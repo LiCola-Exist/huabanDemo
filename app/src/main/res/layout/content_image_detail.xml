@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="licola.demo.com.huabandemo.activity.ImageDetailActivity"
+    tools:showIn="@layout/activity_image_detail">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:divider="@drawable/divider_linear"
+        android:showDividers="middle|end"
+        >
+
+        <RelativeLayout
+            android:id="@+id/rl_image_describe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_margin"
+            android:paddingRight="@dimen/activity_margin"
+            android:paddingTop="@dimen/activity_margin">
+
+            <TextView
+                android:id="@+id/tv_image_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="图片的文字描述"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="@dimen/card_context_size_16sp" />
+
+            <TextView
+                android:id="@+id/tv_image_link"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:gravity="left|center"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/tv_image_text"
+                android:layout_marginTop="@dimen/text_spacing_default"
+                android:text="图片的来源"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="@dimen/card_context_size_14sp" />
+
+            <Button
+                android:id="@+id/btn_image_gather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/drawable_default_selector"
+                android:text="转采"
+                android:layout_below="@id/tv_image_link"
+                android:layout_toLeftOf="@+id/btn_image_favorite"
+                android:layout_toStartOf="@+id/btn_image_favorite" />
+
+            <Button
+                android:id="@+id/btn_image_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/drawable_default_selector"
+                android:text="喜欢"
+                android:layout_below="@id/tv_image_link"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_image_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:padding="@dimen/activity_margin"
+
+            >
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/img_image_user"
+                android:layout_width="@dimen/user_head_circle_size"
+                android:layout_height="@dimen/user_head_circle_size"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true" />
+
+            <TextView
+                android:id="@+id/tv_image_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:paddingLeft="@dimen/text_spacing_default"
+                android:paddingRight="@dimen/text_spacing_default"
+                android:text="用户名"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="@dimen/card_context_size_16sp"
+                android:layout_alignLeft="@+id/tv_image_time"
+                android:layout_alignStart="@+id/tv_image_time"
+                android:layout_toLeftOf="@+id/ibtn_image_user_chevron_right"
+                android:layout_toStartOf="@+id/ibtn_image_user_chevron_right" />
+
+            <TextView
+                android:id="@+id/tv_image_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@id/img_image_user"
+                android:layout_toRightOf="@id/img_image_user"
+                android:paddingLeft="@dimen/text_spacing_default"
+                android:paddingRight="@dimen/text_spacing_default"
+                android:text="采集时间"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="@dimen/card_context_size_14sp" />
+
+            <ImageButton
+                android:id="@+id/ibtn_image_user_chevron_right"
+                android:layout_width="@dimen/user_head_circle_size"
+                android:layout_height="@dimen/user_head_circle_size"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/drawable_default_selector" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_image_board"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackground"
+            android:padding="@dimen/activity_margin">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/img_image_board"
+                android:layout_width="@dimen/user_head_circle_size"
+                android:layout_height="@dimen/user_head_circle_size"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true" />
+
+            <TextView
+                android:id="@+id/tv_image_board"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:paddingLeft="@dimen/text_spacing_default"
+                android:paddingRight="@dimen/text_spacing_default"
+                android:text="画板"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="@dimen/card_context_size_16sp"
+                android:layout_toLeftOf="@+id/ibtn_image_board_chevron_right"
+                android:layout_alignLeft="@+id/tv_image_board_title"
+                android:layout_alignStart="@+id/tv_image_board_title" />
+
+            <TextView
+                android:id="@+id/tv_image_board_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+
+                android:layout_alignParentTop="true"
+                android:layout_toEndOf="@id/img_image_board"
+                android:layout_toRightOf="@id/img_image_board"
+                android:paddingLeft="@dimen/text_spacing_default"
+                android:paddingRight="@dimen/text_spacing_default"
+                android:text="采集到"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="@dimen/card_context_size_14sp" />
+
+            <ImageButton
+                android:id="@+id/ibtn_image_board_chevron_right"
+                android:layout_width="@dimen/user_head_circle_size"
+                android:layout_height="@dimen/user_head_circle_size"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/drawable_default_selector" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

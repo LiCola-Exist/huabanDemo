@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="title_array_all">
+        <item>首页</item>
+        <item>热门</item>
+        <item>家居</item>
+        <item>手工</item>
+        <item>摄影</item>
+        <item>美食</item>
+        <item>旅行</item>
+        <item>插画</item>
+        <item>平面</item>
+        <item>搭配</item>
+        <item>造型</item>
+        <item>婚礼</item>
+        <item>礼物</item>
+        <item>美女</item>
+        <item>宠物</item>
+        <item>儿童</item>
+        <item>建筑设计</item>
+        <item>电影图书</item>
+        <item>生活百科</item>
+        <item>人文艺术</item>
+        <item>男士风尚</item>
+    </string-array>
+
+    <string-array name="type_array_all">
+        <item>all</item>
+        <item>popular</item>
+        <item>home</item>
+        <item>diy_crafts</item>
+        <item>photography</item>
+        <item>food_drink</item>
+        <item>travel_places</item>
+        <item>illustration</item>
+        <item>design</item>
+        <item>apparel</item>
+        <item>modeling_hair</item>
+        <item>wedding_events</item>
+        <item>desire</item>
+        <item>beauty</item>
+        <item>pets</item>
+        <item>kids</item>
+        <item>architecture</item>
+        <item>film_music_books</item>
+        <item>tips</item>
+        <item>art</item>
+        <item>men</item>
+    </string-array>
+
+</resources>

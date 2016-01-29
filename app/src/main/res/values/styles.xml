@@ -1,0 +1,57 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:textColorPrimary">@color/primary_text</item>
+        <item name="android:textColorSecondary">@color/secondary_text</item>
+
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+
+
+    <style name="nav_Button">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingTop">@dimen/nav_header_vertical_spacing_small</item>
+        <item name="android:paddingBottom">@dimen/nav_header_vertical_spacing_small</item>
+        <item name="android:paddingLeft">@dimen/nav_header_vertical_spacing</item>
+        <item name="android:paddingRight">@dimen/nav_header_vertical_spacing</item>
+        <item name="android:background">@drawable/drawable_default_selector</item>
+    </style>
+
+    <style name="nav_text_style">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Body1</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="card_text_context">
+        <item name="android:textSize">@dimen/card_context_size_16sp</item>
+        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:paddingLeft">@dimen/text_spacing_default</item>
+        <item name="android:paddingRight">@dimen/text_spacing_default</item>
+        <item name="android:gravity">center|left</item>
+    </style>
+
+
+</resources>

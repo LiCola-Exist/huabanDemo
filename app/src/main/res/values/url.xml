@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="url">http://api.huaban.com/</string>
+    <string name="url_image">http://img.hb.aicdn.com/</string>
+
+
+</resources>
