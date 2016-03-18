@@ -4,43 +4,51 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
-import com.squareup.leakcanary.RefWatcher;
+import com.google.gson.JsonSyntaxException;
+
+import java.net.UnknownHostException;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import de.greenrobot.event.EventBus;
-import licola.demo.com.huabandemo.API.HttpInterface;
 import licola.demo.com.huabandemo.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.activity.ImageDetailActivity;
 import licola.demo.com.huabandemo.activity.ScrollingActivity;
 import licola.demo.com.huabandemo.adapter.MainRecyclerViewAdapter;
 import licola.demo.com.huabandemo.bean.CardBigBean;
 import licola.demo.com.huabandemo.bean.CardBigBean.PinsEntity;
-import licola.demo.com.huabandemo.bean.SearchHitBean;
+import licola.demo.com.huabandemo.bean.SearchHintBean;
 import licola.demo.com.huabandemo.bean.SearchImageBean;
 import licola.demo.com.huabandemo.bean.SearchPeopleBean;
-import licola.demo.com.huabandemo.httpUtils.HttpRequest;
 import licola.demo.com.huabandemo.httpUtils.RetrofitGson;
-import licola.demo.com.huabandemo.httpUtils.RetrofitPins;
-import retrofit.Call;
+import licola.demo.com.huabandemo.httpUtils.RetrofitPinsRx;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by LiCola on  2015/11/28  18:00
  */
 public class HomeFragment extends BaseFragment {
-    private final float percentageScroll = 0.8f;
+    private final float percentageScroll = 0.8f;//滑动距离的百分比
     private int maxId = 0;
 
     protected static final String TYPE_KEY = "TYPE_KEY";
@@ -49,11 +57,21 @@ public class HomeFragment extends BaseFragment {
     protected String title;
     private static int limit = Constant.LIMIT;
 
+    @BindString(R.string.snack_message_net_error)
+    String snack_message_net_error;
+    @BindString(R.string.snack_action_to_setting)
+    String snack_action_to_setting;
+    @BindString(R.string.snack_message_unknown_error)
+    String snack_message_unknown_error;
+    @BindString(R.string.snack_message_data_error)
+    String snack_message_data_error;
+
     @Bind(R.id.recycler_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefresh;
-
+    @Bind(R.id.progressBar_home)
+    ProgressBar mProgressBar;
 
     private MainRecyclerViewAdapter mAdapter;
     private Handler mHandler = new Handler();
@@ -62,14 +80,14 @@ public class HomeFragment extends BaseFragment {
         @Override
         public void run() {
 //            mAdapter.getmList().clear();
-//            httpTypeLimit(type, max, 20);
+//            getHttpMaxId(type, max, 20);
             startHttps();
             mSwipeRefresh.setRefreshing(false);
         }
     };
 
     private void startHttps() {
-        httpTypeFirst(type, limit);
+        getHttpFirstAndRefresh(type, limit);
     }
 
 
@@ -108,22 +126,15 @@ public class HomeFragment extends BaseFragment {
         mSwipeRefresh.setColorSchemeResources(R.color.pink_300, R.color.pink_500, R.color.pink_700, R.color.pink_900);
         initRecyclerView();
         initListener();
-        httpTypeFirst(type, limit);
-//        TestJson();
+        getHttpFirstAndRefresh(type, limit);//默认的联网，区分于滑动的联网加载
     }
 
-    private void TestJson() {
-        String test = "{\"total\":10,\"result\":[\"美人\",\"美人鱼\",\"美人鱼插画\",\"美人图\",\"美人心计\",\"美人制造\",\"美人如玉\",\"美人符\",\"美人蕉\",\"美人胚\"]}";
-        Gson gson = new Gson();
-        SearchHitBean bean = gson.fromJson(test, SearchHitBean.class);
-        bean.toString();
-        Logger.d(bean.toString());
-
-    }
 
 
     private void initRecyclerView() {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        //// TODO: 2016/3/17 0017 预留选项 应该在设置中 添加一条单条垂直滚动选项
+//        LinearLayoutManager layoutManager=new LinearLayoutManager(HuaBanApplication.getInstance());
         mRecyclerView.setLayoutManager(layoutManager);
         mAdapter = new MainRecyclerViewAdapter(HuaBanApplication.getInstance());
         mRecyclerView.setAdapter(mAdapter);
@@ -137,7 +148,7 @@ public class HomeFragment extends BaseFragment {
 //                    Logger.d("滑动停止 position=" + mAdapter.getmAdapterPosition());
                     int size = (int) (mAdapter.getItemCount() * percentageScroll);
                     if (mAdapter.getmAdapterPosition() >= --size) {
-                        httpTypeLimit(type, maxId, 20);
+                        getHttpMaxId(type, maxId, limit);
                     }
                 } else if (RecyclerView.SCROLL_STATE_DRAGGING == newState) {
                     //用户正在滑动
@@ -150,62 +161,151 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
-    private void httpTypeLimit(String type, int max, int limit) {
-        Logger.d("HttpTypeLimit Start 开始联网");
-        Call<CardBigBean> cardBigBeanCall = RetrofitPins.service.httpTypeMaxLimit(type, max, limit);
-        HttpRequest.Requeset(cardBigBeanCall, new HttpInterface<CardBigBean>() {
-            @Override
-            public void onHttpSuccess(CardBigBean result) {
-                maxId = result.getPins().get(result.getPins().size() - 1).getPin_id();
-                mAdapter.setNotifyData(result.getPins());
-            }
+    /**
+     * 根据max值联网 在滑动时调用 继续加载后续内容
+     *
+     * @param type
+     * @param max
+     * @param limit
+     */
+    private void getHttpMaxId(String type, int max, int limit) {
 
-            @Override
-            public void onHttpError(int code, String msg) {
-                Logger.d("code=" + code + " msg=" + msg);
-            }
+        Observable<CardBigBean> observable = RetrofitPinsRx.service.httpTypeMaxLimitRx(type, max, limit);
+        observable
+                .filter(new Func1<CardBigBean, Boolean>() {
+                    @Override
+                    public Boolean call(CardBigBean cardBigBean) {
+                        return cardBigBean.getPins().size() != 0;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<CardBigBean>() {
+                    @Override
+                    public void onCompleted() {
+                        Logger.d();
+                    }
 
-            @Override
-            public void onHttpFailure(String error) {
-                Logger.d(error);
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d();
+                        checkException(e);//检查错误 弹出提示
+                    }
+
+                    @Override
+                    public void onNext(CardBigBean result) {
+                        Logger.d();
+                        maxId = getMaxId(result);
+                        mAdapter.setNotifyData(result.getPins());
+                    }
+                });
+    }
+
+    /**
+     * 联网得到内容 每次都会清空之前内容
+     *
+     * @param type
+     * @param limit
+     */
+    private void getHttpFirstAndRefresh(String type, int limit) {
+        Logger.d("getHttpFirstAndRefresh Start ");
+
+        Observable<CardBigBean> cardBigBeanObservable = RetrofitPinsRx.service.httpTypeLimitRx(type, limit);
+        cardBigBeanObservable
+                .filter(new Func1<CardBigBean, Boolean>() {
+                    @Override
+                    public Boolean call(CardBigBean cardBigBean) {
+                        //过滤掉数组为0的next
+                        return cardBigBean.getPins().size() != 0;
+                    }
+                })
+                .subscribeOn(Schedulers.io())//发布者的运行线程 联网操作属于IO操作
+                .observeOn(AndroidSchedulers.mainThread())//订阅者的运行线程 在main线程中才能修改UI
+                .subscribe(new Subscriber<CardBigBean>() {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        Logger.d();
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        mRecyclerView.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onCompleted() {
+                        Logger.d();
+                        mProgressBar.setVisibility(View.GONE);
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.toString());
+                        mProgressBar.setVisibility(View.GONE);
+                        mRecyclerView.setVisibility(View.VISIBLE);
+                        checkException(e);//检查错误 弹出提示
+                    }
+
+                    @Override
+                    public void onNext(CardBigBean result) {
+                        Logger.d(result.toString());
+                        //保存maxId值 后续加载需要
+                        maxId = getMaxId(result);
+                        mAdapter.setmList(result.getPins());
+                    }
+                });
+
+//        Call<CardBigBean> cardBigBeanCall = RetrofitPins.service.httpTypeLimit(type, limit);
+//        HttpRequest.Requeset(cardBigBeanCall, new HttpInterface<CardBigBean>() {
+//            @Override
+//            public void onHttpStart() {
+//                super.onHttpStart();
+//                Logger.d(" fragment first get data");
+//            }
+//
+//            @Override
+//            public void onHttpSuccess(CardBigBean result) {
+//                if (result.getPins().size() != 0) {
+//                    //保存maxid值 后续加载需要
+//                    maxId = result.getPins().get(result.getPins().size() - 1).getPin_id();
+//                    mAdapter.setmList(result.getPins());
+//                } else {
+//                    Logger.d("pins size=" + result.getPins().size());
+//                }
+//            }
+//
+//            @Override
+//            public void onHttpError(int code, String msg) {
+//                Logger.d("code=" + code + " msg=" + msg);
+//            }
+//
+//            @Override
+//            public void onHttpFailure(String error) {
+//                Logger.d(error);
+//            }
+//        });
 
     }
 
+    private void checkException(Throwable e) {
+        if ((e instanceof UnknownHostException)) {
+            NetUtils.showNetworkError(getActivity(), mRecyclerView, snack_message_net_error, snack_action_to_setting);
+        }
+        if (e instanceof JsonSyntaxException) {
+            NetUtils.showNetworkError(getActivity(),mRecyclerView,snack_message_data_error,snack_action_to_setting);
+        } else {
+            Snackbar.make(mRecyclerView, snack_message_unknown_error, Snackbar.LENGTH_LONG);
+        }
+    }
 
-    private void httpTypeFirst(String type, int limit) {
-        Logger.d("httpTypeFirst Start ");
 
-        Call<CardBigBean> cardBigBeanCall = RetrofitPins.service.httpTypeLimit(type, limit);
-        HttpRequest.Requeset(cardBigBeanCall, new HttpInterface<CardBigBean>() {
-            @Override
-            public void onHttpStart() {
-                super.onHttpStart();
-                Logger.d(" fragment first get data");
-            }
-
-            @Override
-            public void onHttpSuccess(CardBigBean result) {
-                if (result.getPins().size() != 0) {
-                    maxId = result.getPins().get(result.getPins().size() - 1).getPin_id();
-                    mAdapter.setmList(result.getPins());
-                } else {
-                    Logger.d("pins size=" + result.getPins().size());
-                }
-            }
-
-            @Override
-            public void onHttpError(int code, String msg) {
-                Logger.d("code=" + code + " msg=" + msg);
-            }
-
-            @Override
-            public void onHttpFailure(String error) {
-                Logger.d(error);
-            }
-        });
-
+    /**
+     * 从返回联网结果中保存max值 用于下次联网的关键
+     *
+     * @param result
+     * @return
+     */
+    private int getMaxId(CardBigBean result) {
+        return result.getPins().get(result.getPins().size() - 1).getPin_id();
     }
 
 
@@ -252,7 +352,6 @@ public class HomeFragment extends BaseFragment {
             }
         });
     }
-
 
 
     private void initListener() {

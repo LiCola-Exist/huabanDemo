@@ -5,11 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <application
         android:name=".HuaBanApplication"
         android:allowBackup="true"
@@ -51,6 +46,15 @@
         <activity
             android:name=".activity.ImageDetailActivity"
             android:label="@string/title_activity_image_detail"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="licola.demo.com.huabandemo.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.SearchActivity"
+            android:label="@string/title_activity_search"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

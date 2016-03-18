@@ -1,17 +1,9 @@
 package licola.demo.com.huabandemo.httpUtils;
 
 import licola.demo.com.huabandemo.HuaBanApplication;
-import licola.demo.com.huabandemo.API.HttpApi;
+import licola.demo.com.huabandemo.API.HttpAPICall;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Util.Base64;
-import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.bean.TokenBean;
-import licola.demo.com.huabandemo.bean.UserMeBean;
-import licola.demo.com.huabandemo.converter.Converter;
-import retrofit.Call;
-import retrofit.Callback;
 import retrofit.GsonConverterFactory;
-import retrofit.Response;
 import retrofit.Retrofit;
 
 /**
@@ -28,6 +20,6 @@ public class RetrofitGson {
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    public static HttpApi service = retrofit.create(HttpApi.class);
+    public static HttpAPICall service = retrofit.create(HttpAPICall.class);
 
 }

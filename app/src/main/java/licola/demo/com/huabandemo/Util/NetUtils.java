@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 
 /**
  * 跟网络相关的工具类
@@ -20,6 +23,26 @@ public class NetUtils
 		/* cannot be instantiated */
 		throw new UnsupportedOperationException("cannot be instantiated");
 	}
+
+	/**
+	 * 弹出snackbar 提示错误 并添加点击事件 跳转到设置
+	 * @param context
+	 * @param view
+	 * @param message
+     * @param action
+     */
+	public static void showNetworkError(final Context context, View view, String message, String action){
+		Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+				.setAction(action, new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent(Settings.ACTION_SETTINGS);
+						context.startActivity(intent);
+					}
+				}).show();
+	}
+
+
 
 	/**
 	 * 判断网络是否连接

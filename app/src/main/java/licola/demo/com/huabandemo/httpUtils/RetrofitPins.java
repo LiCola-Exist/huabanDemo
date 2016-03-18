@@ -1,11 +1,9 @@
 package licola.demo.com.huabandemo.httpUtils;
 
-import licola.demo.com.huabandemo.API.HttpApi;
+import licola.demo.com.huabandemo.API.HttpAPICall;
 import licola.demo.com.huabandemo.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.converter.Converter;
 import licola.demo.com.huabandemo.converter.PinsConverter;
-import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 
 /**
@@ -22,6 +20,6 @@ public class RetrofitPins {
             .addConverterFactory(PinsConverter.create())
             .build();
 
-    public static HttpApi service = retrofit.create(HttpApi.class);
+    public static HttpAPICall service = retrofit.create(HttpAPICall.class);
 
 }

@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
@@ -27,6 +26,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
@@ -39,8 +39,14 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener, OnClickListener {
 
     //布局中控件 自动生成
-    @Bind(R.id.nav_view) NavigationView navigationView;
-    @Bind(R.id.drawer_layout) DrawerLayout drawer;
+    @Bind(R.id.navigation_view)
+    NavigationView mNavigation;
+    @Bind(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+
+    @BindString(R.string.snack_message_main_gather)
+    String snack_message_main_gather;
+
 
     //NavigationView中的控件 手动填充
     private SimpleDraweeView img_nav_head;//头像
@@ -51,10 +57,11 @@ public class MainActivity extends BaseActivity
 
     private FragmentManager fragmentManager;
 
-    private final int mDrawableList[]={R.drawable.ic_loyalty_white_36dp,R.drawable.ic_cloud_upload_white_36dp,
-            R.drawable.ic_message_white_36dp,R.drawable.ic_group_white_36dp};
-    private  String[] types;
-    private  String[] titles;
+    private final int mDrawableList[] = {R.drawable.ic_loyalty_white_36dp, R.drawable.ic_cloud_upload_white_36dp,
+            R.drawable.ic_message_white_36dp, R.drawable.ic_group_white_36dp};
+    private String[] types;
+    private String[] titles;
+
 
     @Override
     protected int getLayoutId() {
@@ -73,22 +80,27 @@ public class MainActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fragmentManager = getFragmentManager();
-        types=getResources().getStringArray(R.array.type_array);
-        titles=getResources().getStringArray(R.array.title_array);
+        types = getResources().getStringArray(R.array.type_array);
+        titles = getResources().getStringArray(R.array.title_array);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        initFloationButton();
 
         intiDrawer(toolbar);
         initHeadView();
         intiMenuView();
-        selectFragment(4);
+        selectFragment(0);
+
+
+    }
+
+    private void initFloationButton() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_main);
+        fab.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SearchActivity.launch(MainActivity.this);
+            }
+        });
     }
 
     @Override
@@ -98,23 +110,23 @@ public class MainActivity extends BaseActivity
     }
 
     private void setNavUserInfo() {
-        String key= (String) SPUtils.get(mContext, Constant.USERHEADKEY,"");
-        if (!TextUtils.isEmpty(key)){
-            key=getString(R.string.url_image)+key;
-            new ImageLoadFresco.LoadImageFrescoBuilder(mContext,img_nav_head,key)
+        String key = (String) SPUtils.get(mContext, Constant.USERHEADKEY, "");
+        if (!TextUtils.isEmpty(key)) {
+            key = getString(R.string.url_image) + key;
+            new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_nav_head, key)
                     .setIsCircle(true)
                     .build();
-        }else {
+        } else {
             Logger.d("user head key is empty");
         }
 
-        String username= (String) SPUtils.get(mContext,Constant.USERNAME,"");
-        if (!TextUtils.isEmpty(username)){
+        String username = (String) SPUtils.get(mContext, Constant.USERNAME, "");
+        if (!TextUtils.isEmpty(username)) {
             tv_nav_username.setText(username);
         }
 
-        String email= (String) SPUtils.get(mContext,Constant.USEREMAIL,"");
-        if (!TextUtils.isEmpty(email)){
+        String email = (String) SPUtils.get(mContext, Constant.USEREMAIL, "");
+        if (!TextUtils.isEmpty(email)) {
             tv_nav_email.setText(email);
         }
     }
@@ -124,12 +136,12 @@ public class MainActivity extends BaseActivity
          * 代码手动填充 view作为头部布局
          * 得到view之后 就可以对headView进行操作
          */
-        View headView = navigationView.inflateHeaderView(R.layout.nav_header_main);
-        LinearLayout group=ButterKnife.findById(headView,R.id.ll_nav_operation);
-        tv_nav_username = ButterKnife.findById(headView,R.id.tv_nav_username);
-        tv_nav_email = ButterKnife.findById(headView,R.id.tv_nav_email);
-        img_nav_head = ButterKnife.findById(headView,R.id.img_nav_head);
-        ibtn_nav_setting = ButterKnife.findById(headView,R.id.ibtn_nav_setting);
+        View headView = mNavigation.inflateHeaderView(R.layout.nav_header_main);
+        LinearLayout group = ButterKnife.findById(headView, R.id.ll_nav_operation);
+        tv_nav_username = ButterKnife.findById(headView, R.id.tv_nav_username);
+        tv_nav_email = ButterKnife.findById(headView, R.id.tv_nav_email);
+        img_nav_head = ButterKnife.findById(headView, R.id.img_nav_head);
+        ibtn_nav_setting = ButterKnife.findById(headView, R.id.ibtn_nav_setting);
 //        ibtn_nav_clear = (ImageButton) headView.findViewById(R.id.ibtn_nav_clear);
 
         initNavButton();
@@ -146,8 +158,8 @@ public class MainActivity extends BaseActivity
         Button btn = null;
         Drawable drawable = null;
         for (int i = 0, size = group.getChildCount(); i < size; i++) {
-            btn= (Button) group.getChildAt(i);
-            drawable=DrawableCompat.wrap(ContextCompat.getDrawable(mContext,mDrawableList[i]).mutate());
+            btn = (Button) group.getChildAt(i);
+            drawable = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, mDrawableList[i]).mutate());
             DrawableCompat.setTintList(drawable, ContextCompat.getColorStateList(mContext, R.color.tint_list_pink));
             btn.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
         }
@@ -164,7 +176,7 @@ public class MainActivity extends BaseActivity
         /**
          * 手动填充Menu 方便以后对menu的调整
          */
-        Menu menu = navigationView.getMenu();
+        Menu menu = mNavigation.getMenu();
         String titleList[] = getResources().getStringArray(R.array.title_array);
         int order = 0;
         for (String title : titleList) {
@@ -176,11 +188,11 @@ public class MainActivity extends BaseActivity
 
     private void intiDrawer(Toolbar toolbar) {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+                this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(this);
+        mNavigation.setNavigationItemSelectedListener(this);
     }
 
     private void selectFragment(int position) {
@@ -193,11 +205,13 @@ public class MainActivity extends BaseActivity
     }
 
 
+
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        //监听返回键
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            //如果DrawerLayout 拦截点击 关闭Drawer
+            mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -233,7 +247,7 @@ public class MainActivity extends BaseActivity
 
         selectFragment(item.getItemId());
 
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
@@ -243,7 +257,7 @@ public class MainActivity extends BaseActivity
         int id = v.getId();
         switch (id) {
             case R.id.img_nav_head:
-                Intent intent=new Intent(this,LoginActivity.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 break;
             case R.id.tv_nav_username:
@@ -260,7 +274,7 @@ public class MainActivity extends BaseActivity
                 break;
 
         }
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
     @Override
@@ -268,6 +282,7 @@ public class MainActivity extends BaseActivity
         super.onStart();
 
     }
+
     @Override
     public void onStop() {
         super.onStop();
