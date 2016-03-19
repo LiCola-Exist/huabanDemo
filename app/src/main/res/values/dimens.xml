@@ -28,7 +28,8 @@
     <dimen name="card_context_size_14sp">14sp</dimen>
     <dimen name="card_context_size_16sp">16sp</dimen>
 
-    <dimen name="button_padding_default">16dp</dimen>
+    <dimen name="button_padding_default">12dp</dimen>
+    <dimen name="text_padding_default">12dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
 
     <dimen name="nav_info_height">56dp</dimen>

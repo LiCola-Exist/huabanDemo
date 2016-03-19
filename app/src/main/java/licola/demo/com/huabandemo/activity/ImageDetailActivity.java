@@ -2,6 +2,7 @@ package licola.demo.com.huabandemo.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,9 +18,11 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import butterknife.Bind;
+import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindString;
 import butterknife.OnClick;
@@ -33,7 +36,6 @@ import licola.demo.com.huabandemo.bean.CardBigBean;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
 
 public class ImageDetailActivity extends BaseActivity {
-    private final float percentageHeight = 0.8f;
 
     @BindString(R.string.url_image)
     String url_image;
@@ -44,7 +46,7 @@ public class ImageDetailActivity extends BaseActivity {
     @BindDrawable(R.color.pink_500)
     Drawable drawable_pink;
 
-    @Bind(R.id.toolbar)
+    @Bind(R.id.toolbar_image)
     Toolbar toolbar;
     @Bind(R.id.fab_main)
     FloatingActionButton fab;
@@ -75,6 +77,7 @@ public class ImageDetailActivity extends BaseActivity {
     TextView tv_image_board;
     @Bind(R.id.ibtn_image_board_chevron_right)
     ImageButton ibtn_image_board_chevron_right;
+
 
 
     private String url_img;//图片地址
@@ -154,6 +157,7 @@ public class ImageDetailActivity extends BaseActivity {
 
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_image_big, url_img)
+                .setActualImageScaleType(ScalingUtils.ScaleType.FOCUS_CROP)
                 .setRetryImage(drawable_refresh)
                 .setFailureImage(drawable_cancel)
                 .build();

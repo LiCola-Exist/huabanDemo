@@ -1,9 +1,9 @@
 package licola.demo.com.huabandemo.httpUtils;
 
 import android.content.Context;
+import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.text.TextUtils;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
@@ -25,8 +25,8 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
  * <p>
  * 使用示例：
  * new ImageLoadFresco.LoadImageFrescoBuilder(mContext,img_image_user,url_head)
- *              .setIsCircle(true)
- *              .build();
+ * .setIsCircle(true)
+ * .build();
  */
 public class ImageLoadFresco {
     private static final String TAG = "ImageLoadFresco";
@@ -47,8 +47,12 @@ public class ImageLoadFresco {
 
         //初始化M层 用于配置各种显示资源
         GenericDraweeHierarchyBuilder builderM = new GenericDraweeHierarchyBuilder(mContext.getResources());
-        builderM.setActualImageScaleType(ScalingUtils.ScaleType.CENTER_CROP);
 
+        //设置图片的缩放形式
+        builderM.setActualImageScaleType(frescoBuilder.mActualImageScaleType);
+        if (frescoBuilder.mActualImageScaleType == ScalingUtils.ScaleType.FOCUS_CROP) {
+            builderM.setActualImageFocusPoint(new PointF(0f, 0f));
+        }
 
         //初始化C层 用于控制图片的加载
         PipelineDraweeControllerBuilder builderC = Fresco.newDraweeControllerBuilder();
@@ -63,9 +67,12 @@ public class ImageLoadFresco {
             builderM.setPlaceholderImage(frescoBuilder.mPlaceHolderImage, ScalingUtils.ScaleType.CENTER);
         }
 
-        if(frescoBuilder.mProgressBarImage!=null){
-            Drawable progressBarDrawable = new AutoRotateDrawable(frescoBuilder.mProgressBarImage,2000);
+        if (frescoBuilder.mProgressBarImage != null) {
+            Drawable progressBarDrawable = new AutoRotateDrawable(frescoBuilder.mProgressBarImage, 2000);
             builderM.setProgressBarImage(progressBarDrawable);
+            //// TODO: 2016/3/18 0018 直接设置无效 是自定义Drawable setColor知识为了类里面的取值
+//            MyProgressBarDrawable progressBarDrawable=new MyProgressBarDrawable();
+//            builderM.setProgressBarImage(progressBarDrawable);
         }
 
         //设置重试图 同时就是设置支持加载视频时重试
@@ -114,7 +121,7 @@ public class ImageLoadFresco {
         private Drawable mFailureImage;//失败图
         private Drawable mBackgroundImage;//背景图
 
-
+        private ScalingUtils.ScaleType mActualImageScaleType = ScalingUtils.ScaleType.CENTER_CROP;
         private boolean mIsCircle = false;//是否圆形图片
         private boolean mIsRadius = false;//是否圆角
         private float mRadius = 10;//圆角度数 默认10
@@ -148,11 +155,16 @@ public class ImageLoadFresco {
 //            }
 
             //不能同时设定 圆形圆角
-            if (mIsCircle&&mIsRadius){
+            if (mIsCircle && mIsRadius) {
                 throw new IllegalArgumentException("图片不能同时设置圆角和圆形");
             }
 
             return new ImageLoadFresco(this);
+        }
+
+        public LoadImageFrescoBuilder setActualImageScaleType(ScalingUtils.ScaleType mActualImageScaleType) {
+            this.mActualImageScaleType = mActualImageScaleType;
+            return this;
         }
 
         public LoadImageFrescoBuilder setPlaceHolderImage(Drawable mPlaceHolderImage) {
@@ -196,8 +208,8 @@ public class ImageLoadFresco {
             return this;
         }
 
-        public LoadImageFrescoBuilder setIsRadius(boolean mIsRadius,float mRadius) {
-            this.mRadius=mRadius;
+        public LoadImageFrescoBuilder setIsRadius(boolean mIsRadius, float mRadius) {
+            this.mRadius = mRadius;
             this.mIsRadius = mIsRadius;
             return this;
         }

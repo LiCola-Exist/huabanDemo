@@ -7,6 +7,8 @@
     <string name="title_activity_scrolling">Scrolling</string>
     <string name="title_activity_Image">Image</string>
     <string name="title_activity_Login">Login</string>
+    <string name="title_activity_image_detail">ImageDetail</string>
+    <string name="title_activity_search">Search</string>
 
     <string name="action_settings">setting</string>
 
@@ -48,6 +50,10 @@
     <string name="menu_tips">TIPS</string>
     <string name="menu_art">ART</string>
     <string name="menu_men">MEN</string>
+
+    <string name="action_bar_search">Search</string>
+    <string name="action_bar_add">Add</string>
+    <string name="action_bar_edit">Edit</string>
 
     <string name="card_title">测试Card的title应该是很长的文本</string>
     <string name="card_username">用户名14sp</string>
@@ -161,7 +167,6 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="title_activity_image_detail">ImageDetailActivity</string>
-    <string name="title_activity_search">SearchActivity</string>
+
     <string name="section_format">Hello World from section: %1$d</string>
 </resources>

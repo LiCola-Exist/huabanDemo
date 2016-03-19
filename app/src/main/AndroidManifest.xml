@@ -38,7 +38,8 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_Login"
-            android:parentActivityName=".activity.MainActivity">
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="licola.demo.com.huabandemo.activity.MainActivity" />
@@ -46,6 +47,15 @@
         <activity
             android:name=".activity.ImageDetailActivity"
             android:label="@string/title_activity_image_detail"
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="licola.demo.com.huabandemo.activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.ResultActivity"
+            android:label="@string/title_activity_search"
             android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

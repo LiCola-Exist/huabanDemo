@@ -11,6 +11,7 @@
     <color name="icons">#FFFFFF</color>
 
     <color name="white">#ffffff</color>
+    <color name="transparent">@android:color/transparent</color>
 
 
     <color name="grey_50">#fafafa</color>

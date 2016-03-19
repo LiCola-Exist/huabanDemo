@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="title_array_all">
-        <item>首页</item>
-        <item>热门</item>
         <item>家居</item>
         <item>手工</item>
         <item>摄影</item>
@@ -25,8 +23,6 @@
     </string-array>
 
     <string-array name="type_array_all">
-        <item>all</item>
-        <item>popular</item>
         <item>home</item>
         <item>diy_crafts</item>
         <item>photography</item>

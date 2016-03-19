@@ -32,6 +32,7 @@ import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
+import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.fragment.HomeFragment;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
 
@@ -43,6 +44,8 @@ public class MainActivity extends BaseActivity
     NavigationView mNavigation;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
+    @Bind(R.id.fab_main)
+    FloatingActionButton mFab_main;
 
     @BindString(R.string.snack_message_main_gather)
     String snack_message_main_gather;
@@ -77,13 +80,13 @@ public class MainActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         fragmentManager = getFragmentManager();
         types = getResources().getStringArray(R.array.type_array);
         titles = getResources().getStringArray(R.array.title_array);
 
-        initFloationButton();
+        initFloatingActionButton();
 
         intiDrawer(toolbar);
         initHeadView();
@@ -93,9 +96,8 @@ public class MainActivity extends BaseActivity
 
     }
 
-    private void initFloationButton() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_main);
-        fab.setOnClickListener(new OnClickListener() {
+    private void initFloatingActionButton() {
+        mFab_main.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 SearchActivity.launch(MainActivity.this);
@@ -156,20 +158,19 @@ public class MainActivity extends BaseActivity
 
     private void initNavGroupButton(LinearLayout group) {
         Button btn = null;
-        Drawable drawable = null;
         for (int i = 0, size = group.getChildCount(); i < size; i++) {
             btn = (Button) group.getChildAt(i);
-            drawable = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, mDrawableList[i]).mutate());
-            DrawableCompat.setTintList(drawable, ContextCompat.getColorStateList(mContext, R.color.tint_list_pink));
-            btn.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+            btn.setCompoundDrawablesWithIntrinsicBounds(
+                    null,
+                    Utils.getTintCompatDrawable(mContext, mDrawableList[i], R.color.tint_list_pink),
+                    null,
+                    null);
         }
     }
 
 
     private void initNavButton() {
-        Drawable d = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, R.drawable.ic_settings_white_24dp).mutate());
-        DrawableCompat.setTintList(d, ContextCompat.getColorStateList(mContext, R.color.tint_list_grey));
-        ibtn_nav_setting.setImageDrawable(d);
+        ibtn_nav_setting.setImageDrawable(Utils.getTintCompatDrawable(mContext,R.drawable.ic_settings_white_24dp,R.color.tint_list_grey));
     }
 
     private void intiMenuView() {
@@ -189,7 +190,7 @@ public class MainActivity extends BaseActivity
     private void intiDrawer(Toolbar toolbar) {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.setDrawerListener(toggle);
+        mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         mNavigation.setNavigationItemSelectedListener(this);
@@ -203,7 +204,6 @@ public class MainActivity extends BaseActivity
         transaction.commit();
         setTitle(title);
     }
-
 
 
     @Override
@@ -257,8 +257,7 @@ public class MainActivity extends BaseActivity
         int id = v.getId();
         switch (id) {
             case R.id.img_nav_head:
-                Intent intent = new Intent(this, LoginActivity.class);
-                startActivity(intent);
+                LoginActivity.launch(MainActivity.this);
                 break;
             case R.id.tv_nav_username:
 

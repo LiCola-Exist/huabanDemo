@@ -24,11 +24,10 @@
 
 
         <ImageButton
+            style="@style/ibtn_padding_bg"
             android:id="@+id/ibtn_nav_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:padding="@dimen/button_padding_default"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
@@ -68,13 +67,12 @@
         </LinearLayout>
 
         <ImageButton
+            style="@style/ibtn_padding_bg"
             android:id="@+id/ibtn_nav_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:background="@android:color/transparent"
-            android:padding="@dimen/button_padding_default"
             />
     </RelativeLayout>
 

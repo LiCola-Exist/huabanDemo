@@ -12,7 +12,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.httpUtils.FrescoBuilder;
+
 
 public class ImageActivity extends BaseActivity {
     private String url_img;

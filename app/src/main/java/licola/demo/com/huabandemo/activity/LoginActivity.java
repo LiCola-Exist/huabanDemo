@@ -4,9 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -21,6 +24,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding.widget.RxTextView;
+import com.jakewharton.rxbinding.widget.TextViewEditorActionEvent;
 
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -91,14 +96,22 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected String getTAG() {
-        return "Login";
+        return this.getClass().getSimpleName();
+    }
+
+    public static void launch(Activity activity) {
+        Intent intent = new Intent(activity, LoginActivity.class);
+        activity.startActivity(intent);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         TAG = this.getClass().getSimpleName();
-        setupActionBar();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_login);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         // Set up the login form.
         addUsernameAutoComplete();
 
@@ -108,16 +121,33 @@ public class LoginActivity extends BaseActivity {
 
     private void initListener() {
         //软键盘 确定按钮 监听
-        mEditPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+//        mEditPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//            @Override
+//            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+//                Logger.d("textView = "+textView.getText().toString()+" id= "+id);
+//                if (id == R.id.login || id == EditorInfo.IME_ACTION_DONE) {
+////                    attemptLogin();
+//                    Logger.d();
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+        RxTextView.editorActions(mEditPassword, new Func1<Integer, Boolean>() {
             @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
+            public Boolean call(Integer integer) {
+                return integer == EditorInfo.IME_ACTION_DONE;
             }
-        });
+        }).throttleFirst(500, TimeUnit.MILLISECONDS)//设置500毫秒的间隔 防止抖动 用户点击太快登录多次
+                .subscribe(new Action1<Integer>() {
+                    @Override
+                    public void call(Integer integer) {
+                        //// TODO: 2016/3/20 0020 需要隐藏软键盘
+                        attemptLogin();
+                    }
+                });
+
 
         RxView.clicks(mBtnLogin)
                 .throttleFirst(500, TimeUnit.MILLISECONDS)//设置500毫秒的间隔 防止抖动 用户点击太快登录多次
@@ -133,24 +163,14 @@ public class LoginActivity extends BaseActivity {
         //系统读入内容帮助用户输入用户名
         ArrayList<String> arrayList = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
-            arrayList.add("36140137"+i+"@qq.com");
+            arrayList.add("36140137" + i + "@qq.com");
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(LoginActivity.this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext,
                 android.R.layout.simple_dropdown_item_1line, arrayList);
 
         mAtvUsername.setAdapter(adapter);
     }
 
-    /**
-     * Set up the {@link ActionBar}, if the API is available.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -268,7 +288,7 @@ public class LoginActivity extends BaseActivity {
     private void getToken(String username, String password) {
 
         Call<TokenBean> call = RetrofitGson.service.httpsToken(BASIC + Base64.getClientInfo(), PASSWORD, username, password);
-        mCall = call;
+
         HttpRequest.Requeset(call, new HttpInterface<TokenBean>() {
             @Override
             public void onHttpStart() {
@@ -304,7 +324,6 @@ public class LoginActivity extends BaseActivity {
     private void getUserMe(String bearer, String key) {
         String Authorization = bearer + " " + key;
         Call<UserMeBean> call = RetrofitGson.service.httpUsers(Authorization);
-        mCall = call;
 
         HttpRequest.Requeset(call, new HttpInterface<UserMeBean>() {
 

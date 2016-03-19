@@ -2,12 +2,17 @@ package licola.demo.com.huabandemo.Util;
 
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.view.Display;
 import android.view.WindowManager;
 
 import java.io.Closeable;
 import java.io.IOException;
+
+import licola.demo.com.huabandemo.R;
 
 /**
  * Created by LiCola on  2015/12/05  14:12
@@ -46,13 +51,25 @@ public final class Utils {
         }
     }
 
-
+    /**
+     * 计算宽高比
+      * @param width
+     * @param height
+     * @return
+     */
     public static float getAspectRatio(int width, int height) {
         float ratio=(float) width / (float) height;
         if (ratio<0.5){
             return 0.5f;
         }
         return ratio;
+    }
+
+
+    public static Drawable getTintCompatDrawable(Context mContext, int mResDrawableId, int ResTintId){
+        Drawable drawable = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, mResDrawableId).mutate());
+        DrawableCompat.setTintList(drawable, ContextCompat.getColorStateList(mContext, ResTintId));
+        return drawable;
     }
 
     public static boolean checkIsGif(String type) {

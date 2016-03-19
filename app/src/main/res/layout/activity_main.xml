@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+
     tools:openDrawer="start">
 
     <include
@@ -17,8 +17,8 @@
         android:id="@+id/navigation_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         android:layout_gravity="start"
+        android:fitsSystemWindows="true"
         />
     <!--headerLayout 为头部布局文件 -->
     <!--menu 为菜单布局文件   app:menu="@menu/activity_main_drawer" -->
