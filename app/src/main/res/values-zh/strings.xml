@@ -49,6 +49,8 @@
     <string name="action_bar_add">添加</string>
     <string name="action_bar_edit">编辑</string>
 
+    <string name="hint_search">关键字</string>
+
     <string name="card_title">测试Card的title应该是很长的文本</string>
     <string name="card_username">用户名14sp</string>
     <string name="card_gather">采集到图库14sp</string>
@@ -58,6 +60,7 @@
     <string name="title_activity_Login">登录</string>
     <string name="title_activity_image_detail">图片详情</string>
     <string name="title_activity_search">搜索</string>
+    <string name="title_activity_module">模块</string>
 
     <string name="net_error">网络连接错误</string>
     <string name="net_error_data">网络返回数据错误</string>

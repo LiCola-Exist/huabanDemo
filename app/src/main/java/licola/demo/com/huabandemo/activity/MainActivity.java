@@ -2,13 +2,9 @@ package licola.demo.com.huabandemo.activity;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -33,7 +29,7 @@ import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.fragment.HomeFragment;
+import licola.demo.com.huabandemo.fragment.ModuleFragment;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
 
 public class MainActivity extends BaseActivity
@@ -200,7 +196,7 @@ public class MainActivity extends BaseActivity
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         String type = types[position];
         String title = titles[position];
-        transaction.replace(R.id.id_content, HomeFragment.newInstance(type, title));
+        transaction.replace(R.id.id_content, ModuleFragment.newInstance(type, title));
         transaction.commit();
         setTitle(title);
     }

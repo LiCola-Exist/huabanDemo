@@ -3,7 +3,6 @@ package licola.demo.com.huabandemo.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -21,11 +19,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
-import com.jakewharton.rxbinding.widget.TextViewEditorActionEvent;
 
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -77,8 +73,8 @@ public class LoginActivity extends BaseActivity {
     // UI references.
     @Bind(R.id.progress_login)
     ProgressBar mProgressLogin;
-    @Bind(R.id.atv_username)
-    AutoCompleteTextView mAtvUsername;
+    @Bind(R.id.actv_username)
+    AutoCompleteTextView mACTVUsername;
     @Bind(R.id.edit_password)
     EditText mEditPassword;
     @Bind(R.id.btn_login)
@@ -166,9 +162,9 @@ public class LoginActivity extends BaseActivity {
             arrayList.add("36140137" + i + "@qq.com");
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext,
-                android.R.layout.simple_dropdown_item_1line, arrayList);
+                android.R.layout.simple_spinner_dropdown_item, arrayList);
 
-        mAtvUsername.setAdapter(adapter);
+        mACTVUsername.setAdapter(adapter);
     }
 
 
@@ -181,11 +177,11 @@ public class LoginActivity extends BaseActivity {
     private void attemptLogin() {
 
         // Reset errors.
-        mAtvUsername.setError(null);
+        mACTVUsername.setError(null);
         mEditPassword.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = mAtvUsername.getText().toString();
+        String username = mACTVUsername.getText().toString();
         String password = mEditPassword.getText().toString();
 
         boolean cancel = false;
@@ -200,12 +196,12 @@ public class LoginActivity extends BaseActivity {
 
         // Check for a valid username address.
         if (TextUtils.isEmpty(username)) {
-            mAtvUsername.setError(getString(R.string.error_field_required));
-            focusView = mAtvUsername;
+            mACTVUsername.setError(getString(R.string.error_field_required));
+            focusView = mACTVUsername;
             cancel = true;
         } else if (!isEmailValid(username)) {
-            mAtvUsername.setError(getString(R.string.error_invalid_username));
-            focusView = mAtvUsername;
+            mACTVUsername.setError(getString(R.string.error_invalid_username));
+            focusView = mACTVUsername;
             cancel = true;
         }
 
@@ -383,16 +379,16 @@ public class LoginActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mScrollViewLogin.setVisibility(show ? View.GONE : View.VISIBLE);
-            mScrollViewLogin.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mScrollViewLogin.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+//            mScrollViewLogin.setVisibility(show ? View.GONE : View.VISIBLE);
+//            mScrollViewLogin.animate().setDuration(shortAnimTime).alpha(
+//                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+//                @Override
+//                public void onAnimationEnd(Animator animation) {
+//                    mScrollViewLogin.setVisibility(show ? View.GONE : View.VISIBLE);
+//                }
+//            });
 
-            mProgressLogin.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressLogin.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
             mProgressLogin.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
@@ -403,8 +399,8 @@ public class LoginActivity extends BaseActivity {
         } else {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
-            mProgressLogin.setVisibility(show ? View.VISIBLE : View.GONE);
-            mScrollViewLogin.setVisibility(show ? View.GONE : View.VISIBLE);
+            mProgressLogin.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
+//            mScrollViewLogin.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
 

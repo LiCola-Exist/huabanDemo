@@ -9,6 +9,7 @@
     <string name="title_activity_Login">Login</string>
     <string name="title_activity_image_detail">ImageDetail</string>
     <string name="title_activity_search">Search</string>
+    <string name="title_activity_module">Module</string>
 
     <string name="action_settings">setting</string>
 
@@ -55,12 +56,12 @@
     <string name="action_bar_add">Add</string>
     <string name="action_bar_edit">Edit</string>
 
+    <string name="hint_search">key</string>
+
     <string name="card_title">测试Card的title应该是很长的文本</string>
     <string name="card_username">用户名14sp</string>
     <string name="card_gather">采集到图库14sp</string>
 
-
-    <string name="title_activity_login">Login</string>
 
     <string name="net_error">net error</string>
     <string name="net_error_data">net error on data</string>
@@ -169,4 +170,5 @@
     </string>
 
     <string name="section_format">Hello World from section: %1$d</string>
+
 </resources>

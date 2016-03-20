@@ -71,6 +71,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="licola.demo.com.huabandemo.activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.ModuleActivity"
+            android:label="@string/title_activity_module"
+            android:parentActivityName=".activity.SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="licola.demo.com.huabandemo.activity.SearchActivity" />
+        </activity>
     </application>
 
 </manifest>

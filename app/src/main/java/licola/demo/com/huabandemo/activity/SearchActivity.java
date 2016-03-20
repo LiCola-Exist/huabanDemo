@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -24,6 +29,8 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 import com.jakewharton.rxbinding.view.RxView;
+import com.jakewharton.rxbinding.widget.RxAutoCompleteTextView;
+import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -32,16 +39,21 @@ import butterknife.Bind;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
+import licola.demo.com.huabandemo.adapter.SearHintAdapter;
 import licola.demo.com.huabandemo.bean.SearchHintBean;
 import licola.demo.com.huabandemo.httpUtils.RetrofitGsonRx;
 import licola.demo.com.huabandemo.view.FlowLayout;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class SearchActivity extends BaseActivity {
+
+    @Bind(R.id.actv_search)
+    AutoCompleteTextView mACTVSearch;
 
     @Bind(R.id.scrollview_search)
     ScrollView mScrollViewSearch;
@@ -51,14 +63,14 @@ public class SearchActivity extends BaseActivity {
     FlowLayout mFlowHistory;//推荐的父控件 内容动态填充
     @Bind(R.id.ibtn_clear_history)
     ImageButton mIBtnClearHistory;
-    @Bind(R.id.listview_search)
-    ListView mListViewSearch;//用于展示搜索关键字网络提示
 
     final int mItemLineNumber = 4;//每行的个数
     final int mItemMargin = 1;
     final int mItemTVMargin = 10;
     int mItemWidth;//子控件的宽度
 
+    private ArrayAdapter<String> mAdapter;
+    private ArrayList<String> mListHttpHint=new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -82,24 +94,73 @@ public class SearchActivity extends BaseActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_search);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar= getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
 
         mIBtnClearHistory.setImageDrawable(Utils.getTintCompatDrawable(mContext, R.drawable.ic_close_white_24dp, R.color.tint_list_grey));
         initFlowReference(mFlowReference);
         initFlowHistory(mFlowHistory);
 
+        addUsernameAutoComplete();
+
+        RxTextView.textChanges(mACTVSearch)
+                .observeOn(Schedulers.io())
+                .filter(new Func1<CharSequence, Boolean>() {
+                    @Override
+                    public Boolean call(CharSequence charSequence) {
+                        return charSequence.length()>0;
+                    }
+                })
+                //debounce 函数 过滤掉由Observable发射的速率过快的数据
+                .debounce(300, TimeUnit.MILLISECONDS)
+                //switchMap函数 每当源Observable发射一个新的数据项（Observable）时，
+                //它将取消订阅并停止监视之前那个数据项产生的Observable，并开始监视当前发射的这一个。
+                .switchMap(new Func1<CharSequence, Observable<SearchHintBean>>() {
+                    @Override
+                    public Observable<SearchHintBean> call(CharSequence charSequence) {
+                        return getSearHit(charSequence.toString());
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<SearchHintBean>() {
+                    @Override
+                    public void onCompleted() {
+                        Logger.d();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.toString());
+                    }
+
+                    @Override
+                    public void onNext(SearchHintBean searchHintBean) {
+
+                        mListHttpHint.clear();
+                        mListHttpHint.addAll(searchHintBean.getResult());
+                        mAdapter.notifyDataSetChanged();
+                    }
+                });
+
         initClearHistory();//点击按钮 清除历史记录的操作
-        initSearHint();
     }
 
-    private void initSearHint() {
-        ArrayList<String> arrayList = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            arrayList.add("36140137" + i + "@qq.com");
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext,
-                android.R.layout.simple_spinner_dropdown_item, arrayList);
-        mListViewSearch.setAdapter(adapter);
+
+    private void addUsernameAutoComplete() {
+
+        mAdapter = new SearHintAdapter(mContext,
+                android.R.layout.simple_dropdown_item_1line,mListHttpHint);
+
+        mACTVSearch.setAdapter(mAdapter);
+
+
+//        mAdapter = new ArrayAdapter<>(mContext,
+//                android.R.layout.simple_dropdown_item_1line,mListHttpHint);
+//        mACTVTest.setAdapter(mAdapter);
+    }
+
+    private void initActionSearch() {
 
     }
 
@@ -120,7 +181,7 @@ public class SearchActivity extends BaseActivity {
                     public void onNext(Void aVoid) {
                         Logger.d();
                         mFlowHistory.removeAllViews();
-                        addChildTextTips(mFlowHistory,"没有纪录");
+                        addChildTextTips(mFlowHistory, "没有纪录");
                     }
                 });
     }
@@ -146,9 +207,9 @@ public class SearchActivity extends BaseActivity {
 
     }
 
-    private void addChildTextTips(FlowLayout group,String mTextString) {
-        TextView tvChild=new TextView(mContext);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+    private void addChildTextTips(FlowLayout group, String mTextString) {
+        TextView tvChild = new TextView(mContext);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
         tvChild.setText(mTextString);
         tvChild.setLayoutParams(layoutParams);
@@ -157,8 +218,8 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void addChildText(FlowLayout group, String mTextString) {
-        final TextView tvChild=new TextView(mContext);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        final TextView tvChild = new TextView(mContext);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
         layoutParams.setMargins(mItemTVMargin, mItemTVMargin, mItemTVMargin, mItemTVMargin);
         tvChild.setText(mTextString);
@@ -170,7 +231,7 @@ public class SearchActivity extends BaseActivity {
         tvChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ResultActivity.launch(SearchActivity.this,tvChild.getText().toString());
+                ResultActivity.launch(SearchActivity.this, tvChild.getText().toString());
             }
         });
 
@@ -197,8 +258,7 @@ public class SearchActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 TextView textView = (TextView) v;
-                Logger.d(textView.getTag() + " ");
-                Logger.d(textView.getText().toString());
+                ModuleActivity.launch(SearchActivity.this, textView.getText().toString(), textView.getTag().toString());
             }
         });
 
@@ -213,48 +273,19 @@ public class SearchActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_search, menu);
-        SearchView searchView = (SearchView) MenuItemCompat
-                .getActionView(menu.findItem(R.id.action_search));
 
+//        SearchView searchView = (SearchView) MenuItemCompat
+//                .getActionView(menu.findItem(R.id.action_search));
 //        initSearchView(searchView);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-            /**
-             * Called when the user submits the query. This could be due to a key press on the
-             * keyboard or due to pressing a submit button.
-             * The listener can override the standard behavior by returning true
-             * to indicate that it has handled the submit request. Otherwise return false to
-             * let the SearchView handle the submission by launching any associated intent.
-             *
-             * @param query the query text that is to be submitted
-             *
-             * @return true if the query has been handled by the listener, false to let the
-             * SearchView perform the default action.
-             */
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Logger.d(query);
-                return false;
-            }
-
-            /**
-             * Called when the query text is changed by the user.
-             *
-             * @param newText the new content of the query text field.
-             *
-             * @return false if the SearchView should perform the default action of showing any
-             * suggestions if available, true if the action was handled by the listener.
-             */
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                Logger.d(newText);
-                return true;
-            }
-        });
         return true;
     }
 
+    /**
+     * SearchView的监听处理
+     * @param searchView
+     */
     private void initSearchView(final SearchView searchView) {
+
         RxSearchView.queryTextChanges(searchView)
                 .filter(new Func1<CharSequence, Boolean>() {
                     @Override
@@ -292,19 +323,56 @@ public class SearchActivity extends BaseActivity {
 //                        mListViewSearch.setVisibility(View.VISIBLE);
                     }
                 });
+
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            /**
+//             * Called when the user submits the query. This could be due to a key press on the
+//             * keyboard or due to pressing a submit button.
+//             * The listener can override the standard behavior by returning true
+//             * to indicate that it has handled the submit request. Otherwise return false to
+//             * let the SearchView handle the submission by launching any associated intent.
+//             *
+//             * @param query the query text that is to be submitted
+//             *
+//             * @return true if the query has been handled by the listener, false to let the
+//             * SearchView perform the default action.
+//             */
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                Logger.d(query);
+//                return false;
+//            }
+//
+//            /**
+//             * Called when the query text is changed by the user.
+//             *
+//             * @param newText the new content of the query text field.
+//             *
+//             * @return false if the SearchView should perform the default action of showing any
+//             * suggestions if available, true if the action was handled by the listener.
+//             */
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                Logger.d(newText);
+//                return true;
+//            }
+//        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_search:
-//                break;
-//        }
+        Logger.d(item.getTitle().toString());
 
-        Logger.d(item.getItemId()+" "+item.getTitle());
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                initActionSearch();
+                break;
+        }
 
         return true;
     }
+
+
 
 
 }

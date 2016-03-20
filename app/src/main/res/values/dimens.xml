@@ -27,6 +27,8 @@
 
     <dimen name="card_context_size_14sp">14sp</dimen>
     <dimen name="card_context_size_16sp">16sp</dimen>
+    <dimen name="card_context_size_18sp">18sp</dimen>
+    <dimen name="card_context_size_20sp">20sp</dimen>
 
     <dimen name="button_padding_default">12dp</dimen>
     <dimen name="text_padding_default">12dp</dimen>
