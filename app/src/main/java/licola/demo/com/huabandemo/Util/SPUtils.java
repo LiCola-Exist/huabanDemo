@@ -3,6 +3,7 @@ package licola.demo.com.huabandemo.Util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Set;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -41,6 +42,8 @@ public class SPUtils {
             editor.putFloat(key, (Float) object);
         } else if (object instanceof Long) {
             editor.putLong(key, (Long) object);
+        } else if (object instanceof Set) {
+            editor.putStringSet(key, (Set<String>) object);
         } else {
             editor.putString(key, object.toString());
         }
@@ -70,6 +73,8 @@ public class SPUtils {
             return sp.getFloat(key, (Float) defaultObject);
         } else if (defaultObject instanceof Long) {
             return sp.getLong(key, (Long) defaultObject);
+        } else if (defaultObject instanceof Set) {
+            return sp.getStringSet(key, (Set<String>) defaultObject);
         }
 
         return null;

@@ -5,11 +5,7 @@
         <item>家居</item>
         <item>摄影</item>
         <item>美食</item>
-        <item>旅行</item>
-        <item>造型</item>
         <item>美女</item>
-        <item>宠物</item>
-        <item>电影图书</item>
     </string-array>
 
     <string-array name="type_array">
@@ -17,10 +13,6 @@
         <item>home</item>
         <item>photography</item>
         <item>food_drink</item>
-        <item>travel_places</item>
-        <item>modeling_hair</item>
         <item>beauty</item>
-        <item>pets</item>
-        <item>film_music_books</item>
     </string-array>
 </resources>

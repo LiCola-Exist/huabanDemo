@@ -51,8 +51,6 @@ public class MainActivity extends BaseActivity
     private SimpleDraweeView img_nav_head;//头像
     private TextView tv_nav_username;//用户名
     private TextView tv_nav_email;//用户邮箱
-    private ImageButton ibtn_nav_setting;//设置按钮
-    private ImageButton ibtn_nav_clear;//清空按钮
 
     private FragmentManager fragmentManager;
 
@@ -108,24 +106,28 @@ public class MainActivity extends BaseActivity
     }
 
     private void setNavUserInfo() {
-        String key = (String) SPUtils.get(mContext, Constant.USERHEADKEY, "");
-        if (!TextUtils.isEmpty(key)) {
-            key = getString(R.string.url_image) + key;
-            new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_nav_head, key)
-                    .setIsCircle(true)
-                    .build();
-        } else {
-            Logger.d("user head key is empty");
-        }
+        Boolean isLogin = (Boolean) SPUtils.get(mContext, Constant.ISLOGIN, false);
+        Logger.d("isLogin=" + isLogin);
+        if (isLogin) {
+            String key = (String) SPUtils.get(mContext, Constant.USERHEADKEY, "");
+            if (!TextUtils.isEmpty(key)) {
+                key = getString(R.string.url_image) + key;
+                new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_nav_head, key)
+                        .setIsCircle(true)
+                        .build();
+            } else {
+                Logger.d("user head key is empty");
+            }
 
-        String username = (String) SPUtils.get(mContext, Constant.USERNAME, "");
-        if (!TextUtils.isEmpty(username)) {
-            tv_nav_username.setText(username);
-        }
+            String username = (String) SPUtils.get(mContext, Constant.USERNAME, "");
+            if (!TextUtils.isEmpty(username)) {
+                tv_nav_username.setText(username);
+            }
 
-        String email = (String) SPUtils.get(mContext, Constant.USEREMAIL, "");
-        if (!TextUtils.isEmpty(email)) {
-            tv_nav_email.setText(email);
+            String email = (String) SPUtils.get(mContext, Constant.USEREMAIL, "");
+            if (!TextUtils.isEmpty(email)) {
+                tv_nav_email.setText(email);
+            }
         }
     }
 
@@ -139,16 +141,12 @@ public class MainActivity extends BaseActivity
         tv_nav_username = ButterKnife.findById(headView, R.id.tv_nav_username);
         tv_nav_email = ButterKnife.findById(headView, R.id.tv_nav_email);
         img_nav_head = ButterKnife.findById(headView, R.id.img_nav_head);
-        ibtn_nav_setting = ButterKnife.findById(headView, R.id.ibtn_nav_setting);
-//        ibtn_nav_clear = (ImageButton) headView.findViewById(R.id.ibtn_nav_clear);
 
-        initNavButton();
         initNavGroupButton(group);
 
         tv_nav_username.setOnClickListener(this);
         img_nav_head.setOnClickListener(this);
-        ibtn_nav_setting.setOnClickListener(this);
-//        ibtn_nav_clear.setOnClickListener(this);
+
 
     }
 
@@ -165,10 +163,6 @@ public class MainActivity extends BaseActivity
     }
 
 
-    private void initNavButton() {
-        ibtn_nav_setting.setImageDrawable(Utils.getTintCompatDrawable(mContext,R.drawable.ic_settings_white_24dp,R.color.tint_list_grey));
-    }
-
     private void intiMenuView() {
         /**
          * 手动填充Menu 方便以后对menu的调整
@@ -178,9 +172,10 @@ public class MainActivity extends BaseActivity
         int order = 0;
         for (String title : titleList) {
 //            menu.add(Menu.NONE, order++, Menu.NONE, title).setIcon(R.drawable.ic_menu_share).setCheckable(true);
-            menu.add(Menu.NONE, order++, Menu.NONE, title).setCheckable(true);
+            menu.add(Menu.NONE, order++, Menu.NONE, title).setIcon(mDrawableList[0]).setCheckable(true);
         }
         menu.getItem(0).setChecked(true);
+
     }
 
     private void intiDrawer(Toolbar toolbar) {
@@ -256,12 +251,6 @@ public class MainActivity extends BaseActivity
                 LoginActivity.launch(MainActivity.this);
                 break;
             case R.id.tv_nav_username:
-
-                break;
-            case R.id.ibtn_nav_clear:
-
-                break;
-            case R.id.ibtn_nav_setting:
 
                 break;
 

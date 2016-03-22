@@ -7,14 +7,11 @@ import android.widget.Filter;
 import java.util.ArrayList;
 import java.util.List;
 
-import licola.demo.com.huabandemo.Util.Logger;
-
 /**
  * Created by LiCola on  2016/03/21  0:41
  */
 public class SearHintAdapter extends ArrayAdapter<String> {
     private static final String TAG = "SearHintAdapter";
-
 
     private Filter mFilter;
     private List<String> mObjects;

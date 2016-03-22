@@ -6,6 +6,9 @@
         android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
         app:showAsAction="always"
         />
+    <item android:id="@+id/action_add"
+    android:icon="@android:drawable/ic_menu_add"
+    android:title="@string/action_bar_add" />
     <!--有点击效果的menu-->
     <!--<item android:id="@+id/action_search"-->
         <!--android:title="@string/action_bar_search"-->

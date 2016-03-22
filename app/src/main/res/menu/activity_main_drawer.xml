@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group
-        android:id="@+id/group_menu_default"
-        android:checkableBehavior="single">
+    <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_menu_all"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_all"
-            />
-        <item
-            android:id="@+id/nav_menu_popular"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_popular" />
+            android:id="@+id/nav_city"
+            android:icon="@drawable/ic_cloud_upload_black_24dp"
+            android:title="选择城市"/>
     </group>
+
+    <item android:title="@string/app_name">
+        <menu>
+            <item
+                android:id="@+id/nav_set"
+                android:icon="@drawable/ic_settings_white_24dp"
+                android:title="设置"/>
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_settings_white_24dp"
+                android:title="关于"/>
+        </menu>
+    </item>
 
 
 </menu>

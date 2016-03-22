@@ -352,7 +352,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void saveUserInfo(UserMeBean result) {
-        SPUtils.put(mContext, Constant.ISLOGIN, Boolean.FALSE);
+        SPUtils.clear(mContext);
+        SPUtils.put(mContext, Constant.ISLOGIN, Boolean.TRUE);
         SPUtils.put(mContext, Constant.USERNAME, result.getUsername());
         SPUtils.put(mContext, Constant.USERID, result.getUser_id());
         SPUtils.put(mContext, Constant.USERHEADKEY, result.getAvatar().getKey());

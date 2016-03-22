@@ -23,16 +23,6 @@
             />
 
 
-        <ImageButton
-            style="@style/ibtn_padding_bg"
-            android:id="@+id/ibtn_nav_setting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="24dp"
-            />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -42,11 +32,10 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/ibtn_nav_arrow"
-            android:layout_toStartOf="@+id/ibtn_nav_arrow"
             android:layout_marginLeft="@dimen/activity_horizontal_margin"
             android:paddingBottom="@dimen/activity_vertical_margin"
-            >
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
 
             <TextView
                 android:layout_width="match_parent"
@@ -66,14 +55,6 @@
 
         </LinearLayout>
 
-        <ImageButton
-            style="@style/ibtn_padding_bg"
-            android:id="@+id/ibtn_nav_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            />
     </RelativeLayout>
 
     <LinearLayout

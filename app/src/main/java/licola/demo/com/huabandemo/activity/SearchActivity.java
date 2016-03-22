@@ -4,40 +4,39 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 
-import com.jakewharton.rxbinding.support.v7.widget.RxSearchView;
 import com.jakewharton.rxbinding.view.RxView;
-import com.jakewharton.rxbinding.widget.RxAutoCompleteTextView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.adapter.SearHintAdapter;
 import licola.demo.com.huabandemo.bean.SearchHintBean;
@@ -46,7 +45,6 @@ import licola.demo.com.huabandemo.view.FlowLayout;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -54,7 +52,6 @@ public class SearchActivity extends BaseActivity {
 
     @Bind(R.id.actv_search)
     AutoCompleteTextView mACTVSearch;
-
     @Bind(R.id.scrollview_search)
     ScrollView mScrollViewSearch;
     @Bind(R.id.flow_reference)
@@ -64,13 +61,16 @@ public class SearchActivity extends BaseActivity {
     @Bind(R.id.ibtn_clear_history)
     ImageButton mIBtnClearHistory;
 
+    @BindString(R.string.hint_not_history)
+    String mStringNotHistory;
+
     final int mItemLineNumber = 4;//每行的个数
     final int mItemMargin = 1;
     final int mItemTVMargin = 10;
     int mItemWidth;//子控件的宽度
 
     private ArrayAdapter<String> mAdapter;
-    private ArrayList<String> mListHttpHint=new ArrayList<>();
+    private ArrayList<String> mListHttpHint = new ArrayList<>();
 
     @Override
     protected int getLayoutId() {
@@ -89,27 +89,43 @@ public class SearchActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        initFlowHistory(mFlowHistory);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_search);
         setSupportActionBar(toolbar);
-        ActionBar actionBar= getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
 
         mIBtnClearHistory.setImageDrawable(Utils.getTintCompatDrawable(mContext, R.drawable.ic_close_white_24dp, R.color.tint_list_grey));
         initFlowReference(mFlowReference);
-        initFlowHistory(mFlowHistory);
 
-        addUsernameAutoComplete();
+        initHintAdapter();
+        initHintHttp();
+        mACTVSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Logger.d(mListHttpHint.get(position));
+                ResultActivity.launch(SearchActivity.this,mListHttpHint.get(position));
+            }
+        });
+        initClearHistory();//点击按钮 清除历史记录的操作
+    }
 
-        RxTextView.textChanges(mACTVSearch)
+    private void initHintHttp() {
+        RxTextView.textChanges(mACTVSearch)//观察mACTVSearch的输入变化
                 .observeOn(Schedulers.io())
                 .filter(new Func1<CharSequence, Boolean>() {
                     @Override
                     public Boolean call(CharSequence charSequence) {
-                        return charSequence.length()>0;
+                        return charSequence.length() > 0;//过滤空输入
                     }
                 })
                 //debounce 函数 过滤掉由Observable发射的速率过快的数据
@@ -119,11 +135,23 @@ public class SearchActivity extends BaseActivity {
                 .switchMap(new Func1<CharSequence, Observable<SearchHintBean>>() {
                     @Override
                     public Observable<SearchHintBean> call(CharSequence charSequence) {
-                        return getSearHit(charSequence.toString());
+                        return getSearHit(charSequence.toString());//Retrofit开始联网 直接返回Observable<SearchHintBean>
+                    }
+                })
+                .map(new Func1<SearchHintBean, List<String>>() {
+                    @Override
+                    public List<String> call(SearchHintBean searchHintBean) {
+                        return searchHintBean.getResult();//转换联网返回结果
+                    }
+                })
+                .filter(new Func1<List<String>, Boolean>() {
+                    @Override
+                    public Boolean call(List<String> strings) {
+                        return strings.size() > 0;//过滤联网空返回
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SearchHintBean>() {
+                .subscribe(new Subscriber<List<String>>() {
                     @Override
                     public void onCompleted() {
                         Logger.d();
@@ -135,33 +163,29 @@ public class SearchActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onNext(SearchHintBean searchHintBean) {
-
+                    public void onNext(List<String> strings) {
                         mListHttpHint.clear();
-                        mListHttpHint.addAll(searchHintBean.getResult());
+                        mListHttpHint.addAll(strings);
                         mAdapter.notifyDataSetChanged();
+                        Logger.d("strings.size()=" + strings.size() +" mAdapter.getCount()=" + mAdapter.getCount());
                     }
                 });
-
-        initClearHistory();//点击按钮 清除历史记录的操作
     }
 
 
-    private void addUsernameAutoComplete() {
+    private void initHintAdapter() {
 
         mAdapter = new SearHintAdapter(mContext,
-                android.R.layout.simple_dropdown_item_1line,mListHttpHint);
+                android.R.layout.simple_spinner_dropdown_item, mListHttpHint);
 
         mACTVSearch.setAdapter(mAdapter);
 
-
-//        mAdapter = new ArrayAdapter<>(mContext,
-//                android.R.layout.simple_dropdown_item_1line,mListHttpHint);
-//        mACTVTest.setAdapter(mAdapter);
     }
 
     private void initActionSearch() {
-
+        if (mACTVSearch.getText().length()>0){
+            ResultActivity.launch(SearchActivity.this,mACTVSearch.getText().toString());
+        }
     }
 
     private void initClearHistory() {
@@ -181,17 +205,23 @@ public class SearchActivity extends BaseActivity {
                     public void onNext(Void aVoid) {
                         Logger.d();
                         mFlowHistory.removeAllViews();
-                        addChildTextTips(mFlowHistory, "没有纪录");
+                        SPUtils.remove(mContext,Constant.HISTORYTEXT);
+                        addChildTextTips(mFlowHistory, mStringNotHistory);
                     }
                 });
     }
 
     private void initFlowHistory(FlowLayout mFlowHistory) {
         mFlowHistory.removeAllViews();
-        String mTextList[] = getResources().getStringArray(R.array.title_array_all);//显示的文字
-        for (String mTextString :
-                mTextList) {
-            addChildText(mFlowHistory, mTextString);
+//        String mTextList[] = getResources().getStringArray(R.array.title_array_all);//显示的文字
+        HashSet<String> mTextList= (HashSet<String>) SPUtils.get(mContext, Constant.HISTORYTEXT,new HashSet<>());
+        if (!mTextList.isEmpty()){
+            for (String mTextString :
+                    mTextList) {
+                addChildText(mFlowHistory, mTextString);
+            }
+        }else {
+            addChildTextTips(mFlowHistory,mStringNotHistory);
         }
     }
 
@@ -211,6 +241,7 @@ public class SearchActivity extends BaseActivity {
         TextView tvChild = new TextView(mContext);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
+        layoutParams.setMargins(mItemTVMargin, mItemTVMargin, mItemTVMargin, mItemTVMargin);
         tvChild.setText(mTextString);
         tvChild.setLayoutParams(layoutParams);
         tvChild.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -280,85 +311,6 @@ public class SearchActivity extends BaseActivity {
         return true;
     }
 
-    /**
-     * SearchView的监听处理
-     * @param searchView
-     */
-    private void initSearchView(final SearchView searchView) {
-
-        RxSearchView.queryTextChanges(searchView)
-                .filter(new Func1<CharSequence, Boolean>() {
-                    @Override
-                    public Boolean call(CharSequence charSequence) {
-                        return !charSequence.equals("");
-                    }
-                })
-                .observeOn(Schedulers.io())
-                //debounce 函数 过滤掉由Observable发射的速率过快的数据
-                .debounce(500, TimeUnit.MILLISECONDS)
-                //switchMap函数 每当源Observable发射一个新的数据项（Observable）时，
-                //它将取消订阅并停止监视之前那个数据项产生的Observable，并开始监视当前发射的这一个。
-                .switchMap(new Func1<CharSequence, Observable<SearchHintBean>>() {
-                    @Override
-                    public Observable<SearchHintBean> call(CharSequence charSequence) {
-                        return getSearHit(charSequence.toString());
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SearchHintBean>() {
-                    @Override
-                    public void onCompleted() {
-                        Logger.d();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Logger.d(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(SearchHintBean searchHintBean) {
-                        Logger.d(searchHintBean.getResult().toString());
-//                        mScrollViewSearch.setVisibility(View.GONE);
-//                        mListViewSearch.setVisibility(View.VISIBLE);
-                    }
-                });
-
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            /**
-//             * Called when the user submits the query. This could be due to a key press on the
-//             * keyboard or due to pressing a submit button.
-//             * The listener can override the standard behavior by returning true
-//             * to indicate that it has handled the submit request. Otherwise return false to
-//             * let the SearchView handle the submission by launching any associated intent.
-//             *
-//             * @param query the query text that is to be submitted
-//             *
-//             * @return true if the query has been handled by the listener, false to let the
-//             * SearchView perform the default action.
-//             */
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                Logger.d(query);
-//                return false;
-//            }
-//
-//            /**
-//             * Called when the query text is changed by the user.
-//             *
-//             * @param newText the new content of the query text field.
-//             *
-//             * @return false if the SearchView should perform the default action of showing any
-//             * suggestions if available, true if the action was handled by the listener.
-//             */
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                Logger.d(newText);
-//                return true;
-//            }
-//        });
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Logger.d(item.getTitle().toString());
@@ -371,8 +323,6 @@ public class SearchActivity extends BaseActivity {
 
         return true;
     }
-
-
 
 
 }

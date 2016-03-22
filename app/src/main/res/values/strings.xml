@@ -57,6 +57,10 @@
     <string name="action_bar_edit">Edit</string>
 
     <string name="hint_search">key</string>
+    <string name="hint_not_history">noting</string>
+
+    <string name="text_search_history">History</string>
+    <string name="text_reference">reference</string>
 
     <string name="card_title">测试Card的title应该是很长的文本</string>
     <string name="card_username">用户名14sp</string>
@@ -170,5 +174,7 @@
     </string>
 
     <string name="section_format">Hello World from section: %1$d</string>
+
+
 
 </resources>

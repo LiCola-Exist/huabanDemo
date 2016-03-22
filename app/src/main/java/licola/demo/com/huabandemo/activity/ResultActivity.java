@@ -21,11 +21,14 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 
+import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.bean.SearchHintBean;
 import licola.demo.com.huabandemo.httpUtils.RetrofitGsonRx;
 import rx.Observable;
@@ -73,38 +76,20 @@ public class ResultActivity extends BaseActivity {
 
         key=getIntent().getStringExtra(SEARCHKEY);
         Logger.d(key);
-
+        saveSearchHistory(key);
         initAdapter();
 
-        RxTextView.textChanges(mEditSearch)
-                .observeOn(Schedulers.io())
-                //debounce函数 过滤掉由Observable发射的速率过快的数据
-                .debounce(300, TimeUnit.MILLISECONDS)
-                //switchMap函数 每当源Observable发射一个新的数据项（Observable）时，
-                //它将取消订阅并停止监视之前那个数据项产生的Observable，并开始监视当前发射的这一个。
-                .switchMap(new Func1<CharSequence, Observable<SearchHintBean>>() {
-                    @Override
-                    public Observable<SearchHintBean> call(CharSequence charSequence) {
-                        return getSearHit(charSequence.toString());
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<SearchHintBean>() {
-                    @Override
-                    public void onCompleted() {
-                        Logger.d();
-                    }
+    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Logger.d(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(SearchHintBean searchHintBean) {
-                        Logger.d(searchHintBean.getResult().toString());
-                    }
-                });
+    private void saveSearchHistory(String key) {
+        //转到这个界面就表示 搜索成功 保存搜索记录
+        HashSet<String> hashSet= (HashSet<String>) SPUtils.get(mContext,Constant.HISTORYTEXT,new HashSet<String>());
+        for (String s :
+                hashSet) {
+            Logger.d(s);
+        }
+        hashSet.add(key);
+        SPUtils.put(mContext, Constant.HISTORYTEXT,hashSet);
     }
 
     private void initAdapter() {

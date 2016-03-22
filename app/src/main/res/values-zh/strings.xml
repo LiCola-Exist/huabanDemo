@@ -50,6 +50,10 @@
     <string name="action_bar_edit">编辑</string>
 
     <string name="hint_search">关键字</string>
+    <string name="hint_not_history">空</string>
+
+    <string name="text_search_history">搜索记录</string>
+    <string name="text_reference">推荐模块</string>
 
     <string name="card_title">测试Card的title应该是很长的文本</string>
     <string name="card_username">用户名14sp</string>
@@ -77,4 +81,6 @@
     <string name="error_field_required">请输入内容</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."</string>
+
+
 </resources>

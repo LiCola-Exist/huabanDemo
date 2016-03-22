@@ -19,16 +19,18 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:theme="@style/ThemeOverlay.AppCompat.ActionBar" >
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" >
             <AutoCompleteTextView
                 android:id="@+id/actv_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_search"
-                android:completionThreshold="1"
-                android:inputType="textAutoComplete"
+                android:singleLine="true"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:inputType="textAutoComplete"
+                android:completionThreshold="1"
+                android:popupBackground="@color/white"
+                />
             </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
@@ -63,7 +65,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:text="搜索记录"
+                    android:text="@string/text_search_history"
                     android:padding="12dp"
                     android:textColor="@color/secondary_text"
                     />
@@ -88,7 +90,7 @@
            <TextView
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:text="推荐模块"
+               android:text="@string/text_reference"
                android:padding="12dp"
                android:textColor="@color/secondary_text"
                />

@@ -9,6 +9,7 @@ public class Constant {
     public static final String USERID="userID";
     public static final String USERHEADKEY="userHeadKey";
     public static final String USEREMAIL="userEmail";
+    public static final String HISTORYTEXT="historyText";
 
 
     public static final int LIMIT=20;
