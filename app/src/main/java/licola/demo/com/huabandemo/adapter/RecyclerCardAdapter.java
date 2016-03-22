@@ -22,19 +22,23 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Utils;
+
 import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
 
+import static android.view.View.*;
 import static android.view.ViewGroup.OnClickListener;
 import static android.view.ViewGroup.VISIBLE;
 
 
 /**
- * TODO: Replace the implementation with code for your data type.
+ * Created by LiCola on  2016/03/22  18:00
+ * 负责展示CardView 的adapter
  */
-public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.ViewHolder> {
+public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapter.ViewHolder> {
     private final String life = "Life";
     private Context mContext;
     private List<PinsEntity> mList = new ArrayList<>(20);
@@ -46,21 +50,21 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         return mList;
     }
 
-    public void setmList(List<PinsEntity> mList) {
+    public void setList(List<PinsEntity> mList) {
         this.mList = mList;
         notifyDataSetChanged();
     }
 
-    public void setNotifyData(List<PinsEntity> mList) {
+    public void addList(List<PinsEntity> mList) {
         this.mList.addAll(mList);
         notifyDataSetChanged();
     }
 
-    public int getmAdapterPosition() {
+    public int getAdapterPosition() {
         return mAdapterPosition;
     }
 
-    public void setmAdapterPosition(int mAdapterPosition) {
+    public void setAdapterPosition(int mAdapterPosition) {
         this.mAdapterPosition = mAdapterPosition;
     }
 
@@ -68,12 +72,14 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     public interface onAdapterListener {
         void onClickImage(PinsEntity bean, View view);
 
-        void onClickBoard(PinsEntity bean, View view);
+        void onClickTitleInfo(PinsEntity bean, View view);
 
-        void onClickInfo(PinsEntity bean, View view);
+        void onClickInfoGather(PinsEntity bean, View view);
+
+        void onClickInfoLike(PinsEntity bean, View view);
     }
 
-    public MainRecyclerViewAdapter(Context context) {
+    public RecyclerCardAdapter(Context context) {
         this.mContext = context;
         this.url_root = mContext.getResources().getString(R.string.url_image);
     }
@@ -87,8 +93,20 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Logger.d(life);
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_cardview, parent, false);
-        return new ViewHolder(view);
+                .inflate(R.layout.item_cardview_image, parent, false);
+        ViewHolder holder= new ViewHolder(view);
+
+        holder.tv_card_like.setCompoundDrawablesWithIntrinsicBounds(
+                Utils.getTintCompatDrawable(mContext,R.drawable.ic_favorite_white_18dp,R.color.tint_list_grey),
+                null,
+                null,
+                null);
+        holder.tv_card_gather.setCompoundDrawablesWithIntrinsicBounds(
+                Utils.getTintCompatDrawable(mContext,R.drawable.ic_explore_white_18dp,R.color.tint_list_grey),
+                null,
+                null,
+                null);
+        return holder;
     }
 
     @Override
@@ -97,8 +115,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         //当有被被回收viewHolder调用
         // Logger.d(life);
         holder.img_card_image.setTag(null);
-        holder.img_card_head.setTag(null);
-        holder.ibtn_card_gif.setVisibility(View.INVISIBLE);
+        holder.ibtn_card_gif.setVisibility(INVISIBLE);
     }
 
     @Override
@@ -125,16 +142,24 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     }
 
     private void onBindData(final ViewHolder holder, PinsEntity bean) {
-        String title = bean.getRaw_text();
-        if (!TextUtils.isEmpty(title)) {
-            holder.tv_card_title.setVisibility(VISIBLE);
-            holder.tv_card_title.setText(title);
-        } else {
-            holder.tv_card_title.setVisibility(View.GONE);
-        }
+        //检查图片信息
+        if (checkInfoContext(bean)){
+            holder.ll_title_info.setVisibility(VISIBLE);
 
-        holder.tv_card_gather.setText(bean.getBoard().getTitle());
-        holder.tv_card_username.setText(bean.getUser().getUsername());
+            String title = bean.getRaw_text();//图片的文字描述
+            int like=bean.getLike_count();//被喜欢数量
+            int gather=bean.getRepin_count();//被转采的数量
+            if (!TextUtils.isEmpty(title)){
+                holder.tv_card_title.setVisibility(VISIBLE);
+                holder.tv_card_title.setText(title);
+            }else {
+                holder.tv_card_title.setVisibility(GONE);
+            }
+            holder.tv_card_like.setText(" "+like);
+            holder.tv_card_gather.setText(" "+gather);
+        }else {
+            holder.ll_title_info.setVisibility(GONE);
+        }
 
         String url_img = url_root + bean.getFile().getKey();
         String url_head = bean.getUser().getAvatar();
@@ -144,23 +169,6 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         //长图 "width":440,"height":5040,
         holder.img_card_image.setAspectRatio(ratio);//设置宽高比
 
-
-//        FrescoBuilder.setHeadDrawableMC2V(mContext, holder.img_card_head, url_head,true);
-        new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_head, url_head)
-                .setIsCircle(true)
-                .build();
-
-
-//        FrescoBuilder.setImageDrawableMC2V(mContext, holder.img_card_image, url_img, new FrescoBuilder.onAnimatableListener() {
-//            @Override
-//            public void onComplete(boolean isPlay, Animatable animatable) {
-//                if (isPlay) {
-//                    holder.ibtn_card_gif.setVisibility(VISIBLE);
-//                    setPlayListener(holder, animatable);
-//                    setPlayDrawable(holder, false);
-//                }
-//            }
-//        });
         Drawable dProgressImage = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, R.drawable.ic_toys_white_48dp).mutate());
         DrawableCompat.setTintList(dProgressImage, ContextCompat.getColorStateList(mContext, R.color.tint_list_pink));
 
@@ -180,26 +188,53 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                 .build();
     }
 
-    private void onBindListener(final ViewHolder holder, final PinsEntity bean) {
+    /**
+     * 检查三项信息 任何一项不为空 都返回true
+     * @param bean
+     * @return
+     */
+    private boolean checkInfoContext(PinsEntity bean) {
+
+        String title = bean.getRaw_text();//图片的文字描述
+        int like=bean.getLike_count();//被喜欢数量
+        int gather=bean.getRepin_count();//被转采的数量
+
+        if (!TextUtils.isEmpty(title)){
+            return true;
+        }else if (like>0||gather>0){
+            return true;
+        }
+
+        return false;
+    }
+
+    private void onBindListener(ViewHolder holder, final PinsEntity bean) {
 
         holder.rl_image.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onClickImage(bean, holder.rl_image);
+                mListener.onClickImage(bean, v);
             }
         });
 
-        holder.ll_board.setOnClickListener(new OnClickListener() {
+        holder.ll_title_info.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onClickBoard(bean, holder.ll_board);
+                mListener.onClickTitleInfo(bean, v);
             }
         });
 
-        holder.ll_info.setOnClickListener(new OnClickListener() {
+        holder.tv_card_gather.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onClickInfo(bean, holder.ll_info);
+                mListener.onClickInfoGather(bean,v);
+            }
+        });
+
+        holder.tv_card_like.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.onClickInfoLike(bean,v);
             }
         });
     }
@@ -244,33 +279,33 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        //这个CardView采用三层操作
+        //这个CardView采用两层操作
         public final View mView;
 
-        public final FrameLayout rl_image;//第一层
+        public final FrameLayout rl_image;//第一层 包含图片和播放按钮
         public final SimpleDraweeView img_card_image;
         public final ImageButton ibtn_card_gif;
 
-        public final LinearLayout ll_board;//第二层
-        public final TextView tv_card_title;
+        public final LinearLayout ll_title_info;//第二层 包含描述 图片信息
+        public final TextView tv_card_title;//第二层 描述title
 
+        public final LinearLayout ll_info;//第二层的子类 包含图片被采集和喜爱的信息
         public final TextView tv_card_gather;
-        public final LinearLayout ll_info;//第三层
-        public final TextView tv_card_username;
-        public final SimpleDraweeView img_card_head;
+        public final TextView tv_card_like;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             rl_image = (FrameLayout) view.findViewById(R.id.rl_image);
-            ll_info = (LinearLayout) view.findViewById(R.id.ll_info);
-            ll_board = (LinearLayout) view.findViewById(R.id.ll_board);
-            img_card_image = (SimpleDraweeView) view.findViewById(R.id.img_card_image);
-            img_card_head = (SimpleDraweeView) view.findViewById(R.id.img_card_head);
-            ibtn_card_gif = (ImageButton) view.findViewById(R.id.ibtn_card_gif);
-            tv_card_title = (TextView) view.findViewById(R.id.tv_card_title);
-            tv_card_username = (TextView) view.findViewById(R.id.tv_card_username);
+            img_card_image = (SimpleDraweeView) view.findViewById(R.id.img_card_image);//主图
+            ibtn_card_gif = (ImageButton) view.findViewById(R.id.ibtn_card_gif);//播放按钮
+
+            ll_title_info= (LinearLayout) view.findViewById(R.id.ll_title_info);//图片所有文字信息
+            tv_card_title = (TextView) view.findViewById(R.id.tv_card_title);//描述的title
+
+            ll_info = (LinearLayout) view.findViewById(R.id.ll_info);//文字子类
             tv_card_gather = (TextView) view.findViewById(R.id.tv_card_gather);
+            tv_card_like= (TextView) view.findViewById(R.id.tv_card_like);
         }
 
     }

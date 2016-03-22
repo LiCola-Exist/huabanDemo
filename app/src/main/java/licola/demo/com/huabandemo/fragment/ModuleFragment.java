@@ -1,6 +1,5 @@
 package licola.demo.com.huabandemo.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -25,10 +24,9 @@ import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.activity.ImageDetailActivity;
-import licola.demo.com.huabandemo.activity.ScrollingActivity;
-import licola.demo.com.huabandemo.adapter.MainRecyclerViewAdapter;
+import licola.demo.com.huabandemo.adapter.RecyclerCardAdapter;
 import licola.demo.com.huabandemo.bean.CardBigBean;
-import licola.demo.com.huabandemo.bean.CardBigBean.PinsEntity;
+import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.bean.SearchImageBean;
 import licola.demo.com.huabandemo.bean.SearchPeopleBean;
 import licola.demo.com.huabandemo.httpUtils.RetrofitGson;
@@ -69,10 +67,11 @@ public class ModuleFragment extends BaseFragment {
     RecyclerView mRecyclerView;
     @Bind(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefresh;
-    @Bind(R.id.progressBar_home)
+    @Bind(R.id.progressBar_recycler)
     ProgressBar mProgressBar;
 
-    private MainRecyclerViewAdapter mAdapter;
+//    private MainRecyclerViewAdapter mAdapter;
+    private RecyclerCardAdapter mAdapter;
     private Handler mHandler = new Handler();
 
     private final Runnable mRefresh = new Runnable() {
@@ -102,7 +101,7 @@ public class ModuleFragment extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_home;
+        return R.layout.fragment_module;
     }
 
     @Override
@@ -135,7 +134,8 @@ public class ModuleFragment extends BaseFragment {
         //// TODO: 2016/3/17 0017 预留选项 应该在设置中 添加一条单条垂直滚动选项
 //        LinearLayoutManager layoutManager=new LinearLayoutManager(HuaBanApplication.getInstance());
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new MainRecyclerViewAdapter(HuaBanApplication.getInstance());
+//        mAdapter = new MainRecyclerViewAdapter(HuaBanApplication.getInstance());
+        mAdapter = new RecyclerCardAdapter(HuaBanApplication.getInstance());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());//设置默认动画
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -144,17 +144,17 @@ public class ModuleFragment extends BaseFragment {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (RecyclerView.SCROLL_STATE_IDLE == newState) {
                     //滑动停止
-//                    Logger.d("滑动停止 position=" + mAdapter.getmAdapterPosition());
+//                    Logger.d("滑动停止 position=" + mAdapter.getAdapterPosition());
                     int size = (int) (mAdapter.getItemCount() * percentageScroll);
-                    if (mAdapter.getmAdapterPosition() >= --size) {
+                    if (mAdapter.getAdapterPosition() >= --size) {
                         getHttpMaxId(type, maxId, limit);
                     }
                 } else if (RecyclerView.SCROLL_STATE_DRAGGING == newState) {
                     //用户正在滑动
-//                    Logger.d("用户正在滑动 position=" + mAdapter.getmAdapterPosition());
+//                    Logger.d("用户正在滑动 position=" + mAdapter.getAdapterPosition());
                 } else {
                     //惯性滑动
-//                    Logger.d("惯性滑动 position=" + mAdapter.getmAdapterPosition());
+//                    Logger.d("惯性滑动 position=" + mAdapter.getAdapterPosition());
                 }
             }
         });
@@ -195,7 +195,7 @@ public class ModuleFragment extends BaseFragment {
                     public void onNext(CardBigBean result) {
                         Logger.d();
                         maxId = getMaxId(result);
-                        mAdapter.setNotifyData(result.getPins());
+                        mAdapter.addList(result.getPins());
                     }
                 });
     }
@@ -249,7 +249,7 @@ public class ModuleFragment extends BaseFragment {
                         Logger.d(result.toString());
                         //保存maxId值 后续加载需要
                         maxId = getMaxId(result);
-                        mAdapter.setmList(result.getPins());
+                        mAdapter.setList(result.getPins());
                     }
                 });
 
@@ -266,7 +266,7 @@ public class ModuleFragment extends BaseFragment {
 //                if (result.getPins().size() != 0) {
 //                    //保存maxid值 后续加载需要
 //                    maxId = result.getPins().get(result.getPins().size() - 1).getPin_id();
-//                    mAdapter.setmList(result.getPins());
+//                    mAdapter.setList(result.getPins());
 //                } else {
 //                    Logger.d("pins size=" + result.getPins().size());
 //                }
@@ -313,7 +313,7 @@ public class ModuleFragment extends BaseFragment {
         RetrofitGson.service.httpTypeSearch(type, key, page, per_page).enqueue(new Callback<CardBigBean>() {
             @Override
             public void onResponse(Response<CardBigBean> response, Retrofit retrofit) {
-                mAdapter.setNotifyData(response.body().getPins());
+                mAdapter.addList(response.body().getPins());
 
             }
 
@@ -364,30 +364,56 @@ public class ModuleFragment extends BaseFragment {
         });
 
 
-        mAdapter.setOnClickItemListener(new MainRecyclerViewAdapter.onAdapterListener() {
+//        mAdapter.setOnClickItemListener(new MainRecyclerViewAdapter.onAdapterListener() {
+//            @Override
+//            public void onClickImage(PinsEntity bean, View view) {
+////                Logger.d(bean.toString());
+////                Intent intent = new Intent(getActivity(), ImageActivity.class);
+////                intent.putExtra("key", bean.getFile().getKey());
+////                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+////                    getActivity().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity(), view, "card_image").toBundle());
+////                }
+//
+//                ImageDetailActivity.launch(getActivity());
+//                EventBus.getDefault().postSticky(bean);
+//            }
+//
+//            @Override
+//            public void onClickBoard(PinsEntity bean, View view) {
+//                Logger.d(bean.toString());
+//                Intent intent = new Intent(getActivity(), ScrollingActivity.class);
+//                getActivity().startActivity(intent);
+//            }
+//
+//            @Override
+//            public void onClickTitleInfo(PinsEntity bean, View view) {
+//                Logger.d(bean.toString());
+//            }
+//        });
+
+        mAdapter.setOnClickItemListener(new RecyclerCardAdapter.onAdapterListener() {
             @Override
             public void onClickImage(PinsEntity bean, View view) {
-//                Logger.d(bean.toString());
-//                Intent intent = new Intent(getActivity(), ImageActivity.class);
-//                intent.putExtra("key", bean.getFile().getKey());
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                    getActivity().startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity(), view, "card_image").toBundle());
-//                }
-
+                Logger.d();
                 ImageDetailActivity.launch(getActivity());
                 EventBus.getDefault().postSticky(bean);
             }
 
             @Override
-            public void onClickBoard(PinsEntity bean, View view) {
-                Logger.d(bean.toString());
-                Intent intent = new Intent(getActivity(), ScrollingActivity.class);
-                getActivity().startActivity(intent);
+            public void onClickTitleInfo(PinsEntity bean, View view) {
+                Logger.d();
+                ImageDetailActivity.launch(getActivity());
+                EventBus.getDefault().postSticky(bean);
             }
 
             @Override
-            public void onClickInfo(PinsEntity bean, View view) {
-                Logger.d(bean.toString());
+            public void onClickInfoGather(PinsEntity bean, View view) {
+                Logger.d();
+            }
+
+            @Override
+            public void onClickInfoLike(PinsEntity bean, View view) {
+                Logger.d();
             }
         });
     }

@@ -28,7 +28,6 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
@@ -113,7 +112,7 @@ public class SearchActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Logger.d(mListHttpHint.get(position));
-                ResultActivity.launch(SearchActivity.this,mListHttpHint.get(position));
+                SearchResultActivity.launch(SearchActivity.this,mListHttpHint.get(position));
             }
         });
         initClearHistory();//点击按钮 清除历史记录的操作
@@ -184,7 +183,7 @@ public class SearchActivity extends BaseActivity {
 
     private void initActionSearch() {
         if (mACTVSearch.getText().length()>0){
-            ResultActivity.launch(SearchActivity.this,mACTVSearch.getText().toString());
+            SearchResultActivity.launch(SearchActivity.this,mACTVSearch.getText().toString());
         }
     }
 
@@ -262,7 +261,7 @@ public class SearchActivity extends BaseActivity {
         tvChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ResultActivity.launch(SearchActivity.this, tvChild.getText().toString());
+                SearchResultActivity.launch(SearchActivity.this, tvChild.getText().toString());
             }
         });
 

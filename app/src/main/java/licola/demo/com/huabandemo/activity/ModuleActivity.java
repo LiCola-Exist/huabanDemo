@@ -50,7 +50,9 @@ public class ModuleActivity extends BaseActivity {
         type=getIntent().getStringExtra(TYPE_KEY);
         setTitle(title);
 
-        getFragmentManager().beginTransaction().replace(R.id.framelayout_module, ModuleFragment.newInstance(type,title)).commit();
+//        getFragmentManager().beginTransaction().replace(R.id.framelayout_module, ModuleFragment.newInstance(type,title)).commit();
+        getSupportFragmentManager().
+                beginTransaction().replace(R.id.framelayout_module,ModuleFragment.newInstance(type,title)).commit();
     }
 
 }

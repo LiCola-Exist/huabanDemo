@@ -46,12 +46,11 @@
     </style>
 
     <style name="card_text_context">
-        <item name="android:textSize">@dimen/card_context_size_16sp</item>
-        <item name="android:textColor">@color/secondary_text</item>
+        <item name="android:textSize">@dimen/card_context_size_12sp</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:paddingLeft">@dimen/text_spacing_default</item>
-        <item name="android:paddingRight">@dimen/text_spacing_default</item>
+        <item name="android:padding">@dimen/activity_margin</item>
         <item name="android:gravity">center|left</item>
     </style>
 

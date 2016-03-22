@@ -21,7 +21,9 @@ import licola.demo.com.huabandemo.Util.Utils;
 /**
  * Created by LiCola on  2015/12/05  13:48
  * 自定义Converter 转换器 用于解析list返回类型时
- * avatar对象有时为String类型 有时是对象
+ * 一般涉及到user用户信息的
+ * avatar对象有时是String类型表示来自本地服务器之外的数据 有时是对象表示自身服务器的数据
+ * 这里中正则表达式 统一为
  */
 public class PinsConverter extends retrofit.Converter.Factory {
     private static final String TAG="PinsConverter";
@@ -91,14 +93,16 @@ public class PinsConverter extends retrofit.Converter.Factory {
 
         private String regexChange(String input) {
             String result=input;
+            //匹配规则是当avatar是{}包装的对象
             Pattern mPAvatar=Pattern.compile("\"avatar\":\\{([^\\}]*)\\}");
             Matcher mMAvatar=mPAvatar.matcher(result);
-            while (mMAvatar.find()){
+            while (mMAvatar.find()){//如果找到 开始替换
                 result=result.replaceFirst("\"avatar\":\\{([^\\}]*)\\}",getKey(mMAvatar.group()));
             }
             return result;
         }
 
+        //取出key值 统一拼接成http://img.hb.aicdn.com/+图片key 作为String返回
         private String getKey(String group) {
             Matcher matcher=mPkey.matcher(group);
             StringBuffer buffer=new StringBuffer();

@@ -10,43 +10,45 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.EditText;
-import android.widget.TextView;
-
-import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.HashSet;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
-import licola.demo.com.huabandemo.bean.SearchHintBean;
-import licola.demo.com.huabandemo.httpUtils.RetrofitGsonRx;
+import licola.demo.com.huabandemo.bean.SearchBoardBean;
+import licola.demo.com.huabandemo.bean.SearchImageBean;
+import licola.demo.com.huabandemo.bean.SearchPeopleBean;
+import licola.demo.com.huabandemo.fragment.ResultImageFragment;
+import licola.demo.com.huabandemo.httpUtils.RetrofitPinsRx;
 import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
 
-public class ResultActivity extends BaseActivity {
 
-    private static final String SEARCHKEY="KEY";
+public class SearchResultActivity extends BaseActivity {
+
+    private static final String SEARCHKEY = "KEY";
     private String key;//搜索的关键字
 
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    @BindString(R.string.title_activity_search_result)
+    String mTitleSeatch;
+    @BindString(R.string.title_fragment_image)
+    String mTitleImage;
+    @BindString(R.string.title_fragment_board)
+    String mTitleBoard;
+    @BindString(R.string.title_fragment_user)
+    String mTitleUser;
 
-    @Bind(R.id.edit_search)
-    EditText mEditSearch;
+    @Bind(R.id.viewpager_search)
+    ViewPager mViewPager;
+    @Bind(R.id.tablayou_search)
+    TabLayout mTabLayout;
+
+    private SectionsPagerAdapter mSectionsPagerAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -59,10 +61,9 @@ public class ResultActivity extends BaseActivity {
     }
 
 
-    public static void launch(Activity activity,String key) {
-        Intent intent = new Intent(activity, ResultActivity.class);
-        intent.putExtra(SEARCHKEY,key);
-//        ActivityCompat.startActivity();
+    public static void launch(Activity activity, String key) {
+        Intent intent = new Intent(activity, SearchResultActivity.class);
+        intent.putExtra(SEARCHKEY, key);
         activity.startActivity(intent);
     }
 
@@ -74,22 +75,34 @@ public class ResultActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        key=getIntent().getStringExtra(SEARCHKEY);
+        key = getIntent().getStringExtra(SEARCHKEY);
         Logger.d(key);
         saveSearchHistory(key);
         initAdapter();
+        setTitle(String.format(mTitleSeatch, key));
+    }
 
+    private Observable<SearchImageBean> getSearchImage(String key, int page, int limit) {
+        return RetrofitPinsRx.service.httpImageSearchRx(key, page, limit);
+    }
+
+    private Observable<SearchBoardBean> getSearchBoard(String key, int page, int limit) {
+        return RetrofitPinsRx.service.httpBoardSearchRx(key, page, limit);
+    }
+
+    private Observable<SearchPeopleBean> getSearchPeople(String key, int page, int limit) {
+        return RetrofitPinsRx.service.httpPeopleSearchRx(key, page, limit);
     }
 
     private void saveSearchHistory(String key) {
         //转到这个界面就表示 搜索成功 保存搜索记录
-        HashSet<String> hashSet= (HashSet<String>) SPUtils.get(mContext,Constant.HISTORYTEXT,new HashSet<String>());
+        HashSet<String> hashSet = (HashSet<String>) SPUtils.get(mContext, Constant.HISTORYTEXT, new HashSet<String>());
         for (String s :
                 hashSet) {
             Logger.d(s);
         }
         hashSet.add(key);
-        SPUtils.put(mContext, Constant.HISTORYTEXT,hashSet);
+        SPUtils.put(mContext, Constant.HISTORYTEXT, hashSet);
     }
 
     private void initAdapter() {
@@ -98,11 +111,10 @@ public class ResultActivity extends BaseActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.viewpager_search);
+
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tablayou_search);
-        tabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
 
@@ -111,10 +123,6 @@ public class ResultActivity extends BaseActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_result, menu);
         return true;
-    }
-
-    private Observable<SearchHintBean> getSearHit(String key) {
-        return RetrofitGsonRx.service.httpSearHintBean(key);
     }
 
     @Override
@@ -132,40 +140,6 @@ public class ResultActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_result, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -181,7 +155,10 @@ public class ResultActivity extends BaseActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+            if (position == 0) {
+                return ResultImageFragment.newInstance(key);
+            }
+            return ResultImageFragment.newInstance(key);
         }
 
         @Override
@@ -194,11 +171,11 @@ public class ResultActivity extends BaseActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return mTitleImage;
                 case 1:
-                    return "SECTION 2";
+                    return mTitleBoard;
                 case 2:
-                    return "SECTION 3";
+                    return mTitleUser;
             }
             return null;
         }

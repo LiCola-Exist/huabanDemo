@@ -64,7 +64,11 @@
     <string name="title_activity_Login">登录</string>
     <string name="title_activity_image_detail">图片详情</string>
     <string name="title_activity_search">搜索</string>
+    <string name="title_activity_search_result">搜索%s</string>
     <string name="title_activity_module">模块</string>
+    <string name="title_fragment_image">图片</string>
+    <string name="title_fragment_board">画板</string>
+    <string name="title_fragment_user">用户</string>
 
     <string name="net_error">网络连接错误</string>
     <string name="net_error_data">网络返回数据错误</string>

@@ -1,21 +1,20 @@
 package licola.demo.com.huabandemo.fragment;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.Util.Logger;
-import retrofit.Call;
+
 
 /**
  * Created by LiCola on  2015/12/19  20:19
  */
 public abstract class BaseFragment extends Fragment {
-    protected Call mCall;
 
     protected String TAG =getTAG();
 

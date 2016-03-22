@@ -9,7 +9,12 @@
     <string name="title_activity_Login">Login</string>
     <string name="title_activity_image_detail">ImageDetail</string>
     <string name="title_activity_search">Search</string>
+    <string name="title_activity_search_result">Search%s</string>
     <string name="title_activity_module">Module</string>
+
+    <string name="title_fragment_image">Images</string>
+    <string name="title_fragment_board">Boards</string>
+    <string name="title_fragment_user">User</string>
 
     <string name="action_settings">setting</string>
 

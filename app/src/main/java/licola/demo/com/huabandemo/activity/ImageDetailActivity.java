@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.drawee.drawable.ScalingUtils;
@@ -33,6 +34,7 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.TimeUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.bean.CardBigBean;
+import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
 
 public class ImageDetailActivity extends BaseActivity {
@@ -115,12 +117,13 @@ public class ImageDetailActivity extends BaseActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         initTintDrawable(btn_image_gather, R.drawable.ic_favorite_border_white_24dp);
         initTintDrawable(btn_image_favorite, R.drawable.ic_favorite_border_white_24dp);
         initTintDrawable(ibtn_image_user_chevron_right, R.drawable.ic_chevron_right_white_24dp);
         initTintDrawable(ibtn_image_board_chevron_right, R.drawable.ic_chevron_right_white_24dp);
         initTintDrawable(tv_image_link, R.drawable.ic_link_white_24dp);
+//        ListView listView=new ListView(mContext);
 
 //        int[] attrs = new int[]{R.attr.selectableItemBackground};
 //        TypedArray typedArray = this.obtainStyledAttributes(attrs);
@@ -157,7 +160,7 @@ public class ImageDetailActivity extends BaseActivity {
 
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_image_big, url_img)
-                .setActualImageScaleType(ScalingUtils.ScaleType.FOCUS_CROP)
+//                .setActualImageScaleType(ScalingUtils.ScaleType.FOCUS_CROP)
                 .setRetryImage(drawable_refresh)
                 .setFailureImage(drawable_cancel)
                 .build();
@@ -184,7 +187,7 @@ public class ImageDetailActivity extends BaseActivity {
     }
 
     @Subscribe(sticky = true)
-    public void onEventReceiveBean(CardBigBean.PinsEntity bean) {
+    public void onEventReceiveBean(PinsEntity bean) {
         Logger.d(TAG + " receive bean");
         url_img = url_image + bean.getFile().getKey();
         url_head = bean.getUser().getAvatar();
@@ -195,13 +198,11 @@ public class ImageDetailActivity extends BaseActivity {
 
     }
 
-    private void setImageTextInfo(CardBigBean.PinsEntity bean) {
+    private void setImageTextInfo(PinsEntity bean) {
         String raw = bean.getRaw_text();
         if (!TextUtils.isEmpty(raw)) {
-            setTitle(raw);
             tv_image_text.setText(raw);
         } else {
-            setTitle("");
             tv_image_text.setText("图片暂无描述");
         }
 

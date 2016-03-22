@@ -1,10 +1,11 @@
 package licola.demo.com.huabandemo.activity;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -76,17 +76,17 @@ public class MainActivity extends BaseActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
-        fragmentManager = getFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         types = getResources().getStringArray(R.array.type_array);
         titles = getResources().getStringArray(R.array.title_array);
 
         initFloatingActionButton();
 
-        intiDrawer(toolbar);
-        initHeadView();
-        intiMenuView();
-        selectFragment(0);
+        intiDrawer(toolbar);//初始化DrawerLayout
+        initHeadView();//为Drawer添加头部
+        intiMenuView();//为Drawer添加menu菜单项目
 
+        selectFragment(0);//默认选中0
 
     }
 
@@ -105,6 +105,9 @@ public class MainActivity extends BaseActivity
         setNavUserInfo();
     }
 
+    /**
+     * 根据登录状态 显示头像和用户名
+     */
     private void setNavUserInfo() {
         Boolean isLogin = (Boolean) SPUtils.get(mContext, Constant.ISLOGIN, false);
         Logger.d("isLogin=" + isLogin);
@@ -142,15 +145,20 @@ public class MainActivity extends BaseActivity
         tv_nav_email = ButterKnife.findById(headView, R.id.tv_nav_email);
         img_nav_head = ButterKnife.findById(headView, R.id.img_nav_head);
 
-        initNavGroupButton(group);
+        addButtonDrawable(group);
 
         tv_nav_username.setOnClickListener(this);
         img_nav_head.setOnClickListener(this);
 
-
     }
 
-    private void initNavGroupButton(LinearLayout group) {
+    /**
+     * 取出父视图中的button 动态添加的Drawable资源
+     * 使用了V4兼容包的Tint方法
+     *
+     * @param group
+     */
+    private void addButtonDrawable(LinearLayout group) {
         Button btn = null;
         for (int i = 0, size = group.getChildCount(); i < size; i++) {
             btn = (Button) group.getChildAt(i);
@@ -163,10 +171,11 @@ public class MainActivity extends BaseActivity
     }
 
 
+    /**
+     * 手动填充Menu 方便以后对menu的调整
+     */
     private void intiMenuView() {
-        /**
-         * 手动填充Menu 方便以后对menu的调整
-         */
+
         Menu menu = mNavigation.getMenu();
         String titleList[] = getResources().getStringArray(R.array.title_array);
         int order = 0;
@@ -174,7 +183,7 @@ public class MainActivity extends BaseActivity
 //            menu.add(Menu.NONE, order++, Menu.NONE, title).setIcon(R.drawable.ic_menu_share).setCheckable(true);
             menu.add(Menu.NONE, order++, Menu.NONE, title).setIcon(mDrawableList[0]).setCheckable(true);
         }
-        menu.getItem(0).setChecked(true);
+        menu.getItem(0).setChecked(true);//默认选中第一项
 
     }
 
@@ -186,6 +195,7 @@ public class MainActivity extends BaseActivity
 
         mNavigation.setNavigationItemSelectedListener(this);
     }
+
 
     private void selectFragment(int position) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -261,14 +271,4 @@ public class MainActivity extends BaseActivity
         mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
 }

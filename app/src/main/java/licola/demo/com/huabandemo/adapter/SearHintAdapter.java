@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Created by LiCola on  2016/03/21  0:41
+ * 主要用在输入提示的adapter
  */
 public class SearHintAdapter extends ArrayAdapter<String> {
     private static final String TAG = "SearHintAdapter";

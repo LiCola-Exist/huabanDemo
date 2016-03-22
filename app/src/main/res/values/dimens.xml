@@ -25,6 +25,8 @@
     <dimen name="card_spacing_default_half">4dp</dimen>
     <dimen name="card_title_size_24sp">24sp</dimen>
 
+    <dimen name="card_context_size_10sp">10sp</dimen>
+    <dimen name="card_context_size_12sp">12sp</dimen>
     <dimen name="card_context_size_14sp">14sp</dimen>
     <dimen name="card_context_size_16sp">16sp</dimen>
     <dimen name="card_context_size_18sp">18sp</dimen>
