@@ -30,7 +30,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.BindString;
-import licola.demo.com.huabandemo.API.HttpInterface;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
@@ -39,10 +38,7 @@ import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.bean.TokenBean;
 import licola.demo.com.huabandemo.bean.UserMeBean;
-import licola.demo.com.huabandemo.httpUtils.HttpRequest;
-import licola.demo.com.huabandemo.httpUtils.RetrofitGson;
 import licola.demo.com.huabandemo.httpUtils.RetrofitGsonRx;
-import retrofit.Call;
 import retrofit.HttpException;
 import rx.Observable;
 import rx.Subscriber;
@@ -59,6 +55,9 @@ public class LoginActivity extends BaseActivity {
     //登录的报文需要
     private static final String BASIC = "Basic ";
     private static final String PASSWORD = "password";
+
+    private String mAccessToken;//后续所有的https联网都使用 需要暂时保存
+    private String mRefreshToken;
 
     //需要的资源
     @BindString(R.string.snack_message_net_error)
@@ -220,6 +219,16 @@ public class LoginActivity extends BaseActivity {
 
     private void httpLogin(String username, String password) {
         getUserToken(username, password)
+                //得到toke成功 用内部字段保存 在最后得到用户信息一起保存写入
+                .map(new Func1<TokenBean, TokenBean>() {
+                    @Override
+                    public TokenBean call(TokenBean tokenBean) {
+                        mAccessToken = tokenBean.getAccess_token();
+                        mRefreshToken = tokenBean.getRefresh_token();
+                        return tokenBean;
+                    }
+                })
+                //得到Observable<> 将它转换成另一个Observable<>
                 .flatMap(new Func1<TokenBean, Observable<UserMeBean>>() {
                     @Override
                     public Observable<UserMeBean> call(TokenBean tokenBean) {
@@ -264,14 +273,11 @@ public class LoginActivity extends BaseActivity {
                     public void onNext(UserMeBean userMeBean) {
                         Snackbar.make(mScrollViewLogin, snack_message_login_success, Snackbar.LENGTH_LONG)
                                 .show();
-                        saveUserInfo(userMeBean);
+                        saveUserInfo(userMeBean,mAccessToken,mRefreshToken);
                     }
                 });
     }
 
-    private void startHttpLogin(String username, String password) {
-        getToken(username, password);
-    }
 
     private Observable<TokenBean> getUserToken(String username, String password) {
         return RetrofitGsonRx.service.httpsTokenRx(BASIC + Base64.getClientInfo(), PASSWORD, username, password);
@@ -281,78 +287,11 @@ public class LoginActivity extends BaseActivity {
         return RetrofitGsonRx.service.httpUserRx(bearer + " " + key);
     }
 
-    private void getToken(String username, String password) {
 
-        Call<TokenBean> call = RetrofitGson.service.httpsToken(BASIC + Base64.getClientInfo(), PASSWORD, username, password);
-
-        HttpRequest.Requeset(call, new HttpInterface<TokenBean>() {
-            @Override
-            public void onHttpStart() {
-                showProgress(true);
-            }
-
-            @Override
-            public void onHttpSuccess(TokenBean result) {
-                //成功后下一步
-                getUserMe(result.getToken_type(), result.getAccess_token());
-            }
-
-            @Override
-            public void onHttpError(int code, String msg) {
-                //网络返回数据错误 需要提示
-                showProgress(false);
-                Snackbar.make(mScrollViewLogin, R.string.error_incorrect_password, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-
-            @Override
-            public void onHttpFailure(String error) {
-                //联网错误 需要提示
-                showProgress(false);
-                Snackbar.make(mScrollViewLogin, R.string.net_error, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-    }
-
-
-    private void getUserMe(String bearer, String key) {
-        String Authorization = bearer + " " + key;
-        Call<UserMeBean> call = RetrofitGson.service.httpUsers(Authorization);
-
-        HttpRequest.Requeset(call, new HttpInterface<UserMeBean>() {
-
-            @Override
-            public void onHttpFinish() {
-                //联网结束
-                showProgress(false);
-            }
-
-            @Override
-            public void onHttpSuccess(UserMeBean result) {
-                //登录成功需要保存数据
-                Snackbar.make(mScrollViewLogin, "登录成功！", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                saveUserInfo(result);
-            }
-
-            @Override
-            public void onHttpError(int code, String msg) {
-                Snackbar.make(mScrollViewLogin, R.string.net_error_data, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-
-            @Override
-            public void onHttpFailure(String error) {
-                Snackbar.make(mScrollViewLogin, R.string.net_error, Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
-
-    private void saveUserInfo(UserMeBean result) {
+    private void saveUserInfo(UserMeBean result,String mAccessToken,String mRefreshToken) {
         SPUtils.clear(mContext);
+        SPUtils.put(mContext,Constant.ACCESSTOKEN,mAccessToken);
+        SPUtils.put(mContext,Constant.REFRESHTOKEN,mRefreshToken);
         SPUtils.put(mContext, Constant.ISLOGIN, Boolean.TRUE);
         SPUtils.put(mContext, Constant.USERNAME, result.getUsername());
         SPUtils.put(mContext, Constant.USERID, result.getUser_id());

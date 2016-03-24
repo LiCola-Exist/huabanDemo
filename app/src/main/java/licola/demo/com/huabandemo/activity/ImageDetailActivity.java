@@ -3,9 +3,11 @@ package licola.demo.com.huabandemo.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -15,12 +17,15 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.image.ImageInfo;
 
 import butterknife.Bind;
 import butterknife.BindColor;
@@ -35,6 +40,8 @@ import licola.demo.com.huabandemo.Util.TimeUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.bean.CardBigBean;
 import licola.demo.com.huabandemo.bean.PinsEntity;
+import licola.demo.com.huabandemo.fragment.ModuleFragment;
+import licola.demo.com.huabandemo.fragment.ResultImageFragment;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
 
 public class ImageDetailActivity extends BaseActivity {
@@ -48,6 +55,8 @@ public class ImageDetailActivity extends BaseActivity {
     @BindDrawable(R.color.pink_500)
     Drawable drawable_pink;
 
+    @Bind(R.id.colltoolbar_layout)
+    CollapsingToolbarLayout mCollapsingToolBar;
     @Bind(R.id.toolbar_image)
     Toolbar toolbar;
     @Bind(R.id.fab_main)
@@ -64,6 +73,7 @@ public class ImageDetailActivity extends BaseActivity {
     @Bind(R.id.btn_image_favorite)
     Button btn_image_favorite;
 
+
     @Bind(R.id.img_image_user)
     SimpleDraweeView img_image_user;
     @Bind(R.id.tv_image_user)
@@ -79,7 +89,6 @@ public class ImageDetailActivity extends BaseActivity {
     TextView tv_image_board;
     @Bind(R.id.ibtn_image_board_chevron_right)
     ImageButton ibtn_image_board_chevron_right;
-
 
 
     private String url_img;//图片地址
@@ -117,13 +126,13 @@ public class ImageDetailActivity extends BaseActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        mCollapsingToolBar.setExpandedTitleColor(Color.TRANSPARENT);//设置折叠后的文字颜色
         initTintDrawable(btn_image_gather, R.drawable.ic_favorite_border_white_24dp);
         initTintDrawable(btn_image_favorite, R.drawable.ic_favorite_border_white_24dp);
         initTintDrawable(ibtn_image_user_chevron_right, R.drawable.ic_chevron_right_white_24dp);
         initTintDrawable(ibtn_image_board_chevron_right, R.drawable.ic_chevron_right_white_24dp);
         initTintDrawable(tv_image_link, R.drawable.ic_link_white_24dp);
-//        ListView listView=new ListView(mContext);
+
 
 //        int[] attrs = new int[]{R.attr.selectableItemBackground};
 //        TypedArray typedArray = this.obtainStyledAttributes(attrs);
@@ -163,6 +172,15 @@ public class ImageDetailActivity extends BaseActivity {
 //                .setActualImageScaleType(ScalingUtils.ScaleType.FOCUS_CROP)
                 .setRetryImage(drawable_refresh)
                 .setFailureImage(drawable_cancel)
+                .setControllerListener(new BaseControllerListener<ImageInfo>() {
+                    @Override
+                    public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
+                        super.onFinalImageSet(id, imageInfo, animatable);
+                        if (animatable != null) {
+                            animatable.start();
+                        }
+                    }
+                })
                 .build();
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_image_user, url_head)

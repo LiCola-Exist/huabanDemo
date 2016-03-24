@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +25,12 @@ import java.util.List;
 
 
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
 
 import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.view.recyclerview.RecyclerViewUtils;
 
 import static android.view.View.*;
 import static android.view.ViewGroup.OnClickListener;
@@ -40,6 +43,7 @@ import static android.view.ViewGroup.VISIBLE;
  */
 public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapter.ViewHolder> {
     private final String life = "Life";
+    private RecyclerView mRecyclerView;
     private Context mContext;
     private List<PinsEntity> mList = new ArrayList<>(20);
     private onAdapterListener mListener;
@@ -79,8 +83,9 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
         void onClickInfoLike(PinsEntity bean, View view);
     }
 
-    public RecyclerCardAdapter(Context context) {
-        this.mContext = context;
+    public RecyclerCardAdapter(RecyclerView recyclerView) {
+        this.mRecyclerView = recyclerView;
+        this.mContext = recyclerView.getContext();
         this.url_root = mContext.getResources().getString(R.string.url_image);
     }
 
@@ -91,21 +96,22 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // Logger.d(life);
+        Logger.d(life);
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_cardview_image, parent, false);
-        ViewHolder holder= new ViewHolder(view);
+        ViewHolder holder = new ViewHolder(view);
 
         holder.tv_card_like.setCompoundDrawablesWithIntrinsicBounds(
-                Utils.getTintCompatDrawable(mContext,R.drawable.ic_favorite_white_18dp,R.color.tint_list_grey),
+                Utils.getTintCompatDrawable(mContext, R.drawable.ic_favorite_white_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);
         holder.tv_card_gather.setCompoundDrawablesWithIntrinsicBounds(
-                Utils.getTintCompatDrawable(mContext,R.drawable.ic_explore_white_18dp,R.color.tint_list_grey),
+                Utils.getTintCompatDrawable(mContext, R.drawable.ic_explore_white_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);
+
         return holder;
     }
 
@@ -113,15 +119,14 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
         //当有被被回收viewHolder调用
-        // Logger.d(life);
+        Logger.d(life);
         holder.img_card_image.setTag(null);
         holder.ibtn_card_gif.setVisibility(INVISIBLE);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        // Logger.d(life);
-//        Logger.d(holder.toString());
+        Logger.d(life);
         final PinsEntity bean = mList.get(position);
 
         //注释的是 动态修改image高度
@@ -135,29 +140,39 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
     }
 
     @Override
-    public void onViewAttachedToWindow(final ViewHolder holder) {
+    public void onViewAttachedToWindow(ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        // Logger.d(life);
+        Logger.d(life);
         mAdapterPosition = holder.getAdapterPosition();
+
+//        Logger.d("mAdapterPosition="+mAdapterPosition);
+//        mAdapterPosition = RecyclerViewUtils.getAdapterPosition(mRecyclerView, holder);
+
+        //能够让某个view满格的 setFullSpan 方法
+//        ViewGroup.LayoutParams layoutParams=holder.mView.getLayoutParams();
+//        if (layoutParams!=null &&layoutParams instanceof StaggeredGridLayoutManager.LayoutParams){
+//            StaggeredGridLayoutManager.LayoutParams params= (StaggeredGridLayoutManager.LayoutParams) layoutParams;
+//            params.setFullSpan(holder.getLayoutPosition()==0);
+//        }
     }
 
     private void onBindData(final ViewHolder holder, PinsEntity bean) {
         //检查图片信息
-        if (checkInfoContext(bean)){
+        if (checkInfoContext(bean)) {
             holder.ll_title_info.setVisibility(VISIBLE);
 
             String title = bean.getRaw_text();//图片的文字描述
-            int like=bean.getLike_count();//被喜欢数量
-            int gather=bean.getRepin_count();//被转采的数量
-            if (!TextUtils.isEmpty(title)){
+            int like = bean.getLike_count();//被喜欢数量
+            int gather = bean.getRepin_count();//被转采的数量
+            if (!TextUtils.isEmpty(title)) {
                 holder.tv_card_title.setVisibility(VISIBLE);
                 holder.tv_card_title.setText(title);
-            }else {
+            } else {
                 holder.tv_card_title.setVisibility(GONE);
             }
-            holder.tv_card_like.setText(" "+like);
-            holder.tv_card_gather.setText(" "+gather);
-        }else {
+            holder.tv_card_like.setText(" " + like);
+            holder.tv_card_gather.setText(" " + gather);
+        } else {
             holder.ll_title_info.setVisibility(GONE);
         }
 
@@ -190,18 +205,19 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
 
     /**
      * 检查三项信息 任何一项不为空 都返回true
+     *
      * @param bean
      * @return
      */
     private boolean checkInfoContext(PinsEntity bean) {
 
         String title = bean.getRaw_text();//图片的文字描述
-        int like=bean.getLike_count();//被喜欢数量
-        int gather=bean.getRepin_count();//被转采的数量
+        int like = bean.getLike_count();//被喜欢数量
+        int gather = bean.getRepin_count();//被转采的数量
 
-        if (!TextUtils.isEmpty(title)){
+        if (!TextUtils.isEmpty(title)) {
             return true;
-        }else if (like>0||gather>0){
+        } else if (like > 0 || gather > 0) {
             return true;
         }
 
@@ -227,14 +243,14 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
         holder.tv_card_gather.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onClickInfoGather(bean,v);
+                mListener.onClickInfoGather(bean, v);
             }
         });
 
         holder.tv_card_like.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onClickInfoLike(bean,v);
+                mListener.onClickInfoLike(bean, v);
             }
         });
     }
@@ -278,7 +294,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public  class ViewHolder extends RecyclerView.ViewHolder {
         //这个CardView采用两层操作
         public final View mView;
 
@@ -300,12 +316,12 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
             img_card_image = (SimpleDraweeView) view.findViewById(R.id.img_card_image);//主图
             ibtn_card_gif = (ImageButton) view.findViewById(R.id.ibtn_card_gif);//播放按钮
 
-            ll_title_info= (LinearLayout) view.findViewById(R.id.ll_title_info);//图片所有文字信息
+            ll_title_info = (LinearLayout) view.findViewById(R.id.ll_title_info);//图片所有文字信息
             tv_card_title = (TextView) view.findViewById(R.id.tv_card_title);//描述的title
 
             ll_info = (LinearLayout) view.findViewById(R.id.ll_info);//文字子类
             tv_card_gather = (TextView) view.findViewById(R.id.tv_card_gather);
-            tv_card_like= (TextView) view.findViewById(R.id.tv_card_like);
+            tv_card_like = (TextView) view.findViewById(R.id.tv_card_like);
         }
 
     }

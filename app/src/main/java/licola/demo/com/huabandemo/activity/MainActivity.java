@@ -181,8 +181,9 @@ public class MainActivity extends BaseActivity
         int order = 0;
         for (String title : titleList) {
 //            menu.add(Menu.NONE, order++, Menu.NONE, title).setIcon(R.drawable.ic_menu_share).setCheckable(true);
-            menu.add(Menu.NONE, order++, Menu.NONE, title).setIcon(mDrawableList[0]).setCheckable(true);
+            menu.add(R.id.menu_group_type, order++, Menu.NONE, title).setIcon(mDrawableList[0]).setCheckable(true);
         }
+//        menu.addSubMenu("text");
         menu.getItem(0).setChecked(true);//默认选中第一项
 
     }
@@ -245,8 +246,12 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-
-        selectFragment(item.getItemId());
+        if (item.getGroupId()==R.id.menu_group_type){
+            selectFragment(item.getItemId());
+        }else {
+            //// TODO: 2016/3/24 0024 处理 设置 关于 界面
+            Logger.d(item.getTitle().toString());
+        }
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;

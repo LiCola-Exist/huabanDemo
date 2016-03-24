@@ -12,10 +12,12 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import java.util.HashSet;
 
 import butterknife.Bind;
+import butterknife.BindColor;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
@@ -42,6 +44,8 @@ public class SearchResultActivity extends BaseActivity {
     String mTitleBoard;
     @BindString(R.string.title_fragment_user)
     String mTitleUser;
+    @BindColor(R.color.white)
+    int mColorTabIndicator;
 
     @Bind(R.id.viewpager_search)
     ViewPager mViewPager;
@@ -80,6 +84,7 @@ public class SearchResultActivity extends BaseActivity {
         saveSearchHistory(key);
         initAdapter();
         setTitle(String.format(mTitleSeatch, key));
+
     }
 
     private Observable<SearchImageBean> getSearchImage(String key, int page, int limit) {
@@ -102,6 +107,7 @@ public class SearchResultActivity extends BaseActivity {
             Logger.d(s);
         }
         hashSet.add(key);
+
         SPUtils.put(mContext, Constant.HISTORYTEXT, hashSet);
     }
 
@@ -115,6 +121,7 @@ public class SearchResultActivity extends BaseActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
+        mTabLayout.setSelectedTabIndicatorColor(mColorTabIndicator);
     }
 
 

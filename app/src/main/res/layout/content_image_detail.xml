@@ -181,6 +181,8 @@
                 android:layout_alignParentTop="true"
                 android:background="@drawable/drawable_default_selector" />
         </RelativeLayout>
+
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

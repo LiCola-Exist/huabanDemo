@@ -107,7 +107,7 @@ public class ResultImageFragment extends BaseFragment {
         //// TODO: 2016/3/17 0017 预留选项 应该在设置中 添加一条单条垂直滚动选项
 //        LinearLayoutManager layoutManager=new LinearLayoutManager(HuaBanApplication.getInstance());
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new RecyclerCardAdapter(HuaBanApplication.getInstance());
+        mAdapter = new RecyclerCardAdapter(mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());//设置默认动画
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -205,8 +205,12 @@ public class ResultImageFragment extends BaseFragment {
      * @param isShowRecycler
      */
     private void setRecyclerProgressVisibility(boolean isShowRecycler) {
-        mRecyclerView.setVisibility(isShowRecycler?View.VISIBLE:View.GONE);
-        mProgressBar.setVisibility(isShowRecycler ? View.GONE : View.VISIBLE);
+        if (mRecyclerView!=null) {
+            mRecyclerView.setVisibility(isShowRecycler?View.VISIBLE:View.GONE);
+        }
+        if (mProgressBar!=null) {
+            mProgressBar.setVisibility(isShowRecycler ? View.GONE : View.VISIBLE);
+        }
     }
 
     /**

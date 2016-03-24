@@ -3,8 +3,11 @@ package licola.demo.com.huabandemo.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
+import butterknife.Bind;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.fragment.ModuleFragment;
 
@@ -21,6 +24,9 @@ public class ModuleActivity extends BaseActivity {
 
     protected String type;
     protected String title;
+
+    @Bind(R.id.fab_module)
+    FloatingActionButton mFABModule;
 
     @Override
     protected int getLayoutId() {
@@ -53,6 +59,13 @@ public class ModuleActivity extends BaseActivity {
 //        getFragmentManager().beginTransaction().replace(R.id.framelayout_module, ModuleFragment.newInstance(type,title)).commit();
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.framelayout_module,ModuleFragment.newInstance(type,title)).commit();
+
+        mFABModule.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 }

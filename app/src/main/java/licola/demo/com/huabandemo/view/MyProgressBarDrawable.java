@@ -19,6 +19,7 @@ import com.facebook.drawee.drawable.DrawableUtils;
 
 /**
 * Drawable that displays a progress bar based on the level.
+ * 来自Fresco的 自定义Drawable
 */
 public class MyProgressBarDrawable extends Drawable {
 

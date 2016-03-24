@@ -6,11 +6,16 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.google.gson.JsonSyntaxException;
 
 import java.net.UnknownHostException;
@@ -31,6 +36,10 @@ import licola.demo.com.huabandemo.bean.SearchImageBean;
 import licola.demo.com.huabandemo.bean.SearchPeopleBean;
 import licola.demo.com.huabandemo.httpUtils.RetrofitGson;
 import licola.demo.com.huabandemo.httpUtils.RetrofitPinsRx;
+import licola.demo.com.huabandemo.view.HeadStaggeredGirdLayoutManager;
+import licola.demo.com.huabandemo.view.recyclerview.EndlessRecyclerOnScrollListener;
+import licola.demo.com.huabandemo.view.recyclerview.HeaderAndFooterRecyclerViewAdapter;
+import licola.demo.com.huabandemo.view.recyclerview.RecyclerViewUtils;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
@@ -70,8 +79,9 @@ public class ModuleFragment extends BaseFragment {
     @Bind(R.id.progressBar_recycler)
     ProgressBar mProgressBar;
 
-//    private MainRecyclerViewAdapter mAdapter;
+    //    private MainRecyclerViewAdapter mAdapter;
     private RecyclerCardAdapter mAdapter;
+
     private Handler mHandler = new Handler();
 
     private final Runnable mRefresh = new Runnable() {
@@ -128,20 +138,26 @@ public class ModuleFragment extends BaseFragment {
     }
 
 
-
     private void initRecyclerView() {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+//        HeadStaggeredGirdLayoutManager layoutManager = new HeadStaggeredGirdLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+
         //// TODO: 2016/3/17 0017 预留选项 应该在设置中 添加一条单条垂直滚动选项
 //        LinearLayoutManager layoutManager=new LinearLayoutManager(HuaBanApplication.getInstance());
-        mRecyclerView.setLayoutManager(layoutManager);
+
 //        mAdapter = new MainRecyclerViewAdapter(HuaBanApplication.getInstance());
-        mAdapter = new RecyclerCardAdapter(HuaBanApplication.getInstance());
+
+        mAdapter = new RecyclerCardAdapter(mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(layoutManager);
+
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());//设置默认动画
+
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
+
                 if (RecyclerView.SCROLL_STATE_IDLE == newState) {
                     //滑动停止
 //                    Logger.d("滑动停止 position=" + mAdapter.getAdapterPosition());
@@ -158,6 +174,7 @@ public class ModuleFragment extends BaseFragment {
                 }
             }
         });
+
     }
 
     /**
@@ -206,7 +223,7 @@ public class ModuleFragment extends BaseFragment {
      * @param type
      * @param limit
      */
-    private void getHttpFirstAndRefresh(String type, int limit) {
+    private void getHttpFirstAndRefresh(final String type, int limit) {
         Logger.d("getHttpFirstAndRefresh Start ");
 
         Observable<CardBigBean> cardBigBeanObservable = RetrofitPinsRx.service.httpTypeLimitRx(type, limit);
@@ -225,22 +242,19 @@ public class ModuleFragment extends BaseFragment {
                     public void onStart() {
                         super.onStart();
                         Logger.d();
-                        mProgressBar.setVisibility(View.VISIBLE);
-                        mRecyclerView.setVisibility(View.GONE);
+                        setRecyclerProgressVisibility(false);
                     }
 
                     @Override
                     public void onCompleted() {
                         Logger.d();
-                        mProgressBar.setVisibility(View.GONE);
-                        mRecyclerView.setVisibility(View.VISIBLE);
+                        setRecyclerProgressVisibility(true);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Logger.d(e.toString());
-                        mProgressBar.setVisibility(View.GONE);
-                        mRecyclerView.setVisibility(View.VISIBLE);
+                        setRecyclerProgressVisibility(true);
                         checkException(e);//检查错误 弹出提示
                     }
 
@@ -285,12 +299,22 @@ public class ModuleFragment extends BaseFragment {
 
     }
 
+    /**
+     * true 显示recycler 隐藏progress
+     *
+     * @param isShowRecycler
+     */
+    private void setRecyclerProgressVisibility(boolean isShowRecycler) {
+        mRecyclerView.setVisibility(isShowRecycler?View.VISIBLE:View.GONE);
+        mProgressBar.setVisibility(isShowRecycler ? View.GONE : View.VISIBLE);
+    }
+
     private void checkException(Throwable e) {
         if ((e instanceof UnknownHostException)) {
             NetUtils.showNetworkError(getActivity(), mRecyclerView, snack_message_net_error, snack_action_to_setting);
         }
         if (e instanceof JsonSyntaxException) {
-            NetUtils.showNetworkError(getActivity(),mRecyclerView,snack_message_data_error,snack_action_to_setting);
+            NetUtils.showNetworkError(getActivity(), mRecyclerView, snack_message_data_error, snack_action_to_setting);
         } else {
             Snackbar.make(mRecyclerView, snack_message_unknown_error, Snackbar.LENGTH_LONG);
         }

@@ -19,6 +19,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        app:menu="@menu/activity_main_drawer"
         />
     <!--headerLayout 为头部布局文件 -->
     <!--menu 为菜单布局文件   app:menu="@menu/activity_main_drawer" -->
