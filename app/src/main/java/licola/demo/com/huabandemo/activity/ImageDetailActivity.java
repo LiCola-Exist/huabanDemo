@@ -96,6 +96,7 @@ public class ImageDetailActivity extends BaseActivity {
     private String url_board;//画板图片地址
 
 
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_image_detail;

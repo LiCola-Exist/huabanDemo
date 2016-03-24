@@ -6,16 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 
-import com.bartoszlipinski.recyclerviewheader.RecyclerViewHeader;
 import com.google.gson.JsonSyntaxException;
 
 import java.net.UnknownHostException;
@@ -30,14 +26,13 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.activity.ImageDetailActivity;
 import licola.demo.com.huabandemo.adapter.RecyclerCardAdapter;
+import licola.demo.com.huabandemo.adapter.RecyclerHeadCardAdapter;
 import licola.demo.com.huabandemo.bean.CardBigBean;
 import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.bean.SearchImageBean;
 import licola.demo.com.huabandemo.bean.SearchPeopleBean;
 import licola.demo.com.huabandemo.httpUtils.RetrofitGson;
 import licola.demo.com.huabandemo.httpUtils.RetrofitPinsRx;
-import licola.demo.com.huabandemo.view.HeadStaggeredGirdLayoutManager;
-import licola.demo.com.huabandemo.view.recyclerview.EndlessRecyclerOnScrollListener;
 import licola.demo.com.huabandemo.view.recyclerview.HeaderAndFooterRecyclerViewAdapter;
 import licola.demo.com.huabandemo.view.recyclerview.RecyclerViewUtils;
 import retrofit.Callback;
@@ -80,7 +75,8 @@ public class ModuleFragment extends BaseFragment {
     ProgressBar mProgressBar;
 
     //    private MainRecyclerViewAdapter mAdapter;
-    private RecyclerCardAdapter mAdapter;
+//    private RecyclerCardAdapter mAdapter;
+    private RecyclerHeadCardAdapter mAdapter;
 
     private Handler mHandler = new Handler();
 
@@ -147,9 +143,11 @@ public class ModuleFragment extends BaseFragment {
 
 //        mAdapter = new MainRecyclerViewAdapter(HuaBanApplication.getInstance());
 
-        mAdapter = new RecyclerCardAdapter(mRecyclerView);
+        mAdapter = new RecyclerHeadCardAdapter(mRecyclerView);
+//        HeaderAndFooterRecyclerViewAdapter headAdapter= new HeaderAndFooterRecyclerViewAdapter(mAdapter);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(layoutManager);
+//        RecyclerViewUtils.setHeaderView(mRecyclerView, new Button(getContext()));
 
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());//设置默认动画
 
@@ -415,7 +413,7 @@ public class ModuleFragment extends BaseFragment {
 //            }
 //        });
 
-        mAdapter.setOnClickItemListener(new RecyclerCardAdapter.onAdapterListener() {
+        mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.onAdapterListener() {
             @Override
             public void onClickImage(PinsEntity bean, View view) {
                 Logger.d();

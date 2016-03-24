@@ -172,9 +172,8 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     @Override
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-//        mInnerAdapter.onViewAttachedToWindow(holder);
-        Logger.d(holder.getClass().getName());
         mInnerAdapter.onViewAttachedToWindow(holder);
+
     }
 
     @Override

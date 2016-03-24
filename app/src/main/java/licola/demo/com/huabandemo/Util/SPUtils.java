@@ -47,8 +47,8 @@ public class SPUtils {
         } else {
             editor.putString(key, object.toString());
         }
-
-        SharedPreferencesCompat.apply(editor);
+        editor.apply();
+//        SharedPreferencesCompat.apply(editor);
     }
 
     /**
@@ -91,7 +91,8 @@ public class SPUtils {
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(key);
-        SharedPreferencesCompat.apply(editor);
+        editor.apply();
+//        SharedPreferencesCompat.apply(editor);
     }
 
     /**
@@ -104,7 +105,8 @@ public class SPUtils {
                 Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.clear();
-        SharedPreferencesCompat.apply(editor);
+        editor.apply();
+//        SharedPreferencesCompat.apply(editor);
     }
 
     /**
@@ -134,6 +136,7 @@ public class SPUtils {
 
     /**
      * 创建一个解决SharedPreferencesCompat.apply方法的一个兼容类
+     * apply API Level 9 不需要适配
      *
      * @author zhy
      */
