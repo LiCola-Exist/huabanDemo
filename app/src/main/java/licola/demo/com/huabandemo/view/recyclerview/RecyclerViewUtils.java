@@ -16,7 +16,7 @@ public class RecyclerViewUtils {
      * @param recyclerView
      * @param view
      */
-    public static void setHeaderView(RecyclerView recyclerView, View view) {
+    public static void addHearView(RecyclerView recyclerView, View view) {
         RecyclerView.Adapter outerAdapter = recyclerView.getAdapter();
 
         if (outerAdapter == null || !(outerAdapter instanceof HeaderAndFooterRecyclerViewAdapter)) {
@@ -35,7 +35,7 @@ public class RecyclerViewUtils {
      * @param recyclerView
      * @param view
      */
-    public static void setFooterView(RecyclerView recyclerView, View view) {
+    public static void addFootView(RecyclerView recyclerView, View view) {
         RecyclerView.Adapter outerAdapter = recyclerView.getAdapter();
 
         if (outerAdapter == null || !(outerAdapter instanceof HeaderAndFooterRecyclerViewAdapter)) {

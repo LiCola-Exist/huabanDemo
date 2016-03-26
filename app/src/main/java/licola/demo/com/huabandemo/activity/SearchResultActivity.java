@@ -12,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import java.util.HashSet;
 
@@ -37,7 +36,7 @@ public class SearchResultActivity extends BaseActivity {
     private String key;//搜索的关键字
 
     @BindString(R.string.title_activity_search_result)
-    String mTitleSeatch;
+    String mTitle;
     @BindString(R.string.title_fragment_image)
     String mTitleImage;
     @BindString(R.string.title_fragment_board)
@@ -83,7 +82,7 @@ public class SearchResultActivity extends BaseActivity {
         Logger.d(key);
         saveSearchHistory(key);
         initAdapter();
-        setTitle(String.format(mTitleSeatch, key));
+        setTitle(String.format(mTitle, key));
 
     }
 

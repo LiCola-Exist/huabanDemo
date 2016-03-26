@@ -1,9 +1,7 @@
 package licola.demo.com.huabandemo.converter;
 
-import com.google.gson.Gson;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.ResponseBody;
-import com.squareup.okhttp.internal.Util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +10,6 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.bean.CardBigBean;
 
 /**
  * Created by LiCola on  2015/12/05  13:48

@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
@@ -94,9 +93,9 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Logger.d(life);
+        //Logger.d(life);
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_cardview_image, parent, false);
+                .inflate(R.layout.cardview_item_image, parent, false);
         ViewHolder holder = new ViewHolder(view);
 
         holder.tv_card_like.setCompoundDrawablesWithIntrinsicBounds(
@@ -117,22 +116,20 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
     public void onViewRecycled(RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         //当有被被回收viewHolder调用
-        Logger.d(life);
-//        ViewHolder viewHolder = (ViewHolder) holder;
-//        viewHolder.img_card_image.setTag(null);
-//        viewHolder.ibtn_card_gif.setVisibility(INVISIBLE);
+        //Logger.d(life);
+
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        Logger.d(life);
+        //Logger.d(life);
         final PinsEntity bean = mList.get(position);
 
         //注释的是 动态修改image高度
 //        LayoutParams lp = holder.img_card_image.getLayoutParams();
 //        lp.height = height[mAdapterPosition];
 //        holder.img_card_image.setLayoutParams(lp);
-        ViewHolder viewHolder = (ViewHolder) holder;
+        ViewHolder viewHolder = (ViewHolder) holder;//强制类型转换 转成内部的ViewHolder
 
         onBindData(viewHolder, bean);
         onBindListener(viewHolder, bean);//初始化点击事件
@@ -142,14 +139,13 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
     @Override
     public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
-        Logger.d(life);
+        //Logger.d(life);
 //        Logger.d(holder.toString());
 //        mAdapterPosition = holder.getAdapterPosition();
 
 //        Logger.d("mAdapterPosition="+mAdapterPosition);
+        //这是添加headView后 需要修正的position位置
         mAdapterPosition = RecyclerViewUtils.getAdapterPosition(mRecyclerView, holder);
-
-
     }
 
     private void onBindData(final ViewHolder holder, PinsEntity bean) {
@@ -193,7 +189,7 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
                             holder.ibtn_card_gif.setVisibility(VISIBLE);
                             setPlayListener(holder, animatable);
                             setPlayDrawable(holder, false);
-                        }else {
+                        } else {
                             holder.ibtn_card_gif.setVisibility(INVISIBLE);
                         }
                     }
@@ -292,7 +288,7 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
     }
 
 
-    public  class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         //这个CardView采用两层操作
         public final View mView;
 
@@ -310,14 +306,14 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            rl_image = (FrameLayout) view.findViewById(R.id.rl_image);
+            rl_image = (FrameLayout) view.findViewById(R.id.framelayout_image);
             img_card_image = (SimpleDraweeView) view.findViewById(R.id.img_card_image);//主图
             ibtn_card_gif = (ImageButton) view.findViewById(R.id.ibtn_card_gif);//播放按钮
 
-            ll_title_info = (LinearLayout) view.findViewById(R.id.ll_title_info);//图片所有文字信息
+            ll_title_info = (LinearLayout) view.findViewById(R.id.linearlayout_title_info);//图片所有文字信息
             tv_card_title = (TextView) view.findViewById(R.id.tv_card_title);//描述的title
 
-            ll_info = (LinearLayout) view.findViewById(R.id.ll_info);//文字子类
+            ll_info = (LinearLayout) view.findViewById(R.id.linearlayout_info);//文字子类
             tv_card_gather = (TextView) view.findViewById(R.id.tv_card_gather);
             tv_card_like = (TextView) view.findViewById(R.id.tv_card_like);
         }

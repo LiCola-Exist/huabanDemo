@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +29,6 @@ import licola.demo.com.huabandemo.Util.Utils;
 
 import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.view.recyclerview.RecyclerViewUtils;
 
 import static android.view.View.*;
 import static android.view.ViewGroup.OnClickListener;
@@ -98,7 +96,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Logger.d(life);
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_cardview_image, parent, false);
+                .inflate(R.layout.cardview_item_image, parent, false);
         ViewHolder holder = new ViewHolder(view);
 
         holder.tv_card_like.setCompoundDrawablesWithIntrinsicBounds(
@@ -312,14 +310,14 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            rl_image = (FrameLayout) view.findViewById(R.id.rl_image);
+            rl_image = (FrameLayout) view.findViewById(R.id.framelayout_image);
             img_card_image = (SimpleDraweeView) view.findViewById(R.id.img_card_image);//主图
             ibtn_card_gif = (ImageButton) view.findViewById(R.id.ibtn_card_gif);//播放按钮
 
-            ll_title_info = (LinearLayout) view.findViewById(R.id.ll_title_info);//图片所有文字信息
+            ll_title_info = (LinearLayout) view.findViewById(R.id.linearlayout_title_info);//图片所有文字信息
             tv_card_title = (TextView) view.findViewById(R.id.tv_card_title);//描述的title
 
-            ll_info = (LinearLayout) view.findViewById(R.id.ll_info);//文字子类
+            ll_info = (LinearLayout) view.findViewById(R.id.linearlayout_info);//文字子类
             tv_card_gather = (TextView) view.findViewById(R.id.tv_card_gather);
             tv_card_like = (TextView) view.findViewById(R.id.tv_card_like);
         }

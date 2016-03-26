@@ -5,42 +5,31 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.drawable.ScalingUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 
 import butterknife.Bind;
-import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindString;
-import butterknife.OnClick;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.Util.TimeUtils;
 import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.bean.CardBigBean;
 import licola.demo.com.huabandemo.bean.PinsEntity;
-import licola.demo.com.huabandemo.fragment.ModuleFragment;
+import licola.demo.com.huabandemo.fragment.ImageDetailFragment;
 import licola.demo.com.huabandemo.fragment.ResultImageFragment;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
 
@@ -52,8 +41,7 @@ public class ImageDetailActivity extends BaseActivity {
     Drawable drawable_cancel;
     @BindDrawable(R.drawable.ic_refresh_white_48dp)
     Drawable drawable_refresh;
-    @BindDrawable(R.color.pink_500)
-    Drawable drawable_pink;
+
 
     @Bind(R.id.colltoolbar_layout)
     CollapsingToolbarLayout mCollapsingToolBar;
@@ -61,40 +49,12 @@ public class ImageDetailActivity extends BaseActivity {
     Toolbar toolbar;
     @Bind(R.id.fab_main)
     FloatingActionButton fab;
-
     @Bind(R.id.img_image_big)
     SimpleDraweeView img_image_big;
-    @Bind(R.id.tv_image_text)
-    TextView tv_image_text;
-    @Bind(R.id.tv_image_link)
-    TextView tv_image_link;
-    @Bind(R.id.btn_image_gather)
-    Button btn_image_gather;
-    @Bind(R.id.btn_image_favorite)
-    Button btn_image_favorite;
 
+    public String url_img;//图片地址
 
-    @Bind(R.id.img_image_user)
-    SimpleDraweeView img_image_user;
-    @Bind(R.id.tv_image_user)
-    TextView tv_image_user;
-    @Bind(R.id.tv_image_time)
-    TextView tv_image_time;
-    @Bind(R.id.ibtn_image_user_chevron_right)
-    ImageButton ibtn_image_user_chevron_right;
-
-    @Bind(R.id.img_image_board)
-    SimpleDraweeView img_image_board;
-    @Bind(R.id.tv_image_board)
-    TextView tv_image_board;
-    @Bind(R.id.ibtn_image_board_chevron_right)
-    ImageButton ibtn_image_board_chevron_right;
-
-
-    private String url_img;//图片地址
-    private String url_head;//用户头像图片地址
-    private String url_board;//画板图片地址
-
+    public PinsEntity mPinsBean;//公开 填充的Fragment需要访问权限
 
 
     @Override
@@ -116,9 +76,18 @@ public class ImageDetailActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);//注册
 
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initFloatingAction();
+        mCollapsingToolBar.setExpandedTitleColor(Color.TRANSPARENT);//设置折叠后的文字颜色
+        String key = String.valueOf(mPinsBean.getPin_id());
+        getSupportFragmentManager().
+                beginTransaction().replace(R.id.framelayout_info_recycler, ImageDetailFragment.newInstance(key)).commit();
+    }
+
+    private void initFloatingAction() {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,49 +95,13 @@ public class ImageDetailActivity extends BaseActivity {
                         .setAction("Action", null).show();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mCollapsingToolBar.setExpandedTitleColor(Color.TRANSPARENT);//设置折叠后的文字颜色
-        initTintDrawable(btn_image_gather, R.drawable.ic_favorite_border_white_24dp);
-        initTintDrawable(btn_image_favorite, R.drawable.ic_favorite_border_white_24dp);
-        initTintDrawable(ibtn_image_user_chevron_right, R.drawable.ic_chevron_right_white_24dp);
-        initTintDrawable(ibtn_image_board_chevron_right, R.drawable.ic_chevron_right_white_24dp);
-        initTintDrawable(tv_image_link, R.drawable.ic_link_white_24dp);
-
-
-//        int[] attrs = new int[]{R.attr.selectableItemBackground};
-//        TypedArray typedArray = this.obtainStyledAttributes(attrs);
-//        int backgroundResource = typedArray.getResourceId(0, 0);
-//        btn_image_gather.setBackgroundResource(backgroundResource);
-    }
-
-    private void initTintDrawable(View view, int resId) {
-        Drawable drawable = null;
-        if (view instanceof Button) {
-            drawable = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, resId).mutate());
-            DrawableCompat.setTintList(drawable, ContextCompat.getColorStateList(mContext, R.color.tint_list_pink));
-            ((Button) view).setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-            return;
-        }
-
-        if (view instanceof ImageButton) {
-            drawable = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, resId).mutate());
-            DrawableCompat.setTintList(drawable, ContextCompat.getColorStateList(mContext, R.color.tint_list_grey));
-            ((ImageButton) view).setImageDrawable(drawable);
-            return;
-        }
-        if (view instanceof TextView) {
-            drawable = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, resId).mutate());
-            DrawableCompat.setTintList(drawable, ContextCompat.getColorStateList(mContext, R.color.tint_list_grey));
-            ((TextView) view).setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
-            return;
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-
+        //加载大图
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_image_big, url_img)
 //                .setActualImageScaleType(ScalingUtils.ScaleType.FOCUS_CROP)
                 .setRetryImage(drawable_refresh)
@@ -184,12 +117,6 @@ public class ImageDetailActivity extends BaseActivity {
                 })
                 .build();
 
-        new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_image_user, url_head)
-                .setIsCircle(true)
-                .build();
-        new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_image_board, url_head)
-                .setIsRadius(true)
-                .build();
 
     }
 
@@ -207,74 +134,15 @@ public class ImageDetailActivity extends BaseActivity {
 
     @Subscribe(sticky = true)
     public void onEventReceiveBean(PinsEntity bean) {
+        //接受EvenBus传过来的数据
         Logger.d(TAG + " receive bean");
-        url_img = url_image + bean.getFile().getKey();
-        url_head = bean.getUser().getAvatar();
+        this.mPinsBean = bean;
+        url_img = url_image + mPinsBean.getFile().getKey();
 
         img_image_big.setAspectRatio(Utils.getAspectRatio(bean.getFile().getWidth(), bean.getFile().getHeight()));
 
-        setImageTextInfo(bean);//设置图片的文本信息
 
     }
 
-    private void setImageTextInfo(PinsEntity bean) {
-        String raw = bean.getRaw_text();
-        if (!TextUtils.isEmpty(raw)) {
-            tv_image_text.setText(raw);
-        } else {
-            tv_image_text.setText("图片暂无描述");
-        }
 
-        String link = bean.getLink();
-        String source = bean.getSource();
-        if ((!TextUtils.isEmpty(link)) && (!TextUtils.isEmpty(source))) {
-            tv_image_link.setText(source);
-            tv_image_link.setTag(link);
-        } else {
-            tv_image_link.setVisibility(View.GONE);
-        }
-
-
-        String dTime = TimeUtils.getTimeDifference(bean.getCreated_at(), System.currentTimeMillis());
-        tv_image_time.setText(dTime);
-
-        String user = bean.getUser().getUsername();
-        tv_image_user.setText(user);
-
-        String board_title = bean.getBoard().getTitle();
-        if (!TextUtils.isEmpty(board_title)) {
-            tv_image_board.setText(board_title);
-        } else {
-            tv_image_board.setText("暂无画板信息");
-        }
-    }
-
-    @OnClick(R.id.rl_image_user)
-    public void onClickItemImageUser() {
-        Logger.d();
-    }
-
-    @OnClick(R.id.rl_image_board)
-    public void onClickItemImageBoard() {
-        Logger.d();
-    }
-
-    @OnClick(R.id.tv_image_link)
-    public void onClickLink(View view) {
-        String url = (String) view.getTag();
-        Logger.d(url);
-
-        //直接打开浏览器
-//        Intent intent = new Intent();
-//        intent.setAction("android.intent.action.VIEW");
-//        Uri content_url = Uri.parse(url);
-//        intent.setData(content_url);
-//        intent.setClassName("com.android.browser","com.android.browser.BrowserActivity");
-//        startActivity(intent);
-
-        //打开选择浏览器 再浏览界面
-        final Uri uri = Uri.parse(url);
-        final Intent it = new Intent(Intent.ACTION_VIEW, uri);
-        startActivity(it);
-    }
 }

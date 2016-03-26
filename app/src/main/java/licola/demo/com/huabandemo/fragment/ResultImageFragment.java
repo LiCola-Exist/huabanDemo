@@ -2,26 +2,20 @@ package licola.demo.com.huabandemo.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import com.google.gson.JsonSyntaxException;
-
-import java.net.UnknownHostException;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.BindString;
 import de.greenrobot.event.EventBus;
 import licola.demo.com.huabandemo.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.activity.ImageDetailActivity;
 import licola.demo.com.huabandemo.adapter.RecyclerCardAdapter;
 import licola.demo.com.huabandemo.bean.PinsEntity;
@@ -45,16 +39,8 @@ public class ResultImageFragment extends BaseFragment {
     private int mIndex = 1;//默认值为1
     private static int limit = Constant.LIMIT;
 
-    private boolean isFistHttp=true;//是否第一次联网
+    private boolean isFistHttp = true;//是否第一次联网
 
-    @BindString(R.string.snack_message_net_error)
-    String snack_message_net_error;
-    @BindString(R.string.snack_action_to_setting)
-    String snack_action_to_setting;
-    @BindString(R.string.snack_message_unknown_error)
-    String snack_message_unknown_error;
-    @BindString(R.string.snack_message_data_error)
-    String snack_message_data_error;
 
     @Bind(R.id.recycler_list)
     RecyclerView mRecyclerView;
@@ -121,12 +107,6 @@ public class ResultImageFragment extends BaseFragment {
                     if (mAdapter.getAdapterPosition() >= --size) {
                         getHttpSearchImage(mKey, mIndex, limit);//滑动联网
                     }
-                } else if (RecyclerView.SCROLL_STATE_DRAGGING == newState) {
-                    //用户正在滑动
-//                    Logger.d("用户正在滑动 position=" + mAdapter.getAdapterPosition());
-                } else {
-                    //惯性滑动
-//                    Logger.d("惯性滑动 position=" + mAdapter.getAdapterPosition());
                 }
             }
         });
@@ -141,9 +121,9 @@ public class ResultImageFragment extends BaseFragment {
         Logger.d();
 
         getSearchImageObservable(key, index, limit)
-//                .filter(new Func1<CardBigBean, Boolean>() {
+//                .filter(new Func1<ListPinsBean, Boolean>() {
 //                    @Override
-//                    public Boolean call(CardBigBean cardBigBean) {
+//                    public Boolean call(ListPinsBean cardBigBean) {
 //                        //过滤掉数组为0的next
 //                        return cardBigBean.getPins().size() != 0;
 //                    }
@@ -161,7 +141,7 @@ public class ResultImageFragment extends BaseFragment {
                     public void onStart() {
                         super.onStart();
                         Logger.d();
-                        if (isFistHttp){
+                        if (isFistHttp) {
                             setRecyclerProgressVisibility(false);
                         }
                     }
@@ -169,18 +149,18 @@ public class ResultImageFragment extends BaseFragment {
                     @Override
                     public void onCompleted() {
                         Logger.d();
-                        if (isFistHttp){
+                        if (isFistHttp) {
                             setRecyclerProgressVisibility(true);
-                            isFistHttp=false;//第一次联网完成 修改状态值
+                            isFistHttp = false;//第一次联网完成 修改状态值
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Logger.d(e.toString());
-                        if (isFistHttp){
+                        if (isFistHttp) {
                             setRecyclerProgressVisibility(true);
-                            isFistHttp=false;//第一次联网异常 修改状态值
+                            isFistHttp = false;//第一次联网异常 修改状态值
                         }
                         //// TODO: 2016/3/22 0022 需要显示异常
                         checkException(e);//检查错误 弹出提示
@@ -205,27 +185,11 @@ public class ResultImageFragment extends BaseFragment {
      * @param isShowRecycler
      */
     private void setRecyclerProgressVisibility(boolean isShowRecycler) {
-        if (mRecyclerView!=null) {
-            mRecyclerView.setVisibility(isShowRecycler?View.VISIBLE:View.GONE);
+        if (mRecyclerView != null) {
+            mRecyclerView.setVisibility(isShowRecycler ? View.VISIBLE : View.GONE);
         }
-        if (mProgressBar!=null) {
+        if (mProgressBar != null) {
             mProgressBar.setVisibility(isShowRecycler ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    /**
-     * 判断异常类型 根据类型弹出提示
-     *
-     * @param e
-     */
-    private void checkException(Throwable e) {
-        if ((e instanceof UnknownHostException)) {
-            NetUtils.showNetworkError(getActivity(), mRecyclerView, snack_message_net_error, snack_action_to_setting);
-        }
-        if (e instanceof JsonSyntaxException) {
-            NetUtils.showNetworkError(getActivity(), mRecyclerView, snack_message_data_error, snack_action_to_setting);
-        } else {
-            Snackbar.make(mRecyclerView, snack_message_unknown_error, Snackbar.LENGTH_LONG);
         }
     }
 

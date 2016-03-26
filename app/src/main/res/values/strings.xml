@@ -179,7 +179,13 @@
     </string>
 
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="text_foot_loading">loading</string>
+    <string name="text_foot_error">error</string>
+    <string name="text_foot_end">end</string>
 
-
+    <string name="text_image_like_number"> %d like</string>
+    <string name="text_image_gather_number"> %d gather</string>
+    <string name="text_recommend">recommend</string>
+    <string name="text_to">To</string>
 
 </resources>

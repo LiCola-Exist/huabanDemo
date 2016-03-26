@@ -87,7 +87,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Logger.d(life);
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_cardview, parent, false);
+                .inflate(R.layout.cardview_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -262,8 +262,8 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            rl_image = (FrameLayout) view.findViewById(R.id.rl_image);
-            ll_info = (LinearLayout) view.findViewById(R.id.ll_info);
+            rl_image = (FrameLayout) view.findViewById(R.id.framelayout_image);
+            ll_info = (LinearLayout) view.findViewById(R.id.linearlayout_info);
             ll_board = (LinearLayout) view.findViewById(R.id.ll_board);
             img_card_image = (SimpleDraweeView) view.findViewById(R.id.img_card_image);
             img_card_head = (SimpleDraweeView) view.findViewById(R.id.img_card_head);

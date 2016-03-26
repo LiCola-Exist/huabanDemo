@@ -6,7 +6,7 @@ import java.util.List;
  * Created by LiCola on  2015/12/04  20:02
  * 所有的图片列表基类
  */
-public class CardBigBean {
+public class ListPinsBean {
 
     /**
      * pin_id : 562785369

@@ -85,6 +85,13 @@
     <string name="error_field_required">请输入内容</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."</string>
+    <string name="text_foot_loading">正在加载</string>
+    <string name="text_foot_error">异常</string>
+    <string name="text_foot_end">结束</string>
 
+    <string name="text_image_like_number"> %d 喜欢</string>
+    <string name="text_image_gather_number"> %d 采集</string>
+    <string name="text_recommend">推荐</string>
+    <string name="text_to">采集到</string>
 
 </resources>

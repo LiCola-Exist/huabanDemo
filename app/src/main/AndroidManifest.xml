@@ -44,6 +44,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="licola.demo.com.huabandemo.activity.MainActivity" />
         </activity>
+
         <activity
             android:name=".activity.ImageDetailActivity"
             android:label="@string/title_activity_image_detail"
@@ -53,6 +54,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="licola.demo.com.huabandemo.activity.MainActivity" />
         </activity>
+
         <activity
             android:name=".activity.SearchResultActivity"
             android:label="@string/title_activity_search_result"

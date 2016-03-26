@@ -45,13 +45,27 @@
         <item name="android:maxLines">1</item>
     </style>
 
-    <style name="card_text_context">
+    <style name="card_text_secondary">
         <item name="android:textSize">@dimen/card_context_size_12sp</item>
         <item name="android:textColor">?android:textColorSecondary</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="card_text_secondary_info" parent="card_text_secondary">
         <item name="android:padding">@dimen/activity_margin</item>
         <item name="android:gravity">center|left</item>
+    </style>
+
+    <style name="text_image_detail_secondary" parent="card_text_secondary">
+        <item name="android:textSize">@dimen/card_context_size_14sp</item>
+    </style>
+
+    <style name="text_image_detail_primary">
+        <item name="android:textSize">@dimen/card_context_size_16sp</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="ibtn_padding_bg">
