@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".HuaBanApplication"
@@ -21,19 +22,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".activity.ImageActivity"
-            android:label="@string/title_activity_Image"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".activity.ScrollingActivity"
-            android:label="@string/title_activity_scrolling"
-            android:parentActivityName=".activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="licola.demo.com.huabandemo.activity.MainActivity" />
         </activity>
         <activity
             android:name=".activity.LoginActivity"
@@ -82,6 +70,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="licola.demo.com.huabandemo.activity.SearchActivity" />
         </activity>
+
+        //todo 注册广播暂时不不处理 网络状态变换
+        <receiver android:name=".httpUtils.ConnectionChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

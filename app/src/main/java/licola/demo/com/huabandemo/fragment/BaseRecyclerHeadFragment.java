@@ -141,6 +141,7 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
             public void onClickInfoLike(PinsEntity bean, View view) {
                 Logger.d();
             }
+
         });
     }
 

@@ -100,12 +100,12 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
         ViewHolder holder = new ViewHolder(view);
 
         holder.tv_card_like.setCompoundDrawablesWithIntrinsicBounds(
-                Utils.getTintCompatDrawable(mContext, R.drawable.ic_favorite_white_18dp, R.color.tint_list_grey),
+                Utils.getTintCompatDrawable(mContext, R.drawable.ic_favorite_black_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);
         holder.tv_card_gather.setCompoundDrawablesWithIntrinsicBounds(
-                Utils.getTintCompatDrawable(mContext, R.drawable.ic_explore_white_18dp, R.color.tint_list_grey),
+                Utils.getTintCompatDrawable(mContext, R.drawable.ic_explore_black_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);
@@ -173,8 +173,8 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
         } else {
             holder.ll_title_info.setVisibility(GONE);
         }
+        String url_img= url_root + bean.getFile().getKey();
 
-        String url_img = url_root + bean.getFile().getKey();
         String url_head = bean.getUser().getAvatar();
 //        String url_img = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
 
@@ -182,8 +182,8 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
         //长图 "width":440,"height":5040,
         holder.img_card_image.setAspectRatio(ratio);//设置宽高比
 
-        Drawable dProgressImage = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, R.drawable.ic_toys_white_48dp).mutate());
-        DrawableCompat.setTintList(dProgressImage, ContextCompat.getColorStateList(mContext, R.color.tint_list_pink));
+        Drawable dProgressImage =
+                Utils.getTintCompatDrawable(mContext,R.drawable.ic_toys_black_48dp,R.color.tint_list_pink);
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
                 .setProgressBarImage(dProgressImage)

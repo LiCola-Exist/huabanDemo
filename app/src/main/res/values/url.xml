@@ -3,5 +3,8 @@
     <string name="url">http://api.huaban.com/</string>
     <string name="url_image">http://img.hb.aicdn.com/</string>
 
-
+    //图片的后缀 则同一个图片key 得到不同的结果
+    <string name="image_general">_fw320sf</string>//普通浏览的图
+    <string name="image_big">_fw658</string>//大图
+    <string name="image_small">_sq75sf</string>//小图
 </resources>

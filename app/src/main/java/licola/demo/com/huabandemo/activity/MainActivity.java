@@ -43,8 +43,6 @@ public class MainActivity extends BaseActivity
     @Bind(R.id.fab_main)
     FloatingActionButton mFab_main;
 
-    @BindString(R.string.snack_message_main_gather)
-    String snack_message_main_gather;
 
 
     //NavigationView中的控件 手动填充
@@ -54,8 +52,8 @@ public class MainActivity extends BaseActivity
 
     private FragmentManager fragmentManager;
 
-    private final int mDrawableList[] = {R.drawable.ic_loyalty_white_36dp, R.drawable.ic_cloud_upload_white_36dp,
-            R.drawable.ic_message_white_36dp, R.drawable.ic_group_white_36dp};
+    private final int mDrawableList[] = {R.drawable.ic_loyalty_black_36dp, R.drawable.ic_cloud_upload_black_36dp,
+            R.drawable.ic_message_black_36dp, R.drawable.ic_people_black_36dp};
     private String[] types;
     private String[] titles;
 
@@ -131,6 +129,8 @@ public class MainActivity extends BaseActivity
             if (!TextUtils.isEmpty(email)) {
                 tv_nav_email.setText(email);
             }
+        }else {
+
         }
     }
 

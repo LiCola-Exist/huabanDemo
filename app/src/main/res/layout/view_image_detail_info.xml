@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:divider="@drawable/divider_linear"
+    android:divider="@drawable/divider_padding_linear"
     android:orientation="vertical"
     android:background="@color/white"
-    android:showDividers="middle">
+    android:showDividers="middle"
+    >
 
     <RelativeLayout
         android:id="@+id/relativelayout_image_describe"

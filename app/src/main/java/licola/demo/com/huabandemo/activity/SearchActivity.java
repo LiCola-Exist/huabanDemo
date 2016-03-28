@@ -3,10 +3,13 @@ package licola.demo.com.huabandemo.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -31,6 +34,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
+import butterknife.BindDrawable;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
@@ -62,6 +66,8 @@ public class SearchActivity extends BaseActivity {
 
     @BindString(R.string.hint_not_history)
     String mStringNotHistory;
+//    @BindDrawable(R.drawable.bg_tv_text_selector)
+//    Drawable mTextDrawable;
 
     final int mItemLineNumber = 4;//每行的个数
     final int mItemMargin = 1;
@@ -103,7 +109,7 @@ public class SearchActivity extends BaseActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
 
-        mIBtnClearHistory.setImageDrawable(Utils.getTintCompatDrawable(mContext, R.drawable.ic_close_white_24dp, R.color.tint_list_grey));
+        mIBtnClearHistory.setImageDrawable(Utils.getTintCompatDrawable(mContext, R.drawable.ic_close_black_24dp, R.color.tint_list_grey));
         initFlowReference(mFlowReference);
 
         initHintAdapter();
@@ -112,7 +118,7 @@ public class SearchActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Logger.d(mListHttpHint.get(position));
-                SearchResultActivity.launch(SearchActivity.this,mListHttpHint.get(position));
+                SearchResultActivity.launch(SearchActivity.this, mListHttpHint.get(position));
             }
         });
         initClearHistory();//点击按钮 清除历史记录的操作
@@ -166,7 +172,7 @@ public class SearchActivity extends BaseActivity {
                         mListHttpHint.clear();
                         mListHttpHint.addAll(strings);
                         mAdapter.notifyDataSetChanged();
-                        Logger.d("strings.size()=" + strings.size() +" mAdapter.getCount()=" + mAdapter.getCount());
+                        Logger.d("strings.size()=" + strings.size() + " mAdapter.getCount()=" + mAdapter.getCount());
                     }
                 });
     }
@@ -182,8 +188,8 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void initActionSearch() {
-        if (mACTVSearch.getText().length()>0){
-            SearchResultActivity.launch(SearchActivity.this,mACTVSearch.getText().toString());
+        if (mACTVSearch.getText().length() > 0) {
+            SearchResultActivity.launch(SearchActivity.this, mACTVSearch.getText().toString());
         }
     }
 
@@ -204,7 +210,7 @@ public class SearchActivity extends BaseActivity {
                     public void onNext(Void aVoid) {
                         Logger.d();
                         mFlowHistory.removeAllViews();
-                        SPUtils.remove(mContext,Constant.HISTORYTEXT);
+                        SPUtils.remove(mContext, Constant.HISTORYTEXT);
                         addChildTextTips(mFlowHistory, mStringNotHistory);
                     }
                 });
@@ -213,14 +219,14 @@ public class SearchActivity extends BaseActivity {
     private void initFlowHistory(FlowLayout mFlowHistory) {
         mFlowHistory.removeAllViews();
 //        String mTextList[] = getResources().getStringArray(R.array.title_array_all);//显示的文字
-        HashSet<String> mTextList= (HashSet<String>) SPUtils.get(mContext, Constant.HISTORYTEXT,new HashSet<>());
-        if (!mTextList.isEmpty()){
+        HashSet<String> mTextList = (HashSet<String>) SPUtils.get(mContext, Constant.HISTORYTEXT, new HashSet<>());
+        if (!mTextList.isEmpty()) {
             for (String mTextString :
                     mTextList) {
                 addChildText(mFlowHistory, mTextString);
             }
-        }else {
-            addChildTextTips(mFlowHistory,mStringNotHistory);
+        } else {
+            addChildTextTips(mFlowHistory, mStringNotHistory);
         }
     }
 
@@ -248,20 +254,22 @@ public class SearchActivity extends BaseActivity {
     }
 
     private void addChildText(FlowLayout group, String mTextString) {
-        final TextView tvChild = new TextView(mContext);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.CENTER;
-        layoutParams.setMargins(mItemTVMargin, mItemTVMargin, mItemTVMargin, mItemTVMargin);
+        TextView tvChild = (TextView) LayoutInflater.from(mContext).inflate(R.layout.view_textview_history, group, false);
+//        final TextView tvChild = new TextView(mContext);
+//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        layoutParams.gravity = Gravity.CENTER;
+//        layoutParams.setMargins(mItemTVMargin, mItemTVMargin, mItemTVMargin, mItemTVMargin);
         tvChild.setText(mTextString);
-        tvChild.setTextColor(Color.WHITE);
-        tvChild.setBackgroundResource(R.drawable.bg_text_history);
-        tvChild.setLayoutParams(layoutParams);
-        tvChild.setGravity(Gravity.CENTER_HORIZONTAL);
+//        tvChild.setTextColor(Color.WHITE);
+//        Drawable drawable=getResources().getDrawable(R.drawable.bg_text_history);
+//        tvChild.setBackground(drawable);
+//        tvChild.setLayoutParams(layoutParams);
+//        tvChild.setGravity(Gravity.CENTER_HORIZONTAL);
 
         tvChild.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SearchResultActivity.launch(SearchActivity.this, tvChild.getText().toString());
+                SearchResultActivity.launch(SearchActivity.this, ((TextView) v).getText().toString());
             }
         });
 
@@ -275,7 +283,7 @@ public class SearchActivity extends BaseActivity {
         layoutParams.setMargins(mItemMargin, mItemMargin, mItemMargin, mItemMargin);
         btnChild.setCompoundDrawablesWithIntrinsicBounds(
                 null,
-                Utils.getTintCompatDrawable(mContext, R.drawable.ic_toys_white_48dp, R.color.tint_list_pink),
+                Utils.getTintCompatDrawable(mContext, R.drawable.ic_toys_black_24dp, R.color.tint_list_pink),
                 null,
                 null);
         btnChild.setText(text);
@@ -312,7 +320,6 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Logger.d(item.getTitle().toString());
 
         switch (item.getItemId()) {
             case R.id.action_search:
@@ -320,7 +327,7 @@ public class SearchActivity extends BaseActivity {
                 break;
         }
 
-        return true;
+        return super.onOptionsItemSelected(item);
     }
 
 

@@ -1,12 +1,9 @@
 package licola.demo.com.huabandemo.fragment;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,17 +16,14 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
-import butterknife.Bind;
 import butterknife.BindString;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+import licola.demo.com.huabandemo.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.TimeUtils;
 import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.activity.ImageActivity;
 import licola.demo.com.huabandemo.activity.ImageDetailActivity;
-import licola.demo.com.huabandemo.bean.ListPinsBean;
 import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.httpUtils.RetrofitPinsRx;
@@ -96,11 +90,11 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
         url_board = mPinsBean.getUser().getAvatar();
         RecyclerViewUtils.addFootView(mRecyclerView, new Button(getContext()));
 
-        initTintDrawable(tv_image_gather, R.drawable.ic_explore_white_18dp);
-        initTintDrawable(tv_image_like, R.drawable.ic_favorite_white_18dp);
-        initTintDrawable(ibtn_image_user_chevron_right, R.drawable.ic_chevron_right_white_24dp);
-        initTintDrawable(ibtn_image_board_chevron_right, R.drawable.ic_chevron_right_white_24dp);
-        initTintDrawable(tv_image_link, R.drawable.ic_link_white_24dp);
+        initTintDrawable(tv_image_gather, R.drawable.ic_explore_black_24dp);
+        initTintDrawable(tv_image_like, R.drawable.ic_favorite_black_24dp);
+        initTintDrawable(ibtn_image_user_chevron_right, R.drawable.ic_chevron_right_black_24dp);
+        initTintDrawable(ibtn_image_board_chevron_right, R.drawable.ic_chevron_right_black_24dp);
+        initTintDrawable(tv_image_link, R.drawable.ic_insert_link_black_24dp);
     }
 
     @Override
@@ -283,5 +277,11 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
 
     private Observable<List<PinsEntity>> getRecommend(String pinsId, int page, int limit) {
         return RetrofitPinsRx.service.httpPinsRecommend(pinsId, page, limit);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        HuaBanApplication.getInstance().getRefwatcher().watch(this);
     }
 }

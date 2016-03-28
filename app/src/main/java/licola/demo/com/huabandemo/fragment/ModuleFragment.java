@@ -116,7 +116,6 @@ public class ModuleFragment extends BaseFragment {
 
     private void initRecyclerView() {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-//        HeadStaggeredGirdLayoutManager layoutManager = new HeadStaggeredGirdLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 
         //// TODO: 2016/3/17 0017 预留选项 应该在设置中 添加一条单条垂直滚动选项
 //        LinearLayoutManager layoutManager=new LinearLayoutManager(HuaBanApplication.getInstance());
@@ -324,6 +323,7 @@ public class ModuleFragment extends BaseFragment {
             public void onClickInfoLike(PinsEntity bean, View view) {
                 Logger.d();
             }
+
         });
     }
 

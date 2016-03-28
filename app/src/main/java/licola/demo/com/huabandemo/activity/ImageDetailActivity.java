@@ -37,9 +37,9 @@ public class ImageDetailActivity extends BaseActivity {
 
     @BindString(R.string.url_image)
     String url_image;
-    @BindDrawable(R.drawable.ic_cancel_white_48dp)
+    @BindDrawable(R.drawable.ic_cancel_black_24dp)
     Drawable drawable_cancel;
-    @BindDrawable(R.drawable.ic_refresh_white_48dp)
+    @BindDrawable(R.drawable.ic_refresh_black_24dp)
     Drawable drawable_refresh;
 
 
@@ -140,7 +140,6 @@ public class ImageDetailActivity extends BaseActivity {
         url_img = url_image + mPinsBean.getFile().getKey();
 
         img_image_big.setAspectRatio(Utils.getAspectRatio(bean.getFile().getWidth(), bean.getFile().getHeight()));
-
 
     }
 

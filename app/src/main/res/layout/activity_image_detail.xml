@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="licola.demo.com.huabandemo.activity.ScrollingActivity">
+    tools:context="licola.demo.com.huabandemo.activity.ImageDetailActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -56,7 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_toys_white_24dp"
+        android:src="@drawable/ic_explore_black_24dp"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end" />
 

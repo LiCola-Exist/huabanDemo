@@ -161,7 +161,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 //                }
 //            }
 //        });
-        Drawable dProgressImage = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, R.drawable.ic_toys_white_48dp).mutate());
+        Drawable dProgressImage = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, R.drawable.ic_toys_black_24dp).mutate());
         DrawableCompat.setTintList(dProgressImage, ContextCompat.getColorStateList(mContext, R.color.tint_list_pink));
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
