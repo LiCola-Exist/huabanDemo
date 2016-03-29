@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import butterknife.Bind;
-import butterknife.BindString;
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
@@ -112,7 +111,7 @@ public class MainActivity extends BaseActivity
         if (isLogin) {
             String key = (String) SPUtils.get(mContext, Constant.USERHEADKEY, "");
             if (!TextUtils.isEmpty(key)) {
-                key = getString(R.string.url_image) + key;
+                key = getString(R.string.urlImageRoot) + key;
                 new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_nav_head, key)
                         .setIsCircle(true)
                         .build();

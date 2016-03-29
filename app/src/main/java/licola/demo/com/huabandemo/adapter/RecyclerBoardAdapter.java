@@ -79,7 +79,7 @@ public class RecyclerBoardAdapter extends RecyclerView.Adapter {
     public RecyclerBoardAdapter(RecyclerView recyclerView) {
         this.mRecyclerView = recyclerView;
         this.mContext = recyclerView.getContext();
-        this.url_root = mContext.getResources().getString(R.string.url_image);
+        this.url_root = mContext.getResources().getString(R.string.urlImageRoot);
     }
 
 
@@ -172,7 +172,7 @@ public class RecyclerBoardAdapter extends RecyclerView.Adapter {
 
         String url_img = url_root + bean.getFile().getKey();
         String url_head = bean.getUser().getAvatar();
-//        String url_img = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
+//        String mImageUrl = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
 
         float ratio = Utils.getAspectRatio(bean.getFile().getWidth(), bean.getFile().getHeight());
         //长图 "width":440,"height":5040,

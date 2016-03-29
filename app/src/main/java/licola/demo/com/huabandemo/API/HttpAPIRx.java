@@ -2,7 +2,9 @@ package licola.demo.com.huabandemo.API;
 
 import java.util.List;
 
+import licola.demo.com.huabandemo.bean.BoardDetailBean;
 import licola.demo.com.huabandemo.bean.ListPinsBean;
+import licola.demo.com.huabandemo.bean.PinsDetailBean;
 import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.bean.SearchBoardBean;
 import licola.demo.com.huabandemo.bean.SearchHintBean;
@@ -40,17 +42,6 @@ public interface HttpAPIRx {
     @GET("search/hint")
     Observable<SearchHintBean> httpSearHintBean(@Query("q") String key);
 
-    //弃用
-//    //http://api.huaban.com/all/food_drink/keywords
-//    @GET("all/{type}/keywords")
-//    Observable<String> httpTypeKeyWordRx(@Path("type") String type);
-//
-//    //http://api.huaban.com/favorite/food_drink?q=%E6%96%99%E7%90%86&page=1&per_page=2
-//    @GET("favorite/{type}")
-//    Observable<ListPinsBean> httpTypeSearchRx(@Path("type") String type, @Query("q") String key,
-//                                     @Query("page") int page, @Query("per_page") int per_page);
-
-
     //http://api.huaban.com/search/?q=%E7%BE%8E%E9%A3%9F&page=1&per_page=2
     //图片搜索 返回结果跟模板类型差不多
     @GET("search/")
@@ -65,6 +56,26 @@ public interface HttpAPIRx {
     //用户搜索
     @GET("search/people/")
     Observable<SearchPeopleBean> httpPeopleSearchRx(@Query("q") String key, @Query("page") int page, @Query("per_page") int per_page);
+
+    //http://api.huaban.com/pins/663478425
+    //根据图片id获取详情
+    @GET("pins/{pinsId}")
+    Observable<PinsDetailBean> httpPinsDetail(@Path("pinsId") String pinsId);
+
+    //http://api.huaban.com/boards/3514299
+    //获取画板的详情
+    @GET("boards/{boardId}")
+    Observable<BoardDetailBean> httpBoardDetail(@Path("boardId") String boardId);
+
+    //http://api.huaban.com/boards/19196160/pins?limit=40
+    //获取画板的图片集合
+    @GET("boards/{boardId}/pins")
+    Observable<ListPinsBean> httpBoardPins(@Path("boardId") String boardId, @Query("limit") int limit);
+
+    //http://api.huaban.com/boards/19196160/pins?limit=40&max=508414882
+    //获取画板的图片集合 根据上一个图片的id继续加载
+    @GET("boards/{boardId}/pins")
+    Observable<ListPinsBean> httpBoardPinsMax(@Path("boardId") String boardId, @Query("max") int max, @Query("limit") int limit);
 
     //http://api.huaban.com/pins/654197326/recommend/?page=1&limit=40
     //获取某个图片的推荐图片列表

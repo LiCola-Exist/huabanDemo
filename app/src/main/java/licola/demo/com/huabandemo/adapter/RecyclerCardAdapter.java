@@ -3,8 +3,6 @@ package licola.demo.com.huabandemo.adapter;
 import android.content.Context;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -84,7 +82,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
     public RecyclerCardAdapter(RecyclerView recyclerView) {
         this.mRecyclerView = recyclerView;
         this.mContext = recyclerView.getContext();
-        this.url_root = mContext.getResources().getString(R.string.url_image);
+        this.url_root = mContext.getResources().getString(R.string.urlImageRoot);
     }
 
 
@@ -176,7 +174,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
         String url_img= url_root + bean.getFile().getKey();
 
         String url_head = bean.getUser().getAvatar();
-//        String url_img = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
+//        String mImageUrl = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
 
         float ratio = Utils.getAspectRatio(bean.getFile().getWidth(), bean.getFile().getHeight());
         //长图 "width":440,"height":5040,

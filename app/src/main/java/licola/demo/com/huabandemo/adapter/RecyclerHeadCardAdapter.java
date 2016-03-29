@@ -8,20 +8,14 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.facebook.drawee.controller.BaseControllerListener;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
@@ -85,7 +79,7 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
     public RecyclerHeadCardAdapter(RecyclerView recyclerView) {
         this.mRecyclerView = recyclerView;
         this.mContext = recyclerView.getContext();
-        this.url_root = mContext.getResources().getString(R.string.url_image);
+        this.url_root = mContext.getResources().getString(R.string.urlImageRoot);
     }
 
     //多一个标志位的 构造函数
@@ -182,8 +176,8 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
         }
 
         String url_img = url_root + bean.getFile().getKey()+"_fw320sf";
-        String url_head = bean.getUser().getAvatar();
-//        String url_img = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
+
+//        String mImageUrl = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
 
         float ratio = Utils.getAspectRatio(bean.getFile().getWidth(), bean.getFile().getHeight());
         //长图 "width":440,"height":5040,

@@ -8,6 +8,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
 import butterknife.Bind;
+import butterknife.BindString;
 import de.greenrobot.event.EventBus;
 import licola.demo.com.huabandemo.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
@@ -33,6 +34,8 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
 
     protected boolean isFistHttp = true;//是否第一次联网
 
+    @BindString(R.string.urlImageRoot)
+    String mUrlImageRoot;
 
     @Bind(R.id.recycler_list)
     RecyclerView mRecyclerView;
@@ -46,16 +49,13 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
         return R.layout.fragment_recycler;
     }
 
-    @Override
-    public String getTAG() {
-        return this.getClass().getSimpleName();
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        mKey = args.getString(TYPE_KEY);//取出key
+        mKey = args.getString(TYPE_KEY);//父类取出key
 //        EventBus.getDefault().register(this);
     }
 
@@ -65,6 +65,12 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
         initRecyclerView();
         initListener();
         getHttpFirst();
+        getHttpOther();
+    }
+
+    //界面初始化的其他联网 可以不重写
+    protected void getHttpOther(){
+
     }
 
     protected abstract void getHttpFirst();//界面初始化的联网 由子类重写

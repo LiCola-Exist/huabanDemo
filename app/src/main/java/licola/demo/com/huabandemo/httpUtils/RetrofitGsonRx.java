@@ -1,6 +1,5 @@
 package licola.demo.com.huabandemo.httpUtils;
 
-import licola.demo.com.huabandemo.API.HttpAPICall;
 import licola.demo.com.huabandemo.API.HttpAPIRx;
 import licola.demo.com.huabandemo.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
@@ -18,7 +17,7 @@ public class RetrofitGsonRx {
      * 注意addConverterFactory的顺序
      */
     public static Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(HuaBanApplication.getInstance().getString(R.string.url))
+            .baseUrl(HuaBanApplication.getInstance().getString(R.string.urlRoot))
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .build();

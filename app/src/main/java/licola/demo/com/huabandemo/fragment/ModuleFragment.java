@@ -38,7 +38,7 @@ import rx.schedulers.Schedulers;
  */
 public class ModuleFragment extends BaseFragment {
     private final float percentageScroll = 0.8f;//滑动距离的百分比
-    private int maxId = 0;
+    private int mMaxId = 0;
 
     protected static final String TYPE_KEY = "TYPE_KEY";
     protected static final String TYPE_TITLE = "TYPE_TITLE";
@@ -142,7 +142,7 @@ public class ModuleFragment extends BaseFragment {
 //                    Logger.d("滑动停止 position=" + mAdapter.getAdapterPosition());
                     int size = (int) (mAdapter.getItemCount() * percentageScroll);
                     if (mAdapter.getAdapterPosition() >= --size) {
-                        getHttpMaxId(type, maxId, limit);
+                        getHttpMaxId(type, mMaxId, limit);
                     }
                 } else if (RecyclerView.SCROLL_STATE_DRAGGING == newState) {
                     //用户正在滑动
@@ -197,7 +197,7 @@ public class ModuleFragment extends BaseFragment {
 
                     @Override
                     public void onNext(List<PinsEntity> pinsEntities) {
-                        maxId = getMaxId(pinsEntities);
+                        mMaxId = getMaxId(pinsEntities);
                         mAdapter.addList(pinsEntities);
                     }
                 });
@@ -254,7 +254,7 @@ public class ModuleFragment extends BaseFragment {
                     public void onNext(List<PinsEntity> result) {
                         Logger.d(result.toString());
                         //保存maxId值 后续加载需要
-                        maxId = getMaxId(result);
+                        mMaxId = getMaxId(result);
                         mAdapter.setList(result);
                     }
                 });

@@ -22,8 +22,8 @@ public class ModuleActivity extends BaseActivity {
     protected static final String TYPE_KEY = "TYPE_KEY";
     protected static final String TYPE_TITLE = "TYPE_TITLE";
 
-    protected String type;
-    protected String title;
+    protected String mType;
+    protected String mTitle;
 
     @Bind(R.id.fab_module)
     FloatingActionButton mFABModule;
@@ -52,13 +52,13 @@ public class ModuleActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        title=getIntent().getStringExtra(TYPE_TITLE);
-        type=getIntent().getStringExtra(TYPE_KEY);
-        setTitle(title);
+        mTitle=getIntent().getStringExtra(TYPE_TITLE);
+        mType=getIntent().getStringExtra(TYPE_KEY);
+        setTitle(mTitle);
 
 //        getFragmentManager().beginTransaction().replace(R.id.framelayout_module, ModuleFragment.newInstance(type,title)).commit();
         getSupportFragmentManager().
-                beginTransaction().replace(R.id.framelayout_module,ModuleFragment.newInstance(type,title)).commit();
+                beginTransaction().replace(R.id.framelayout_module,ModuleFragment.newInstance(mType,mTitle)).commit();
 
         mFABModule.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -57,6 +57,10 @@ public class ImageLoadFresco {
         //初始化C层 用于控制图片的加载
         PipelineDraweeControllerBuilder builderC = Fresco.newDraweeControllerBuilder();
 
+        if (frescoBuilder.mUrlLow!=null){
+            builderC.setLowResImageRequest(ImageRequest.fromUri(frescoBuilder.mUrlLow));
+        }
+
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(frescoBuilder.mUrl))
                 .setResizeOptions(frescoBuilder.mResizeOptions)
                 .build();
@@ -115,6 +119,8 @@ public class ImageLoadFresco {
         private String mUrl;
 
         //非必要参数
+        private String mUrlLow;//低分率图地址
+
         private Drawable mPlaceHolderImage;//占位图
         private Drawable mProgressBarImage;//loading图
         private Drawable mRetryImage;//重试图
@@ -160,6 +166,11 @@ public class ImageLoadFresco {
             }
 
             return new ImageLoadFresco(this);
+        }
+
+        public LoadImageFrescoBuilder setUrlLow(String urlLow){
+            this.mUrlLow=urlLow;
+            return this;
         }
 
         public LoadImageFrescoBuilder setActualImageScaleType(ScalingUtils.ScaleType mActualImageScaleType) {

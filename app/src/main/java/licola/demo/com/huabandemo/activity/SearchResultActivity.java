@@ -86,18 +86,6 @@ public class SearchResultActivity extends BaseActivity {
 
     }
 
-    private Observable<SearchImageBean> getSearchImage(String key, int page, int limit) {
-        return RetrofitPinsRx.service.httpImageSearchRx(key, page, limit);
-    }
-
-    private Observable<SearchBoardBean> getSearchBoard(String key, int page, int limit) {
-        return RetrofitPinsRx.service.httpBoardSearchRx(key, page, limit);
-    }
-
-    private Observable<SearchPeopleBean> getSearchPeople(String key, int page, int limit) {
-        return RetrofitPinsRx.service.httpPeopleSearchRx(key, page, limit);
-    }
-
     private void saveSearchHistory(String key) {
         //转到这个界面就表示 搜索成功 保存搜索记录
         HashSet<String> hashSet = (HashSet<String>) SPUtils.get(mContext, Constant.HISTORYTEXT, new HashSet<String>());

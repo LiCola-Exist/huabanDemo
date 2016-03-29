@@ -237,7 +237,7 @@ public class SearchActivity extends BaseActivity {
 //        mItemWidth= Utils.getScreenWidth(mContext)/mItemLineNumber;
         //根据内容动态填充
         for (int i = 0, size = mTextList.length; i < size; i++) {
-            addChildButton(mFlowReference, mTextList[i], mTypeList[i]);
+            addChildButton(mFlowReference, mTextList[i], mTypeList[i],R.drawable.ic_toys_black_36dp);
         }
 
     }
@@ -276,14 +276,14 @@ public class SearchActivity extends BaseActivity {
         group.addView(tvChild);
     }
 
-    private void addChildButton(FlowLayout group, String text, String type) {
+    private void addChildButton(FlowLayout group, String text, String type,int ResId) {
         Button btnChild = new Button(mContext);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mItemWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
         layoutParams.setMargins(mItemMargin, mItemMargin, mItemMargin, mItemMargin);
         btnChild.setCompoundDrawablesWithIntrinsicBounds(
                 null,
-                Utils.getTintCompatDrawable(mContext, R.drawable.ic_toys_black_24dp, R.color.tint_list_pink),
+                Utils.getTintCompatDrawable(mContext, ResId, R.color.tint_list_pink),
                 null,
                 null);
         btnChild.setText(text);

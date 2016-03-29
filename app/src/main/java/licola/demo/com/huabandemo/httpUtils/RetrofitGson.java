@@ -16,7 +16,7 @@ public class RetrofitGson {
      * 注意addConverterFactory的顺序
      */
     public static Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(HuaBanApplication.getInstance().getString(R.string.url))
+            .baseUrl(HuaBanApplication.getInstance().getString(R.string.urlRoot))
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 

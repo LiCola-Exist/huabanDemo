@@ -55,7 +55,7 @@
     <string name="text_search_history">搜索记录</string>
     <string name="text_reference">推荐模块</string>
 
-    <string name="card_title">测试Card的title应该是很长的文本</string>
+
     <string name="card_username">用户名14sp</string>
     <string name="card_gather">采集到图库14sp</string>
 
@@ -69,6 +69,7 @@
     <string name="title_fragment_image">图片</string>
     <string name="title_fragment_board">画板</string>
     <string name="title_fragment_user">用户</string>
+    <string name="title_activity_board_detail">画板详情</string>
 
     <string name="net_error">网络连接错误</string>
     <string name="net_error_data">网络返回数据错误</string>
@@ -89,8 +90,11 @@
     <string name="text_foot_error">异常</string>
     <string name="text_foot_end">结束</string>
 
-    <string name="text_image_like_number"> %d 喜欢</string>
-    <string name="text_image_gather_number"> %d 采集</string>
+    <string name="text_image_like_number">%d 喜欢</string>
+    <string name="text_image_gather_number">%d 采集</string>
+    <string name="text_image_attention_number">%d 关注</string>
+    <string name="text_image_describe_null">暂无图片描述</string>
+    <string name="text_board_describe_null">暂无画板描述</string>
     <string name="text_recommend">推荐</string>
     <string name="text_to">采集到</string>
 

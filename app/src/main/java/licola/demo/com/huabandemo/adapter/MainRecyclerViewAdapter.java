@@ -75,7 +75,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
     public MainRecyclerViewAdapter(Context context) {
         this.mContext = context;
-        this.url_root = mContext.getResources().getString(R.string.url_image);
+        this.url_root = mContext.getResources().getString(R.string.urlImageRoot);
     }
 
 
@@ -138,7 +138,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
         String url_img = url_root + bean.getFile().getKey();
         String url_head = bean.getUser().getAvatar();
-//        String url_img = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
+//        String mImageUrl = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
 
         float ratio = Utils.getAspectRatio(bean.getFile().getWidth(), bean.getFile().getHeight());
         //长图 "width":440,"height":5040,
@@ -151,7 +151,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                 .build();
 
 
-//        FrescoBuilder.setImageDrawableMC2V(mContext, holder.img_card_image, url_img, new FrescoBuilder.onAnimatableListener() {
+//        FrescoBuilder.setImageDrawableMC2V(mContext, holder.img_card_image, mImageUrl, new FrescoBuilder.onAnimatableListener() {
 //            @Override
 //            public void onComplete(boolean isPlay, Animatable animatable) {
 //                if (isPlay) {

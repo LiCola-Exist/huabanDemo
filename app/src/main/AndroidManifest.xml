@@ -32,7 +32,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="licola.demo.com.huabandemo.activity.MainActivity" />
         </activity>
-
         <activity
             android:name=".activity.ImageDetailActivity"
             android:label="@string/title_activity_image_detail"
@@ -43,6 +42,13 @@
                 android:value="licola.demo.com.huabandemo.activity.MainActivity" />
         </activity>
 
+        <activity
+            android:name=".activity.BoardDetailActivity"
+            android:label="@string/title_activity_board_detail"
+            android:theme="@style/AppTheme.NoActionBar"
+            >
+
+        </activity>
         <activity
             android:name=".activity.SearchResultActivity"
             android:label="@string/title_activity_search_result"
@@ -70,13 +76,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="licola.demo.com.huabandemo.activity.SearchActivity" />
         </activity>
-
         //todo 注册广播暂时不不处理 网络状态变换
         <receiver android:name=".httpUtils.ConnectionChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
 
     </application>
 

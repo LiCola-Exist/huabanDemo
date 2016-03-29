@@ -12,9 +12,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -30,18 +27,21 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.fragment.ImageDetailFragment;
-import licola.demo.com.huabandemo.fragment.ResultImageFragment;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
 
 public class ImageDetailActivity extends BaseActivity {
 
-    @BindString(R.string.url_image)
-    String url_image;
     @BindDrawable(R.drawable.ic_cancel_black_24dp)
     Drawable drawable_cancel;
     @BindDrawable(R.drawable.ic_refresh_black_24dp)
     Drawable drawable_refresh;
 
+    //小图的后缀
+    @BindString(R.string.url_image_big)
+    String mFormatImageUrlBig;
+    //大图的后缀
+    @BindString(R.string.url_image_general)
+    String mFormatImageGeneral;
 
     @Bind(R.id.colltoolbar_layout)
     CollapsingToolbarLayout mCollapsingToolBar;
@@ -52,10 +52,10 @@ public class ImageDetailActivity extends BaseActivity {
     @Bind(R.id.img_image_big)
     SimpleDraweeView img_image_big;
 
-    public String url_img;//图片地址
+    public PinsEntity mPinsBean;
 
-    public PinsEntity mPinsBean;//公开 填充的Fragment需要访问权限
-
+    public String mImageUrl;//图片地址
+    public String mPinsId;
 
     @Override
     protected int getLayoutId() {
@@ -69,7 +69,6 @@ public class ImageDetailActivity extends BaseActivity {
 
     public static void launch(Activity activity) {
         Intent intent = new Intent(activity, ImageDetailActivity.class);
-//        ActivityCompat.startActivity();
         activity.startActivity(intent);
     }
 
@@ -82,9 +81,11 @@ public class ImageDetailActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initFloatingAction();
         mCollapsingToolBar.setExpandedTitleColor(Color.TRANSPARENT);//设置折叠后的文字颜色
-        String key = String.valueOf(mPinsBean.getPin_id());
+        //设置图片空间的宽高比
+        img_image_big.setAspectRatio(
+                Utils.getAspectRatio(mPinsBean.getFile().getWidth(), mPinsBean.getFile().getHeight()));
         getSupportFragmentManager().
-                beginTransaction().replace(R.id.framelayout_info_recycler, ImageDetailFragment.newInstance(key)).commit();
+                beginTransaction().replace(R.id.framelayout_info_recycler, ImageDetailFragment.newInstance(mPinsId)).commit();
     }
 
     private void initFloatingAction() {
@@ -101,9 +102,12 @@ public class ImageDetailActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
+        String url = String.format(mFormatImageUrlBig, mImageUrl);
+        String url_low = String.format(mFormatImageGeneral, mImageUrl);
         //加载大图
-        new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_image_big, url_img)
+        new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_image_big, url)
 //                .setActualImageScaleType(ScalingUtils.ScaleType.FOCUS_CROP)
+                .setUrlLow(url_low)
                 .setRetryImage(drawable_refresh)
                 .setFailureImage(drawable_cancel)
                 .setControllerListener(new BaseControllerListener<ImageInfo>() {
@@ -137,9 +141,8 @@ public class ImageDetailActivity extends BaseActivity {
         //接受EvenBus传过来的数据
         Logger.d(TAG + " receive bean");
         this.mPinsBean = bean;
-        url_img = url_image + mPinsBean.getFile().getKey();
-
-        img_image_big.setAspectRatio(Utils.getAspectRatio(bean.getFile().getWidth(), bean.getFile().getHeight()));
+        mImageUrl = mPinsBean.getFile().getKey();
+        mPinsId = String.valueOf(mPinsBean.getPin_id());
 
     }
 

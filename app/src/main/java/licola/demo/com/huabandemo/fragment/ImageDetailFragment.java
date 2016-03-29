@@ -23,9 +23,12 @@ import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.TimeUtils;
 import licola.demo.com.huabandemo.Util.Utils;
+import licola.demo.com.huabandemo.activity.BoardDetailActivity;
 import licola.demo.com.huabandemo.activity.ImageDetailActivity;
+import licola.demo.com.huabandemo.bean.PinsDetailBean;
 import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.httpUtils.RetrofitGsonRx;
 import licola.demo.com.huabandemo.httpUtils.RetrofitPinsRx;
 import licola.demo.com.huabandemo.view.LoadingFooter;
 import licola.demo.com.huabandemo.view.recyclerview.RecyclerViewUtils;
@@ -46,6 +49,13 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
     String mStringLikeNumber;
     @BindString(R.string.text_image_gather_number)
     String mStringGatherNumber;
+    @BindString(R.string.text_image_describe_null)
+    String mStringNullDescribe;
+
+    @BindString(R.string.url_image_small)
+    String mFormatUrlSmall;
+    @BindString(R.string.image_suffix_small)
+    String mUrlSmallSuffix;
 
     TextView tv_image_text;//图片的文字描述
     TextView tv_image_link;//链接
@@ -59,14 +69,20 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
     ImageButton ibtn_image_user_chevron_right;
 
     RelativeLayout mRLImageBoard;//画板信息的父视图
-    SimpleDraweeView img_image_board;//归属的画板图片
+    SimpleDraweeView img_image_board_1;//归属的画板图片
+    SimpleDraweeView img_image_board_2;
+    SimpleDraweeView img_image_board_3;
+    SimpleDraweeView img_image_board_4;
     TextView tv_image_board;//归属的画板名称
     ImageButton ibtn_image_board_chevron_right;
 
-
     private PinsEntity mPinsBean;
-    private String url_head;
-    private String url_board;
+
+    private String mBoardId;
+    private String mUserId;
+
+    private String mBoardName;
+    private String mUserName;
 
     @Override
     public String getTAG() {
@@ -86,16 +102,10 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         this.mPinsBean = ((ImageDetailActivity) getActivity()).mPinsBean;//取出Activity的全局变量
-        url_head = mPinsBean.getUser().getAvatar();
-        url_board = mPinsBean.getUser().getAvatar();
-        RecyclerViewUtils.addFootView(mRecyclerView, new Button(getContext()));
 
-        initTintDrawable(tv_image_gather, R.drawable.ic_explore_black_24dp);
-        initTintDrawable(tv_image_like, R.drawable.ic_favorite_black_24dp);
-        initTintDrawable(ibtn_image_user_chevron_right, R.drawable.ic_chevron_right_black_24dp);
-        initTintDrawable(ibtn_image_board_chevron_right, R.drawable.ic_chevron_right_black_24dp);
-        initTintDrawable(tv_image_link, R.drawable.ic_insert_link_black_24dp);
+        setViewDrawable();
     }
+
 
     @Override
     protected void initListener() {
@@ -114,6 +124,20 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
             }
         });
 
+        tv_image_gather.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Logger.d();
+            }
+        });
+
+        tv_image_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Logger.d();
+            }
+        });
+
         mRLImageUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +149,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
             @Override
             public void onClick(View v) {
                 Logger.d();
+                BoardDetailActivity.launch(getActivity(), mBoardId, mBoardName);
             }
         });
     }
@@ -132,14 +157,15 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setImageTextInfo(mPinsBean);
 
-        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_user, url_head)
-                .setIsCircle(true)
-                .build();
-        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board, url_board)
-                .setIsRadius(true)
-                .build();
+    }
+
+    private void setViewDrawable() {
+        initTintDrawable(tv_image_gather, R.drawable.ic_explore_black_24dp);
+        initTintDrawable(tv_image_like, R.drawable.ic_favorite_black_24dp);
+        initTintDrawable(ibtn_image_user_chevron_right, R.drawable.ic_chevron_right_black_24dp);
+        initTintDrawable(ibtn_image_board_chevron_right, R.drawable.ic_chevron_right_black_24dp);
+        initTintDrawable(tv_image_link, R.drawable.ic_insert_link_black_24dp);
     }
 
     private void initTintDrawable(View view, int resId) {
@@ -159,9 +185,36 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
         }
     }
 
+    @Override
+    protected void getHttpOther() {
+        getPinsDetail(mKey)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<PinsDetailBean>() {
+                    @Override
+                    public void onCompleted() {
+                        Logger.d();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.toString());
+                        //网络错误 使用本地缓存
+                        setImageInfo(mPinsBean);
+                    }
+
+                    @Override
+                    public void onNext(PinsDetailBean pinsDetailBean) {
+                        Logger.d();
+                        //联网成功使用 正确的网络数据
+                        setImageInfo(pinsDetailBean);
+                    }
+                });
+    }
 
     @Override
     protected void getHttpFirst() {
+
         getRecommend(mKey, mIndex, mLimit)
                 .filter(new Func1<List<PinsEntity>, Boolean>() {
                     @Override
@@ -189,7 +242,6 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
                         mIndex++;//联网成功 +1
                     }
                 });
-
     }
 
     @Override
@@ -224,7 +276,10 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
         tv_image_board = ButterKnife.findById(headView, R.id.tv_image_board);
 
         img_image_user = ButterKnife.findById(headView, R.id.img_image_user);
-        img_image_board = ButterKnife.findById(headView, R.id.img_image_board);
+        img_image_board_1 = ButterKnife.findById(headView, R.id.img_image_board_1);
+        img_image_board_2 = ButterKnife.findById(headView, R.id.img_image_board_2);
+        img_image_board_3 = ButterKnife.findById(headView, R.id.img_image_board_3);
+        img_image_board_4 = ButterKnife.findById(headView, R.id.img_image_board_4);
 
         ibtn_image_board_chevron_right = ButterKnife.findById(headView, R.id.ibtn_image_board_chevron_right);
         ibtn_image_user_chevron_right = ButterKnife.findById(headView, R.id.ibtn_image_user_chevron_right);
@@ -233,19 +288,14 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
         mRLImageBoard = ButterKnife.findById(headView, R.id.relativelayout_image_board);
     }
 
-
-    private void setImageTextInfo(PinsEntity bean) {
-        //描述
-        String raw = bean.getRaw_text();
+    //图像文字信息 填充
+    private void setImageTextInfo(String raw, String link, String source, int gather, int like) {
         if (!TextUtils.isEmpty(raw)) {
             tv_image_text.setText(raw);
         } else {
-            tv_image_text.setText("图片暂无描述");
+            tv_image_text.setText(mStringNullDescribe);
         }
 
-        //链接
-        String link = bean.getLink();
-        String source = bean.getSource();
         if ((!TextUtils.isEmpty(link)) && (!TextUtils.isEmpty(source))) {
             tv_image_link.setText(source);
             tv_image_link.setTag(link);
@@ -253,26 +303,113 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
             tv_image_link.setVisibility(View.GONE);
         }
 
-        tv_image_gather.setText(String.format(mStringGatherNumber, bean.getRepin_count()));
-        tv_image_like.setText(String.format(mStringLikeNumber, bean.getLike_count()));
+        tv_image_gather.setText(String.format(mStringGatherNumber, gather));
+        tv_image_like.setText(String.format(mStringLikeNumber, like));
+    }
 
-        //采集时间
-        String dTime = TimeUtils.getTimeDifference(bean.getCreated_at(), System.currentTimeMillis());
-        tv_image_time.setText(dTime);
-
+    //图像的用户信息 填充
+    private void setImageUserInfo(String url_head, String username, int created_time) {
+        //用户名头像加载
+        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_user, url_head)
+                .setIsCircle(true)
+                .build();
         //用户名
-        String user = bean.getUser().getUsername();
-        tv_image_user.setText(user);
+        tv_image_user.setText(username);
+        //创建时间
+        tv_image_time.setText(TimeUtils.getTimeDifference(created_time, System.currentTimeMillis()));
+    }
 
+    private void setImageBoardInfo(String url1, String url2, String url3, String url4, String board_name) {
         //画板名称
-        String board_title = bean.getBoard().getTitle();
-        if (!TextUtils.isEmpty(board_title)) {
-            tv_image_board.setText(board_title);
+        if (!TextUtils.isEmpty(board_name)) {
+            tv_image_board.setText(board_name);
         } else {
             tv_image_board.setText("暂无画板信息");
         }
 
 
+        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_1, url1)
+                .build();
+        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_2, url2)
+                .build();
+        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_3, url3)
+                .build();
+        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_4, url4)
+                .build();
+
+    }
+
+    /**
+     * 使用网络数据填充UI控件 赋值全局变量 填充UI控件
+     *
+     * @param pinsDetailBean 网络bean
+     */
+    private void setImageInfo(PinsDetailBean pinsDetailBean) {
+        PinsDetailBean.PinBean bean = pinsDetailBean.getPin();
+
+        mBoardId = String.valueOf(bean.getBoard_id());
+        mUserId = String.valueOf(bean.getUser_id());
+        mBoardName = bean.getBoard().getTitle();
+        mUserName = bean.getUser().getUrlname();
+
+        //描述
+        setImageTextInfo(bean.getRaw_text(),
+                bean.getLink(),
+                bean.getSource(),
+                bean.getRepin_count(),
+                bean.getLike_count()
+        );
+
+        //用户信息
+        String url_head = String.format(mFormatUrlSmall, bean.getUser().getAvatar().getKey());
+        setImageUserInfo(url_head,
+                bean.getUser().getUsername(),
+                bean.getCreated_at()
+        );
+
+        //画板信息
+        String url1 = String.format(mFormatUrlSmall, bean.getBoard().getPins().get(0).getFile().getKey());
+        String url2 = String.format(mFormatUrlSmall, bean.getBoard().getPins().get(1).getFile().getKey());
+        String url3 = String.format(mFormatUrlSmall, bean.getBoard().getPins().get(2).getFile().getKey());
+        String url4 = String.format(mFormatUrlSmall, bean.getBoard().getPins().get(3).getFile().getKey());
+        setImageBoardInfo(url1, url2, url3, url4, bean.getBoard().getTitle());
+    }
+
+    /**
+     * 网络错误使用本地缓存 赋值全局变量 填充UI控件
+     *
+     * @param bean 本地缓存的bean
+     */
+    private void setImageInfo(PinsEntity bean) {
+
+        mBoardId = String.valueOf(bean.getBoard_id());
+        mUserId = String.valueOf(bean.getUser_id());
+        mBoardName = bean.getBoard().getTitle();
+        mUserName = bean.getUser().getUrlname();
+
+        //描述
+        setImageTextInfo(bean.getRaw_text(),
+                bean.getLink(),
+                bean.getSource(),
+                bean.getRepin_count(),
+                bean.getLike_count()
+        );
+
+        //用户信息
+        String url_head = bean.getUser().getAvatar() + mUrlSmallSuffix;
+        setImageUserInfo(url_head,
+                bean.getUser().getUsername(),
+                bean.getCreated_at()
+        );
+
+        //画板信息
+        String url = String.format(mFormatUrlSmall, bean.getFile().getKey());
+        setImageBoardInfo(url, url, url, url, bean.getBoard().getTitle());
+
+    }
+
+    private Observable<PinsDetailBean> getPinsDetail(String pinsId) {
+        return RetrofitGsonRx.service.httpPinsDetail(pinsId);
     }
 
     private Observable<List<PinsEntity>> getRecommend(String pinsId, int page, int limit) {
