@@ -157,6 +157,13 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         return getFooterViewsCount() > 0 && position == lastPosition;
     }
 
+    /**
+     * 根据 viewType 和 headerViewsCountCount 的数量
+     * 决定创建的 ViewHolder是 使用List<View> mHeaderViews 还是内部adapter的 onCreateViewHolder
+     * @param parent
+     * @param viewType
+     * @return
+     */
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         int headerViewsCountCount = getHeaderViewsCount();
@@ -184,6 +191,13 @@ public class HeaderAndFooterRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         mInnerAdapter.onViewRecycled(holder);
     }
 
+
+    /**
+     * head和foot的视图不复用 不需要特别的 onBindViewHolder
+     * 只是在 使用StaggeredGridLayoutManager 瀑布流时候 让head和foot 视图占据满格 setFullSpan(true)
+     * @param holder
+     * @param position
+     */
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int headerViewsCountCount = getHeaderViewsCount();

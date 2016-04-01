@@ -66,8 +66,8 @@ public class ResultImageFragment extends BaseFragment {
     }
 
     @Override
-    public String getTAG() {
-        return this.getClass().getSimpleName();
+    protected String getTAG() {
+        return this.toString();
     }
 
     @Override

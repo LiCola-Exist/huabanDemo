@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.facebook.drawee.controller.BaseControllerListener;
@@ -64,7 +65,7 @@ public class ImageDetailActivity extends BaseActivity {
 
     @Override
     protected String getTAG() {
-        return this.getClass().getSimpleName();
+        return this.toString();
     }
 
     public static void launch(Activity activity) {
@@ -76,7 +77,7 @@ public class ImageDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);//注册
-
+        Intent intent=getIntent();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initFloatingAction();
@@ -87,6 +88,8 @@ public class ImageDetailActivity extends BaseActivity {
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.framelayout_info_recycler, ImageDetailFragment.newInstance(mPinsId)).commit();
     }
+
+
 
     private void initFloatingAction() {
         fab.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +131,14 @@ public class ImageDetailActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_scrolling, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        Logger.d("id="+item.getItemId());
+        Logger.d("android.R.id.home="+android.R.id.home);
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

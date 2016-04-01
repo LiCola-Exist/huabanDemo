@@ -60,7 +60,7 @@ public class SearchResultActivity extends BaseActivity {
 
     @Override
     protected String getTAG() {
-        return this.getClass().getSimpleName();
+        return this.toString();
     }
 
 

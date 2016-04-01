@@ -55,7 +55,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment {
 
     @Override
     protected String getTAG() {
-        return this.getClass().getSimpleName();
+        return this.toString();
     }
 
 

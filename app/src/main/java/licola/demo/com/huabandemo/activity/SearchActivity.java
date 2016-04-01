@@ -84,7 +84,7 @@ public class SearchActivity extends BaseActivity {
 
     @Override
     protected String getTAG() {
-        return this.getClass().getSimpleName();
+        return this.toString();
     }
 
     public static void launch(Activity activity) {

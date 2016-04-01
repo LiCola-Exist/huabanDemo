@@ -91,8 +91,8 @@ public class ModuleFragment extends BaseFragment {
     }
 
     @Override
-    public String getTAG() {
-        return this.getClass().getSimpleName();
+    protected String getTAG() {
+        return this.toString();
     }
 
     @Override
@@ -197,6 +197,7 @@ public class ModuleFragment extends BaseFragment {
 
                     @Override
                     public void onNext(List<PinsEntity> pinsEntities) {
+                        Logger.d();
                         mMaxId = getMaxId(pinsEntities);
                         mAdapter.addList(pinsEntities);
                     }
@@ -252,7 +253,7 @@ public class ModuleFragment extends BaseFragment {
 
                     @Override
                     public void onNext(List<PinsEntity> result) {
-                        Logger.d(result.toString());
+                        Logger.d();
                         //保存maxId值 后续加载需要
                         mMaxId = getMaxId(result);
                         mAdapter.setList(result);
@@ -337,6 +338,8 @@ public class ModuleFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mAdapter=null;
+
         HuaBanApplication.getInstance().getRefwatcher().watch(this);
 //        EventBus.getDefault().unregister(this);
     }

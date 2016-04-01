@@ -100,7 +100,7 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
 
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.cardview_item_image, parent, false);
-        holder = new ViewHolderGeneral(view);
+        holder = new ViewHolderGeneral(view);//使用子类初始化ViewHolder
 
         holder.tv_card_like.setCompoundDrawablesWithIntrinsicBounds(
                 Utils.getTintCompatDrawable(mContext, R.drawable.ic_favorite_black_18dp, R.color.tint_list_grey),

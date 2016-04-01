@@ -35,7 +35,7 @@ public class ModuleActivity extends BaseActivity {
 
     @Override
     protected String getTAG() {
-        return this.getClass().getSimpleName();
+        return this.toString();
     }
 
     public static void launch(Activity activity,String title,String type) {

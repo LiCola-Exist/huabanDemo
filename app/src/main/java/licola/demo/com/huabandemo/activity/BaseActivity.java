@@ -22,14 +22,18 @@ import retrofit.Call;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    protected String TAG =getTAG();
+    protected String TAG = getTAG();
 
-    protected abstract  int getLayoutId();
+    protected abstract int getLayoutId();
 
-    protected abstract  String getTAG();
-
+    protected abstract String getTAG();
 
     protected Context mContext;
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " @" + Integer.toHexString(hashCode());
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +53,16 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         setContentView(getLayoutId());
         ButterKnife.bind(this);
-        mContext=this;
+        mContext = this;
         Logger.d(TAG);
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Logger.d(TAG);
+    }
 
     @Override
     protected void onResume() {
@@ -74,5 +83,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         Logger.d(TAG);
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Logger.d(TAG);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Logger.d(TAG);
+    }
 }

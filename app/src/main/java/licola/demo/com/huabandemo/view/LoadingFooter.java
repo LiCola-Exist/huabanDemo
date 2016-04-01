@@ -154,7 +154,7 @@ public class LoadingFooter extends RelativeLayout {
         }
     }
 
-    public static enum State {
+    public  enum State {
         Normal/**正常*/
         , TheEnd/**加载到最底了*/
         , Loading/**加载中..*/

@@ -21,9 +21,11 @@ import licola.demo.com.huabandemo.Util.NetUtils;
 
 /**
  * Created by LiCola on  2015/12/19  20:19
+ * 所有的fragment父类
  */
 public abstract class BaseFragment extends Fragment {
 
+    //网络错误 提示文字 放在父类方便子类使用
     @BindString(R.string.snack_message_net_error)
     protected String snack_message_net_error;
     @BindString(R.string.snack_action_to_setting)
@@ -40,6 +42,11 @@ public abstract class BaseFragment extends Fragment {
     protected View mRootView;
 
     protected abstract int getLayoutId();
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + " @" + Integer.toHexString(hashCode());
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,11 +85,24 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        Logger.d(TAG);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Logger.d(TAG);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         Logger.d(TAG);
-
     }
+
+
 
     /**
      * 异常类型判断 检查网络访问的异常 类型

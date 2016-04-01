@@ -16,6 +16,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
+import butterknife.BindInt;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.HuaBanApplication;
@@ -56,6 +57,9 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
     String mFormatUrlSmall;
     @BindString(R.string.image_suffix_small)
     String mUrlSmallSuffix;
+    @BindString(R.string.httpRoot)
+    String mHttpRoot;
+
 
     TextView tv_image_text;//图片的文字描述
     TextView tv_image_link;//链接
@@ -85,8 +89,8 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
     private String mUserName;
 
     @Override
-    public String getTAG() {
-        return this.getClass().getSimpleName();
+    protected String getTAG() {
+        return this.toString();
     }
 
     //只需要一个Key作为关键字联网
@@ -361,8 +365,13 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
         );
 
         //用户信息
-        String url_head = String.format(mFormatUrlSmall, bean.getUser().getAvatar().getKey());
-        setImageUserInfo(url_head,
+        String url = bean.getUser().getAvatar();
+        //如果是花瓣本地服务器的图片 不包含只有图片的key 加载时需要添加http头
+        //否则 可以直接使用
+        if (!url.contains(mHttpRoot)) {
+            url = String.format(mFormatUrlSmall, url);
+        }
+        setImageUserInfo(url,
                 bean.getUser().getUsername(),
                 bean.getCreated_at()
         );
@@ -396,20 +405,25 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
         );
 
         //用户信息
-        String url_head = bean.getUser().getAvatar() + mUrlSmallSuffix;
-        setImageUserInfo(url_head,
+        String url = bean.getUser().getAvatar();
+        //如果是花瓣本地服务器的图片 不包含只有图片的key 加载时需要添加http头
+        //否则 可以直接使用
+        if (!url.contains(mHttpRoot)) {
+            url = String.format(mFormatUrlSmall, url);
+        }
+        setImageUserInfo(url,
                 bean.getUser().getUsername(),
                 bean.getCreated_at()
         );
 
         //画板信息
-        String url = String.format(mFormatUrlSmall, bean.getFile().getKey());
-        setImageBoardInfo(url, url, url, url, bean.getBoard().getTitle());
+        String url_file = String.format(mFormatUrlSmall, bean.getFile().getKey());
+        setImageBoardInfo(url_file, url_file, url_file, url_file, bean.getBoard().getTitle());
 
     }
 
     private Observable<PinsDetailBean> getPinsDetail(String pinsId) {
-        return RetrofitGsonRx.service.httpPinsDetail(pinsId);
+        return RetrofitPinsRx.service.httpPinsDetail(pinsId);
     }
 
     private Observable<List<PinsEntity>> getRecommend(String pinsId, int page, int limit) {

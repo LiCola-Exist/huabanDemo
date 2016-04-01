@@ -1,6 +1,7 @@
 package licola.demo.com.huabandemo.activity;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -64,7 +65,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected String getTAG() {
-        return this.getClass().getSimpleName();
+        return this.toString();
     }
 
     @Override
@@ -85,6 +86,12 @@ public class MainActivity extends BaseActivity
 
         selectFragment(0);//默认选中0
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Logger.d(intent.toString());
     }
 
     private void initFloatingActionButton() {
@@ -201,6 +208,7 @@ public class MainActivity extends BaseActivity
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         String type = types[position];
         String title = titles[position];
+
         transaction.replace(R.id.id_content, ModuleFragment.newInstance(type, title));
         transaction.commit();
         setTitle(title);

@@ -26,7 +26,8 @@ import licola.demo.com.huabandemo.Util.Utils;
  * 这里中正则表达式 统一为
  */
 public class PinsConverter extends retrofit.Converter.Factory {
-    private static final String TAG="PinsConverter";
+    private static final String TAG = "PinsConverter";
+
     /**
      * Create an instance using a default {@link Gson} instance for conversion. Encoding to JSON and
      * decoding from JSON (when no charset is specified by a header) will use UTF-8.
@@ -65,8 +66,8 @@ public class PinsConverter extends retrofit.Converter.Factory {
         private final Gson gson;
         private final Type type;
 
-        private String mSKey="\"key\":\"([^\"]*)\"";
-        private Pattern mPkey=Pattern.compile(mSKey);
+        private String mSKey = "\"key\":\"([^\"]*)\"";
+        private Pattern mPkey = Pattern.compile(mSKey);
 
         public StringResponseBodyConverter(Gson gson, Type type) {
             this.gson = gson;
@@ -75,43 +76,56 @@ public class PinsConverter extends retrofit.Converter.Factory {
 
         @Override
         public T convert(ResponseBody value) throws IOException {
-            Reader reader = value.charStream();
+            Reader reader = value.charStream();//取出字节流
             String result;
             try {
-                BufferedReader in = new BufferedReader(reader);
-                StringBuffer buffer = new StringBuffer();
+                BufferedReader in = new BufferedReader(reader);//读取
+                StringBuffer buffer = new StringBuffer();//构造buffer对象用于拼接
                 String line;
-                while ((line = in.readLine()) != null) {
-                    buffer.append(line);
+                while ((line = in.readLine()) != null) {//读行
+                    buffer.append(line);//写入buffer
                 }
                 result = buffer.toString();
             } finally {
-                Utils.closeQuietly(reader);
+                Utils.closeQuietly(reader);//记得关闭流
             }
-            return gson.fromJson(regexChange(result), type);
+            return gson.fromJson(regexChange(result), type);//返回解析后的对象
         }
 
+        /**
+         * 对输入的字符串进行处理
+         *
+         * @param input 传入的需要处理的字符串
+         * @return
+         */
         private String regexChange(String input) {
-            String result=input;
+            String result = input;
             //匹配规则是当avatar是{}包装的对象
-            Pattern mPAvatar=Pattern.compile("\"avatar\":\\{([^\\}]*)\\}");
-            Matcher mMAvatar=mPAvatar.matcher(result);
-            while (mMAvatar.find()){//如果找到 开始替换
-                result=result.replaceFirst("\"avatar\":\\{([^\\}]*)\\}",getKey(mMAvatar.group()));
+            Pattern mPAvatar = Pattern.compile("\"avatar\":\\{([^\\}]*)\\}");
+            Matcher mMAvatar = mPAvatar.matcher(result);
+            while (mMAvatar.find()) {//如果找到 开始替换
+                result = result.replaceFirst("\"avatar\":\\{([^\\}]*)\\}", getKey(mMAvatar.group()));
             }
             return result;
         }
 
-        //取出key值 统一拼接成http://img.hb.aicdn.com/+图片key 作为String返回
+        /**
+         * 取出关键值返回
+         * 取出key值 统一拼接成http://img.hb.aicdn.com/+图片key 作为String返回
+         *
+         * @param group
+         * @return
+         */
         private String getKey(String group) {
-            Matcher matcher=mPkey.matcher(group);
-            StringBuffer buffer=new StringBuffer();
+            Matcher matcher = mPkey.matcher(group);
+            StringBuffer buffer = new StringBuffer();
 //            Logger.d(TAG);
-            buffer.append("\"avatar\":\"http://img.hb.aicdn.com/");
-            while (matcher.find()){
+//            buffer.append("\"avatar\":\"http://img.hb.aicdn.com/");
+            buffer.append("\"avatar\":\"");//替换成不带http头的avatar
+            while (matcher.find()) {
                 buffer.append(matcher.group(1));
             }
-            buffer.append("\"");
+            buffer.append("\"");//添加 " 做最后一个字符 完成拼接
             return buffer.toString();
         }
     }
