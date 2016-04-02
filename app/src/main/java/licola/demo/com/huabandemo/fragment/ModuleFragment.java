@@ -300,7 +300,7 @@ public class ModuleFragment extends BaseFragment {
         });
 
 
-        mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.onAdapterListener() {
+        mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.OnAdapterListener() {
             @Override
             public void onClickImage(PinsEntity bean, View view) {
                 Logger.d();

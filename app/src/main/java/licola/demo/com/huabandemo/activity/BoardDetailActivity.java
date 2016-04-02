@@ -14,10 +14,12 @@ import android.view.View;
 import butterknife.Bind;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.fragment.BoardDetailFragment;
 import licola.demo.com.huabandemo.fragment.ImageDetailFragment;
 
-public class BoardDetailActivity extends BaseActivity {
+public class BoardDetailActivity extends BaseActivity
+        implements BoardDetailFragment.onBoardDetailFragmentInteractionListener {
     protected static final String TYPE_KEY = "TYPE_KEY";
     protected static final String TYPE_TITLE = "TYPE_TITLE";
 
@@ -80,4 +82,15 @@ public class BoardDetailActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onClickItemImage(PinsEntity bean, View view) {
+        //绑定的fragment 需要跳转的点击事件
+        ImageDetailActivity.launch(BoardDetailActivity.this);
+    }
+
+    @Override
+    public void onClickItemText(PinsEntity bean, View view) {
+        //绑定的fragment 需要跳转的点击事件
+        ImageDetailActivity.launch(BoardDetailActivity.this);
+    }
 }

@@ -30,7 +30,8 @@ import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.fragment.ImageDetailFragment;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
 
-public class ImageDetailActivity extends BaseActivity {
+public class ImageDetailActivity extends BaseActivity
+        implements ImageDetailFragment.OnImageDetailFragmentInteractionListener {
 
     @BindDrawable(R.drawable.ic_cancel_black_24dp)
     Drawable drawable_cancel;
@@ -77,18 +78,17 @@ public class ImageDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);//注册
-        Intent intent=getIntent();
+        Intent intent = getIntent();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        initFloatingAction();
         mCollapsingToolBar.setExpandedTitleColor(Color.TRANSPARENT);//设置折叠后的文字颜色
+        initFloatingAction();
         //设置图片空间的宽高比
         img_image_big.setAspectRatio(
                 Utils.getAspectRatio(mPinsBean.getFile().getWidth(), mPinsBean.getFile().getHeight()));
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.framelayout_info_recycler, ImageDetailFragment.newInstance(mPinsId)).commit();
     }
-
 
 
     private void initFloatingAction() {
@@ -136,8 +136,8 @@ public class ImageDetailActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        Logger.d("id="+item.getItemId());
-        Logger.d("android.R.id.home="+android.R.id.home);
+        Logger.d("id=" + item.getItemId());
+        Logger.d("android.R.id.home=" + android.R.id.home);
         return super.onOptionsItemSelected(item);
     }
 
@@ -155,6 +155,27 @@ public class ImageDetailActivity extends BaseActivity {
         mImageUrl = mPinsBean.getFile().getKey();
         mPinsId = String.valueOf(mPinsBean.getPin_id());
 
+    }
+
+
+    @Override
+    public void onClickItemImage(PinsEntity bean, View view) {
+        ImageDetailActivity.launch(this);
+    }
+
+    @Override
+    public void onClickItemText(PinsEntity bean, View view) {
+        ImageDetailActivity.launch(this);
+    }
+
+    @Override
+    public void onClickBoardField(String key, String title) {
+        BoardDetailActivity.launch(this, key, title);
+    }
+
+    @Override
+    public void onClickUserField(String key, String title) {
+        // TODO: 2016/4/2 0002 图片详情的用户跳转
     }
 
 

@@ -22,7 +22,12 @@ import licola.demo.com.huabandemo.view.recyclerview.RecyclerViewUtils;
 
 /**
  * Created by LiCola on  2016/03/26  16:55
- * 图片的详情页 用Recycler addHeadView展示图片信息 然后展示推荐列表
+ * 作为一个持有 RecyclerHeadCardAdapter对象 其中包含数据List<PinsEntity>
+ * 在RecyclerView负责显示内容的基类
+ * 因为app中有多个类型一致的一致的返回List结果 抽象出来作为模板类
+ * 作用在于：固定通用方法确定整体结构 然后具体算法实现在子类中实现扩展 还确保了子类的拓展
+ * 定义成抽象类：既要约束子类的行为，又为子类提供公共功能
+ * 所以：模板方法的基类只提供通用功能和确定骨架，而不应该决定逻辑跳转等具体子类的功能
  */
 public abstract class BaseRecyclerHeadFragment extends BaseFragment {
     protected static final String TYPE_KEY = "KEY";//搜索关键字的key值
@@ -50,7 +55,6 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +73,7 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
     }
 
     //界面初始化的其他联网 可以不重写
-    protected void getHttpOther(){
+    protected void getHttpOther() {
 
     }
 
@@ -121,34 +125,37 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
     }
 
 
+    /**
+     * 初始化监听器的空方法 子类需要重写
+     */
     protected void initListener() {
-
-        mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.onAdapterListener() {
-            @Override
-            public void onClickImage(PinsEntity bean, View view) {
-                Logger.d();
-                ImageDetailActivity.launch(getActivity());
-                EventBus.getDefault().postSticky(bean);
-            }
-
-            @Override
-            public void onClickTitleInfo(PinsEntity bean, View view) {
-                Logger.d();
-                ImageDetailActivity.launch(getActivity());
-                EventBus.getDefault().postSticky(bean);
-            }
-
-            @Override
-            public void onClickInfoGather(PinsEntity bean, View view) {
-                Logger.d();
-            }
-
-            @Override
-            public void onClickInfoLike(PinsEntity bean, View view) {
-                Logger.d();
-            }
-
-        });
+        //基类中不应该 确定具体的逻辑跳转 交由子类实现
+//        mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.OnAdapterListener() {
+//            @Override
+//            public void onClickImage(PinsEntity bean, View view) {
+//                Logger.d();
+//                ImageDetailActivity.launch(getActivity());
+//                EventBus.getDefault().postSticky(bean);
+//            }
+//
+//            @Override
+//            public void onClickTitleInfo(PinsEntity bean, View view) {
+//                Logger.d();
+//                ImageDetailActivity.launch(getActivity());
+//                EventBus.getDefault().postSticky(bean);
+//            }
+//
+//            @Override
+//            public void onClickInfoGather(PinsEntity bean, View view) {
+//                Logger.d();
+//            }
+//
+//            @Override
+//            public void onClickInfoLike(PinsEntity bean, View view) {
+//                Logger.d();
+//            }
+//
+//        });
     }
 
 

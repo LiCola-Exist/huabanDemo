@@ -1,5 +1,6 @@
 package licola.demo.com.huabandemo.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,9 +16,9 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
-import butterknife.BindInt;
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 import licola.demo.com.huabandemo.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -26,13 +26,12 @@ import licola.demo.com.huabandemo.Util.TimeUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.activity.BoardDetailActivity;
 import licola.demo.com.huabandemo.activity.ImageDetailActivity;
+import licola.demo.com.huabandemo.adapter.RecyclerHeadCardAdapter;
 import licola.demo.com.huabandemo.bean.PinsDetailBean;
 import licola.demo.com.huabandemo.bean.PinsEntity;
 import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.httpUtils.RetrofitGsonRx;
 import licola.demo.com.huabandemo.httpUtils.RetrofitPinsRx;
 import licola.demo.com.huabandemo.view.LoadingFooter;
-import licola.demo.com.huabandemo.view.recyclerview.RecyclerViewUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -88,6 +87,18 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
     private String mBoardName;
     private String mUserName;
 
+    private OnImageDetailFragmentInteractionListener mListener;
+
+    public interface OnImageDetailFragmentInteractionListener {
+        void onClickItemImage(PinsEntity bean, View view);
+
+        void onClickItemText(PinsEntity bean, View view);
+
+        void onClickBoardField(String key, String title);
+
+        void onClickUserField(String key,String title);
+    }
+
     @Override
     protected String getTAG() {
         return this.toString();
@@ -112,8 +123,44 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
 
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnImageDetailFragmentInteractionListener) {
+            mListener = (OnImageDetailFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
     protected void initListener() {
         super.initListener();
+
+        mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.OnAdapterListener() {
+            @Override
+            public void onClickImage(PinsEntity bean, View view) {
+                EventBus.getDefault().postSticky(bean);
+                mListener.onClickItemImage(bean, view);
+            }
+
+            @Override
+            public void onClickTitleInfo(PinsEntity bean, View view) {
+                EventBus.getDefault().postSticky(bean);
+                mListener.onClickItemText(bean, view);
+            }
+
+            @Override
+            public void onClickInfoGather(PinsEntity bean, View view) {
+                Logger.d();
+            }
+
+            @Override
+            public void onClickInfoLike(PinsEntity bean, View view) {
+                Logger.d();
+
+            }
+        });
 
         tv_image_link.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +193,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
             @Override
             public void onClick(View v) {
                 Logger.d();
+                mListener.onClickUserField(mUserId,mUserName);
             }
         });
 
@@ -153,7 +201,8 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
             @Override
             public void onClick(View v) {
                 Logger.d();
-                BoardDetailActivity.launch(getActivity(), mBoardId, mBoardName);
+//                BoardDetailActivity.launch(getActivity(), mBoardId, mBoardName);
+                mListener.onClickBoardField(mBoardId,mBoardName);
             }
         });
     }

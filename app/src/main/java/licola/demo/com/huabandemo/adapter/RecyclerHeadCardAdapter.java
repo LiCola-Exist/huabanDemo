@@ -38,7 +38,7 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private boolean mIsShowUser = false;//是否显示用户头像和名字的标志位
     private List<PinsEntity> mList = new ArrayList<>(20);
-    private onAdapterListener mListener;
+    private OnAdapterListener mListener;
     private final String url_root;
     public int mAdapterPosition = 0;
 
@@ -65,7 +65,7 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
     }
 
 
-    public interface onAdapterListener {
+    public interface OnAdapterListener {
         void onClickImage(PinsEntity bean, View view);
 
         void onClickTitleInfo(PinsEntity bean, View view);
@@ -89,7 +89,7 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
     }
 
 
-    public void setOnClickItemListener(onAdapterListener mListener) {
+    public void setOnClickItemListener(OnAdapterListener mListener) {
         this.mListener = mListener;
     }
 

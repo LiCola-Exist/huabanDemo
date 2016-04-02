@@ -1,5 +1,6 @@
 package licola.demo.com.huabandemo.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,9 +14,11 @@ import java.util.List;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 import licola.demo.com.huabandemo.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.adapter.RecyclerHeadCardAdapter;
 import licola.demo.com.huabandemo.bean.BoardDetailBean;
 import licola.demo.com.huabandemo.bean.ListPinsBean;
 import licola.demo.com.huabandemo.bean.PinsEntity;
@@ -52,6 +55,13 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment {
     TextView mTVBoardAttention;
     TextView mTVBoardGather;
 
+    private onBoardDetailFragmentInteractionListener mListener;
+
+    public interface onBoardDetailFragmentInteractionListener {
+        void onClickItemImage(PinsEntity bean, View view);
+
+        void onClickItemText(PinsEntity bean, View view);
+    }
 
     @Override
     protected String getTAG() {
@@ -71,9 +81,35 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment {
     @Override
     protected void initListener() {
         super.initListener();
+
         mLLBoardUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Logger.d();
+            }
+        });//画板栏事件
+        mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.OnAdapterListener() {
+            @Override
+            public void onClickImage(PinsEntity bean, View view) {
+                EventBus.getDefault().postSticky(bean);//发送bean 而不用知晓接受得类
+                mListener.onClickItemImage(bean, view);
+            }
+
+            @Override
+            public void onClickTitleInfo(PinsEntity bean, View view) {
+                EventBus.getDefault().postSticky(bean);//发送bean 而不用知晓接受得类
+                mListener.onClickItemText(bean, view);
+            }
+
+            @Override
+            public void onClickInfoGather(PinsEntity bean, View view) {
+                //某个图片的收集点击 在fragment中直接处理 不用跳转
+                Logger.d();
+            }
+
+            @Override
+            public void onClickInfoLike(PinsEntity bean, View view) {
+                //某个图片的喜欢点击 在fragment中直接处理 不用跳转
                 Logger.d();
             }
         });
@@ -237,6 +273,23 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment {
 
     private Observable<ListPinsBean> getBoardPinsMax(String boardId, int max, int limit) {
         return RetrofitGsonRx.service.httpBoardPinsMax(boardId, max, limit);
+    }
+
+
+    /**
+     * 检查绑定的activity 并得到引用 否则抛出异常
+     *
+     * @param context
+     */
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof onBoardDetailFragmentInteractionListener) {
+            mListener = (onBoardDetailFragmentInteractionListener) context;//在绑定时候得到listener的真正引用
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
