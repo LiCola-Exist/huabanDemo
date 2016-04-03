@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.httpUtils;
+package licola.demo.com.huabandemo.HttpUtils;
 
 import android.content.Context;
 import android.graphics.PointF;

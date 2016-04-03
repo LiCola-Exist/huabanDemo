@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.view.recyclerview;
+package licola.demo.com.huabandemo.View.recyclerview;
 
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -6,8 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-
-import licola.demo.com.huabandemo.Util.Logger;
 
 
 /**

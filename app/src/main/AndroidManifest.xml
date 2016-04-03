@@ -7,14 +7,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".HuaBanApplication"
+        android:name=".Base.HuaBanApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".Main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTask"
@@ -26,59 +26,61 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".Login.LoginActivity"
             android:label="@string/title_activity_Login"
-            android:parentActivityName=".activity.MainActivity"
+            android:parentActivityName=".Main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="licola.demo.com.huabandemo.activity.MainActivity" />
+                android:value="licola.demo.com.huabandemo.Main.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.ImageDetailActivity"
+            android:name=".ImageDetail.ImageDetailActivity"
             android:label="@string/title_activity_image_detail"
-            android:parentActivityName=".activity.MainActivity"
+            android:parentActivityName=".Main.MainActivity"
+            android:launchMode="standard"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="licola.demo.com.huabandemo.activity.MainActivity" />
+                android:value="licola.demo.com.huabandemo.Main.MainActivity" />
         </activity>
 
         <activity
-            android:name=".activity.BoardDetailActivity"
+            android:name=".BoardDetail.BoardDetailActivity"
             android:label="@string/title_activity_board_detail"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
         <activity
-            android:name=".activity.SearchResultActivity"
+            android:name=".SearchResult.SearchResultActivity"
             android:label="@string/title_activity_search_result"
-            android:parentActivityName=".activity.SearchActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:parentActivityName=".Search.SearchActivity"
+            android:theme="@style/AppTheme.ActionBar_StatusBarDark">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="licola.demo.com.huabandemo.activity.MainActivity" />
+                android:value="licola.demo.com.huabandemo.Main.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.SearchActivity"
+            android:name=".Search.SearchActivity"
             android:label="@string/title_activity_search"
-            android:parentActivityName=".activity.MainActivity"
+            android:parentActivityName=".Main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="licola.demo.com.huabandemo.activity.MainActivity" />
+                android:value="licola.demo.com.huabandemo.Main.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.ModuleActivity"
+            android:name=".Module.ModuleActivity"
             android:label="@string/title_activity_module"
-            android:parentActivityName=".activity.SearchActivity"
+            android:parentActivityName=".Search.SearchActivity"
+
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="licola.demo.com.huabandemo.activity.SearchActivity" />
+                android:value=".Search.SearchActivity" />
         </activity>
         //todo 注册广播暂时不不处理 网络状态变换
-        <receiver android:name=".httpUtils.ConnectionChangeReceiver">
+        <receiver android:name=".HttpUtils.ConnectionChangeReceiver">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>

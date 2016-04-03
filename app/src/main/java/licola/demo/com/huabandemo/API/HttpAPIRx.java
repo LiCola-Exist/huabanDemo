@@ -2,16 +2,17 @@ package licola.demo.com.huabandemo.API;
 
 import java.util.List;
 
-import licola.demo.com.huabandemo.bean.BoardDetailBean;
+import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
+import licola.demo.com.huabandemo.My.FollowingPinsBean;
 import licola.demo.com.huabandemo.bean.ListPinsBean;
-import licola.demo.com.huabandemo.bean.PinsDetailBean;
+import licola.demo.com.huabandemo.ImageDetail.PinsDetailBean;
 import licola.demo.com.huabandemo.bean.PinsEntity;
-import licola.demo.com.huabandemo.bean.SearchBoardBean;
-import licola.demo.com.huabandemo.bean.SearchHintBean;
-import licola.demo.com.huabandemo.bean.SearchImageBean;
-import licola.demo.com.huabandemo.bean.SearchPeopleBean;
-import licola.demo.com.huabandemo.bean.TokenBean;
-import licola.demo.com.huabandemo.bean.UserMeBean;
+import licola.demo.com.huabandemo.SearchResult.SearchBoardBean;
+import licola.demo.com.huabandemo.Search.SearchHintBean;
+import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
+import licola.demo.com.huabandemo.SearchResult.SearchPeopleBean;
+import licola.demo.com.huabandemo.Login.TokenBean;
+import licola.demo.com.huabandemo.Login.UserMeBean;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
@@ -60,29 +61,30 @@ public interface HttpAPIRx {
     //http://api.huaban.com/pins/663478425
     //根据图片id获取详情
     @GET("pins/{pinsId}")
-    Observable<PinsDetailBean> httpPinsDetail(@Path("pinsId") String pinsId);
+    Observable<PinsDetailBean> httpPinsDetailRx(@Path("pinsId") String pinsId);
 
     //http://api.huaban.com/boards/3514299
     //获取画板的详情
     @GET("boards/{boardId}")
-    Observable<BoardDetailBean> httpBoardDetail(@Path("boardId") String boardId);
+    Observable<BoardDetailBean> httpBoardDetailRx(@Path("boardId") String boardId);
 
     //http://api.huaban.com/boards/19196160/pins?limit=40
     //获取画板的图片集合
     @GET("boards/{boardId}/pins")
-    Observable<ListPinsBean> httpBoardPins(@Path("boardId") String boardId, @Query("limit") int limit);
+    Observable<ListPinsBean> httpBoardPinsRx(@Path("boardId") String boardId, @Query("limit") int limit);
 
     //http://api.huaban.com/boards/19196160/pins?limit=40&max=508414882
     //获取画板的图片集合 根据上一个图片的id继续加载
     @GET("boards/{boardId}/pins")
-    Observable<ListPinsBean> httpBoardPinsMax(@Path("boardId") String boardId, @Query("max") int max, @Query("limit") int limit);
+    Observable<ListPinsBean> httpBoardPinsMaxRx(@Path("boardId") String boardId, @Query("max") int max, @Query("limit") int limit);
 
     //http://api.huaban.com/pins/654197326/recommend/?page=1&limit=40
     //获取某个图片的推荐图片列表
     @GET("pins/{pinsId}/recommend/")
-    Observable<List<PinsEntity>> httpPinsRecommend(@Path("pinsId") String pinsId, @Query("page") int page, @Query("limit") int limit);
+    Observable<List<PinsEntity>> httpPinsRecommendRx(@Path("pinsId") String pinsId, @Query("page") int page, @Query("limit") int limit);
 
     //https 用户登录  的第一步
+    // Authorization 报头一个固定的值 内容 grant_type=password&password=密码&username=账号
     //传入用户名和密码
     @FormUrlEncoded
     @POST("https://huaban.com/oauth/access_token/")
@@ -92,4 +94,10 @@ public interface HttpAPIRx {
     //登录第二步 用上一步结果联网
     @GET("users/me")
     Observable<UserMeBean> httpUserRx(@Header("Authorization") String authorization);
+
+    //https://api.huaban.com/following?limit=40 报头 bearer getAccess_token
+    @GET("following")
+    Observable<FollowingPinsBean> httpsUserFollowingPinsRx(@Header("Authorization") String authorization,@Query("limit") int limit);
+
+
 }

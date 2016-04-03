@@ -1,6 +1,6 @@
-package licola.demo.com.huabandemo.httpUtils;
+package licola.demo.com.huabandemo.HttpUtils;
 
-import licola.demo.com.huabandemo.HuaBanApplication;
+import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.API.HttpAPICall;
 import licola.demo.com.huabandemo.R;
 import retrofit.GsonConverterFactory;

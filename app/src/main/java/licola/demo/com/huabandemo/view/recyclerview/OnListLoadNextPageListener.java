@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.view.recyclerview;
+package licola.demo.com.huabandemo.View.recyclerview;
 
 import android.view.View;
 

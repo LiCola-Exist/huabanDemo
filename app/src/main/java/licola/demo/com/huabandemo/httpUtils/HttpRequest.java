@@ -1,10 +1,6 @@
-package licola.demo.com.huabandemo.httpUtils;
-
-import java.io.IOException;
+package licola.demo.com.huabandemo.HttpUtils;
 
 import licola.demo.com.huabandemo.API.HttpInterface;
-import licola.demo.com.huabandemo.HuaBanApplication;
-import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import retrofit.Call;
 import retrofit.Callback;

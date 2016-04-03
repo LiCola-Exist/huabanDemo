@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.view;
+package licola.demo.com.huabandemo.View;
 
 import android.content.Context;
 import android.util.AttributeSet;

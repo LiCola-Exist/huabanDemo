@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.adapter;
+package licola.demo.com.huabandemo.Adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Animatable;
@@ -26,7 +26,7 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
 
 import licola.demo.com.huabandemo.bean.PinsEntity;
-import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 
 import static android.view.View.*;
 import static android.view.ViewGroup.OnClickListener;

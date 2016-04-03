@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.adapter;
+package licola.demo.com.huabandemo.Adapter;
 
 import android.content.Context;
 import android.graphics.drawable.Animatable;
@@ -18,9 +18,9 @@ import java.util.List;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.bean.PinsEntity;
-import licola.demo.com.huabandemo.httpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.view.ViewHolder.ViewHolderGeneral;
-import licola.demo.com.huabandemo.view.recyclerview.RecyclerViewUtils;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.View.ViewHolder.ViewHolderGeneral;
+import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;

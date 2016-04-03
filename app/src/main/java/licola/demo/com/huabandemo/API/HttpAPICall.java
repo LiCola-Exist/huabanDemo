@@ -1,11 +1,11 @@
 package licola.demo.com.huabandemo.API;
 
 import licola.demo.com.huabandemo.bean.ListPinsBean;
-import licola.demo.com.huabandemo.bean.SearchBoardBean;
-import licola.demo.com.huabandemo.bean.SearchImageBean;
-import licola.demo.com.huabandemo.bean.SearchPeopleBean;
-import licola.demo.com.huabandemo.bean.TokenBean;
-import licola.demo.com.huabandemo.bean.UserMeBean;
+import licola.demo.com.huabandemo.SearchResult.SearchBoardBean;
+import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
+import licola.demo.com.huabandemo.SearchResult.SearchPeopleBean;
+import licola.demo.com.huabandemo.Login.TokenBean;
+import licola.demo.com.huabandemo.Login.UserMeBean;
 import retrofit.Call;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;

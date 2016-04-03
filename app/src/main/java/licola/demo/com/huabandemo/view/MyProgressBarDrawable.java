@@ -7,7 +7,7 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-package licola.demo.com.huabandemo.view;
+package licola.demo.com.huabandemo.View;
 
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="licola.demo.com.huabandemo.activity.SearchActivity">
+    tools:context=".Search.SearchActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -78,7 +78,7 @@
                     />
             </LinearLayout>
 
-            <licola.demo.com.huabandemo.view.FlowLayout
+            <licola.demo.com.huabandemo.View.FlowLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/flow_history"
@@ -86,7 +86,7 @@
                 android:background="@color/white"
                 >
 
-            </licola.demo.com.huabandemo.view.FlowLayout>
+            </licola.demo.com.huabandemo.View.FlowLayout>
            <TextView
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
@@ -94,13 +94,13 @@
                android:padding="12dp"
                android:textColor="@color/secondary_text"
                />
-            <licola.demo.com.huabandemo.view.FlowLayout
+            <licola.demo.com.huabandemo.View.FlowLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/flow_reference"
                 >
 
-            </licola.demo.com.huabandemo.view.FlowLayout>
+            </licola.demo.com.huabandemo.View.FlowLayout>
 
         </LinearLayout>
     </ScrollView>

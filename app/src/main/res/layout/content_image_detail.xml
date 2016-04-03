@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.ImageDetailActivity"
+    tools:context=".ImageDetail.ImageDetailActivity"
     tools:showIn="@layout/activity_image_detail">
 
     <include layout="@layout/view_image_detail_info"/>
