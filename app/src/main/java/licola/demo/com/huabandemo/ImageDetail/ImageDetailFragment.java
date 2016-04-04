@@ -26,7 +26,7 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.TimeUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Adapter.RecyclerHeadCardAdapter;
-import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitPinsRx;
 import licola.demo.com.huabandemo.View.LoadingFooter;
@@ -39,7 +39,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/03/26  19:05
  */
-public class ImageDetailFragment extends BaseRecyclerHeadFragment {
+public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerHeadCardAdapter> {
     private static final String TAG = "ImageDetailFragment";
     protected int mIndex = 1;//默认值为1
 
@@ -56,7 +56,6 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
     String mUrlSmallSuffix;
     @BindString(R.string.httpRoot)
     String mHttpRoot;
-
 
     TextView tv_image_text;//图片的文字描述
     TextView tv_image_link;//链接
@@ -323,6 +322,16 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
         findHeadView(headView);
 
         return headView;
+    }
+
+    @Override
+    protected int getAdapterPosition() {
+        return mAdapter.getAdapterPosition();
+    }
+
+    @Override
+    protected RecyclerHeadCardAdapter setAdapter() {
+        return new RecyclerHeadCardAdapter(mRecyclerView);
     }
 
 

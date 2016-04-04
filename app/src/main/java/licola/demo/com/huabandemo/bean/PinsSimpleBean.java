@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.bean;
+package licola.demo.com.huabandemo.Bean;
 
 /**
  * Created by LiCola on  2016/04/04  18:10

@@ -25,7 +25,7 @@ import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
 
-import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 
 import static android.view.View.*;

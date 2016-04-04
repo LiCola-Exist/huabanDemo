@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.bean;
+package licola.demo.com.huabandemo.Bean;
 
 import java.util.List;
 

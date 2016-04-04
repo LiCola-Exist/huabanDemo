@@ -2,7 +2,7 @@ package licola.demo.com.huabandemo.My;
 
 import java.util.List;
 
-import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 
 /**
  * Created by LiCola on  2016/04/03  16:07

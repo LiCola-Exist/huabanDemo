@@ -17,14 +17,13 @@ import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
 
 /**
  * Created by LiCola on  2016/03/26  16:55
- * 作为一个持有 RecyclerHeadCardAdapter对象 其中包含数据List<PinsAndUserEntity>
- * 在RecyclerView负责显示内容的基类
- * 因为app中有多个类型一致的一致的返回List结果 抽象出来作为模板类
+ * BaseRecyclerHeadFragment 抽象出来作为模板类
+ * 采用泛型 约束条件是RecyclerView.Adapter
  * 作用在于：固定通用方法确定整体结构 然后具体算法实现在子类中实现扩展 还确保了子类的拓展
  * 定义成抽象类：既要约束子类的行为，又为子类提供公共功能
  * 所以：模板方法的基类只提供通用功能和确定骨架，而不应该决定逻辑跳转等具体子类的功能
  */
-public abstract class BaseRecyclerHeadFragment extends BaseFragment {
+public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> extends BaseFragment {
     protected static final String TYPE_KEY = "KEY";//搜索关键字的key值
     protected final float percentageScroll = 0.8f;//滑动距离的百分比
 
@@ -40,9 +39,8 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
     @Bind(R.id.recycler_list)
     protected RecyclerView mRecyclerView;
 
-    //    private RecyclerCardAdapter mAdapter;
-    protected RecyclerHeadCardAdapter mAdapter;
-
+//    protected RecyclerHeadCardAdapter mAdapter;
+    protected T mAdapter;
 
     @Override
     protected int getLayoutId() {
@@ -65,8 +63,8 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         initRecyclerView();
         initListener();
-        getHttpFirst();
         getHttpOther();
+        getHttpFirst();
     }
 
     //界面初始化的其他联网 可以不重写
@@ -82,12 +80,23 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
 
     protected abstract View setHeadView();
 
+    protected abstract int getAdapterPosition();
 
-    protected void initRecyclerView() {
+    protected abstract T setAdapter(); //这里初始化 adapter
+
+    /**
+     * 初始化监听器的空方法 子类需要重写
+     */
+    protected void initListener() {
+
+    }
+
+    private void initRecyclerView() {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         //// TODO: 2016/3/17 0017 预留选项 应该在设置中 添加一条单条垂直滚动选项
 //        LinearLayoutManager layoutManager=new LinearLayoutManager(HuaBanApplication.getInstance());
-        mAdapter = new RecyclerHeadCardAdapter(mRecyclerView);
+//        mAdapter = new RecyclerHeadCardAdapter(mRecyclerView);
+        mAdapter=setAdapter();
         HeaderAndFooterRecyclerViewAdapter headAdapter = new HeaderAndFooterRecyclerViewAdapter(mAdapter);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(headAdapter);
@@ -107,7 +116,7 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
                     //滑动停止
 //                    Logger.d("滑动停止 position=" + mAdapter.getAdapterPosition());
                     int size = (int) (mAdapter.getItemCount() * percentageScroll);
-                    if (mAdapter.getAdapterPosition() >= --size) {
+                    if (getAdapterPosition() >= --size) {
                         getHttpScroll();
                     }
                 } else if (RecyclerView.SCROLL_STATE_DRAGGING == newState) {
@@ -121,19 +130,6 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
         });
     }
 
-
-    /**
-     * 初始化监听器的空方法 子类需要重写
-     */
-    protected void initListener() {
-
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-    }
 
     @Override
     public void onDestroy() {

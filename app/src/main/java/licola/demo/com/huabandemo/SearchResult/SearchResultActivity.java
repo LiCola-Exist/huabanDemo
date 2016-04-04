@@ -25,7 +25,7 @@ import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
-import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 
 
 public class SearchResultActivity extends BaseActivity implements ResultImageFragment.OnResultImageFragmentInteractionListener {

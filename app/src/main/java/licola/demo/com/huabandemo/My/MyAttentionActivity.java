@@ -12,15 +12,20 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.Base.BaseActivity;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 
-public class MyAttentionActivity extends BaseActivity {
+public class MyAttentionActivity extends BaseActivity
+        implements MyAttentionPinsFragment.OnMyAttentionPinsFragmentInteractionListener {
+
     static final int mTabCount = 2;
 
     @BindString(R.string.title_fragment_attention_pins)
@@ -108,6 +113,18 @@ public class MyAttentionActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClickItemImage(PinsAndUserEntity bean, View view) {
+        //我的关注 画板的点击跳转
+        ImageDetailActivity.launch(this,ImageDetailActivity.ACTION_ATTENTION);
+    }
+
+    @Override
+    public void onClickItemText(PinsAndUserEntity bean, View view) {
+        //我的关注 画板的点击跳转
+        ImageDetailActivity.launch(this,ImageDetailActivity.ACTION_ATTENTION);
     }
 
 

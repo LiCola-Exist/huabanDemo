@@ -4,9 +4,9 @@ import java.util.List;
 
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
 import licola.demo.com.huabandemo.My.FollowingPinsBean;
-import licola.demo.com.huabandemo.bean.ListPinsBean;
+import licola.demo.com.huabandemo.Bean.ListPinsBean;
 import licola.demo.com.huabandemo.ImageDetail.PinsDetailBean;
-import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.SearchResult.SearchBoardBean;
 import licola.demo.com.huabandemo.Search.SearchHintBean;
 import licola.demo.com.huabandemo.SearchResult.SearchImageBean;

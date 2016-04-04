@@ -17,7 +17,7 @@ import java.util.List;
 
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.View.ViewHolder.ViewHolderGeneral;
 import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;

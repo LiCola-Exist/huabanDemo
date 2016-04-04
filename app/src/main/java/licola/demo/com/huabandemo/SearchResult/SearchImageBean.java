@@ -2,8 +2,8 @@ package licola.demo.com.huabandemo.SearchResult;
 
 import java.util.List;
 
-import licola.demo.com.huabandemo.bean.FacetsEntity;
-import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.Bean.FacetsEntity;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 
 /**
  * Created by LiCola on  2015/12/05  15:25

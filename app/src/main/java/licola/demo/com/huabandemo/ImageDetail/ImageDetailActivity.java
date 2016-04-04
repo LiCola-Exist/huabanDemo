@@ -30,7 +30,7 @@ import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Main.MainActivity;
-import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 
 public class ImageDetailActivity extends BaseActivity
@@ -39,12 +39,13 @@ public class ImageDetailActivity extends BaseActivity
     //定义调用ImageDetailActivity的类 来自什么类型 在结束作为判断条件
 
     public static final String ACTION_KEY = "key";//key值
-    public static final int ACTION_DEFAULT = -1;//来自自己的跳转
+    public static final int ACTION_DEFAULT = -1;//默认值
     public static final int ACTION_THIS = 0;//来自自己的跳转
     public static final int ACTION_MAIN = 1;//来自主界面的跳转
     public static final int ACTION_MODULE = 2;//来自模块界面的跳转
     public static final int ACTION_BOARD = 3;//来自画板界面的跳转
-    public static final int ACTION_SEARCH = 4;//来自搜索界面的跳转
+    public static final int ACTION_ATTENTION = 4;//来自我的关注界面的跳转
+    public static final int ACTION_SEARCH = 5;//来自搜索界面的跳转
 
     private int mActionFrom;
 
@@ -177,7 +178,7 @@ public class ImageDetailActivity extends BaseActivity
                 MainActivity.launch(this);
                 break;
             case ACTION_MODULE:
-                ModuleActivity.launch(this,Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                ModuleActivity.launch(this, Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 break;
             case ACTION_BOARD:
 //                BoardDetailActivity.launch(this, );
@@ -204,12 +205,12 @@ public class ImageDetailActivity extends BaseActivity
 
     @Override
     public void onClickItemImage(PinsAndUserEntity bean, View view) {
-        ImageDetailActivity.launch(this,mActionFrom);
+        ImageDetailActivity.launch(this, mActionFrom);
     }
 
     @Override
     public void onClickItemText(PinsAndUserEntity bean, View view) {
-        ImageDetailActivity.launch(this,mActionFrom);
+        ImageDetailActivity.launch(this, mActionFrom);
     }
 
     @Override

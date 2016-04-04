@@ -14,7 +14,7 @@ import butterknife.Bind;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 
 public class BoardDetailActivity extends BaseActivity
         implements BoardDetailFragment.onBoardDetailFragmentInteractionListener {

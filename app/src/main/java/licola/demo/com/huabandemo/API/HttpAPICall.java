@@ -1,6 +1,6 @@
 package licola.demo.com.huabandemo.API;
 
-import licola.demo.com.huabandemo.bean.ListPinsBean;
+import licola.demo.com.huabandemo.Bean.ListPinsBean;
 import licola.demo.com.huabandemo.SearchResult.SearchBoardBean;
 import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
 import licola.demo.com.huabandemo.SearchResult.SearchPeopleBean;

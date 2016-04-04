@@ -20,8 +20,8 @@ import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Adapter.RecyclerHeadCardAdapter;
-import licola.demo.com.huabandemo.bean.ListPinsBean;
-import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.Bean.ListPinsBean;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitGsonRx;
 import licola.demo.com.huabandemo.View.LoadingFooter;
@@ -34,7 +34,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/03/29  18:12
  */
-public class BoardDetailFragment extends BaseRecyclerHeadFragment {
+public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerHeadCardAdapter> {
 
     private int mMaxId;
 
@@ -256,6 +256,16 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment {
         findHeadView(headView);
 
         return headView;
+    }
+
+    @Override
+    protected int getAdapterPosition() {
+        return mAdapter.getAdapterPosition();
+    }
+
+    @Override
+    protected RecyclerHeadCardAdapter setAdapter() {
+        return new RecyclerHeadCardAdapter(mRecyclerView);
     }
 
     private void findHeadView(View headView) {
