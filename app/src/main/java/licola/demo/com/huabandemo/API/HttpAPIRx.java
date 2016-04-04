@@ -6,7 +6,7 @@ import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
 import licola.demo.com.huabandemo.My.FollowingPinsBean;
 import licola.demo.com.huabandemo.bean.ListPinsBean;
 import licola.demo.com.huabandemo.ImageDetail.PinsDetailBean;
-import licola.demo.com.huabandemo.bean.PinsEntity;
+import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.SearchResult.SearchBoardBean;
 import licola.demo.com.huabandemo.Search.SearchHintBean;
 import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
@@ -81,7 +81,7 @@ public interface HttpAPIRx {
     //http://api.huaban.com/pins/654197326/recommend/?page=1&limit=40
     //获取某个图片的推荐图片列表
     @GET("pins/{pinsId}/recommend/")
-    Observable<List<PinsEntity>> httpPinsRecommendRx(@Path("pinsId") String pinsId, @Query("page") int page, @Query("limit") int limit);
+    Observable<List<PinsAndUserEntity>> httpPinsRecommendRx(@Path("pinsId") String pinsId, @Query("page") int page, @Query("limit") int limit);
 
     //https 用户登录  的第一步
     // Authorization 报头一个固定的值 内容 grant_type=password&password=密码&username=账号
@@ -97,7 +97,11 @@ public interface HttpAPIRx {
 
     //https://api.huaban.com/following?limit=40 报头 bearer getAccess_token
     @GET("following")
-    Observable<FollowingPinsBean> httpsUserFollowingPinsRx(@Header("Authorization") String authorization,@Query("limit") int limit);
+    Observable<FollowingPinsBean> httpsMyFollowingPinsRx(@Header("Authorization") String authorization, @Query("limit") int limit);
 
+    //https://api.huaban.com/following?limit=40&max=670619456
+    //我的关注图片的 后续滑动联网
+    @GET("following")
+    Observable<FollowingPinsBean> httpsMyFollowingPinsMaxRx(@Header("Authorization") String authorization, @Query("max") int max, @Query("limit") int limit);
 
 }

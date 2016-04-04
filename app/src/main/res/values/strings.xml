@@ -17,6 +17,11 @@
     <string name="title_fragment_board">Boards</string>
     <string name="title_fragment_user">User</string>
 
+    <string name="title_fragment_attention_pins">Attention Gather</string>
+    <string name="title_fragment_attention_board">Attention Board</string>
+
+
+
     <string name="action_settings">setting</string>
 
     <string name="snack_message_main_gather">start to gather</string>
@@ -101,6 +106,7 @@
     <string name="text_board_describe_null">noting describe</string>
     <string name="text_recommend">recommend</string>
     <string name="text_to">To</string>
+    <string name="title_activity_my_following">MyFollowingActivity</string>
 
 
 </resources>

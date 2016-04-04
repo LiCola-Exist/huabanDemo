@@ -25,7 +25,7 @@ import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
 
-import licola.demo.com.huabandemo.bean.PinsEntity;
+import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 
 import static android.view.View.*;
@@ -41,21 +41,21 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
     private final String life = "Life";
     private RecyclerView mRecyclerView;
     private Context mContext;
-    private List<PinsEntity> mList = new ArrayList<>(20);
+    private List<PinsAndUserEntity> mList = new ArrayList<>(20);
     private onAdapterListener mListener;
     private final String url_root;
     public int mAdapterPosition = 0;
 
-    public List<PinsEntity> getmList() {
+    public List<PinsAndUserEntity> getmList() {
         return mList;
     }
 
-    public void setList(List<PinsEntity> mList) {
+    public void setList(List<PinsAndUserEntity> mList) {
         this.mList = mList;
         notifyDataSetChanged();
     }
 
-    public void addList(List<PinsEntity> mList) {
+    public void addList(List<PinsAndUserEntity> mList) {
         this.mList.addAll(mList);
         notifyDataSetChanged();
     }
@@ -70,13 +70,13 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
 
 
     public interface onAdapterListener {
-        void onClickImage(PinsEntity bean, View view);
+        void onClickImage(PinsAndUserEntity bean, View view);
 
-        void onClickTitleInfo(PinsEntity bean, View view);
+        void onClickTitleInfo(PinsAndUserEntity bean, View view);
 
-        void onClickInfoGather(PinsEntity bean, View view);
+        void onClickInfoGather(PinsAndUserEntity bean, View view);
 
-        void onClickInfoLike(PinsEntity bean, View view);
+        void onClickInfoLike(PinsAndUserEntity bean, View view);
     }
 
     public RecyclerCardAdapter(RecyclerView recyclerView) {
@@ -123,7 +123,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         Logger.d(life);
-        final PinsEntity bean = mList.get(position);
+        final PinsAndUserEntity bean = mList.get(position);
 
         //注释的是 动态修改image高度
 //        LayoutParams lp = holder.img_card_image.getLayoutParams();
@@ -152,7 +152,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
 //        }
     }
 
-    private void onBindData(final ViewHolder holder, PinsEntity bean) {
+    private void onBindData(final ViewHolder holder, PinsAndUserEntity bean) {
         //检查图片信息
         if (checkInfoContext(bean)) {
             holder.ll_title_info.setVisibility(VISIBLE);
@@ -205,7 +205,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
      * @param bean
      * @return
      */
-    private boolean checkInfoContext(PinsEntity bean) {
+    private boolean checkInfoContext(PinsAndUserEntity bean) {
 
         String title = bean.getRaw_text();//图片的文字描述
         int like = bean.getLike_count();//被喜欢数量
@@ -220,7 +220,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
         return false;
     }
 
-    private void onBindListener(ViewHolder holder, final PinsEntity bean) {
+    private void onBindListener(ViewHolder holder, final PinsAndUserEntity bean) {
 
         holder.rl_image.setOnClickListener(new OnClickListener() {
             @Override

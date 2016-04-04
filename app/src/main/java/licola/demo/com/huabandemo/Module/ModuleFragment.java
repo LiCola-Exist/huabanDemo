@@ -2,7 +2,6 @@ package licola.demo.com.huabandemo.Module;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,7 +20,7 @@ import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Adapter.RecyclerHeadCardAdapter;
 import licola.demo.com.huabandemo.bean.ListPinsBean;
-import licola.demo.com.huabandemo.bean.PinsEntity;
+import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.Base.BaseFragment;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitPinsRx;
 import licola.demo.com.huabandemo.View.LoadingFooter;
@@ -62,27 +61,10 @@ public class ModuleFragment extends BaseFragment {
     private OnModuleFragmentInteractionListener mListener;
 
     public interface OnModuleFragmentInteractionListener {
-        void onClickItemImage(PinsEntity bean, View view);
+        void onClickItemImage(PinsAndUserEntity bean, View view);
 
-        void onClickItemText(PinsEntity bean, View view);
+        void onClickItemText(PinsAndUserEntity bean, View view);
     }
-
-    private Handler mHandler = new Handler();
-
-    private final Runnable mRefresh = new Runnable() {
-        @Override
-        public void run() {
-//            mAdapter.getmList().clear();
-//            getHttpMaxId(type, max, 20);
-            startHttps();
-            mSwipeRefresh.setRefreshing(false);
-        }
-    };
-
-    private void startHttps() {
-        getHttpFirstAndRefresh(type, limit);
-    }
-
 
     public static ModuleFragment newInstance(String type, String title) {
         ModuleFragment fragment = new ModuleFragment();
@@ -176,23 +158,23 @@ public class ModuleFragment extends BaseFragment {
 
         Observable<ListPinsBean> observable = RetrofitPinsRx.service.httpTypeMaxLimitRx(type, max, limit);
         observable
-                .map(new Func1<ListPinsBean, List<PinsEntity>>() {
+                .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
                     @Override
-                    public List<PinsEntity> call(ListPinsBean listPinsBean) {
+                    public List<PinsAndUserEntity> call(ListPinsBean listPinsBean) {
                         //取出list对象
                         return listPinsBean.getPins();
                     }
                 })
-                .filter(new Func1<List<PinsEntity>, Boolean>() {
+                .filter(new Func1<List<PinsAndUserEntity>, Boolean>() {
                     @Override
-                    public Boolean call(List<PinsEntity> pinsEntities) {
+                    public Boolean call(List<PinsAndUserEntity> pinsEntities) {
                         //检查非空
                         return pinsEntities.size() > 0;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<List<PinsEntity>>() {
+                .subscribe(new Subscriber<List<PinsAndUserEntity>>() {
                     @Override
                     public void onCompleted() {
                         Logger.d();
@@ -205,7 +187,7 @@ public class ModuleFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onNext(List<PinsEntity> pinsEntities) {
+                    public void onNext(List<PinsAndUserEntity> pinsEntities) {
                         Logger.d();
                         mMaxId = getMaxId(pinsEntities);
                         mAdapter.addList(pinsEntities);
@@ -220,7 +202,7 @@ public class ModuleFragment extends BaseFragment {
      * @param limit
      */
     private void getHttpFirstAndRefresh(final String type, int limit) {
-        Logger.d("getHttpFirstAndRefresh Start ");
+        Logger.d();
 
         Observable<ListPinsBean> cardBigBeanObservable = RetrofitPinsRx.service.httpTypeLimitRx(type, limit);
         cardBigBeanObservable
@@ -231,15 +213,15 @@ public class ModuleFragment extends BaseFragment {
                         return Bean.getPins().size() != 0;
                     }
                 })
-                .map(new Func1<ListPinsBean, List<PinsEntity>>() {
+                .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
                     @Override
-                    public List<PinsEntity> call(ListPinsBean listPinsBean) {
+                    public List<PinsAndUserEntity> call(ListPinsBean listPinsBean) {
                         return listPinsBean.getPins();
                     }
                 })
                 .subscribeOn(Schedulers.io())//发布者的运行线程 联网操作属于IO操作
                 .observeOn(AndroidSchedulers.mainThread())//订阅者的运行线程 在main线程中才能修改UI
-                .subscribe(new Subscriber<List<PinsEntity>>() {
+                .subscribe(new Subscriber<List<PinsAndUserEntity>>() {
                     @Override
                     public void onStart() {
                         super.onStart();
@@ -250,20 +232,23 @@ public class ModuleFragment extends BaseFragment {
                     @Override
                     public void onCompleted() {
                         Logger.d();
+                        mSwipeRefresh.setRefreshing(false);
                         setRecyclerProgressVisibility(true);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Logger.d(e.toString());
+                        mSwipeRefresh.setRefreshing(false);
                         setRecyclerProgressVisibility(true);
                         checkException(e);//检查错误 弹出提示
                     }
 
                     @Override
-                    public void onNext(List<PinsEntity> result) {
+                    public void onNext(List<PinsAndUserEntity> result) {
                         Logger.d();
                         //保存maxId值 后续加载需要
+
                         mMaxId = getMaxId(result);
                         mAdapter.setList(result);
                     }
@@ -282,7 +267,6 @@ public class ModuleFragment extends BaseFragment {
         }
         if (mProgressBar != null) {
             mProgressBar.setVisibility(isShowRecycler ? View.GONE : View.VISIBLE);
-
         }
     }
 
@@ -293,7 +277,7 @@ public class ModuleFragment extends BaseFragment {
      * @param result
      * @return
      */
-    private int getMaxId(List<PinsEntity> result) {
+    private int getMaxId(List<PinsAndUserEntity> result) {
         return result.get(result.size() - 1).getPin_id();
     }
 
@@ -301,46 +285,45 @@ public class ModuleFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnModuleFragmentInteractionListener){
-            mListener= (OnModuleFragmentInteractionListener) context;
-        }else {
+        if (context instanceof OnModuleFragmentInteractionListener) {
+            mListener = (OnModuleFragmentInteractionListener) context;
+        } else {
             throwRuntimeException(context);
         }
     }
 
     private void initListener() {
-
+        //swipeRefresh 控件的滑动监听
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mHandler.removeCallbacks(mRefresh);
-                mHandler.postDelayed(mRefresh, 800);
+                getHttpFirstAndRefresh(type, limit);
             }
         });
 
 
         mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.OnAdapterListener() {
             @Override
-            public void onClickImage(PinsEntity bean, View view) {
+            public void onClickImage(PinsAndUserEntity bean, View view) {
                 Logger.d();
                 EventBus.getDefault().postSticky(bean);
-                mListener.onClickItemImage(bean,view);
+                mListener.onClickItemImage(bean, view);
             }
 
             @Override
-            public void onClickTitleInfo(PinsEntity bean, View view) {
+            public void onClickTitleInfo(PinsAndUserEntity bean, View view) {
                 Logger.d();
                 EventBus.getDefault().postSticky(bean);
-                mListener.onClickItemText(bean,view);
+                mListener.onClickItemText(bean, view);
             }
 
             @Override
-            public void onClickInfoGather(PinsEntity bean, View view) {
+            public void onClickInfoGather(PinsAndUserEntity bean, View view) {
                 Logger.d();
             }
 
             @Override
-            public void onClickInfoLike(PinsEntity bean, View view) {
+            public void onClickInfoLike(PinsAndUserEntity bean, View view) {
                 Logger.d();
             }
 
@@ -357,7 +340,7 @@ public class ModuleFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mAdapter=null;
+        mAdapter = null;
 
         HuaBanApplication.getInstance().getRefwatcher().watch(this);
 //        EventBus.getDefault().unregister(this);

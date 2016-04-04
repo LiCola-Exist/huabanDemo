@@ -55,8 +55,10 @@ public class LoginActivity extends BaseActivity {
     private static final String BASIC = "Basic ";
     private static final String PASSWORD = "password";
 
-    private String mAccessToken;//后续所有的https联网都使用 需要暂时保存
-    private String mRefreshToken;
+    private String mTokenAccess;//后续所有的https联网都使用 需要暂时保存
+    private String mTokenRefresh;
+    private String mTokenType;
+    private int mTokenExpiresIn;
 
     //需要的资源
     @BindString(R.string.snack_message_net_error)
@@ -222,8 +224,10 @@ public class LoginActivity extends BaseActivity {
                 .map(new Func1<TokenBean, TokenBean>() {
                     @Override
                     public TokenBean call(TokenBean tokenBean) {
-                        mAccessToken = tokenBean.getAccess_token();
-                        mRefreshToken = tokenBean.getRefresh_token();
+                        mTokenAccess = tokenBean.getAccess_token();
+                        mTokenRefresh = tokenBean.getRefresh_token();
+                        mTokenType = tokenBean.getToken_type();
+                        mTokenExpiresIn = tokenBean.getExpires_in();
                         return tokenBean;
                     }
                 })
@@ -256,11 +260,11 @@ public class LoginActivity extends BaseActivity {
                         showProgress(false);
                         if (e instanceof SocketTimeoutException) {
                             //SocketTimeoutException socket连接超时
-                            NetUtils.showNetworkError(mContext, mScrollViewLogin, snack_message_net_error, snack_action_to_setting);
+                            NetUtils.showNetworkErrorSnackBar(mContext, mScrollViewLogin, snack_message_net_error, snack_action_to_setting);
                         }
                         if (e instanceof UnknownHostException) {
                             //未知的网络主机 一般是没有联网
-                            NetUtils.showNetworkError(mContext, mScrollViewLogin, snack_message_net_error, snack_action_to_setting);
+                            NetUtils.showNetworkErrorSnackBar(mContext, mScrollViewLogin, snack_message_net_error, snack_action_to_setting);
                         }
                         if (e instanceof HttpException) {
                             Snackbar.make(mScrollViewLogin, snack_message_password_error, Snackbar.LENGTH_LONG)
@@ -270,32 +274,28 @@ public class LoginActivity extends BaseActivity {
 
                     @Override
                     public void onNext(UserMeBean userMeBean) {
-                        Snackbar.make(mScrollViewLogin, snack_message_login_success, Snackbar.LENGTH_LONG)
-                                .show();
-                        saveUserInfo(userMeBean,mAccessToken,mRefreshToken);
+                        NetUtils.showSnackBar(mContext, mScrollViewLogin, snack_message_login_success);
+                        saveUserInfo(userMeBean, mTokenAccess, mTokenRefresh, mTokenType, mTokenExpiresIn);
                     }
                 });
     }
 
 
-    private Observable<TokenBean> getUserToken(String username, String password) {
-        return RetrofitGsonRx.service.httpsTokenRx(BASIC + Base64.getClientInfo(), PASSWORD, username, password);
-    }
-
-    private Observable<UserMeBean> getUserInfo(String bearer, String key) {
-        return RetrofitGsonRx.service.httpUserRx(bearer + " " + key);
-    }
-
-
-    private void saveUserInfo(UserMeBean result,String mAccessToken,String mRefreshToken) {
-        SPUtils.clear(mContext);
-        SPUtils.put(mContext,Constant.ACCESSTOKEN,mAccessToken);
-        SPUtils.put(mContext,Constant.REFRESHTOKEN,mRefreshToken);
-        SPUtils.put(mContext, Constant.ISLOGIN, Boolean.TRUE);
-        SPUtils.put(mContext, Constant.USERNAME, result.getUsername());
-        SPUtils.put(mContext, Constant.USERID, result.getUser_id());
-        SPUtils.put(mContext, Constant.USERHEADKEY, result.getAvatar().getKey());
-        SPUtils.put(mContext, Constant.USEREMAIL, result.getEmail());
+    private void saveUserInfo(UserMeBean result,
+                              String mTokenAccess, String mTokenRefresh, String mTokenType, int mTokenExpiresIn) {
+        //保存先清空内容
+        SPUtils.clear(getApplicationContext());
+        //token 信息
+        SPUtils.put(getApplicationContext(), Constant.TOKENACCESS, mTokenAccess);
+        SPUtils.put(getApplicationContext(), Constant.TOKENREFRESH, mTokenRefresh);
+        SPUtils.put(getApplicationContext(), Constant.TOKENTYPE, mTokenType);
+        SPUtils.put(getApplicationContext(), Constant.TOKENEXPIRESIN, mTokenExpiresIn);
+        //用户个人信息
+        SPUtils.put(getApplicationContext(), Constant.ISLOGIN, Boolean.TRUE);
+        SPUtils.put(getApplicationContext(), Constant.USERNAME, result.getUsername());
+        SPUtils.put(getApplicationContext(), Constant.USERID, result.getUser_id());
+        SPUtils.put(getApplicationContext(), Constant.USERHEADKEY, result.getAvatar().getKey());
+        SPUtils.put(getApplicationContext(), Constant.USEREMAIL, result.getEmail());
     }
 
     private boolean isEmailValid(String email) {
@@ -306,6 +306,15 @@ public class LoginActivity extends BaseActivity {
 
         return password.length() > 4;
     }
+
+    private Observable<TokenBean> getUserToken(String username, String password) {
+        return RetrofitGsonRx.service.httpsTokenRx(BASIC + Base64.getClientInfo(), PASSWORD, username, password);
+    }
+
+    private Observable<UserMeBean> getUserInfo(String bearer, String key) {
+        return RetrofitGsonRx.service.httpUserRx(bearer + " " + key);
+    }
+
 
     /**
      * Shows the progress UI and hides the login form.
@@ -342,6 +351,7 @@ public class LoginActivity extends BaseActivity {
 //            mScrollViewLogin.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
+
 
 }
 

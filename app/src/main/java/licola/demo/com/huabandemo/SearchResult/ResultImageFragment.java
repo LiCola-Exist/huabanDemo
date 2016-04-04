@@ -19,7 +19,7 @@ import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Adapter.RecyclerCardAdapter;
-import licola.demo.com.huabandemo.bean.PinsEntity;
+import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitPinsRx;
 import rx.Observable;
 import rx.Subscriber;
@@ -53,9 +53,9 @@ public class ResultImageFragment extends BaseFragment {
     private OnResultImageFragmentInteractionListener mListener;
 
     public interface OnResultImageFragmentInteractionListener {
-        void onClickItemImage(PinsEntity bean, View view);
+        void onClickItemImage(PinsAndUserEntity bean, View view);
 
-        void onClickItemText(PinsEntity bean, View view);
+        void onClickItemText(PinsAndUserEntity bean, View view);
     }
 
 
@@ -139,13 +139,13 @@ public class ResultImageFragment extends BaseFragment {
 //                })
                 .subscribeOn(Schedulers.io())//发布者的运行线程 联网操作属于IO操作
                 .observeOn(AndroidSchedulers.mainThread())//订阅者的运行线程 在main线程中才能修改UI
-                .map(new Func1<SearchImageBean, List<PinsEntity>>() {
+                .map(new Func1<SearchImageBean, List<PinsAndUserEntity>>() {
                     @Override
-                    public List<PinsEntity> call(SearchImageBean searchImageBean) {
+                    public List<PinsAndUserEntity> call(SearchImageBean searchImageBean) {
                         return searchImageBean.getPins();//取出list对象
                     }
                 })
-                .subscribe(new Subscriber<List<PinsEntity>>() {
+                .subscribe(new Subscriber<List<PinsAndUserEntity>>() {
                     @Override
                     public void onStart() {
                         super.onStart();
@@ -176,7 +176,7 @@ public class ResultImageFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onNext(List<PinsEntity> pinsEntities) {
+                    public void onNext(List<PinsAndUserEntity> pinsEntities) {
                         Logger.d(pinsEntities.size() + "");
                         mAdapter.addList(pinsEntities);
                         mIndex++;//联网成功 +1
@@ -217,26 +217,26 @@ public class ResultImageFragment extends BaseFragment {
 
         mAdapter.setOnClickItemListener(new RecyclerCardAdapter.onAdapterListener() {
             @Override
-            public void onClickImage(PinsEntity bean, View view) {
+            public void onClickImage(PinsAndUserEntity bean, View view) {
                 Logger.d();
                 EventBus.getDefault().postSticky(bean);
                 mListener.onClickItemImage(bean,view);
             }
 
             @Override
-            public void onClickTitleInfo(PinsEntity bean, View view) {
+            public void onClickTitleInfo(PinsAndUserEntity bean, View view) {
                 Logger.d();
                 EventBus.getDefault().postSticky(bean);
                 mListener.onClickItemText(bean,view);
             }
 
             @Override
-            public void onClickInfoGather(PinsEntity bean, View view) {
+            public void onClickInfoGather(PinsAndUserEntity bean, View view) {
                 Logger.d();
             }
 
             @Override
-            public void onClickInfoLike(PinsEntity bean, View view) {
+            public void onClickInfoLike(PinsAndUserEntity bean, View view) {
                 Logger.d();
             }
         });

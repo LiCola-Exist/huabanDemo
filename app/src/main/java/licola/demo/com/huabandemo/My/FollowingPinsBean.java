@@ -2,7 +2,7 @@ package licola.demo.com.huabandemo.My;
 
 import java.util.List;
 
-import licola.demo.com.huabandemo.bean.PinsSimpleEntity;
+import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 
 /**
  * Created by LiCola on  2016/04/03  16:07
@@ -18,7 +18,7 @@ public class FollowingPinsBean {
 
     private int followed_board;
 
-    private List<PinsSimpleEntity> pins;
+    private List<PinsAndUserEntity> pins;
 
     public int getFollowed_board() {
         return followed_board;
@@ -29,11 +29,11 @@ public class FollowingPinsBean {
     }
 
 
-    public void setPins(List<PinsSimpleEntity> pins) {
+    public void setPins(List<PinsAndUserEntity> pins) {
         this.pins = pins;
     }
 
-    public List<PinsSimpleEntity> getPins() {
+    public List<PinsAndUserEntity> getPins() {
         return pins;
     }
 }

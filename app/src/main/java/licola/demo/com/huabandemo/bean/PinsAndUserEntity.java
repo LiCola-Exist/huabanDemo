@@ -3,7 +3,7 @@ package licola.demo.com.huabandemo.bean;
 /**
  * Created by LiCola on  2016/03/22  20:14
  */
-public class PinsEntity {
+public class PinsAndUserEntity {
     private int pin_id;
     private int user_id;
     private int board_id;
@@ -66,8 +66,6 @@ public class PinsEntity {
      * created_at : 1344088961
      * avatar : https
      */
-
-    private ViaUserEntity via_user;
 
     public void setPin_id(int pin_id) {
         this.pin_id = pin_id;
@@ -149,9 +147,6 @@ public class PinsEntity {
         this.board = board;
     }
 
-    public void setVia_user(ViaUserEntity via_user) {
-        this.via_user = via_user;
-    }
 
     public int getPin_id() {
         return pin_id;
@@ -233,9 +228,6 @@ public class PinsEntity {
         return board;
     }
 
-    public ViaUserEntity getVia_user() {
-        return via_user;
-    }
 
     public static class FileEntity {
         private String farm;
@@ -512,52 +504,4 @@ public class PinsEntity {
         }
     }
 
-    public static class ViaUserEntity {
-        private int user_id;
-        private String username;
-        private String urlname;
-        private int created_at;
-        private String avatar;
-
-
-        public void setUser_id(int user_id) {
-            this.user_id = user_id;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public void setUrlname(String urlname) {
-            this.urlname = urlname;
-        }
-
-        public void setCreated_at(int created_at) {
-            this.created_at = created_at;
-        }
-
-        public void setAvatar(String avatar) {
-            this.avatar = avatar;
-        }
-
-        public int getUser_id() {
-            return user_id;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public String getUrlname() {
-            return urlname;
-        }
-
-        public int getCreated_at() {
-            return created_at;
-        }
-
-        public String getAvatar() {
-            return avatar;
-        }
-    }
 }

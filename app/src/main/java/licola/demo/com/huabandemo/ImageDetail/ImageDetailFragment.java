@@ -26,7 +26,7 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.TimeUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Adapter.RecyclerHeadCardAdapter;
-import licola.demo.com.huabandemo.bean.PinsEntity;
+import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitPinsRx;
 import licola.demo.com.huabandemo.View.LoadingFooter;
@@ -77,7 +77,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
     TextView tv_image_board;//归属的画板名称
     ImageButton ibtn_image_board_chevron_right;
 
-    private PinsEntity mPinsBean;
+    private PinsAndUserEntity mPinsBean;
 
     private String mBoardId;
     private String mUserId;
@@ -88,9 +88,9 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
     private OnImageDetailFragmentInteractionListener mListener;
 
     public interface OnImageDetailFragmentInteractionListener {
-        void onClickItemImage(PinsEntity bean, View view);
+        void onClickItemImage(PinsAndUserEntity bean, View view);
 
-        void onClickItemText(PinsEntity bean, View view);
+        void onClickItemText(PinsAndUserEntity bean, View view);
 
         void onClickBoardField(String key, String title);
 
@@ -138,24 +138,24 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
 
         mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.OnAdapterListener() {
             @Override
-            public void onClickImage(PinsEntity bean, View view) {
+            public void onClickImage(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);
                 mListener.onClickItemImage(bean, view);
             }
 
             @Override
-            public void onClickTitleInfo(PinsEntity bean, View view) {
+            public void onClickTitleInfo(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);
                 mListener.onClickItemText(bean, view);
             }
 
             @Override
-            public void onClickInfoGather(PinsEntity bean, View view) {
+            public void onClickInfoGather(PinsAndUserEntity bean, View view) {
                 Logger.d();
             }
 
             @Override
-            public void onClickInfoLike(PinsEntity bean, View view) {
+            public void onClickInfoLike(PinsAndUserEntity bean, View view) {
                 Logger.d();
 
             }
@@ -276,15 +276,15 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
     protected void getHttpFirst() {
 
         getRecommend(mKey, mIndex, mLimit)
-                .filter(new Func1<List<PinsEntity>, Boolean>() {
+                .filter(new Func1<List<PinsAndUserEntity>, Boolean>() {
                     @Override
-                    public Boolean call(List<PinsEntity> pinsEntities) {
+                    public Boolean call(List<PinsAndUserEntity> pinsEntities) {
                         return pinsEntities.size() > 0;
                     }
                 })
                 .subscribeOn(Schedulers.io())//发布者的运行线程 联网操作属于IO操作
                 .observeOn(AndroidSchedulers.mainThread()) //订阅者的运行线程 在main线程中才能修改UI
-                .subscribe(new Subscriber<List<PinsEntity>>() {
+                .subscribe(new Subscriber<List<PinsAndUserEntity>>() {
                     @Override
                     public void onCompleted() {
                         Logger.d();
@@ -297,7 +297,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
                     }
 
                     @Override
-                    public void onNext(List<PinsEntity> pinsEntities) {
+                    public void onNext(List<PinsAndUserEntity> pinsEntities) {
                         mAdapter.addList(pinsEntities);
                         mIndex++;//联网成功 +1
                     }
@@ -445,7 +445,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
      *
      * @param bean 本地缓存的bean
      */
-    private void setImageInfo(PinsEntity bean) {
+    private void setImageInfo(PinsAndUserEntity bean) {
 
         mBoardId = String.valueOf(bean.getBoard_id());
         mUserId = String.valueOf(bean.getUser_id());
@@ -482,7 +482,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment {
         return RetrofitPinsRx.service.httpPinsDetailRx(pinsId);
     }
 
-    private Observable<List<PinsEntity>> getRecommend(String pinsId, int page, int limit) {
+    private Observable<List<PinsAndUserEntity>> getRecommend(String pinsId, int page, int limit) {
         return RetrofitPinsRx.service.httpPinsRecommendRx(pinsId, page, limit);
     }
 

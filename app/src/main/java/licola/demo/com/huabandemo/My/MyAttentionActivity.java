@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.SearchResult;
+package licola.demo.com.huabandemo.My;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,60 +12,53 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
-import java.util.HashSet;
 
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.Base.BaseActivity;
-import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.Util.SPUtils;
-import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 
+public class MyAttentionActivity extends BaseActivity {
+    static final int mTabCount = 2;
 
-public class SearchResultActivity extends BaseActivity implements ResultImageFragment.OnResultImageFragmentInteractionListener {
+    @BindString(R.string.title_fragment_attention_pins)
+    String mTitleAttentionPins;
+    @BindString(R.string.title_fragment_attention_board)
+    String mTitleAttentionBoard;
+    @Bind(R.id.tablatyou_attention)
+    TabLayout mTabLayout;
+    @Bind(R.id.container)
+    ViewPager mViewPager;
+    @Bind(R.id.toolbar_attention)
+    Toolbar mToolbar;
 
-    private static final String SEARCHKEY = "KEY";
-    private String key;//搜索的关键字
-
-    @BindString(R.string.title_activity_search_result)
-    String mTitle;
-    @BindString(R.string.title_fragment_image)
-    String mTitleImage;
-    @BindString(R.string.title_fragment_board)
-    String mTitleBoard;
-    @BindString(R.string.title_fragment_user)
-    String mTitleUser;
     @BindColor(R.color.white)
     int mColorTabIndicator;
 
-    @Bind(R.id.viewpager_search)
-    ViewPager mViewPager;
-    @Bind(R.id.tablayou_search)
-    TabLayout mTabLayout;
-
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    public static void launch(Activity activity, int flag) {
+        Intent intent = new Intent(activity, MyAttentionActivity.class);
+        intent.setFlags(flag);
+        activity.startActivity(intent);
+    }
+
+    public static void launch(Activity activity) {
+        Intent intent = new Intent(activity, MyAttentionActivity.class);
+        activity.startActivity(intent);
+    }
+
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_result;
+        return R.layout.activity_my_attention;
     }
 
     @Override
     protected String getTAG() {
         return this.toString();
-    }
-
-
-    public static void launch(Activity activity, String key) {
-        Intent intent = new Intent(activity, SearchResultActivity.class);
-        intent.putExtra(SEARCHKEY, key);
-        activity.startActivity(intent);
     }
 
     @Override
@@ -77,48 +70,28 @@ public class SearchResultActivity extends BaseActivity implements ResultImageFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_result);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        key = getIntent().getStringExtra(SEARCHKEY);
-        Logger.d(key);
-        saveSearchHistory(key);
-        initAdapter();
-        setTitle(String.format(mTitle, key));
-
-    }
-
-    private void saveSearchHistory(String key) {
-        //转到这个界面就表示 搜索成功 保存搜索记录
-        HashSet<String> hashSet = (HashSet<String>) SPUtils.get(mContext, Constant.HISTORYTEXT, new HashSet<String>());
-        for (String s :
-                hashSet) {
-            Logger.d(s);
-        }
-        hashSet.add(key);
-
-        SPUtils.put(mContext, Constant.HISTORYTEXT, hashSet);
-    }
-
-    private void initAdapter() {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setSelectedTabIndicatorColor(mColorTabIndicator);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Logger.d(intent.toString());
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_result, menu);
+        getMenuInflater().inflate(R.menu.menu_my_following, menu);
         return true;
     }
 
@@ -137,18 +110,6 @@ public class SearchResultActivity extends BaseActivity implements ResultImageFra
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onClickItemImage(PinsAndUserEntity bean, View view) {
-        Logger.d();
-        ImageDetailActivity.launch(this);
-    }
-
-    @Override
-    public void onClickItemText(PinsAndUserEntity bean, View view) {
-        Logger.d();
-        ImageDetailActivity.launch(this);
-    }
-
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -165,28 +126,24 @@ public class SearchResultActivity extends BaseActivity implements ResultImageFra
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
-                return ResultImageFragment.newInstance(key);
+                return MyAttentionPinsFragment.newInstance();
+            } else {
+                return MyAttentionPinsFragment.newInstance();
             }
-            return ResultImageFragment.newInstance(key);
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return mTabCount;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return mTitleImage;
-                case 1:
-                    return mTitleBoard;
-                case 2:
-                    return mTitleUser;
+            if (position == 0) {
+                return mTitleAttentionPins;
+            } else {
+                return mTitleAttentionBoard;
             }
-            return null;
         }
     }
 }

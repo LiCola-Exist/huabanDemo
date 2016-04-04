@@ -17,7 +17,7 @@ import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
 
 /**
  * Created by LiCola on  2016/03/26  16:55
- * 作为一个持有 RecyclerHeadCardAdapter对象 其中包含数据List<PinsEntity>
+ * 作为一个持有 RecyclerHeadCardAdapter对象 其中包含数据List<PinsAndUserEntity>
  * 在RecyclerView负责显示内容的基类
  * 因为app中有多个类型一致的一致的返回List结果 抽象出来作为模板类
  * 作用在于：固定通用方法确定整体结构 然后具体算法实现在子类中实现扩展 还确保了子类的拓展
@@ -54,7 +54,9 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        mKey = args.getString(TYPE_KEY);//父类取出key
+        if (args!=null){
+            mKey = args.getString(TYPE_KEY);//父类取出key
+        }
 //        EventBus.getDefault().register(this);
     }
 
@@ -124,35 +126,8 @@ public abstract class BaseRecyclerHeadFragment extends BaseFragment {
      * 初始化监听器的空方法 子类需要重写
      */
     protected void initListener() {
-        //基类中不应该 确定具体的逻辑跳转 交由子类实现
-//        mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.OnAdapterListener() {
-//            @Override
-//            public void onClickImage(PinsEntity bean, View view) {
-//                Logger.d();
-//                ImageDetailActivity.launch(getActivity());
-//                EventBus.getDefault().postSticky(bean);
-//            }
-//
-//            @Override
-//            public void onClickTitleInfo(PinsEntity bean, View view) {
-//                Logger.d();
-//                ImageDetailActivity.launch(getActivity());
-//                EventBus.getDefault().postSticky(bean);
-//            }
-//
-//            @Override
-//            public void onClickInfoGather(PinsEntity bean, View view) {
-//                Logger.d();
-//            }
-//
-//            @Override
-//            public void onClickInfoLike(PinsEntity bean, View view) {
-//                Logger.d();
-//            }
-//
-//        });
-    }
 
+    }
 
     @Override
     public void onDestroyView() {

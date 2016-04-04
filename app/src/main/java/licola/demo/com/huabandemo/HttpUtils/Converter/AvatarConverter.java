@@ -21,14 +21,14 @@ import licola.demo.com.huabandemo.Util.Utils;
  * avatar对象有时是String类型表示来自本地服务器之外的数据 有时是对象表示自身服务器的数据
  * 这里中正则表达式 统一为
  */
-public class PinsConverter extends retrofit.Converter.Factory {
-    private static final String TAG = "PinsConverter";
+public class AvatarConverter extends retrofit.Converter.Factory {
+    private static final String TAG = "AvatarConverter";
 
     /**
      * Create an instance using a default {@link Gson} instance for conversion. Encoding to JSON and
      * decoding from JSON (when no charset is specified by a header) will use UTF-8.
      */
-    public static PinsConverter create() {
+    public static AvatarConverter create() {
         return create(new Gson());
     }
 
@@ -36,13 +36,13 @@ public class PinsConverter extends retrofit.Converter.Factory {
      * Create an instance using {@code gson} for conversion. Encoding to JSON and
      * decoding from JSON (when no charset is specified by a header) will use UTF-8.
      */
-    public static PinsConverter create(Gson gson) {
-        return new PinsConverter(gson);
+    public static AvatarConverter create(Gson gson) {
+        return new AvatarConverter(gson);
     }
 
     private final Gson gson;
 
-    private PinsConverter(Gson gson) {
+    private AvatarConverter(Gson gson) {
         if (gson == null) throw new NullPointerException("gson == null");
         this.gson = gson;
     }

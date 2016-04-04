@@ -33,13 +33,13 @@ public class ListPinsBean {
      * via_user : {"user_id":605533,"username":"宁馨郁金香","urlname":"xxf837568038","created_at":1344088961,"avatar":"https"}
      */
 
-    private List<PinsEntity> pins;
+    private List<PinsAndUserEntity> pins;
 
-    public void setPins(List<PinsEntity> pins) {
+    public void setPins(List<PinsAndUserEntity> pins) {
         this.pins = pins;
     }
 
-    public List<PinsEntity> getPins() {
+    public List<PinsAndUserEntity> getPins() {
         return pins;
     }
 

@@ -69,6 +69,10 @@
     <string name="title_fragment_image">图片</string>
     <string name="title_fragment_board">画板</string>
     <string name="title_fragment_user">用户</string>
+    <string name="title_fragment_attention_pins">关注的采集</string>
+    <string name="title_fragment_attention_board">关注的画板</string>
+
+
     <string name="title_activity_board_detail">画板详情</string>
 
     <string name="net_error">网络连接错误</string>

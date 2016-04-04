@@ -30,7 +30,7 @@ import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Main.MainActivity;
-import licola.demo.com.huabandemo.bean.PinsEntity;
+import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 
 public class ImageDetailActivity extends BaseActivity
@@ -69,7 +69,7 @@ public class ImageDetailActivity extends BaseActivity
     @Bind(R.id.img_image_big)
     SimpleDraweeView img_image_big;
 
-    public PinsEntity mPinsBean;
+    public PinsAndUserEntity mPinsBean;
 
     public String mImageUrl;//图片地址
     public String mPinsId;
@@ -192,7 +192,7 @@ public class ImageDetailActivity extends BaseActivity
     }
 
     @Subscribe(sticky = true)
-    public void onEventReceiveBean(PinsEntity bean) {
+    public void onEventReceiveBean(PinsAndUserEntity bean) {
         //接受EvenBus传过来的数据
         Logger.d(TAG + " receive bean");
         this.mPinsBean = bean;
@@ -203,12 +203,12 @@ public class ImageDetailActivity extends BaseActivity
 
 
     @Override
-    public void onClickItemImage(PinsEntity bean, View view) {
+    public void onClickItemImage(PinsAndUserEntity bean, View view) {
         ImageDetailActivity.launch(this,mActionFrom);
     }
 
     @Override
-    public void onClickItemText(PinsEntity bean, View view) {
+    public void onClickItemText(PinsAndUserEntity bean, View view) {
         ImageDetailActivity.launch(this,mActionFrom);
     }
 

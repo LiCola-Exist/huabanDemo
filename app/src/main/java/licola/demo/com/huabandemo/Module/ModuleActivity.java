@@ -12,7 +12,7 @@ import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
-import licola.demo.com.huabandemo.bean.PinsEntity;
+import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 
 /**
  * Created by LiCola on  2016/03/20  12:00
@@ -90,12 +90,12 @@ public class ModuleActivity extends BaseActivity implements ModuleFragment.OnMod
     }
 
     @Override
-    public void onClickItemImage(PinsEntity bean, View view) {
+    public void onClickItemImage(PinsAndUserEntity bean, View view) {
         ImageDetailActivity.launch(this,ImageDetailActivity.ACTION_MODULE);
     }
 
     @Override
-    public void onClickItemText(PinsEntity bean, View view) {
+    public void onClickItemText(PinsAndUserEntity bean, View view) {
         ImageDetailActivity.launch(this,ImageDetailActivity.ACTION_MODULE);
     }
 }

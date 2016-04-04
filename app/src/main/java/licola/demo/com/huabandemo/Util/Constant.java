@@ -6,8 +6,11 @@ package licola.demo.com.huabandemo.Util;
  */
 public class Constant {
     //token information
-    public static final String ACCESSTOKEN="accessToken";
-    public static final String REFRESHTOKEN="refreshToken";
+    public static final String TOKENACCESS ="TokenAccess";
+    public static final String TOKENREFRESH ="TokenRefresh";
+    public static final String TOKENTYPE="TokenType";
+    public static final String TOKENEXPIRESIN="TokeExpiresIn";
+
     //user information
     public static final String ISLOGIN ="isLogin";
     public static final String USERNAME="userName";

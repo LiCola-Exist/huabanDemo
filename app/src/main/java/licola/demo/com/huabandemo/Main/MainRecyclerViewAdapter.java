@@ -24,7 +24,7 @@ import java.util.List;
 
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.bean.PinsEntity;
+import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 
 import static android.view.ViewGroup.OnClickListener;
@@ -37,21 +37,21 @@ import static android.view.ViewGroup.VISIBLE;
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewAdapter.ViewHolder> {
     private final String life = "Life";
     private Context mContext;
-    private List<PinsEntity> mList = new ArrayList<>(20);
+    private List<PinsAndUserEntity> mList = new ArrayList<>(20);
     private onAdapterListener mListener;
     private final String url_root;
     public int mAdapterPosition = 0;
 
-    public List<PinsEntity> getmList() {
+    public List<PinsAndUserEntity> getmList() {
         return mList;
     }
 
-    public void setmList(List<PinsEntity> mList) {
+    public void setmList(List<PinsAndUserEntity> mList) {
         this.mList = mList;
         notifyDataSetChanged();
     }
 
-    public void setNotifyData(List<PinsEntity> mList) {
+    public void setNotifyData(List<PinsAndUserEntity> mList) {
         this.mList.addAll(mList);
         notifyDataSetChanged();
     }
@@ -66,11 +66,11 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
 
     public interface onAdapterListener {
-        void onClickImage(PinsEntity bean, View view);
+        void onClickImage(PinsAndUserEntity bean, View view);
 
-        void onClickBoard(PinsEntity bean, View view);
+        void onClickBoard(PinsAndUserEntity bean, View view);
 
-        void onClickInfo(PinsEntity bean, View view);
+        void onClickInfo(PinsAndUserEntity bean, View view);
     }
 
     public MainRecyclerViewAdapter(Context context) {
@@ -105,7 +105,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     public void onBindViewHolder(final ViewHolder holder, int position) {
         // Logger.d(life);
 //        Logger.d(holder.toString());
-        final PinsEntity bean = mList.get(position);
+        final PinsAndUserEntity bean = mList.get(position);
 
         //注释的是 动态修改image高度
 //        LayoutParams lp = holder.img_card_image.getLayoutParams();
@@ -124,7 +124,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         mAdapterPosition = holder.getAdapterPosition();
     }
 
-    private void onBindData(final ViewHolder holder, PinsEntity bean) {
+    private void onBindData(final ViewHolder holder, PinsAndUserEntity bean) {
         String title = bean.getRaw_text();
         if (!TextUtils.isEmpty(title)) {
             holder.tv_card_title.setVisibility(VISIBLE);
@@ -180,7 +180,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
                 .build();
     }
 
-    private void onBindListener(final ViewHolder holder, final PinsEntity bean) {
+    private void onBindListener(final ViewHolder holder, final PinsAndUserEntity bean) {
 
         holder.rl_image.setOnClickListener(new OnClickListener() {
             @Override

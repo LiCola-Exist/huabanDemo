@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.google.gson.JsonSyntaxException;
 
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import butterknife.BindString;
@@ -129,14 +130,16 @@ public abstract class BaseFragment extends Fragment {
     /**
      * 异常类型判断 检查网络访问的异常 类型
      * 根据类型 弹出SnackBar提示
+     *
      * @param e
      */
     protected void checkException(Throwable e) {
         if ((e instanceof UnknownHostException)) {
-            NetUtils.showNetworkError(getActivity(), mRootView, snack_message_net_error, snack_action_to_setting);
-        }
-        if (e instanceof JsonSyntaxException) {
-            NetUtils.showNetworkError(getActivity(), mRootView, snack_message_data_error, snack_action_to_setting);
+            NetUtils.showNetworkErrorSnackBar(getActivity(), mRootView, snack_message_net_error, snack_action_to_setting);
+        } else if (e instanceof JsonSyntaxException) {
+            NetUtils.showNetworkErrorSnackBar(getActivity(), mRootView, snack_message_data_error, snack_action_to_setting);
+        } else if (e instanceof SocketTimeoutException) {
+            NetUtils.showNetworkErrorSnackBar(getActivity(), mRootView, snack_message_net_error, snack_action_to_setting);
         } else {
             Snackbar.make(mRootView, snack_message_unknown_error, Snackbar.LENGTH_LONG);
         }

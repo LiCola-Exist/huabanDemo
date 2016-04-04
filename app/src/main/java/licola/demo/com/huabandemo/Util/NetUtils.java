@@ -29,7 +29,7 @@ public class NetUtils {
      * @param message
      * @param action
      */
-    public static void showNetworkError(final Context context, View view, String message, String action) {
+    public static void showNetworkErrorSnackBar(final Context context, View view, String message, String action) {
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction(action, new View.OnClickListener() {
                     @Override
@@ -40,7 +40,7 @@ public class NetUtils {
                 }).show();
     }
 
-    public static void showNetworkError(final Context context, View view, String message) {
+    public static void showSnackBar(final Context context, View view, String message) {
         Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
                 .show();

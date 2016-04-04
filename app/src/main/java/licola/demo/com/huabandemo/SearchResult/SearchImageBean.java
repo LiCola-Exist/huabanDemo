@@ -3,7 +3,7 @@ package licola.demo.com.huabandemo.SearchResult;
 import java.util.List;
 
 import licola.demo.com.huabandemo.bean.FacetsEntity;
-import licola.demo.com.huabandemo.bean.PinsEntity;
+import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 
 /**
  * Created by LiCola on  2015/12/05  15:25
@@ -72,7 +72,7 @@ public class SearchImageBean{
      * board : {"board_id":28175104,"user_id":18165573,"title":"萌宠 萌宠 萌宠","description":"","category_id":"kids","seq":32,"pin_count":59,"follow_count":35,"like_count":0,"created_at":1455848727,"updated_at":1458096951,"deleting":0,"is_private":0,"extra":{"cover":{"pin_id":"631791256"}}}
      */
 
-    private List<PinsEntity> pins;
+    private List<PinsAndUserEntity> pins;
 
     public QueryBean getQuery() {
         return query;
@@ -146,11 +146,11 @@ public class SearchImageBean{
         this.ads = ads;
     }
 
-    public List<PinsEntity> getPins() {
+    public List<PinsAndUserEntity> getPins() {
         return pins;
     }
 
-    public void setPins(List<PinsEntity> pins) {
+    public void setPins(List<PinsAndUserEntity> pins) {
         this.pins = pins;
     }
 

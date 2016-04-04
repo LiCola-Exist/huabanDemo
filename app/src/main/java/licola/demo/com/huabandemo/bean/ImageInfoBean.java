@@ -750,7 +750,7 @@
 //             * orig_source : null
 //             */
 //
-//            private List<PinsEntity> pins;
+//            private List<PinsAndUserEntity> pins;
 //
 //            public void setBoard_id(int board_id) {
 //                this.board_id = board_id;
@@ -812,7 +812,7 @@
 //                this.following = following;
 //            }
 //
-//            public void setPins(List<PinsEntity> pins) {
+//            public void setPins(List<PinsAndUserEntity> pins) {
 //                this.pins = pins;
 //            }
 //
@@ -876,11 +876,11 @@
 //                return following;
 //            }
 //
-//            public List<PinsEntity> getPins() {
+//            public List<PinsAndUserEntity> getPins() {
 //                return pins;
 //            }
 //
-//            public static class PinsEntity {
+//            public static class PinsAndUserEntity {
 //                private int pin_id;
 //                private int user_id;
 //                private int board_id;

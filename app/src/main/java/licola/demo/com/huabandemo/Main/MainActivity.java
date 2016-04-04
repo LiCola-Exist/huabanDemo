@@ -28,13 +28,14 @@ import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Login.LoginActivity;
+import licola.demo.com.huabandemo.My.MyAttentionActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Search.SearchActivity;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.bean.PinsEntity;
+import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.Module.ModuleFragment;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 
@@ -191,6 +192,7 @@ public class MainActivity extends BaseActivity
                     Utils.getTintCompatDrawable(mContext, mDrawableList[i], R.color.tint_list_pink),
                     null,
                     null);
+            btn.setOnClickListener(this);
         }
     }
 
@@ -283,6 +285,10 @@ public class MainActivity extends BaseActivity
     }
 
 
+    /**
+     * 主界面 drawer 所有控件的点击事件 回调处理
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -294,6 +300,10 @@ public class MainActivity extends BaseActivity
 
                 break;
 
+            case R.id.btn_nav_attention:
+                MyAttentionActivity.launch(MainActivity.this);
+                break;
+
             default:
                 break;
 
@@ -302,13 +312,13 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onClickItemImage(PinsEntity bean, View view) {
+    public void onClickItemImage(PinsAndUserEntity bean, View view) {
         Logger.d();
         ImageDetailActivity.launch(this,ImageDetailActivity.ACTION_MAIN);
     }
 
     @Override
-    public void onClickItemText(PinsEntity bean, View view) {
+    public void onClickItemText(PinsAndUserEntity bean, View view) {
         Logger.d();
         ImageDetailActivity.launch(this);
     }

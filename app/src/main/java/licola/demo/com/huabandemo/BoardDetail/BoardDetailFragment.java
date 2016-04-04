@@ -21,7 +21,7 @@ import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Adapter.RecyclerHeadCardAdapter;
 import licola.demo.com.huabandemo.bean.ListPinsBean;
-import licola.demo.com.huabandemo.bean.PinsEntity;
+import licola.demo.com.huabandemo.bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitGsonRx;
 import licola.demo.com.huabandemo.View.LoadingFooter;
@@ -55,12 +55,15 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment {
     TextView mTVBoardAttention;
     TextView mTVBoardGather;
 
+    //能显示三种状态的 footView
+    LoadingFooter mFooterView;
+
     private onBoardDetailFragmentInteractionListener mListener;
 
     public interface onBoardDetailFragmentInteractionListener {
-        void onClickItemImage(PinsEntity bean, View view);
+        void onClickItemImage(PinsAndUserEntity bean, View view);
 
-        void onClickItemText(PinsEntity bean, View view);
+        void onClickItemText(PinsAndUserEntity bean, View view);
     }
 
     @Override
@@ -90,25 +93,25 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment {
         });//画板栏事件
         mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.OnAdapterListener() {
             @Override
-            public void onClickImage(PinsEntity bean, View view) {
+            public void onClickImage(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);//发送bean 而不用知晓接受得类
                 mListener.onClickItemImage(bean, view);
             }
 
             @Override
-            public void onClickTitleInfo(PinsEntity bean, View view) {
+            public void onClickTitleInfo(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);//发送bean 而不用知晓接受得类
                 mListener.onClickItemText(bean, view);
             }
 
             @Override
-            public void onClickInfoGather(PinsEntity bean, View view) {
+            public void onClickInfoGather(PinsAndUserEntity bean, View view) {
                 //某个图片的收集点击 在fragment中直接处理 不用跳转
                 Logger.d();
             }
 
             @Override
-            public void onClickInfoLike(PinsEntity bean, View view) {
+            public void onClickInfoLike(PinsAndUserEntity bean, View view) {
                 //某个图片的喜欢点击 在fragment中直接处理 不用跳转
                 Logger.d();
             }
@@ -176,13 +179,13 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment {
         getBoardPins(mKey, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<ListPinsBean, List<PinsEntity>>() {
+                .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
                     @Override
-                    public List<PinsEntity> call(ListPinsBean listPinsBean) {
+                    public List<PinsAndUserEntity> call(ListPinsBean listPinsBean) {
                         return listPinsBean.getPins();
                     }
                 })
-                .subscribe(new Subscriber<List<PinsEntity>>() {
+                .subscribe(new Subscriber<List<PinsAndUserEntity>>() {
                     @Override
                     public void onCompleted() {
                         Logger.d();
@@ -195,14 +198,14 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment {
                     }
 
                     @Override
-                    public void onNext(List<PinsEntity> pinsEntities) {
+                    public void onNext(List<PinsAndUserEntity> pinsEntities) {
                         mMaxId = getMaxId(pinsEntities);
                         mAdapter.addList(pinsEntities);
                     }
                 });
     }
 
-    private int getMaxId(List<PinsEntity> result) {
+    private int getMaxId(List<PinsAndUserEntity> result) {
         return result.get(result.size() - 1).getPin_id();
     }
 
@@ -211,13 +214,13 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment {
         getBoardPinsMax(mKey, mMaxId, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<ListPinsBean, List<PinsEntity>>() {
+                .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
                     @Override
-                    public List<PinsEntity> call(ListPinsBean listPinsBean) {
+                    public List<PinsAndUserEntity> call(ListPinsBean listPinsBean) {
                         return listPinsBean.getPins();
                     }
                 })
-                .subscribe(new Subscriber<List<PinsEntity>>() {
+                .subscribe(new Subscriber<List<PinsAndUserEntity>>() {
                     @Override
                     public void onCompleted() {
                         Logger.d();
@@ -230,7 +233,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment {
                     }
 
                     @Override
-                    public void onNext(List<PinsEntity> pinsEntities) {
+                    public void onNext(List<PinsAndUserEntity> pinsEntities) {
                         mMaxId = getMaxId(pinsEntities);
                         mAdapter.addList(pinsEntities);
                     }
@@ -240,9 +243,11 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment {
 
     @Override
     protected View setFootView() {
-        LoadingFooter loadingFooter = new LoadingFooter(getContext());
-        loadingFooter.setState(LoadingFooter.State.Loading);
-        return loadingFooter;
+        if (mFooterView==null){
+            mFooterView = new LoadingFooter(getContext());
+        }
+        mFooterView.setState(LoadingFooter.State.Loading);
+        return mFooterView;
     }
 
     @Override
