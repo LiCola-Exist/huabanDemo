@@ -24,15 +24,13 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/04/04  14:46
  */
-public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter>{
+public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter,List<PinsAndUserEntity>>{
     private static final String TAG = "MyAttentionPinsFragment";
     //联网关键参数
     private int mMaxId;//下一次联网的pinsId开始
     private String mTokenType;
     private String mTokenAccess;
 
-    //能显示三种状态的 footView
-    LoadingFooter mFooterView;
 
     private OnPinsFragmentInteractionListener mListener;
 
@@ -73,13 +71,14 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
         getMyFollowingPins(mTokenType,mTokenAccess,mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .filter(new Func1<FollowingPinsBean, Boolean>() {
+                .map(new Func1<FollowingPinsBean, List<PinsAndUserEntity>>() {
                     @Override
-                    public Boolean call(FollowingPinsBean followingPinsBean) {
-                        return followingPinsBean.getPins().size()>0;
+                    public List<PinsAndUserEntity> call(FollowingPinsBean followingPinsBean) {
+                        return followingPinsBean.getPins();
                     }
                 })
-                .subscribe(new Subscriber<FollowingPinsBean>() {
+                .filter(getFilterFunc1())
+                .subscribe(new Subscriber<List<PinsAndUserEntity>>() {
                     @Override
                     public void onCompleted() {
                         Logger.d();
@@ -92,12 +91,11 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
                     }
 
                     @Override
-                    public void onNext(FollowingPinsBean followingPinsBean) {
-                        mAdapter.setList(followingPinsBean.getPins());
-                        mMaxId=getMaxId(followingPinsBean.getPins());
+                    public void onNext(List<PinsAndUserEntity> pinsAndUserEntities) {
+                        mAdapter.setList(pinsAndUserEntities);
+                        mMaxId=getMaxId(pinsAndUserEntities);
                     }
                 });
-
     }
 
     private int getMaxId(List<PinsAndUserEntity> result) {
@@ -109,7 +107,14 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
         getMyFollowingPinsMax(mTokenType,mTokenAccess,mMaxId,mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<FollowingPinsBean>() {
+                .map(new Func1<FollowingPinsBean, List<PinsAndUserEntity>>() {
+                    @Override
+                    public List<PinsAndUserEntity> call(FollowingPinsBean followingPinsBean) {
+                        return followingPinsBean.getPins();
+                    }
+                })
+                .filter(getFilterFunc1())
+                .subscribe(new Subscriber<List<PinsAndUserEntity>>() {
                     @Override
                     public void onCompleted() {
                         Logger.d();
@@ -122,9 +127,9 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
                     }
 
                     @Override
-                    public void onNext(FollowingPinsBean followingPinsBean) {
-                        mAdapter.addList(followingPinsBean.getPins());
-                        mMaxId=getMaxId(followingPinsBean.getPins());
+                    public void onNext(List<PinsAndUserEntity> pinsAndUserEntities) {
+                        mAdapter.setList(pinsAndUserEntities);
+                        mMaxId=getMaxId(pinsAndUserEntities);
                     }
                 });
     }
@@ -158,17 +163,9 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
         });
     }
 
-    @Override
-    protected View setFootView() {
-        if (mFooterView==null){
-            mFooterView=new LoadingFooter(getContext());
-        }
-        mFooterView.setState(LoadingFooter.State.Loading);
-        return mFooterView;
-    }
 
     @Override
-    protected View setHeadView() {
+    protected View getHeadView() {
         return null;
     }
 

@@ -22,15 +22,12 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/04/04  21:39
  */
-public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardAdapter> {
+public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardAdapter,List<BoardPinsBean>> {
     private static final String TAG = "MyAttentionBoardFragment";
 
     private int mIndex = 1;//联网的起始页 默认1
     private String mTokenType;
     private String mTokenAccess;
-
-    //能显示三种状态的 footView
-    LoadingFooter mFooterView;
 
     private OnBoardFragmentInteractionListener<BoardPinsBean> mListener;
 
@@ -62,6 +59,7 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .filter(getFilterFunc1())
                 .subscribe(new Subscriber<List<BoardPinsBean>>() {
                     @Override
                     public void onCompleted() {
@@ -105,17 +103,10 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
         });
     }
 
-    @Override
-    protected View setFootView() {
-        if (mFooterView==null){
-            mFooterView=new LoadingFooter(getContext());
-        }
-        mFooterView.setState(LoadingFooter.State.Loading);
-        return mFooterView;
-    }
+
 
     @Override
-    protected View setHeadView() {
+    protected View getHeadView() {
         return null;
     }
 

@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
@@ -35,7 +36,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/03/29  18:12
  */
-public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter> {
+public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter,List<PinsAndUserEntity>> {
 
     private int mMaxId;
 
@@ -55,9 +56,6 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     TextView mTVBoardDescribe;
     TextView mTVBoardAttention;
     TextView mTVBoardGather;
-
-    //能显示三种状态的 footView
-    LoadingFooter mFooterView;
 
     private OnPinsFragmentInteractionListener mListener;
 
@@ -205,6 +203,8 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
         return result.get(result.size() - 1).getPin_id();
     }
 
+
+
     @Override
     protected void getHttpScroll() {
         getBoardPinsMax(mKey, mMaxId, mLimit)
@@ -216,24 +216,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
                         return listPinsBean.getPins();
                     }
                 })
-                .filter(new Func1<List<PinsAndUserEntity>, Boolean>() {
-                    @Override
-                    public Boolean call(List<PinsAndUserEntity> pinsAndUserEntities) {
-                        if (pinsAndUserEntities==null||pinsAndUserEntities.size()==0){
-                            //返回 为空 过滤 已经没有往下传递的必要
-                            mFooterView.setState(LoadingFooter.State.TheEnd);
-                            isScorllLisener=false;
-                            return false;
-                        }
-                        if (pinsAndUserEntities.size()<mLimit){
-                            //说明返回结果已经小于 请求参数
-                            mFooterView.setState(LoadingFooter.State.TheEnd);
-                            isScorllLisener=false;
-                            return true;
-                        }
-                        return true;
-                    }
-                })
+                .filter(getFilterFunc1())
                 .subscribe(new Subscriber<List<PinsAndUserEntity>>() {
                     @Override
                     public void onCompleted() {
@@ -257,16 +240,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     @Override
-    protected View setFootView() {
-        if (mFooterView==null){
-            mFooterView = new LoadingFooter(getContext());
-        }
-        mFooterView.setState(LoadingFooter.State.Loading);
-        return mFooterView;
-    }
-
-    @Override
-    protected View setHeadView() {
+    protected View getHeadView() {
         View headView = LayoutInflater.from(getContext()).inflate(R.layout.view_board_detail_info, mRecyclerView, false);
         findHeadView(headView);
 

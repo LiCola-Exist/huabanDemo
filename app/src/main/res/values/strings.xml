@@ -104,6 +104,8 @@
     <string name="text_gather_number">%d gather</string>
     <string name="text_attention_number">%d attention</string>
     <string name="text_by_username">by %s</string>
+    <string name="text_fans_number">fans %d</string>
+
     <string name="text_image_describe_null">noting describe</string>
     <string name="text_board_describe_null">noting describe</string>
     <string name="text_recommend">recommend</string>

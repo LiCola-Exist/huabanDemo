@@ -7,12 +7,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 
+import java.util.List;
+
 import butterknife.Bind;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
+import licola.demo.com.huabandemo.View.LoadingFooter;
 import licola.demo.com.huabandemo.View.recyclerview.HeaderAndFooterRecyclerViewAdapter;
 import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
+import rx.functions.Func1;
 
 /**
  * Created by LiCola on  2016/03/26  16:55
@@ -22,7 +26,8 @@ import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
  * 定义成抽象类：既要约束子类的行为，又为子类提供公共功能
  * 所以：模板方法的基类只提供通用功能和确定骨架，而不应该决定逻辑跳转等具体子类的功能
  */
-public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> extends BaseFragment {
+public abstract class BaseRecyclerHeadFragment
+        <T extends RecyclerView.Adapter, K extends List> extends BaseFragment {
     protected static final String TYPE_KEY = "KEY";//搜索关键字的key值
     protected final float percentageScroll = 0.8f;//滑动距离的百分比
 
@@ -33,7 +38,7 @@ public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> e
     protected boolean isFistHttp = true;//是否第一次联网
 
     //是否还监听滑动的联网 标志位 默认为true 表示需要监听
-    protected boolean isScorllLisener=true;
+    protected boolean isScorllLisener = true;
 
     @BindString(R.string.urlImageRoot)
     protected String mUrlImageRoot;
@@ -41,8 +46,11 @@ public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> e
     @Bind(R.id.recycler_list)
     protected RecyclerView mRecyclerView;
 
-//    protected RecyclerPinsHeadCardAdapter mAdapter;
+    //    protected RecyclerPinsHeadCardAdapter mAdapter;
     protected T mAdapter;
+
+    //能显示三种状态的 footView
+    protected LoadingFooter mFooterView;
 
     @Override
     protected int getLayoutId() {
@@ -54,10 +62,35 @@ public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> e
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
-        if (args!=null){
+        if (args != null) {
             mKey = args.getString(TYPE_KEY);//父类取出key
         }
-//        EventBus.getDefault().register(this);
+
+    }
+
+
+    /**
+     * 提供给子类过滤 网络返回list 并休息ui状态的方法
+     * @return
+     */
+    protected Func1<K, Boolean> getFilterFunc1() {
+        return new Func1<K, Boolean>() {
+            @Override
+            public Boolean call(K k) {
+                if (k == null || k.size() == 0) {
+                    mFooterView.setState(LoadingFooter.State.TheEnd);
+                    isScorllLisener = false;
+                    return false;
+                }
+
+                if (k.size() < mLimit) {
+                    mFooterView.setState(LoadingFooter.State.TheEnd);
+                    isScorllLisener = false;
+                    return true;
+                }
+                return true;
+            }
+        };
     }
 
     @Override
@@ -78,9 +111,15 @@ public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> e
 
     protected abstract void getHttpScroll();//滑动产生的联网 由子类重写
 
-    protected abstract View setFootView();
+    protected View getFootView() {
+        if (mFooterView == null) {
+            mFooterView = new LoadingFooter(getContext());
+            mFooterView.setState(LoadingFooter.State.Loading);
+        }
+        return mFooterView;
+    }
 
-    protected abstract View setHeadView();
+    protected abstract View getHeadView();
 
     protected abstract int getAdapterPosition();
 
@@ -93,22 +132,25 @@ public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> e
 
     }
 
+    protected RecyclerView.LayoutManager getLayoutManager(){
+        return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+    }
 
     private void initRecyclerView() {
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+
         //// TODO: 2016/3/17 0017 预留选项 应该在设置中 添加一条单条垂直滚动选项
 //        LinearLayoutManager layoutManager=new LinearLayoutManager(HuaBanApplication.getInstance());
 //        mAdapter = new RecyclerPinsHeadCardAdapter(mRecyclerView);
-        mAdapter=setAdapter();
+        mAdapter = setAdapter();
         HeaderAndFooterRecyclerViewAdapter headAdapter = new HeaderAndFooterRecyclerViewAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.setLayoutManager(getLayoutManager());
         mRecyclerView.setAdapter(headAdapter);
         //绑定能添加头尾View的adapter后 检查View返回 添加
-        if (setHeadView() != null) {
-            RecyclerViewUtils.addHearView(mRecyclerView, setHeadView());
+        if (getHeadView() != null) {
+            RecyclerViewUtils.addHearView(mRecyclerView, getHeadView());
         }
-        if (setFootView() != null) {
-            RecyclerViewUtils.addFootView(mRecyclerView, setFootView());
+        if (getFootView() != null) {
+            RecyclerViewUtils.addFootView(mRecyclerView, getFootView());
         }
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());//设置默认动画
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -119,7 +161,7 @@ public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> e
                     //滑动停止
 //                    Logger.d("滑动停止 position=" + mAdapter.getAdapterPosition());
                     int size = (int) (mAdapter.getItemCount() * percentageScroll);
-                    if (getAdapterPosition() >= --size&&isScorllLisener) {
+                    if (getAdapterPosition() >= --size && isScorllLisener) {
                         getHttpScroll();
                     }
                 } else if (RecyclerView.SCROLL_STATE_DRAGGING == newState) {

@@ -22,13 +22,11 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/04/05  17:05
  */
-public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardAdapter> {
+public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardAdapter,List<BoardPinsBean>> {
     private static final String TAG = "ResultBoardFragment";
     
     private int mIndex = 1;//联网的起始页 默认1
-    
-    //能显示三种状态的 footView
-    LoadingFooter mFooterView;
+
 
     private OnBoardFragmentInteractionListener<BoardPinsBean> mListener;
 
@@ -55,6 +53,7 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
                         return searchBoardListBean.getBoards();
                     }
                 })
+                .filter(getFilterFunc1())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<BoardPinsBean>>() {
@@ -109,17 +108,9 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
         });
     }
 
-    @Override
-    protected View setFootView() {
-        if (mFooterView == null) {
-            mFooterView = new LoadingFooter(getContext());
-        }
-        mFooterView.setState(LoadingFooter.State.Loading);
-        return mFooterView;
-    }
 
     @Override
-    protected View setHeadView() {
+    protected View getHeadView() {
         return null;
     }
 

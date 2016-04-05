@@ -13,7 +13,7 @@ import licola.demo.com.huabandemo.My.FollowingPinsBean;
 import licola.demo.com.huabandemo.Search.SearchHintBean;
 import licola.demo.com.huabandemo.SearchResult.SearchBoardListBean;
 import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
-import licola.demo.com.huabandemo.SearchResult.SearchPeopleBean;
+import licola.demo.com.huabandemo.SearchResult.SearchPeopleListBean;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
@@ -57,7 +57,7 @@ public interface HttpAPIRx {
     //http://api.huaban.com/search/people/?q=%E7%BE%8E%E9%A3%9F&page=1&per_page=2
     //用户搜索
     @GET("search/people/")
-    Observable<SearchPeopleBean> httpPeopleSearchRx(@Query("q") String key, @Query("page") int page, @Query("per_page") int per_page);
+    Observable<SearchPeopleListBean> httpPeopleSearchRx(@Query("q") String key, @Query("page") int page, @Query("per_page") int per_page);
 
     //http://api.huaban.com/pins/663478425
     //根据图片id获取详情

@@ -23,13 +23,11 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/04/05  16:48
  */
-public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter> {
+public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter,List<PinsAndUserEntity>> {
     private static final String TAG = "ResultImageFragment";
 
     private int mIndex = 1;//联网的起始页 默认1
 
-    //能显示三种状态的 footView
-    LoadingFooter mFooterView;
 
     private OnPinsFragmentInteractionListener mListener;
 
@@ -58,6 +56,7 @@ public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
                         return searchImageBean.getPins();//取出list对象
                     }
                 })
+                .filter(getFilterFunc1())
                 .subscribe(new Subscriber<List<PinsAndUserEntity>>() {
                     @Override
                     public void onCompleted() {
@@ -123,16 +122,7 @@ public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     @Override
-    protected View setFootView() {
-        if (mFooterView == null) {
-            mFooterView = new LoadingFooter(getContext());
-        }
-        mFooterView.setState(LoadingFooter.State.Loading);
-        return mFooterView;
-    }
-
-    @Override
-    protected View setHeadView() {
+    protected View getHeadView() {
         return null;
     }
 

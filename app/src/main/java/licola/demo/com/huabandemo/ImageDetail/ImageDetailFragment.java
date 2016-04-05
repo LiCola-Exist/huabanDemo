@@ -40,7 +40,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/03/26  19:05
  */
-public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter> {
+public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter,List<PinsAndUserEntity>> {
     private static final String TAG = "ImageDetailFragment";
     protected int mIndex = 1;//默认值为1
 
@@ -300,15 +300,9 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
         getHttpFirst();
     }
 
-    @Override
-    protected View setFootView() {
-        LoadingFooter loadingFooter = new LoadingFooter(getContext());
-        loadingFooter.setState(LoadingFooter.State.Loading);
-        return loadingFooter;
-    }
 
     @Override
-    protected View setHeadView() {
+    protected View getHeadView() {
 
         View headView = LayoutInflater.from(getContext()).inflate(R.layout.view_image_detail_info, mRecyclerView, false);
         findHeadView(headView);
@@ -333,7 +327,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
         tv_image_gather = ButterKnife.findById(headView, R.id.tv_image_gather);
         tv_image_like = ButterKnife.findById(headView, R.id.tv_image_like);
         tv_image_user = ButterKnife.findById(headView, R.id.tv_image_user);
-        tv_image_time = ButterKnife.findById(headView, R.id.tv_image_time);
+        tv_image_time = ButterKnife.findById(headView, R.id.tv_image_about);
         tv_image_board = ButterKnife.findById(headView, R.id.tv_image_board);
 
         img_image_user = ButterKnife.findById(headView, R.id.img_image_user);
