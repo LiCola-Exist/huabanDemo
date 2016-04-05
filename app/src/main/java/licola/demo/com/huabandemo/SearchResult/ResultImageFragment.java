@@ -13,12 +13,13 @@ import java.util.List;
 
 import butterknife.Bind;
 import de.greenrobot.event.EventBus;
+import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
+import licola.demo.com.huabandemo.Adapter.RecyclerPinsCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseFragment;
 import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.Adapter.RecyclerCardAdapter;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitPinsRx;
 import rx.Observable;
@@ -48,15 +49,9 @@ public class ResultImageFragment extends BaseFragment {
     ProgressBar mProgressBar;
 
     //    private MainRecyclerViewAdapter mAdapter;
-    private RecyclerCardAdapter mAdapter;
+    private RecyclerPinsCardAdapter mAdapter;
 
-    private OnResultImageFragmentInteractionListener mListener;
-
-    public interface OnResultImageFragmentInteractionListener {
-        void onClickItemImage(PinsAndUserEntity bean, View view);
-
-        void onClickItemText(PinsAndUserEntity bean, View view);
-    }
+    private OnPinsFragmentInteractionListener mListener;
 
 
     //只需要一个Key作为关键字联网
@@ -102,7 +97,7 @@ public class ResultImageFragment extends BaseFragment {
         //// TODO: 2016/3/17 0017 预留选项 应该在设置中 添加一条单条垂直滚动选项
 //        LinearLayoutManager layoutManager=new LinearLayoutManager(HuaBanApplication.getInstance());
         mRecyclerView.setLayoutManager(layoutManager);
-        mAdapter = new RecyclerCardAdapter(mRecyclerView);
+        mAdapter = new RecyclerPinsCardAdapter(mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());//设置默认动画
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -134,7 +129,7 @@ public class ResultImageFragment extends BaseFragment {
 //                    @Override
 //                    public Boolean call(ListPinsBean cardBigBean) {
 //                        //过滤掉数组为0的next
-//                        return cardBigBean.getPins().size() != 0;
+//                        return cardBigBean.getBoards().size() != 0;
 //                    }
 //                })
                 .subscribeOn(Schedulers.io())//发布者的运行线程 联网操作属于IO操作
@@ -206,8 +201,8 @@ public class ResultImageFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnResultImageFragmentInteractionListener){
-            mListener= (OnResultImageFragmentInteractionListener) context;
+        if (context instanceof OnPinsFragmentInteractionListener){
+            mListener= (OnPinsFragmentInteractionListener) context;
         }else {
             throwRuntimeException(context);
         }
@@ -215,7 +210,7 @@ public class ResultImageFragment extends BaseFragment {
 
     private void initListener() {
 
-        mAdapter.setOnClickItemListener(new RecyclerCardAdapter.onAdapterListener() {
+        mAdapter.setOnClickItemListener(new RecyclerPinsCardAdapter.onAdapterListener() {
             @Override
             public void onClickImage(PinsAndUserEntity bean, View view) {
                 Logger.d();

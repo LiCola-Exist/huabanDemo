@@ -14,11 +14,12 @@ import java.util.List;
 
 import butterknife.Bind;
 import de.greenrobot.event.EventBus;
+import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.Adapter.RecyclerHeadCardAdapter;
+import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Bean.ListPinsBean;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.Base.BaseFragment;
@@ -55,16 +56,10 @@ public class ModuleFragment extends BaseFragment {
     ProgressBar mProgressBar;
 
     //    private MainRecyclerViewAdapter mAdapter;
-//    private RecyclerCardAdapter mAdapter;
-    private RecyclerHeadCardAdapter mAdapter;
+//    private RecyclerPinsCardAdapter mAdapter;
+    private RecyclerPinsHeadCardAdapter mAdapter;
 
-    private OnModuleFragmentInteractionListener mListener;
-
-    public interface OnModuleFragmentInteractionListener {
-        void onClickItemImage(PinsAndUserEntity bean, View view);
-
-        void onClickItemText(PinsAndUserEntity bean, View view);
-    }
+    private OnPinsFragmentInteractionListener mListener;
 
     public static ModuleFragment newInstance(String type, String title) {
         ModuleFragment fragment = new ModuleFragment();
@@ -113,7 +108,7 @@ public class ModuleFragment extends BaseFragment {
 
 //        mAdapter = new MainRecyclerViewAdapter(HuaBanApplication.getInstance());
 
-        mAdapter = new RecyclerHeadCardAdapter(mRecyclerView);//正常adapter的初始化
+        mAdapter = new RecyclerPinsHeadCardAdapter(mRecyclerView);//正常adapter的初始化
         //转换成headAdapter
         HeaderAndFooterRecyclerViewAdapter headAdapter = new HeaderAndFooterRecyclerViewAdapter(mAdapter);
         mRecyclerView.setAdapter(headAdapter);
@@ -285,8 +280,8 @@ public class ModuleFragment extends BaseFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnModuleFragmentInteractionListener) {
-            mListener = (OnModuleFragmentInteractionListener) context;
+        if (context instanceof OnPinsFragmentInteractionListener) {
+            mListener = (OnPinsFragmentInteractionListener) context;
         } else {
             throwRuntimeException(context);
         }
@@ -302,7 +297,7 @@ public class ModuleFragment extends BaseFragment {
         });
 
 
-        mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.OnAdapterListener() {
+        mAdapter.setOnClickItemListener(new RecyclerPinsHeadCardAdapter.OnAdapterListener() {
             @Override
             public void onClickImage(PinsAndUserEntity bean, View view) {
                 Logger.d();

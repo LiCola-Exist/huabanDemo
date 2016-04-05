@@ -11,13 +11,14 @@ import android.view.MenuItem;
 import android.view.View;
 
 import butterknife.Bind;
+import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 
 public class BoardDetailActivity extends BaseActivity
-        implements BoardDetailFragment.onBoardDetailFragmentInteractionListener {
+        implements OnPinsFragmentInteractionListener {
     protected static final String TYPE_KEY = "TYPE_KEY";
     protected static final String TYPE_TITLE = "TYPE_TITLE";
 

@@ -23,6 +23,7 @@ import butterknife.BindDrawable;
 import butterknife.BindString;
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
+import licola.demo.com.huabandemo.API.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.Module.ModuleActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -34,7 +35,7 @@ import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 
 public class ImageDetailActivity extends BaseActivity
-        implements ImageDetailFragment.OnImageDetailFragmentInteractionListener {
+        implements OnImageDetailFragmentInteractionListener {
 
     //定义调用ImageDetailActivity的类 来自什么类型 在结束作为判断条件
 

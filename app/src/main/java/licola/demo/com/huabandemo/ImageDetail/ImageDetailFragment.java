@@ -19,13 +19,14 @@ import java.util.List;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import licola.demo.com.huabandemo.API.OnImageDetailFragmentInteractionListener;
+import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.TimeUtils;
 import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.Adapter.RecyclerHeadCardAdapter;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitPinsRx;
@@ -39,13 +40,13 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/03/26  19:05
  */
-public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerHeadCardAdapter> {
+public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter> {
     private static final String TAG = "ImageDetailFragment";
     protected int mIndex = 1;//默认值为1
 
-    @BindString(R.string.text_image_like_number)
+    @BindString(R.string.text_like_number)
     String mStringLikeNumber;
-    @BindString(R.string.text_image_gather_number)
+    @BindString(R.string.text_gather_number)
     String mStringGatherNumber;
     @BindString(R.string.text_image_describe_null)
     String mStringNullDescribe;
@@ -86,15 +87,6 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerHeadCa
 
     private OnImageDetailFragmentInteractionListener mListener;
 
-    public interface OnImageDetailFragmentInteractionListener {
-        void onClickItemImage(PinsAndUserEntity bean, View view);
-
-        void onClickItemText(PinsAndUserEntity bean, View view);
-
-        void onClickBoardField(String key, String title);
-
-        void onClickUserField(String key,String title);
-    }
 
     @Override
     protected String getTAG() {
@@ -135,7 +127,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerHeadCa
     protected void initListener() {
         super.initListener();
 
-        mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.OnAdapterListener() {
+        mAdapter.setOnClickItemListener(new RecyclerPinsHeadCardAdapter.OnAdapterListener() {
             @Override
             public void onClickImage(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);
@@ -330,8 +322,8 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerHeadCa
     }
 
     @Override
-    protected RecyclerHeadCardAdapter setAdapter() {
-        return new RecyclerHeadCardAdapter(mRecyclerView);
+    protected RecyclerPinsHeadCardAdapter setAdapter() {
+        return new RecyclerPinsHeadCardAdapter(mRecyclerView);
     }
 
 

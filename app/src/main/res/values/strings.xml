@@ -12,6 +12,7 @@
     <string name="title_activity_search_result">Search%s</string>
     <string name="title_activity_module">Module</string>
     <string name="title_activity_board_detail">BoardDetail</string>
+    <string name="title_activity_my_following">Following</string>
 
     <string name="title_fragment_image">Images</string>
     <string name="title_fragment_board">Boards</string>
@@ -99,14 +100,15 @@
     <string name="text_foot_error">error</string>
     <string name="text_foot_end">end</string>
 
-    <string name="text_image_like_number"> %d like</string>
-    <string name="text_image_gather_number"> %d gather</string>
-    <string name="text_image_attention_number">%d attention</string>
+    <string name="text_like_number">%d like</string>
+    <string name="text_gather_number">%d gather</string>
+    <string name="text_attention_number">%d attention</string>
+    <string name="text_by_username">by %s</string>
     <string name="text_image_describe_null">noting describe</string>
     <string name="text_board_describe_null">noting describe</string>
     <string name="text_recommend">recommend</string>
     <string name="text_to">To</string>
-    <string name="title_activity_my_following">MyFollowingActivity</string>
+
 
 
 </resources>

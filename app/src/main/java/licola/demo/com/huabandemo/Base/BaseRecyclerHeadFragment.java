@@ -11,7 +11,6 @@ import butterknife.Bind;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
-import licola.demo.com.huabandemo.Adapter.RecyclerHeadCardAdapter;
 import licola.demo.com.huabandemo.View.recyclerview.HeaderAndFooterRecyclerViewAdapter;
 import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
 
@@ -39,7 +38,7 @@ public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> e
     @Bind(R.id.recycler_list)
     protected RecyclerView mRecyclerView;
 
-//    protected RecyclerHeadCardAdapter mAdapter;
+//    protected RecyclerPinsHeadCardAdapter mAdapter;
     protected T mAdapter;
 
     @Override
@@ -95,7 +94,7 @@ public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> e
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         //// TODO: 2016/3/17 0017 预留选项 应该在设置中 添加一条单条垂直滚动选项
 //        LinearLayoutManager layoutManager=new LinearLayoutManager(HuaBanApplication.getInstance());
-//        mAdapter = new RecyclerHeadCardAdapter(mRecyclerView);
+//        mAdapter = new RecyclerPinsHeadCardAdapter(mRecyclerView);
         mAdapter=setAdapter();
         HeaderAndFooterRecyclerViewAdapter headAdapter = new HeaderAndFooterRecyclerViewAdapter(mAdapter);
         mRecyclerView.setLayoutManager(layoutManager);

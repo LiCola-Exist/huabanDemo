@@ -3,6 +3,7 @@ package licola.demo.com.huabandemo.API;
 import java.util.List;
 
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
+import licola.demo.com.huabandemo.My.FollowingBoardListBean;
 import licola.demo.com.huabandemo.My.FollowingPinsBean;
 import licola.demo.com.huabandemo.Bean.ListPinsBean;
 import licola.demo.com.huabandemo.ImageDetail.PinsDetailBean;
@@ -95,7 +96,8 @@ public interface HttpAPIRx {
     @GET("users/me")
     Observable<UserMeBean> httpUserRx(@Header("Authorization") String authorization);
 
-    //https://api.huaban.com/following?limit=40 报头 bearer getAccess_token
+    //https://api.huaban.com/following?limit=40
+    //我的关注图片  需要 报头 bearer getAccess_token
     @GET("following")
     Observable<FollowingPinsBean> httpsMyFollowingPinsRx(@Header("Authorization") String authorization, @Query("limit") int limit);
 
@@ -104,4 +106,8 @@ public interface HttpAPIRx {
     @GET("following")
     Observable<FollowingPinsBean> httpsMyFollowingPinsMaxRx(@Header("Authorization") String authorization, @Query("max") int max, @Query("limit") int limit);
 
+    //https://api.huaban.com/boards/following?page=1&per_page=20
+    //我的关注画板
+    @GET("boards/following")
+    Observable<FollowingBoardListBean> httpsMyFollowingBoardRx(@Header("Authorization") String authorization, @Query("page") int page, @Query("per_page") int per_page);
 }

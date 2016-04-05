@@ -17,14 +17,19 @@ import android.view.View;
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindString;
+import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
+import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.SPUtils;
 
 public class MyAttentionActivity extends BaseActivity
-        implements MyAttentionPinsFragment.OnMyAttentionPinsFragmentInteractionListener {
+        implements OnPinsFragmentInteractionListener, OnBoardFragmentInteractionListener<FollowingBoardItemBean> {
 
     static final int mTabCount = 2;
 
@@ -43,6 +48,10 @@ public class MyAttentionActivity extends BaseActivity
     int mColorTabIndicator;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
+
+    //包含的两个fragment共享联网关键字段
+    public String mTokenType;
+    public String mTokenAccess;
 
     public static void launch(Activity activity, int flag) {
         Intent intent = new Intent(activity, MyAttentionActivity.class);
@@ -77,6 +86,14 @@ public class MyAttentionActivity extends BaseActivity
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initViewPagerTab();
+
+
+        mTokenType = (String) SPUtils.get(mContext, Constant.TOKENTYPE, "");
+        mTokenAccess = (String) SPUtils.get(mContext, Constant.TOKENACCESS, "");
+    }
+
+    private void initViewPagerTab() {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -118,13 +135,25 @@ public class MyAttentionActivity extends BaseActivity
     @Override
     public void onClickItemImage(PinsAndUserEntity bean, View view) {
         //我的关注 画板的点击跳转
-        ImageDetailActivity.launch(this,ImageDetailActivity.ACTION_ATTENTION);
+        ImageDetailActivity.launch(this, ImageDetailActivity.ACTION_ATTENTION);
     }
 
     @Override
     public void onClickItemText(PinsAndUserEntity bean, View view) {
         //我的关注 画板的点击跳转
-        ImageDetailActivity.launch(this,ImageDetailActivity.ACTION_ATTENTION);
+        ImageDetailActivity.launch(this, ImageDetailActivity.ACTION_ATTENTION);
+    }
+
+    @Override
+    public void onClickItemImage(FollowingBoardItemBean bean, View view) {
+        String boardId = String.valueOf(bean.getBoard_id());
+        BoardDetailActivity.launch(this, boardId, bean.getTitle());
+    }
+
+    @Override
+    public void onClickItemText(FollowingBoardItemBean bean, View view) {
+        String boardId = String.valueOf(bean.getBoard_id());
+        BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }
 
 
@@ -145,7 +174,7 @@ public class MyAttentionActivity extends BaseActivity
             if (position == 0) {
                 return MyAttentionPinsFragment.newInstance();
             } else {
-                return MyAttentionPinsFragment.newInstance();
+                return MyAttentionBoardFragment.newInstance();
             }
         }
 

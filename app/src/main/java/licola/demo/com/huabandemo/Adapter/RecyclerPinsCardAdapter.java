@@ -29,7 +29,7 @@ import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 
 import static android.view.View.*;
-import static android.view.ViewGroup.OnClickListener;
+import static android.view.View.OnClickListener;
 import static android.view.ViewGroup.VISIBLE;
 
 
@@ -37,7 +37,7 @@ import static android.view.ViewGroup.VISIBLE;
  * Created by LiCola on  2016/03/22  18:00
  * 负责展示CardView 的adapter
  */
-public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapter.ViewHolder> {
+public class RecyclerPinsCardAdapter extends RecyclerView.Adapter<RecyclerPinsCardAdapter.ViewHolder> {
     private final String life = "Life";
     private RecyclerView mRecyclerView;
     private Context mContext;
@@ -58,6 +58,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
     public void addList(List<PinsAndUserEntity> mList) {
         this.mList.addAll(mList);
         notifyDataSetChanged();
+
     }
 
     public int getAdapterPosition() {
@@ -79,7 +80,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
         void onClickInfoLike(PinsAndUserEntity bean, View view);
     }
 
-    public RecyclerCardAdapter(RecyclerView recyclerView) {
+    public RecyclerPinsCardAdapter(RecyclerView recyclerView) {
         this.mRecyclerView = recyclerView;
         this.mContext = recyclerView.getContext();
         this.url_root = mContext.getResources().getString(R.string.urlImageRoot);
@@ -290,7 +291,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
     }
 
 
-    public  class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         //这个CardView采用两层操作
         public final View mView;
 
@@ -305,6 +306,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
         public final TextView tv_card_gather;
         public final TextView tv_card_like;
 
+
         public ViewHolder(View view) {
             super(view);
             mView = view;
@@ -318,6 +320,7 @@ public class RecyclerCardAdapter extends RecyclerView.Adapter<RecyclerCardAdapte
             ll_info = (LinearLayout) view.findViewById(R.id.linearlayout_info);//文字子类
             tv_card_gather = (TextView) view.findViewById(R.id.tv_card_gather);
             tv_card_like = (TextView) view.findViewById(R.id.tv_card_like);
+
         }
 
     }

@@ -812,7 +812,7 @@
 //                this.following = following;
 //            }
 //
-//            public void setPins(List<PinsAndUserEntity> pins) {
+//            public void setBoards(List<PinsAndUserEntity> pins) {
 //                this.pins = pins;
 //            }
 //
@@ -876,7 +876,7 @@
 //                return following;
 //            }
 //
-//            public List<PinsAndUserEntity> getPins() {
+//            public List<PinsAndUserEntity> getBoards() {
 //                return pins;
 //            }
 //

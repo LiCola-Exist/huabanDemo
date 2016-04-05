@@ -19,6 +19,7 @@ import java.util.HashSet;
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindString;
+import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
@@ -28,7 +29,8 @@ import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 
 
-public class SearchResultActivity extends BaseActivity implements ResultImageFragment.OnResultImageFragmentInteractionListener {
+public class SearchResultActivity extends BaseActivity implements
+        OnPinsFragmentInteractionListener {
 
     private static final String SEARCHKEY = "KEY";
     private String key;//搜索的关键字

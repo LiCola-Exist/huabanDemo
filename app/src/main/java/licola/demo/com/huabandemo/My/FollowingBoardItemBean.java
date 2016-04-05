@@ -1,6 +1,8 @@
-package licola.demo.com.huabandemo.Bean;
+package licola.demo.com.huabandemo.My;
 
 import java.util.List;
+
+import licola.demo.com.huabandemo.Bean.PinsSimpleBean;
 
 /**
  * Created by LiCola on  2016/04/04  19:47

@@ -8,8 +8,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.facebook.drawee.controller.BaseControllerListener;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 
 import java.util.ArrayList;
@@ -19,7 +24,6 @@ import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.View.ViewHolder.ViewHolderGeneral;
 import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
 
 import static android.view.View.GONE;
@@ -32,14 +36,14 @@ import static android.view.ViewGroup.VISIBLE;
  * Created by LiCola on  2016/03/22  18:00
  * 负责展示  图片CardView 的adapter
  */
-public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
+public class RecyclerPinsHeadCardAdapter extends RecyclerView.Adapter {
     private final String life = "Life";
     private RecyclerView mRecyclerView;
     private Context mContext;
     private boolean mIsShowUser = false;//是否显示用户头像和名字的标志位
     private List<PinsAndUserEntity> mList = new ArrayList<>(20);
     private OnAdapterListener mListener;
-    private final String url_root;
+    private final String mUrlFormat;
     public int mAdapterPosition = 0;
 
     public List<PinsAndUserEntity> getmList() {
@@ -76,14 +80,14 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
 
     }
 
-    public RecyclerHeadCardAdapter(RecyclerView recyclerView) {
+    public RecyclerPinsHeadCardAdapter(RecyclerView recyclerView) {
         this.mRecyclerView = recyclerView;
         this.mContext = recyclerView.getContext();
-        this.url_root = mContext.getResources().getString(R.string.urlImageRoot);
+        this.mUrlFormat = mContext.getResources().getString(R.string.url_image_general);
     }
 
     //多一个标志位的 构造函数
-    public RecyclerHeadCardAdapter(RecyclerView recyclerView, boolean isShowUser) {
+    public RecyclerPinsHeadCardAdapter(RecyclerView recyclerView, boolean isShowUser) {
         this(recyclerView);
         this.mIsShowUser = isShowUser;
     }
@@ -175,7 +179,8 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
             holder.ll_title_info.setVisibility(GONE);
         }
 
-        String url_img = url_root + bean.getFile().getKey()+"_fw320sf";
+//        String url_img = mUrlFormat + bean.getFile().getKey()+"_fw320sf";
+        String url_img = String.format(mUrlFormat,bean.getFile().getKey());
 
 //        String mImageUrl = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
 
@@ -294,7 +299,37 @@ public class RecyclerHeadCardAdapter extends RecyclerView.Adapter {
     }
 
 
+    public static class  ViewHolderGeneral extends RecyclerView.ViewHolder {
+        //这个CardView采用两层操作
+        public final View mView;
 
+        public final FrameLayout rl_image;//第一层 包含图片和播放按钮
+        public final SimpleDraweeView img_card_image;
+        public final ImageButton ibtn_card_gif;
+
+        public final LinearLayout ll_title_info;//第二层 包含描述 图片信息
+        public final TextView tv_card_title;//第二层 描述title
+
+        public final LinearLayout ll_info;//第二层的子类 包含图片被采集和喜爱的信息
+        public final TextView tv_card_gather;
+        public final TextView tv_card_like;
+
+        public ViewHolderGeneral(View view) {
+            super(view);
+            mView = view;
+            rl_image = (FrameLayout) view.findViewById(R.id.framelayout_image);
+            img_card_image = (SimpleDraweeView) view.findViewById(R.id.img_card_image);//主图
+            ibtn_card_gif = (ImageButton) view.findViewById(R.id.ibtn_card_gif);//播放按钮
+
+            ll_title_info = (LinearLayout) view.findViewById(R.id.linearlayout_title_info);//图片所有文字信息
+            tv_card_title = (TextView) view.findViewById(R.id.tv_card_title);//描述的title
+
+            ll_info = (LinearLayout) view.findViewById(R.id.linearlayout_info);//文字子类
+            tv_card_gather = (TextView) view.findViewById(R.id.tv_card_gather);
+            tv_card_like = (TextView) view.findViewById(R.id.tv_card_like);
+        }
+
+    }
 
 
 }

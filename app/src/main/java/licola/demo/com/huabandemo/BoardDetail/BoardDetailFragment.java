@@ -15,11 +15,12 @@ import java.util.List;
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
+import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.Adapter.RecyclerHeadCardAdapter;
 import licola.demo.com.huabandemo.Bean.ListPinsBean;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
@@ -34,7 +35,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/03/29  18:12
  */
-public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerHeadCardAdapter> {
+public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter> {
 
     private int mMaxId;
 
@@ -42,9 +43,9 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerHeadCa
     String mFormatUrlSmall;
     @BindString(R.string.text_board_describe_null)
     String mStringNullDescribe;
-    @BindString(R.string.text_image_attention_number)
+    @BindString(R.string.text_attention_number)
     String mStringAttentionNumber;
-    @BindString(R.string.text_image_gather_number)
+    @BindString(R.string.text_gather_number)
     String mStringGatherNumber;
 
 
@@ -58,13 +59,8 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerHeadCa
     //能显示三种状态的 footView
     LoadingFooter mFooterView;
 
-    private onBoardDetailFragmentInteractionListener mListener;
+    private OnPinsFragmentInteractionListener mListener;
 
-    public interface onBoardDetailFragmentInteractionListener {
-        void onClickItemImage(PinsAndUserEntity bean, View view);
-
-        void onClickItemText(PinsAndUserEntity bean, View view);
-    }
 
     @Override
     protected String getTAG() {
@@ -91,7 +87,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerHeadCa
                 Logger.d();
             }
         });//画板栏事件
-        mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.OnAdapterListener() {
+        mAdapter.setOnClickItemListener(new RecyclerPinsHeadCardAdapter.OnAdapterListener() {
             @Override
             public void onClickImage(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);//发送bean 而不用知晓接受得类
@@ -264,8 +260,8 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerHeadCa
     }
 
     @Override
-    protected RecyclerHeadCardAdapter setAdapter() {
-        return new RecyclerHeadCardAdapter(mRecyclerView);
+    protected RecyclerPinsHeadCardAdapter setAdapter() {
+        return new RecyclerPinsHeadCardAdapter(mRecyclerView);
     }
 
     private void findHeadView(View headView) {
@@ -299,8 +295,8 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerHeadCa
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof onBoardDetailFragmentInteractionListener) {
-            mListener = (onBoardDetailFragmentInteractionListener) context;//在绑定时候得到listener的真正引用
+        if (context instanceof OnPinsFragmentInteractionListener) {
+            mListener = (OnPinsFragmentInteractionListener) context;//在绑定时候得到listener的真正引用
         } else {
             throwRuntimeException(context);
         }

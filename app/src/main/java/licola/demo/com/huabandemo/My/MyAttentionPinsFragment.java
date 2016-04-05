@@ -8,14 +8,13 @@ import android.view.View;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
-import licola.demo.com.huabandemo.Adapter.RecyclerHeadCardAdapter;
+import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
+import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsPinsRx;
-import licola.demo.com.huabandemo.Util.Constant;
-import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.Util.SPUtils;
-import licola.demo.com.huabandemo.View.LoadingFooter;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsPinsRx;
+import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.View.LoadingFooter;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -24,7 +23,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/04/04  14:46
  */
-public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerHeadCardAdapter>{
+public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter>{
     private static final String TAG = "MyAttentionPinsFragment";
     //联网关键参数
     private int mMaxId;//下一次联网的pinsId开始
@@ -34,13 +33,8 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerHe
     //能显示三种状态的 footView
     LoadingFooter mFooterView;
 
-    private OnMyAttentionPinsFragmentInteractionListener mListener;
+    private OnPinsFragmentInteractionListener mListener;
 
-    public interface OnMyAttentionPinsFragmentInteractionListener{
-        void onClickItemImage(PinsAndUserEntity bean, View view);
-
-        void onClickItemText(PinsAndUserEntity bean, View view);
-    }
 
     @Override
     protected String getTAG() {
@@ -59,16 +53,15 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerHe
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTokenType= (String) SPUtils.get(getContext(), Constant.TOKENTYPE,"");
-        mTokenAccess= (String) SPUtils.get(getContext(),Constant.TOKENACCESS,"");
-
+        this.mTokenType=((MyAttentionActivity)getActivity()).mTokenType;
+        this.mTokenAccess=((MyAttentionActivity)getActivity()).mTokenAccess;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnMyAttentionPinsFragmentInteractionListener){
-            mListener= (OnMyAttentionPinsFragmentInteractionListener) context;
+        if (context instanceof OnPinsFragmentInteractionListener){
+            mListener= (OnPinsFragmentInteractionListener) context;
         }else {
             throwRuntimeException(context);
         }
@@ -132,7 +125,7 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerHe
     @Override
     protected void initListener() {
         super.initListener();
-        mAdapter.setOnClickItemListener(new RecyclerHeadCardAdapter.OnAdapterListener() {
+        mAdapter.setOnClickItemListener(new RecyclerPinsHeadCardAdapter.OnAdapterListener() {
             @Override
             public void onClickImage(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);
@@ -178,8 +171,8 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerHe
     }
 
     @Override
-    protected RecyclerHeadCardAdapter setAdapter() {
-        return new RecyclerHeadCardAdapter(mRecyclerView);
+    protected RecyclerPinsHeadCardAdapter setAdapter() {
+        return new RecyclerPinsHeadCardAdapter(mRecyclerView);
     }
 
     private Observable<FollowingPinsBean> getMyFollowingPins(String bearer, String key, int limit){
@@ -190,5 +183,10 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerHe
         return RetrofitHttpsPinsRx.service.httpsMyFollowingPinsMaxRx(bearer + " " + key,maxId,limit);
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.mTokenType=null;
+        this.mTokenAccess=null;
+    }
 }

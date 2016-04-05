@@ -25,6 +25,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Login.LoginActivity;
@@ -40,7 +41,9 @@ import licola.demo.com.huabandemo.Module.ModuleFragment;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, OnClickListener ,ModuleFragment.OnModuleFragmentInteractionListener{
+        implements NavigationView.OnNavigationItemSelectedListener,
+        OnClickListener ,
+        OnPinsFragmentInteractionListener {
 
     //布局中控件 自动生成
     @Bind(R.id.navigation_view)
