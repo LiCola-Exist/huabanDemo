@@ -32,6 +32,9 @@ public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> e
 
     protected boolean isFistHttp = true;//是否第一次联网
 
+    //是否还监听滑动的联网 标志位 默认为true 表示需要监听
+    protected boolean isScorllLisener=true;
+
     @BindString(R.string.urlImageRoot)
     protected String mUrlImageRoot;
 
@@ -90,6 +93,7 @@ public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> e
 
     }
 
+
     private void initRecyclerView() {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         //// TODO: 2016/3/17 0017 预留选项 应该在设置中 添加一条单条垂直滚动选项
@@ -115,7 +119,7 @@ public abstract class BaseRecyclerHeadFragment<T extends RecyclerView.Adapter> e
                     //滑动停止
 //                    Logger.d("滑动停止 position=" + mAdapter.getAdapterPosition());
                     int size = (int) (mAdapter.getItemCount() * percentageScroll);
-                    if (getAdapterPosition() >= --size) {
+                    if (getAdapterPosition() >= --size&&isScorllLisener) {
                         getHttpScroll();
                     }
                 } else if (RecyclerView.SCROLL_STATE_DRAGGING == newState) {

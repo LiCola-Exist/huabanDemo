@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.My.FollowingBoardItemBean;
+import licola.demo.com.huabandemo.Bean.BoardPinsBean;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
@@ -32,7 +32,7 @@ public class RecyclerBoardAdapter extends RecyclerView.Adapter {
     private RecyclerView mRecyclerView;
     private Context mContext;
 
-    private List<FollowingBoardItemBean> mList = new ArrayList<>(20);
+    private List<BoardPinsBean> mList = new ArrayList<>(20);
     private onAdapterListener mListener;
     private final String mUrlFormat;//地址
     private final String mAttentionFormat;//关注数量
@@ -41,16 +41,16 @@ public class RecyclerBoardAdapter extends RecyclerView.Adapter {
 
     public int mAdapterPosition = 0;
 
-    public List<FollowingBoardItemBean> getmList() {
+    public List<BoardPinsBean> getmList() {
         return mList;
     }
 
-    public void setList(List<FollowingBoardItemBean> mList) {
+    public void setList(List<BoardPinsBean> mList) {
         this.mList = mList;
         notifyDataSetChanged();
     }
 
-    public void addList(List<FollowingBoardItemBean> mList) {
+    public void addList(List<BoardPinsBean> mList) {
         this.mList.addAll(mList);
         notifyDataSetChanged();
     }
@@ -65,9 +65,9 @@ public class RecyclerBoardAdapter extends RecyclerView.Adapter {
 
 
     public interface onAdapterListener {
-        void onClickImage(FollowingBoardItemBean bean, View view);
+        void onClickImage(BoardPinsBean bean, View view);
 
-        void onClickTextInfo(FollowingBoardItemBean bean, View view);
+        void onClickTextInfo(BoardPinsBean bean, View view);
 
     }
 
@@ -108,7 +108,7 @@ public class RecyclerBoardAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         //Logger.d(life);
-        final FollowingBoardItemBean bean = mList.get(position);
+        final BoardPinsBean bean = mList.get(position);
 
         //父类强制转换成子类 因为这个holder本来就是子类初始化的 所以可以强转
         ViewHolderBoard viewHolder = (ViewHolderBoard) holder;//强制类型转换 转成内部的ViewHolder
@@ -124,7 +124,7 @@ public class RecyclerBoardAdapter extends RecyclerView.Adapter {
         mAdapterPosition = RecyclerViewUtils.getAdapterPosition(mRecyclerView, holder);
     }
 
-    private void onBindData(final ViewHolderBoard holder, FollowingBoardItemBean bean) {
+    private void onBindData(final ViewHolderBoard holder, BoardPinsBean bean) {
         //检查图片信息
         if (checkInfoContext(bean)) {
             holder.tv_board_title.setText(bean.getTitle());
@@ -147,7 +147,7 @@ public class RecyclerBoardAdapter extends RecyclerView.Adapter {
                 .build();
     }
 
-    private String getFirstPinsFileKey(FollowingBoardItemBean bean) {
+    private String getFirstPinsFileKey(BoardPinsBean bean) {
         int size=bean.getPins().size();
         if (size>0){
             return bean.getPins().get(0).getFile().getKey();
@@ -161,12 +161,12 @@ public class RecyclerBoardAdapter extends RecyclerView.Adapter {
      * @param bean
      * @return
      */
-    private boolean checkInfoContext(FollowingBoardItemBean bean) {
+    private boolean checkInfoContext(BoardPinsBean bean) {
 
         return true;
     }
 
-    private void onBindListener(ViewHolderBoard holder, final FollowingBoardItemBean bean) {
+    private void onBindListener(ViewHolderBoard holder, final BoardPinsBean bean) {
 
         holder.frameLayout_image.setOnClickListener(new OnClickListener() {
             @Override

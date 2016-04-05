@@ -2,18 +2,18 @@ package licola.demo.com.huabandemo.API;
 
 import java.util.List;
 
-import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
-import licola.demo.com.huabandemo.My.FollowingBoardListBean;
-import licola.demo.com.huabandemo.My.FollowingPinsBean;
 import licola.demo.com.huabandemo.Bean.ListPinsBean;
-import licola.demo.com.huabandemo.ImageDetail.PinsDetailBean;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
-import licola.demo.com.huabandemo.SearchResult.SearchBoardBean;
-import licola.demo.com.huabandemo.Search.SearchHintBean;
-import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
-import licola.demo.com.huabandemo.SearchResult.SearchPeopleBean;
+import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
+import licola.demo.com.huabandemo.ImageDetail.PinsDetailBean;
 import licola.demo.com.huabandemo.Login.TokenBean;
 import licola.demo.com.huabandemo.Login.UserMeBean;
+import licola.demo.com.huabandemo.My.FollowingBoardListBean;
+import licola.demo.com.huabandemo.My.FollowingPinsBean;
+import licola.demo.com.huabandemo.Search.SearchHintBean;
+import licola.demo.com.huabandemo.SearchResult.SearchBoardListBean;
+import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
+import licola.demo.com.huabandemo.SearchResult.SearchPeopleBean;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
@@ -52,7 +52,7 @@ public interface HttpAPIRx {
     //http://api.huaban.com/search/boards/?q=%E7%BE%8E%E9%A3%9F&page=1&per_page=1
     //画板搜索
     @GET("search/boards/")
-    Observable<SearchBoardBean> httpBoardSearchRx(@Query("q") String key, @Query("page") int page, @Query("per_page") int per_page);
+    Observable<SearchBoardListBean> httpBoardSearchRx(@Query("q") String key, @Query("page") int page, @Query("per_page") int per_page);
 
     //http://api.huaban.com/search/people/?q=%E7%BE%8E%E9%A3%9F&page=1&per_page=2
     //用户搜索

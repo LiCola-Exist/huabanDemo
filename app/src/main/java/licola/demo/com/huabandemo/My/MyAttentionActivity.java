@@ -20,6 +20,7 @@ import butterknife.BindString;
 import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
+import licola.demo.com.huabandemo.Bean.BoardPinsBean;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
@@ -29,7 +30,7 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
 
 public class MyAttentionActivity extends BaseActivity
-        implements OnPinsFragmentInteractionListener, OnBoardFragmentInteractionListener<FollowingBoardItemBean> {
+        implements OnPinsFragmentInteractionListener, OnBoardFragmentInteractionListener<BoardPinsBean> {
 
     static final int mTabCount = 2;
 
@@ -145,13 +146,13 @@ public class MyAttentionActivity extends BaseActivity
     }
 
     @Override
-    public void onClickItemImage(FollowingBoardItemBean bean, View view) {
+    public void onClickItemImage(BoardPinsBean bean, View view) {
         String boardId = String.valueOf(bean.getBoard_id());
         BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }
 
     @Override
-    public void onClickItemText(FollowingBoardItemBean bean, View view) {
+    public void onClickItemText(BoardPinsBean bean, View view) {
         String boardId = String.valueOf(bean.getBoard_id());
         BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }

@@ -18,6 +18,7 @@ import licola.demo.com.huabandemo.View.LoadingFooter;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -72,6 +73,12 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
         getMyFollowingPins(mTokenType,mTokenAccess,mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Func1<FollowingPinsBean, Boolean>() {
+                    @Override
+                    public Boolean call(FollowingPinsBean followingPinsBean) {
+                        return followingPinsBean.getPins().size()>0;
+                    }
+                })
                 .subscribe(new Subscriber<FollowingPinsBean>() {
                     @Override
                     public void onCompleted() {

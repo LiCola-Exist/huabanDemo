@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.My;
+package licola.demo.com.huabandemo.Bean;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import licola.demo.com.huabandemo.Bean.PinsSimpleBean;
 /**
  * Created by LiCola on  2016/04/04  19:47
  */
-public class FollowingBoardItemBean {
+public class BoardPinsBean {
 
     /**
      * board_id : 3210286

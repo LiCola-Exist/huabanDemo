@@ -216,6 +216,24 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
                         return listPinsBean.getPins();
                     }
                 })
+                .filter(new Func1<List<PinsAndUserEntity>, Boolean>() {
+                    @Override
+                    public Boolean call(List<PinsAndUserEntity> pinsAndUserEntities) {
+                        if (pinsAndUserEntities==null||pinsAndUserEntities.size()==0){
+                            //返回 为空 过滤 已经没有往下传递的必要
+                            mFooterView.setState(LoadingFooter.State.TheEnd);
+                            isScorllLisener=false;
+                            return false;
+                        }
+                        if (pinsAndUserEntities.size()<mLimit){
+                            //说明返回结果已经小于 请求参数
+                            mFooterView.setState(LoadingFooter.State.TheEnd);
+                            isScorllLisener=false;
+                            return true;
+                        }
+                        return true;
+                    }
+                })
                 .subscribe(new Subscriber<List<PinsAndUserEntity>>() {
                     @Override
                     public void onCompleted() {
@@ -230,6 +248,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsEntities) {
+                        Logger.d();
                         mMaxId = getMaxId(pinsEntities);
                         mAdapter.addList(pinsEntities);
                     }

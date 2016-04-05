@@ -19,8 +19,11 @@ import java.util.HashSet;
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindString;
+import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
+import licola.demo.com.huabandemo.Bean.BoardPinsBean;
+import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
@@ -30,7 +33,7 @@ import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 
 
 public class SearchResultActivity extends BaseActivity implements
-        OnPinsFragmentInteractionListener {
+        OnPinsFragmentInteractionListener ,OnBoardFragmentInteractionListener<BoardPinsBean>{
 
     private static final String SEARCHKEY = "KEY";
     private String key;//搜索的关键字
@@ -151,6 +154,18 @@ public class SearchResultActivity extends BaseActivity implements
         ImageDetailActivity.launch(this);
     }
 
+    @Override
+    public void onClickItemImage(BoardPinsBean bean, View view) {
+        String boardId = String.valueOf(bean.getBoard_id());
+        BoardDetailActivity.launch(this, boardId, bean.getTitle());
+    }
+
+    @Override
+    public void onClickItemText(BoardPinsBean bean, View view) {
+        String boardId = String.valueOf(bean.getBoard_id());
+        BoardDetailActivity.launch(this, boardId, bean.getTitle());
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -168,6 +183,8 @@ public class SearchResultActivity extends BaseActivity implements
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
                 return ResultImageFragment.newInstance(key);
+            }else if (position==1){
+                return ResultBoardFragment.newInstance(key);
             }
             return ResultImageFragment.newInstance(key);
         }

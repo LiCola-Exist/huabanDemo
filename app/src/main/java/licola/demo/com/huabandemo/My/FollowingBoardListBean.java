@@ -2,6 +2,8 @@ package licola.demo.com.huabandemo.My;
 
 import java.util.List;
 
+import licola.demo.com.huabandemo.Bean.BoardPinsBean;
+
 /**
  * Created by LiCola on  2016/04/04  19:53
  */
@@ -25,13 +27,13 @@ public class FollowingBoardListBean {
 
     private UserInfoBean user_info;
 
-    private List<FollowingBoardItemBean> boards;
+    private List<BoardPinsBean> boards;
 
-    public void setBoards(List<FollowingBoardItemBean> pins) {
+    public void setBoards(List<BoardPinsBean> pins) {
         this.boards = pins;
     }
 
-    public List<FollowingBoardItemBean> getBoards() {
+    public List<BoardPinsBean> getBoards() {
         return boards;
     }
 

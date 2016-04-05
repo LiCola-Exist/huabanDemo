@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.My;
+package licola.demo.com.huabandemo.SearchResult;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,44 +20,39 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by LiCola on  2016/04/04  21:39
+ * Created by LiCola on  2016/04/05  17:05
  */
-public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardAdapter> {
-    private static final String TAG = "MyAttentionBoardFragment";
-
+public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardAdapter> {
+    private static final String TAG = "ResultBoardFragment";
+    
     private int mIndex = 1;//联网的起始页 默认1
-    private String mTokenType;
-    private String mTokenAccess;
-
+    
     //能显示三种状态的 footView
     LoadingFooter mFooterView;
 
     private OnBoardFragmentInteractionListener<BoardPinsBean> mListener;
 
-    @Override
-    protected String getTAG() {
-        return this.toString();
-    }
-
-    public static MyAttentionBoardFragment newInstance() {
-        MyAttentionBoardFragment fragment = new MyAttentionBoardFragment();
+    //只需要一个Key作为关键字联网
+    public static ResultBoardFragment newInstance(String key) {
+        ResultBoardFragment fragment = new ResultBoardFragment();
+        Bundle args = new Bundle();
+        args.putString(TYPE_KEY, key);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.mTokenType = ((MyAttentionActivity) getActivity()).mTokenType;
-        this.mTokenAccess = ((MyAttentionActivity) getActivity()).mTokenAccess;
+    protected String getTAG() {
+        return this.toString();
     }
-
+    
     @Override
     protected void getHttpFirst() {
-        getMyFollowingBoard(mTokenType, mTokenAccess, mIndex, mLimit)
-                .map(new Func1<FollowingBoardListBean, List<BoardPinsBean>>() {
+        getBoard(mKey,mIndex,mLimit)
+                .map(new Func1<SearchBoardListBean, List<BoardPinsBean>>() {
                     @Override
-                    public List<BoardPinsBean> call(FollowingBoardListBean followingBoardListBean) {
-                        return followingBoardListBean.getBoards();
+                    public List<BoardPinsBean> call(SearchBoardListBean searchBoardListBean) {
+                        return searchBoardListBean.getBoards();
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -75,8 +70,9 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
                     }
 
                     @Override
-                    public void onNext(List<BoardPinsBean> followingBoardItemBeen) {
-                        mAdapter.addList(followingBoardItemBeen);
+                    public void onNext(List<BoardPinsBean> boardPinsBeen) {
+                        Logger.d();
+                        mAdapter.addList(boardPinsBeen);
                         mIndex++;
                     }
                 });
@@ -88,18 +84,26 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnBoardFragmentInteractionListener) {
+            mListener= (OnBoardFragmentInteractionListener<BoardPinsBean>) context;
+        }else {
+            throwRuntimeException(context);
+        }
+    }
+
+    @Override
     protected void initListener() {
         super.initListener();
         mAdapter.setOnClickItemListener(new RecyclerBoardAdapter.onAdapterListener() {
             @Override
             public void onClickImage(BoardPinsBean bean, View view) {
-                Logger.d();
                 mListener.onClickItemImage(bean,view);
             }
 
             @Override
             public void onClickTextInfo(BoardPinsBean bean, View view) {
-                Logger.d();
                 mListener.onClickItemText(bean,view);
             }
         });
@@ -107,8 +111,8 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
 
     @Override
     protected View setFootView() {
-        if (mFooterView==null){
-            mFooterView=new LoadingFooter(getContext());
+        if (mFooterView == null) {
+            mFooterView = new LoadingFooter(getContext());
         }
         mFooterView.setState(LoadingFooter.State.Loading);
         return mFooterView;
@@ -129,18 +133,8 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
         return new RecyclerBoardAdapter(mRecyclerView);
     }
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnBoardFragmentInteractionListener){
-            mListener= (OnBoardFragmentInteractionListener<BoardPinsBean>) context;
-        }else {
-            throwRuntimeException(context);
-        }
+    public Observable<SearchBoardListBean> getBoard(String key,int index,int limit){
+        return RetrofitHttpsPinsRx.service.httpBoardSearchRx(key,index,limit);
     }
-
-    public Observable<FollowingBoardListBean> getMyFollowingBoard(String bearer, String key, int index, int limit) {
-        return RetrofitHttpsPinsRx.service.httpsMyFollowingBoardRx(bearer + " " + key, index, limit);
-    }
+    
 }
