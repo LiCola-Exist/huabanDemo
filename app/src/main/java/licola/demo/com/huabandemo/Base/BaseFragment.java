@@ -19,6 +19,8 @@ import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 
 /**
@@ -42,6 +44,26 @@ public abstract class BaseFragment extends Fragment {
     protected abstract String getTAG();
 
     protected View mRootView;
+
+
+    private CompositeSubscription mCompositeSubscription;
+
+    public CompositeSubscription getCompositeSubscription() {
+        if (this.mCompositeSubscription == null) {
+            this.mCompositeSubscription = new CompositeSubscription();
+        }
+
+        return this.mCompositeSubscription;
+    }
+
+    public void addSubscription(Subscription s) {
+        if (this.mCompositeSubscription == null) {
+            this.mCompositeSubscription = new CompositeSubscription();
+        }
+
+        this.mCompositeSubscription.add(s);
+    }
+
 
     protected abstract int getLayoutId();
 
@@ -119,6 +141,12 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Logger.d(TAG);
+
+        if (this.mCompositeSubscription != null) {
+            this.mCompositeSubscription.unsubscribe();
+        }
+
+        HuaBanApplication.getRefwatcher(getActivity()).watch(this);
     }
 
     @Override

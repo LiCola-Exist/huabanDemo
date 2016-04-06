@@ -17,6 +17,8 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
+import licola.demo.com.huabandemo.Util.Logger;
+
 /**
  * Created by LiCola on  2016/01/16  15:26
  * 用Fresco加载图片的类
@@ -45,8 +47,8 @@ public class ImageLoadFresco {
         this.mContext = frescoBuilder.mContext;
         this.mSimpleDraweeView = frescoBuilder.mSimpleDraweeView;
 
-        //初始化M层 用于配置各种显示资源
-        GenericDraweeHierarchyBuilder builderM = new GenericDraweeHierarchyBuilder(mContext.getResources());
+        GenericDraweeHierarchyBuilder builderM;
+        builderM = new GenericDraweeHierarchyBuilder(mContext.getResources());
 
         //设置图片的缩放形式
         builderM.setActualImageScaleType(frescoBuilder.mActualImageScaleType);

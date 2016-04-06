@@ -30,6 +30,7 @@ import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -337,7 +338,7 @@ public class ModuleFragment extends BaseFragment {
         super.onDestroy();
         mAdapter = null;
 
-        HuaBanApplication.getInstance().getRefwatcher().watch(this);
+
 //        EventBus.getDefault().unregister(this);
     }
 }

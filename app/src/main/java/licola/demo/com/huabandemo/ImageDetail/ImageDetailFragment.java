@@ -33,6 +33,7 @@ import licola.demo.com.huabandemo.HttpUtils.RetrofitPinsRx;
 import licola.demo.com.huabandemo.View.LoadingFooter;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -40,7 +41,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/03/26  19:05
  */
-public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter,List<PinsAndUserEntity>> {
+public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter, List<PinsAndUserEntity>> {
     private static final String TAG = "ImageDetailFragment";
     protected int mIndex = 1;//默认值为1
 
@@ -122,7 +123,6 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
 
-
     @Override
     protected void initListener() {
         super.initListener();
@@ -167,7 +167,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
                 //打开选择浏览器 再浏览界面
                 Uri uri = Uri.parse(link);
                 Intent it = new Intent(Intent.ACTION_VIEW, uri);
-                if (it.resolveActivity(getActivity().getPackageManager())!=null){
+                if (it.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(it);
                 }
             }
@@ -191,7 +191,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
             @Override
             public void onClick(View v) {
                 Logger.d();
-                mListener.onClickUserField(mUserId,mUserName);
+                mListener.onClickUserField(mUserId, mUserName);
             }
         });
 
@@ -200,7 +200,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
             public void onClick(View v) {
                 Logger.d();
 //                BoardDetailActivity.launch(getActivity(), mBoardId, mBoardName);
-                mListener.onClickBoardField(mBoardId,mBoardName);
+                mListener.onClickBoardField(mBoardId, mBoardName);
             }
         });
     }
@@ -238,6 +238,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     @Override
     protected void getHttpOther() {
+
         getPinsDetail(mKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -261,6 +262,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
                         setImageInfo(pinsDetailBean);
                     }
                 });
+
     }
 
     @Override
@@ -364,10 +366,16 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     //图像的用户信息 填充
     private void setImageUserInfo(String url_head, String username, int created_time) {
-        //用户名头像加载
-        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_user, url_head)
-                .setIsCircle(true)
-                .build();
+        if (url_head!=null){
+            if (!url_head.contains(mHttpRoot)) {
+                url_head = String.format(mFormatUrlSmall, url_head);
+            }
+            //用户名头像加载
+            new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_user, url_head)
+                    .setIsCircle(true)
+                    .build();
+        }
+
         //用户名
         tv_image_user.setText(username);
         //创建时间
@@ -417,11 +425,15 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
         //用户信息
         String url = bean.getUser().getAvatar();
-        //如果是花瓣本地服务器的图片 不包含只有图片的key 加载时需要添加http头
-        //否则 可以直接使用
-        if (!url.contains(mHttpRoot)) {
-            url = String.format(mFormatUrlSmall, url);
-        }
+//        if (url!=null){
+//            //如果是花瓣本地服务器的图片 不包含只有图片的key 加载时需要添加http头
+//            //否则 可以直接使用
+//            if (!url.contains(mHttpRoot)) {
+//                url = String.format(mFormatUrlSmall, url);
+//            }
+//        }
+
+
         setImageUserInfo(url,
                 bean.getUser().getUsername(),
                 bean.getCreated_at()
@@ -457,11 +469,11 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
         //用户信息
         String url = bean.getUser().getAvatar();
-        //如果是花瓣本地服务器的图片 不包含只有图片的key 加载时需要添加http头
-        //否则 可以直接使用
-        if (!url.contains(mHttpRoot)) {
-            url = String.format(mFormatUrlSmall, url);
-        }
+//        //如果是花瓣本地服务器的图片 不包含只有图片的key 加载时需要添加http头
+//        //否则 可以直接使用
+//        if (!url.contains(mHttpRoot)) {
+//            url = String.format(mFormatUrlSmall, url);
+//        }
         setImageUserInfo(url,
                 bean.getUser().getUsername(),
                 bean.getCreated_at()
@@ -484,6 +496,5 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        HuaBanApplication.getInstance().getRefwatcher().watch(this);
     }
 }

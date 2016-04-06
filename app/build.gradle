@@ -7,6 +7,7 @@ android {
         applicationId "licola.demo.com.huabandemo"
         minSdkVersion 16
         targetSdkVersion 21
+
         versionCode 1
         versionName "1.0"
     }
@@ -47,10 +48,12 @@ dependencies {
     compile 'de.greenrobot:eventbus:3.0.0-beta1'
     compile 'com.squareup.okhttp:okhttp:2.7.0'
     compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'io.reactivex:rxjava:1.1.1'
-    compile 'io.reactivex:rxandroid:1.1.0'
     compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-support-v4:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
+    compile 'io.reactivex:rxjava:1.1.2'
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'com.trello:rxlifecycle:0.5.0'
+    compile 'com.trello:rxlifecycle-components:0.5.0'
 }

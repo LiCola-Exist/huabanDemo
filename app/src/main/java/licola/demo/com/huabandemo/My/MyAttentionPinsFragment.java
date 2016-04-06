@@ -128,7 +128,7 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
 
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsAndUserEntities) {
-                        mAdapter.setList(pinsAndUserEntities);
+                        mAdapter.addList(pinsAndUserEntities);
                         mMaxId=getMaxId(pinsAndUserEntities);
                     }
                 });

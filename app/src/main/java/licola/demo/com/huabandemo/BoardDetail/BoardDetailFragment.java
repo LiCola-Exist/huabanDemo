@@ -298,6 +298,5 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        HuaBanApplication.getInstance().getRefwatcher().watch(this);
     }
 }

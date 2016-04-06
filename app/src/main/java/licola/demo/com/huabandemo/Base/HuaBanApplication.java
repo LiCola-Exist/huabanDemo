@@ -1,6 +1,7 @@
 package licola.demo.com.huabandemo.Base;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.squareup.leakcanary.LeakCanary;
@@ -37,8 +38,9 @@ public class HuaBanApplication extends Application {
      *  使用 refWatcher.watch(object);
      * @return 全局的refWatcher
      */
-   public RefWatcher getRefwatcher(){
-       return refWatcher;
+   public static RefWatcher getRefwatcher(Context context){
+       HuaBanApplication huaBanApplication= (HuaBanApplication) context.getApplicationContext();
+       return huaBanApplication.refWatcher;
    }
 
 }

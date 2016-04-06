@@ -9,20 +9,23 @@ import java.util.List;
 import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerBoardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
+import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.Bean.BoardPinsBean;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsPinsRx;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.View.LoadingFooter;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
  * Created by LiCola on  2016/04/04  21:39
  */
-public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardAdapter,List<BoardPinsBean>> {
+public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardAdapter, List<BoardPinsBean>> {
     private static final String TAG = "MyAttentionBoardFragment";
 
     private int mIndex = 1;//联网的起始页 默认1
@@ -50,11 +53,18 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
 
     @Override
     protected void getHttpFirst() {
-        getMyFollowingBoard(mTokenType, mTokenAccess, mIndex, mLimit)
+
+        Subscription s = getMyFollowingBoard(mTokenType, mTokenAccess, mIndex, mLimit)
                 .map(new Func1<FollowingBoardListBean, List<BoardPinsBean>>() {
                     @Override
                     public List<BoardPinsBean> call(FollowingBoardListBean followingBoardListBean) {
                         return followingBoardListBean.getBoards();
+                    }
+                })
+                .doOnUnsubscribe(new Action0() {
+                    @Override
+                    public void call() {
+                        Logger.d("Unsubscribe");
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -74,10 +84,12 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
 
                     @Override
                     public void onNext(List<BoardPinsBean> followingBoardItemBeen) {
+                        Logger.d();
                         mAdapter.addList(followingBoardItemBeen);
                         mIndex++;
                     }
                 });
+        addSubscription(s);
     }
 
     @Override
@@ -92,17 +104,16 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
             @Override
             public void onClickImage(BoardPinsBean bean, View view) {
                 Logger.d();
-                mListener.onClickItemImage(bean,view);
+                mListener.onClickItemImage(bean, view);
             }
 
             @Override
             public void onClickTextInfo(BoardPinsBean bean, View view) {
                 Logger.d();
-                mListener.onClickItemText(bean,view);
+                mListener.onClickItemText(bean, view);
             }
         });
     }
-
 
 
     @Override
@@ -124,9 +135,9 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnBoardFragmentInteractionListener){
-            mListener= (OnBoardFragmentInteractionListener<BoardPinsBean>) context;
-        }else {
+        if (context instanceof OnBoardFragmentInteractionListener) {
+            mListener = (OnBoardFragmentInteractionListener<BoardPinsBean>) context;
+        } else {
             throwRuntimeException(context);
         }
     }

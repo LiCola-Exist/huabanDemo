@@ -143,8 +143,8 @@ public abstract class BaseRecyclerHeadFragment
 //        mAdapter = new RecyclerPinsHeadCardAdapter(mRecyclerView);
         mAdapter = setAdapter();
         HeaderAndFooterRecyclerViewAdapter headAdapter = new HeaderAndFooterRecyclerViewAdapter(mAdapter);
-        mRecyclerView.setLayoutManager(getLayoutManager());
         mRecyclerView.setAdapter(headAdapter);
+        mRecyclerView.setLayoutManager(getLayoutManager());
         //绑定能添加头尾View的adapter后 检查View返回 添加
         if (getHeadView() != null) {
             RecyclerViewUtils.addHearView(mRecyclerView, getHeadView());
@@ -180,7 +180,6 @@ public abstract class BaseRecyclerHeadFragment
     public void onDestroy() {
         super.onDestroy();
 
-        HuaBanApplication.getInstance().getRefwatcher().watch(this);
 //        EventBus.getDefault().unregister(this);
     }
 }

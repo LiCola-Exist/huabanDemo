@@ -134,21 +134,24 @@ public class RecyclerPeopleAdapter extends RecyclerView.Adapter {
 
         //用户信息
         String url = bean.getAvatar();
-//        if (url==null){
-//            Logger.d("url null");
-//        }else {
-//            Logger.d(url);
-//        }
+        //非空检查
+        if (url != null) {
+            //如果是花瓣本地服务器的图片 不包含只有图片的key 加载时需要添加http头
+            //否则 可以直接使用
+            if (!url.contains(mHttpRoot)) {
+                url = String.format(mUrlFormat, url);
+            }
+            new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_image_user, url)
+                    .setIsCircle(true)
+                    .build();
+        }else {
+            //// TODO: 2016/4/6 0006 对于同一个View，请不要多次调用setHierarchy，即使这个View是可回收的。创建 DraweeHierarchy 的较为耗时的一个过程，应该多次利用。
 
-        //如果是花瓣本地服务器的图片 不包含只有图片的key 加载时需要添加http头
-        //否则 可以直接使用
-        if (!url.contains(mHttpRoot)) {
-            url = String.format(mUrlFormat, url);
+            holder.img_image_user.setImageURI(null);
+            holder.img_image_user.getHierarchy().setPlaceholderImage(R.drawable.ic_account_circle_gray_48dp);
         }
 
-        new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_image_user, url)
-                .setIsCircle(true)
-                .build();
+
     }
 
     /**
