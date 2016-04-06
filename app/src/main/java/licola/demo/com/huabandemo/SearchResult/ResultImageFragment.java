@@ -16,6 +16,7 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.View.LoadingFooter;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -23,7 +24,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/04/05  16:48
  */
-public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter,List<PinsAndUserEntity>> {
+public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter, List<PinsAndUserEntity>> {
     private static final String TAG = "ResultImageFragment";
 
     private int mIndex = 1;//联网的起始页 默认1
@@ -46,8 +47,8 @@ public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     @Override
-    protected void getHttpFirst() {
-        getSearchImage(mKey,mIndex,mLimit)
+    protected Subscription getHttpFirst() {
+        return getSearchImage(mKey, mIndex, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<SearchImageBean, List<PinsAndUserEntity>>() {
@@ -79,16 +80,16 @@ public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     @Override
-    protected void getHttpScroll() {
-            getHttpFirst();
+    protected Subscription getHttpScroll() {
+        return getHttpFirst();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnPinsFragmentInteractionListener){
-            mListener= (OnPinsFragmentInteractionListener) context;
-        }else {
+        if (context instanceof OnPinsFragmentInteractionListener) {
+            mListener = (OnPinsFragmentInteractionListener) context;
+        } else {
             throwRuntimeException(context);
         }
     }
@@ -100,13 +101,13 @@ public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
             @Override
             public void onClickImage(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);
-                mListener.onClickItemImage(bean,view);
+                mListener.onClickItemImage(bean, view);
             }
 
             @Override
             public void onClickTitleInfo(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);
-                mListener.onClickItemText(bean,view);
+                mListener.onClickItemText(bean, view);
             }
 
             @Override

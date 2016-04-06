@@ -16,6 +16,7 @@ import licola.demo.com.huabandemo.SearchResult.SearchPeopleListBean.UsersBean;
 import licola.demo.com.huabandemo.Util.Logger;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -47,8 +48,8 @@ public class ResultPeopleFragment extends
     }
 
     @Override
-    protected void getHttpFirst() {
-        getPeople(mKey, mIndex, mLimit)
+    protected Subscription getHttpFirst() {
+        return getPeople(mKey, mIndex, mLimit)
                 .map(new Func1<SearchPeopleListBean, List<UsersBean>>() {
                     @Override
                     public List<UsersBean> call(SearchPeopleListBean searchPeopleListBean) {
@@ -80,16 +81,17 @@ public class ResultPeopleFragment extends
     }
 
     @Override
-    protected void getHttpScroll() {
-        getHttpFirst();
+    protected Subscription getHttpScroll() {
+
+        return getHttpFirst();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnPeopleFragmentInteraction) {
-            mListener= (OnPeopleFragmentInteraction<UsersBean>) context;
-        }else {
+            mListener = (OnPeopleFragmentInteraction<UsersBean>) context;
+        } else {
             throwRuntimeException(context);
         }
     }

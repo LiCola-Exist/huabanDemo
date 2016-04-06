@@ -237,9 +237,8 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     @Override
-    protected void getHttpOther() {
-
-        getPinsDetail(mKey)
+    protected Subscription getHttpOther() {
+        return getPinsDetail(mKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<PinsDetailBean>() {
@@ -266,9 +265,9 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     @Override
-    protected void getHttpFirst() {
+    protected Subscription getHttpFirst() {
 
-        getRecommend(mKey, mIndex, mLimit)
+        return getRecommend(mKey, mIndex, mLimit)
                 .filter(new Func1<List<PinsAndUserEntity>, Boolean>() {
                     @Override
                     public Boolean call(List<PinsAndUserEntity> pinsEntities) {
@@ -298,8 +297,8 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     @Override
-    protected void getHttpScroll() {
-        getHttpFirst();
+    protected Subscription getHttpScroll() {
+        return getHttpFirst();
     }
 
 
@@ -366,7 +365,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     //图像的用户信息 填充
     private void setImageUserInfo(String url_head, String username, int created_time) {
-        if (url_head!=null){
+        if (url_head != null) {
             if (!url_head.contains(mHttpRoot)) {
                 url_head = String.format(mFormatUrlSmall, url_head);
             }

@@ -17,6 +17,7 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.View.LoadingFooter;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -67,8 +68,8 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
     }
 
     @Override
-    protected void getHttpFirst() {
-        getMyFollowingPins(mTokenType,mTokenAccess,mLimit)
+    protected Subscription getHttpFirst() {
+        return getMyFollowingPins(mTokenType,mTokenAccess,mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<FollowingPinsBean, List<PinsAndUserEntity>>() {
@@ -103,8 +104,8 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
     }
 
     @Override
-    protected void getHttpScroll() {
-        getMyFollowingPinsMax(mTokenType,mTokenAccess,mMaxId,mLimit)
+    protected Subscription getHttpScroll() {
+        return getMyFollowingPinsMax(mTokenType,mTokenAccess,mMaxId,mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<FollowingPinsBean, List<PinsAndUserEntity>>() {

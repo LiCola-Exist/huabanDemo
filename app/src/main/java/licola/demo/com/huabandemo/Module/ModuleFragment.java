@@ -29,6 +29,7 @@ import licola.demo.com.huabandemo.View.recyclerview.HeaderAndFooterRecyclerViewA
 import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Func1;
@@ -97,7 +98,7 @@ public class ModuleFragment extends BaseFragment {
         mSwipeRefresh.setColorSchemeResources(R.color.pink_300, R.color.pink_500, R.color.pink_700, R.color.pink_900);
         initRecyclerView();
         initListener();
-        getHttpFirstAndRefresh(type, limit);//默认的联网，区分于滑动的联网加载
+        getHttpFirstAndRefresh();//默认的联网，区分于滑动的联网加载
     }
 
 
@@ -129,7 +130,7 @@ public class ModuleFragment extends BaseFragment {
 //                    Logger.d("滑动停止 position=" + mAdapter.getAdapterPosition());
                     int size = (int) (mAdapter.getItemCount() * percentageScroll);
                     if (mAdapter.getAdapterPosition() >= --size) {
-                        getHttpMaxId(type, mMaxId, limit);
+                        getHttpMaxId(mMaxId);
                     }
                 } else if (RecyclerView.SCROLL_STATE_DRAGGING == newState) {
                     //用户正在滑动
@@ -146,14 +147,9 @@ public class ModuleFragment extends BaseFragment {
     /**
      * 根据max值联网 在滑动时调用 继续加载后续内容
      *
-     * @param type
-     * @param max
-     * @param limit
      */
-    private void getHttpMaxId(String type, int max, final int limit) {
-
-        Observable<ListPinsBean> observable = RetrofitPinsRx.service.httpTypeMaxLimitRx(type, max, limit);
-        observable
+    private void getHttpMaxId(int max) {
+         Subscription s= getPinsMax(type,max,limit)
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
                     @Override
                     public List<PinsAndUserEntity> call(ListPinsBean listPinsBean) {
@@ -189,19 +185,23 @@ public class ModuleFragment extends BaseFragment {
                         mAdapter.addList(pinsEntities);
                     }
                 });
+        addSubscription(s);
+    }
+
+    private Observable<ListPinsBean> getPins(String type,int limit){
+        return RetrofitPinsRx.service.httpTypeLimitRx(type, limit);
+    }
+
+    private Observable<ListPinsBean> getPinsMax(String type,int max,int limit){
+        return RetrofitPinsRx.service.httpTypeMaxLimitRx(type, max, limit);
     }
 
     /**
      * 联网得到内容 每次都会清空之前内容
      *
-     * @param type
-     * @param limit
      */
-    private void getHttpFirstAndRefresh(final String type, int limit) {
-        Logger.d();
-
-        Observable<ListPinsBean> cardBigBeanObservable = RetrofitPinsRx.service.httpTypeLimitRx(type, limit);
-        cardBigBeanObservable
+    private void getHttpFirstAndRefresh() {
+        Subscription s= getPins(type,limit)
                 .filter(new Func1<ListPinsBean, Boolean>() {
                     @Override
                     public Boolean call(ListPinsBean Bean) {
@@ -250,6 +250,8 @@ public class ModuleFragment extends BaseFragment {
                     }
                 });
 
+        addSubscription(s);
+
     }
 
     /**
@@ -293,7 +295,7 @@ public class ModuleFragment extends BaseFragment {
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getHttpFirstAndRefresh(type, limit);
+                getHttpFirstAndRefresh();
             }
         });
 
@@ -337,7 +339,6 @@ public class ModuleFragment extends BaseFragment {
     public void onDestroy() {
         super.onDestroy();
         mAdapter = null;
-
 
 //        EventBus.getDefault().unregister(this);
     }

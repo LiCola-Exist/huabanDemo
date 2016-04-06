@@ -2,6 +2,7 @@ package licola.demo.com.huabandemo.Main;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -32,6 +33,7 @@ import licola.demo.com.huabandemo.Login.LoginActivity;
 import licola.demo.com.huabandemo.My.MyAttentionActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Search.SearchActivity;
+import licola.demo.com.huabandemo.Setting.SettingsActivity;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
@@ -279,6 +281,9 @@ public class MainActivity extends BaseActivity
         if (item.getGroupId()==R.id.menu_group_type){
             selectFragment(item.getItemId());
         }else {
+            if (item.getItemId()==R.id.nav_set){
+                SettingsActivity.launch(this);
+            }
             //// TODO: 2016/3/24 0024 处理 设置 关于 界面
             Logger.d(item.getTitle().toString());
         }

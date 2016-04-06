@@ -15,6 +15,7 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.View.LoadingFooter;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -45,8 +46,8 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
     }
     
     @Override
-    protected void getHttpFirst() {
-        getBoard(mKey,mIndex,mLimit)
+    protected Subscription getHttpFirst() {
+        return getBoard(mKey,mIndex,mLimit)
                 .map(new Func1<SearchBoardListBean, List<BoardPinsBean>>() {
                     @Override
                     public List<BoardPinsBean> call(SearchBoardListBean searchBoardListBean) {
@@ -78,8 +79,8 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
     }
 
     @Override
-    protected void getHttpScroll() {
-        getHttpFirst();
+    protected Subscription getHttpScroll() {
+        return getHttpFirst();
     }
 
     @Override

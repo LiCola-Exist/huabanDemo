@@ -16,6 +16,7 @@ import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.View.LoadingFooter;
 import licola.demo.com.huabandemo.View.recyclerview.HeaderAndFooterRecyclerViewAdapter;
 import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
+import rx.Subscription;
 import rx.functions.Func1;
 
 /**
@@ -98,18 +99,18 @@ public abstract class BaseRecyclerHeadFragment
         super.onActivityCreated(savedInstanceState);
         initRecyclerView();
         initListener();
-        getHttpOther();
-        getHttpFirst();
+        addSubscription(getHttpOther());
+        addSubscription(getHttpFirst());
     }
 
     //界面初始化的其他联网 可以不重写
-    protected void getHttpOther() {
-
+    protected Subscription getHttpOther() {
+        return null;
     }
 
-    protected abstract void getHttpFirst();//界面初始化的联网 由子类重写
+    protected abstract Subscription getHttpFirst();//界面初始化的联网 由子类重写
 
-    protected abstract void getHttpScroll();//滑动产生的联网 由子类重写
+    protected abstract Subscription getHttpScroll();//滑动产生的联网 由子类重写
 
     protected View getFootView() {
         if (mFooterView == null) {
@@ -162,7 +163,7 @@ public abstract class BaseRecyclerHeadFragment
 //                    Logger.d("滑动停止 position=" + mAdapter.getAdapterPosition());
                     int size = (int) (mAdapter.getItemCount() * percentageScroll);
                     if (getAdapterPosition() >= --size && isScorllLisener) {
-                        getHttpScroll();
+                        addSubscription(getHttpScroll());
                     }
                 } else if (RecyclerView.SCROLL_STATE_DRAGGING == newState) {
                     //用户正在滑动
@@ -179,7 +180,6 @@ public abstract class BaseRecyclerHeadFragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-
 //        EventBus.getDefault().unregister(this);
     }
 }

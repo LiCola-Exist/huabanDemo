@@ -57,6 +57,10 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void addSubscription(Subscription s) {
+        if (s==null){
+            return;
+        }
+
         if (this.mCompositeSubscription == null) {
             this.mCompositeSubscription = new CompositeSubscription();
         }
@@ -143,6 +147,7 @@ public abstract class BaseFragment extends Fragment {
         Logger.d(TAG);
 
         if (this.mCompositeSubscription != null) {
+
             this.mCompositeSubscription.unsubscribe();
         }
 

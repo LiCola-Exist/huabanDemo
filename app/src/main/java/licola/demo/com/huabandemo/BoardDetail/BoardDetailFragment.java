@@ -29,6 +29,7 @@ import licola.demo.com.huabandemo.HttpUtils.RetrofitGsonRx;
 import licola.demo.com.huabandemo.View.LoadingFooter;
 import rx.Observable;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
@@ -36,7 +37,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/03/29  18:12
  */
-public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter,List<PinsAndUserEntity>> {
+public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter, List<PinsAndUserEntity>> {
 
     private int mMaxId;
 
@@ -113,8 +114,8 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     @Override
-    protected void getHttpOther() {
-        getBoardDetail(mKey)
+    protected Subscription getHttpOther() {
+        return getBoardDetail(mKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<BoardDetailBean>() {
@@ -169,8 +170,8 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     @Override
-    protected void getHttpFirst() {
-        getBoardPins(mKey, mLimit)
+    protected Subscription getHttpFirst() {
+        return getBoardPins(mKey, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
@@ -204,10 +205,9 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
 
-
     @Override
-    protected void getHttpScroll() {
-        getBoardPinsMax(mKey, mMaxId, mLimit)
+    protected Subscription getHttpScroll() {
+        return getBoardPinsMax(mKey, mMaxId, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {

@@ -46,7 +46,7 @@
         <activity
             android:name=".BoardDetail.BoardDetailActivity"
             android:label="@string/title_activity_board_detail"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SearchResult.SearchResultActivity"
             android:label="@string/title_activity_search_result"
@@ -86,6 +86,14 @@
             android:label="@string/title_activity_my_following"
             android:parentActivityName=".Main.MainActivity"
             android:theme="@style/AppTheme.ActionBar_StatusBarDark">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="licola.demo.com.huabandemo.Main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Setting.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".Main.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="licola.demo.com.huabandemo.Main.MainActivity" />
