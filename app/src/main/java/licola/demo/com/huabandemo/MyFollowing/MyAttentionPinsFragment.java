@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.My;
+package licola.demo.com.huabandemo.MyFollowing;
 
 
 import android.content.Context;
@@ -14,7 +14,6 @@ import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsPinsRx;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.View.LoadingFooter;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;

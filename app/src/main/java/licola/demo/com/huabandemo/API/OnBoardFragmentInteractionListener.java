@@ -11,5 +11,5 @@ import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 public interface OnBoardFragmentInteractionListener<T> {
     void onClickItemImage(T bean, View view);
 
-    void onClickItemText(T bean, View view);
+    void onClickItemOperate(T bean, View view);
 }

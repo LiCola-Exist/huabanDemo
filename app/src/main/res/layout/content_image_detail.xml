@@ -8,6 +8,6 @@
     tools:context=".ImageDetail.ImageDetailActivity"
     tools:showIn="@layout/activity_image_detail">
 
-    <include layout="@layout/view_image_detail_info"/>
+    <include layout="@layout/view_image_detail_info_head"/>
 
 </android.support.v4.widget.NestedScrollView>

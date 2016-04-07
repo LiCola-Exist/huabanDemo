@@ -22,15 +22,13 @@ import de.greenrobot.event.EventBus;
 import licola.demo.com.huabandemo.API.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
-import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.TimeUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitPinsRx;
-import licola.demo.com.huabandemo.View.LoadingFooter;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitAvatarRx;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -54,8 +52,6 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     @BindString(R.string.url_image_small)
     String mFormatUrlSmall;
-    @BindString(R.string.image_suffix_small)
-    String mUrlSmallSuffix;
     @BindString(R.string.httpRoot)
     String mHttpRoot;
 
@@ -214,8 +210,8 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     private void setViewDrawable() {
         initTintDrawable(tv_image_gather, R.drawable.ic_explore_black_24dp);
         initTintDrawable(tv_image_like, R.drawable.ic_favorite_black_24dp);
-        initTintDrawable(ibtn_image_user_chevron_right, R.drawable.ic_chevron_right_black_24dp);
-        initTintDrawable(ibtn_image_board_chevron_right, R.drawable.ic_chevron_right_black_24dp);
+        initTintDrawable(ibtn_image_user_chevron_right, R.drawable.ic_chevron_right_black_36dp);
+        initTintDrawable(ibtn_image_board_chevron_right, R.drawable.ic_chevron_right_black_36dp);
         initTintDrawable(tv_image_link, R.drawable.ic_insert_link_black_24dp);
     }
 
@@ -305,7 +301,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     @Override
     protected View getHeadView() {
 
-        View headView = LayoutInflater.from(getContext()).inflate(R.layout.view_image_detail_info, mRecyclerView, false);
+        View headView = LayoutInflater.from(getContext()).inflate(R.layout.view_image_detail_info_head, mRecyclerView, false);
         findHeadView(headView);
 
         return headView;
@@ -485,11 +481,11 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     private Observable<PinsDetailBean> getPinsDetail(String pinsId) {
-        return RetrofitPinsRx.service.httpPinsDetailRx(pinsId);
+        return RetrofitAvatarRx.service.httpPinsDetailRx(pinsId);
     }
 
     private Observable<List<PinsAndUserEntity>> getRecommend(String pinsId, int page, int limit) {
-        return RetrofitPinsRx.service.httpPinsRecommendRx(pinsId, page, limit);
+        return RetrofitAvatarRx.service.httpPinsRecommendRx(pinsId, page, limit);
     }
 
     @Override

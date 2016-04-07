@@ -11,7 +11,7 @@ import java.util.List;
 import licola.demo.com.huabandemo.API.OnPeopleFragmentInteraction;
 import licola.demo.com.huabandemo.Adapter.RecyclerPeopleAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitPinsRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitAvatarRx;
 import licola.demo.com.huabandemo.SearchResult.SearchPeopleListBean.UsersBean;
 import licola.demo.com.huabandemo.Util.Logger;
 import rx.Observable;
@@ -128,6 +128,6 @@ public class ResultPeopleFragment extends
     }
 
     private Observable<SearchPeopleListBean> getPeople(String key, int index, int limit) {
-        return RetrofitPinsRx.service.httpPeopleSearchRx(key, index, limit);
+        return RetrofitAvatarRx.service.httpPeopleSearchRx(key, index, limit);
     }
 }

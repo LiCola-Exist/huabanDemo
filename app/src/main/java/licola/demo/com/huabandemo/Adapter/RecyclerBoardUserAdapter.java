@@ -1,6 +1,6 @@
 package licola.demo.com.huabandemo.Adapter;
 
-import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,45 +11,57 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import licola.demo.com.huabandemo.Base.BaseRecyclerAdapter;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.Bean.BoardPinsBean;
+import licola.demo.com.huabandemo.MyUser.UserBoardItemBean;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
 
 import static android.view.View.OnClickListener;
 
 
 /**
- * Created by LiCola on  2016/04/05  15:00
- * 负责展示 画板信息的 adapter
+ * Created by LiCola on  2016/04/07  17:00
+ * 负责展示 展示用户的画板 adapter 差别在于底部是否有操作功能
+ * 在我的界面是 是编辑 在其他用户是关注
+ * 需要判断是否 isMe 影响底部的显示
  */
-public class RecyclerBoardAdapter extends BaseRecyclerAdapter<BoardPinsBean> {
+public class RecyclerBoardUserAdapter extends BaseRecyclerAdapter<UserBoardItemBean> {
+
+    private boolean isMe;//是否是我的标志位 true是我 否则不是
 
     private onAdapterListener mListener;
 
     private final String mAttentionFormat;//关注数量
     private final String mGatherFormat;//采集数量
-    private final String mUsernameFormat;//采集数量
+    private final String mOperateEdit;//编辑
+    private final String mOperateFollowing;//关注
+    private final String mOperateFollowed;//已关注
 
-
+    private final Drawable mDrawableEdit;
+    private final Drawable mDrawableFollowing;
+    private final Drawable mDrawableFollowed;
+    
     public interface onAdapterListener {
-        void onClickImage(BoardPinsBean bean, View view);
-
-        void onClickTextInfo(BoardPinsBean bean, View view);
-
+        void onClickImage(UserBoardItemBean bean, View view);
+        void onClickOperate(UserBoardItemBean bean, View view);
     }
 
-    public RecyclerBoardAdapter(RecyclerView mRecyclerView) {
+    public RecyclerBoardUserAdapter(RecyclerView mRecyclerView, boolean isMe) {
         super(mRecyclerView);
-        this.mGatherFormat = mContext.getResources().getString(R.string.text_gather_number);
-        this.mAttentionFormat = mContext.getResources().getString(R.string.text_attention_number);
-        this.mUsernameFormat = mContext.getResources().getString(R.string.text_by_username);
+        this.isMe = isMe;
+        Resources resources=mContext.getResources();
+        this.mGatherFormat = resources.getString(R.string.text_gather_number);
+        this.mAttentionFormat =resources.getString(R.string.text_attention_number);
+        this.mOperateEdit =resources.getString(R.string.text_edit);
+        this.mOperateFollowing =resources.getString(R.string.text_following);
+        this.mOperateFollowed =resources.getString(R.string.text_followed);
+        this.mDrawableEdit=resources.getDrawable(R.drawable.ic_mode_edit_black_24dp);
+        this.mDrawableFollowing=resources.getDrawable(R.drawable.ic_add_black_24dp);
+        this.mDrawableFollowed=resources.getDrawable(R.drawable.ic_check_black_24dp);
     }
+
 
 
     public void setOnClickItemListener(onAdapterListener mListener) {
@@ -62,7 +74,7 @@ public class RecyclerBoardAdapter extends BaseRecyclerAdapter<BoardPinsBean> {
         ViewHolderBoard holder = null;//ViewHolder的子类
 
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.cardview_item_board, parent, false);
+                .inflate(R.layout.cardview_item_board_user, parent, false);
         holder = new ViewHolderBoard(view);
 
         //子类可以自动转型为父类
@@ -80,7 +92,7 @@ public class RecyclerBoardAdapter extends BaseRecyclerAdapter<BoardPinsBean> {
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         //Logger.d(life);
-        final BoardPinsBean bean = mList.get(position);
+        final UserBoardItemBean bean = mList.get(position);
 
         //父类强制转换成子类 因为这个holder本来就是子类初始化的 所以可以强转
         ViewHolderBoard viewHolder = (ViewHolderBoard) holder;//强制类型转换 转成内部的ViewHolder
@@ -91,13 +103,39 @@ public class RecyclerBoardAdapter extends BaseRecyclerAdapter<BoardPinsBean> {
     }
 
 
-    private void onBindData(final ViewHolderBoard holder, BoardPinsBean bean) {
+    private void onBindData(final ViewHolderBoard holder, UserBoardItemBean bean) {
         //检查图片信息
+        Logger.d("deleting "+bean.getDeleting());
+        boolean isFollowing=bean.isFollowing();
+        if (isMe){
+            holder.tv_board_operate.setText(mOperateEdit);
+            holder.tv_board_operate.setCompoundDrawablesWithIntrinsicBounds(
+                    mDrawableEdit,
+                    null,
+                    null,
+                    null);
+        }else {
+            if (isFollowing){
+                holder.tv_board_operate.setText(mOperateFollowed);
+                holder.tv_board_operate.setCompoundDrawablesWithIntrinsicBounds(
+                        mDrawableFollowed,
+                        null,
+                        null,
+                        null);
+            }else {
+                holder.tv_board_operate.setText(mOperateFollowing);
+                holder.tv_board_operate.setCompoundDrawablesWithIntrinsicBounds(
+                        mDrawableFollowing,
+                        null,
+                        null,
+                        null);
+            }
+        }
+
         if (checkInfoContext(bean)) {
             holder.tv_board_title.setText(bean.getTitle());
             holder.tv_board_gather.setText(String.format(mGatherFormat, bean.getPin_count()));
             holder.tv_board_attention.setText(String.format(mAttentionFormat, bean.getFollow_count()));
-            holder.tv_board_username.setText(String.format(mUsernameFormat, bean.getUser().getUsername()));
         } else {
             //// TODO: 2016/4/5 0005 空值状态的显示
         }
@@ -114,7 +152,7 @@ public class RecyclerBoardAdapter extends BaseRecyclerAdapter<BoardPinsBean> {
                 .build();
     }
 
-    private String getFirstPinsFileKey(BoardPinsBean bean) {
+    private String getFirstPinsFileKey(UserBoardItemBean bean) {
         int size = bean.getPins().size();
         if (size > 0) {
             return bean.getPins().get(0).getFile().getKey();
@@ -129,12 +167,12 @@ public class RecyclerBoardAdapter extends BaseRecyclerAdapter<BoardPinsBean> {
      * @param bean
      * @return
      */
-    private boolean checkInfoContext(BoardPinsBean bean) {
+    private boolean checkInfoContext(UserBoardItemBean bean) {
 
         return true;
     }
 
-    private void onBindListener(ViewHolderBoard holder, final BoardPinsBean bean) {
+    private void onBindListener(ViewHolderBoard holder, final UserBoardItemBean bean) {
 
         holder.frameLayout_image.setOnClickListener(new OnClickListener() {
             @Override
@@ -143,14 +181,13 @@ public class RecyclerBoardAdapter extends BaseRecyclerAdapter<BoardPinsBean> {
             }
         });
 
-        holder.tv_board_username.setOnClickListener(new OnClickListener() {
+        holder.tv_board_operate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onClickTextInfo(bean, v);
+                mListener.onClickOperate(bean, v);
             }
         });
     }
-
 
     public static class ViewHolderBoard extends RecyclerView.ViewHolder {
         //这个CardView采用两层操作
@@ -163,7 +200,7 @@ public class RecyclerBoardAdapter extends BaseRecyclerAdapter<BoardPinsBean> {
         public final TextView tv_board_gather;
         public final TextView tv_board_attention;
 
-        public final TextView tv_board_username;
+        public final TextView tv_board_operate;
 
         public ViewHolderBoard(View view) {
             super(view);
@@ -174,7 +211,7 @@ public class RecyclerBoardAdapter extends BaseRecyclerAdapter<BoardPinsBean> {
             tv_board_title = (TextView) view.findViewById(R.id.tv_board_title);//描述的title
             tv_board_gather = (TextView) view.findViewById(R.id.tv_board_gather);//描述的title
             tv_board_attention = (TextView) view.findViewById(R.id.tv_board_attention);//描述的title
-            tv_board_username = (TextView) view.findViewById(R.id.tv_board_username);//描述的title
+            tv_board_operate = (TextView) view.findViewById(R.id.tv_board_operate);//相关操作
 
         }
 

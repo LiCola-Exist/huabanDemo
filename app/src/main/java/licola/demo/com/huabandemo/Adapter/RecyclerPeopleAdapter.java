@@ -13,6 +13,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import java.util.ArrayList;
 import java.util.List;
 
+import licola.demo.com.huabandemo.Base.BaseRecyclerAdapter;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -27,51 +28,22 @@ import static licola.demo.com.huabandemo.SearchResult.SearchPeopleListBean.Users
  * Created by LiCola on  2016/03/22  18:00
  * 负责展示  图片CardView 的adapter
  */
-public class RecyclerPeopleAdapter extends RecyclerView.Adapter {
-    private final String life = "Life";
-    private RecyclerView mRecyclerView;
-    private Context mContext;
-    private List<UsersBean> mList = new ArrayList<>(20);
+public class RecyclerPeopleAdapter extends BaseRecyclerAdapter<UsersBean> {
+
     private OnAdapterListener mListener;
-    private final String mUrlFormat;
+
     private final String mFansFormat;
     private final String mHttpRoot;
-    public int mAdapterPosition = 0;
-
-    public List<UsersBean> getmList() {
-        return mList;
-    }
-
-    public void setList(List<UsersBean> mList) {
-        this.mList = mList;
-        notifyDataSetChanged();
-    }
-
-    public void addList(List<UsersBean> mList) {
-        this.mList.addAll(mList);
-        notifyDataSetChanged();
-    }
-
-    public int getAdapterPosition() {
-        return mAdapterPosition;
-    }
-
-    public void setAdapterPosition(int mAdapterPosition) {
-        this.mAdapterPosition = mAdapterPosition;
-    }
 
 
     public interface OnAdapterListener {
         void onClickUser(UsersBean bean, View view);
     }
 
-    public RecyclerPeopleAdapter(RecyclerView recyclerView) {
-        this.mRecyclerView = recyclerView;
-        this.mContext = recyclerView.getContext();
-        this.mUrlFormat = mContext.getResources().getString(R.string.url_image_small);
+    public RecyclerPeopleAdapter(RecyclerView mRecyclerView) {
+        super(mRecyclerView);
         this.mFansFormat = mContext.getResources().getString(R.string.text_fans_number);
         this.mHttpRoot = mContext.getResources().getString(R.string.httpRoot);
-
     }
 
 
@@ -89,7 +61,7 @@ public class RecyclerPeopleAdapter extends RecyclerView.Adapter {
         holder = new ViewHolderGeneral(view);//使用子类初始化ViewHolder
 
         holder.ibtn_image_user_chevron_right.setImageDrawable(
-                Utils.getTintCompatDrawable(mContext, R.drawable.ic_chevron_right_black_24dp, R.color.tint_list_grey));
+                Utils.getTintCompatDrawable(mContext, R.drawable.ic_chevron_right_black_36dp, R.color.tint_list_grey));
 
         //子类可以自动转型为父类
         return holder;
@@ -116,12 +88,6 @@ public class RecyclerPeopleAdapter extends RecyclerView.Adapter {
 
     }
 
-    @Override
-    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
-        //Logger.d(life);
-        mAdapterPosition = RecyclerViewUtils.getAdapterPosition(mRecyclerView, holder);
-    }
 
     private void onBindData(final ViewHolderGeneral holder, UsersBean bean) {
         //检查图片信息
@@ -139,7 +105,7 @@ public class RecyclerPeopleAdapter extends RecyclerView.Adapter {
             //如果是花瓣本地服务器的图片 不包含只有图片的key 加载时需要添加http头
             //否则 可以直接使用
             if (!url.contains(mHttpRoot)) {
-                url = String.format(mUrlFormat, url);
+                url = String.format(mUrlSmallFormat, url);
             }
             new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_image_user, url)
                     .setIsCircle(true)
@@ -173,13 +139,6 @@ public class RecyclerPeopleAdapter extends RecyclerView.Adapter {
         });
 
     }
-
-
-    @Override
-    public int getItemCount() {
-        return mList.size();
-    }
-
 
     public static class ViewHolderGeneral extends RecyclerView.ViewHolder {
         //这个CardView采用两层操作

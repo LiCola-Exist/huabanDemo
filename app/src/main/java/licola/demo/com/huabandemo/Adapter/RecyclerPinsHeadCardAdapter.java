@@ -1,6 +1,5 @@
 package licola.demo.com.huabandemo.Adapter;
 
-import android.content.Context;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
@@ -17,14 +16,11 @@ import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Util.Utils;
+import licola.demo.com.huabandemo.Base.BaseRecyclerAdapter;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
+import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Utils;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -36,37 +32,12 @@ import static android.view.ViewGroup.VISIBLE;
  * Created by LiCola on  2016/03/22  18:00
  * 负责展示  图片CardView 的adapter
  */
-public class RecyclerPinsHeadCardAdapter extends RecyclerView.Adapter {
-    private final String life = "Life";
-    private RecyclerView mRecyclerView;
-    private Context mContext;
+public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUserEntity>{
+
     private boolean mIsShowUser = false;//是否显示用户头像和名字的标志位
-    private List<PinsAndUserEntity> mList = new ArrayList<>(20);
+
     private OnAdapterListener mListener;
-    private final String mUrlFormat;
-    public int mAdapterPosition = 0;
 
-    public List<PinsAndUserEntity> getmList() {
-        return mList;
-    }
-
-    public void setList(List<PinsAndUserEntity> mList) {
-        this.mList = mList;
-        notifyDataSetChanged();
-    }
-
-    public void addList(List<PinsAndUserEntity> mList) {
-        this.mList.addAll(mList);
-        notifyDataSetChanged();
-    }
-
-    public int getAdapterPosition() {
-        return mAdapterPosition;
-    }
-
-    public void setAdapterPosition(int mAdapterPosition) {
-        this.mAdapterPosition = mAdapterPosition;
-    }
 
 
     public interface OnAdapterListener {
@@ -80,11 +51,12 @@ public class RecyclerPinsHeadCardAdapter extends RecyclerView.Adapter {
 
     }
 
-    public RecyclerPinsHeadCardAdapter(RecyclerView recyclerView) {
-        this.mRecyclerView = recyclerView;
-        this.mContext = recyclerView.getContext();
-        this.mUrlFormat = mContext.getResources().getString(R.string.url_image_general);
+    public RecyclerPinsHeadCardAdapter(RecyclerView mRecyclerView) {
+        super(mRecyclerView);
+
     }
+
+
 
     //多一个标志位的 构造函数
     public RecyclerPinsHeadCardAdapter(RecyclerView recyclerView, boolean isShowUser) {
@@ -147,17 +119,6 @@ public class RecyclerPinsHeadCardAdapter extends RecyclerView.Adapter {
 
     }
 
-    @Override
-    public void onViewAttachedToWindow(RecyclerView.ViewHolder holder) {
-        super.onViewAttachedToWindow(holder);
-        //Logger.d(life);
-//        Logger.d(holder.toString());
-//        mAdapterPosition = holder.getAdapterPosition();
-
-//        Logger.d("mAdapterPosition="+mAdapterPosition);
-        //这是添加headView后 需要修正的position位置
-        mAdapterPosition = RecyclerViewUtils.getAdapterPosition(mRecyclerView, holder);
-    }
 
     private void onBindData(final ViewHolderGeneral holder, PinsAndUserEntity bean) {
         //检查图片信息
@@ -180,7 +141,7 @@ public class RecyclerPinsHeadCardAdapter extends RecyclerView.Adapter {
         }
 
 //        String url_img = mUrlFormat + bean.getFile().getKey()+"_fw320sf";
-        String url_img = String.format(mUrlFormat,bean.getFile().getKey());
+        String url_img = String.format(mUrlGeneralFormat,bean.getFile().getKey());
 
 //        String mImageUrl = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
 
@@ -291,11 +252,6 @@ public class RecyclerPinsHeadCardAdapter extends RecyclerView.Adapter {
             }
         });
 
-    }
-
-    @Override
-    public int getItemCount() {
-        return mList.size();
     }
 
 

@@ -43,7 +43,7 @@ public class SearchResultActivity extends BaseActivity implements
 
     @BindString(R.string.title_activity_search_result)
     String mTitle;
-    @BindString(R.string.title_fragment_image)
+    @BindString(R.string.title_fragment_gather)
     String mTitleImage;
     @BindString(R.string.title_fragment_board)
     String mTitleBoard;
@@ -163,7 +163,7 @@ public class SearchResultActivity extends BaseActivity implements
     }
 
     @Override
-    public void onClickItemText(BoardPinsBean bean, View view) {
+    public void onClickItemOperate(BoardPinsBean bean, View view) {
         String boardId = String.valueOf(bean.getBoard_id());
         BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }

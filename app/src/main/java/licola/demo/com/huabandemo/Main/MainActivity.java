@@ -2,7 +2,6 @@ package licola.demo.com.huabandemo.Main;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -30,7 +29,8 @@ import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Login.LoginActivity;
-import licola.demo.com.huabandemo.My.MyAttentionActivity;
+import licola.demo.com.huabandemo.MyFollowing.MyAttentionActivity;
+import licola.demo.com.huabandemo.MyUser.MyUserActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Search.SearchActivity;
 import licola.demo.com.huabandemo.Setting.SettingsActivity;
@@ -68,6 +68,9 @@ public class MainActivity extends BaseActivity
     private String[] types;
     private String[] titles;
 
+    private Boolean isLogin;
+    private String mUserName;
+    private String mUserId;
 
     @Override
     protected int getLayoutId() {
@@ -99,9 +102,7 @@ public class MainActivity extends BaseActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         fragmentManager = getSupportFragmentManager();
-        types = getResources().getStringArray(R.array.type_array);
-        titles = getResources().getStringArray(R.array.title_array);
-
+        getData();
         initFloatingActionButton();
 
         intiDrawer(toolbar);//初始化DrawerLayout
@@ -110,6 +111,15 @@ public class MainActivity extends BaseActivity
 
         selectFragment(0);//默认选中0
 
+    }
+
+    //取出各种需要用的全局变量
+    private void getData() {
+        types = getResources().getStringArray(R.array.type_array);
+        titles = getResources().getStringArray(R.array.title_array);
+        isLogin = (Boolean) SPUtils.get(mContext, Constant.ISLOGIN, false);
+        mUserName = (String) SPUtils.get(mContext, Constant.USERNAME, "");
+        mUserId= (String) SPUtils.get(mContext,Constant.USERID,"");
     }
 
     @Override
@@ -137,7 +147,7 @@ public class MainActivity extends BaseActivity
      * 根据登录状态 显示头像和用户名
      */
     private void setNavUserInfo() {
-        Boolean isLogin = (Boolean) SPUtils.get(mContext, Constant.ISLOGIN, false);
+
         Logger.d("isLogin=" + isLogin);
         if (isLogin) {
             String key = (String) SPUtils.get(mContext, Constant.USERHEADKEY, "");
@@ -150,9 +160,9 @@ public class MainActivity extends BaseActivity
                 Logger.d("user head key is empty");
             }
 
-            String username = (String) SPUtils.get(mContext, Constant.USERNAME, "");
-            if (!TextUtils.isEmpty(username)) {
-                tv_nav_username.setText(username);
+
+            if (!TextUtils.isEmpty(mUserName)) {
+                tv_nav_username.setText(mUserName);
             }
 
             String email = (String) SPUtils.get(mContext, Constant.USEREMAIL, "");
@@ -302,7 +312,11 @@ public class MainActivity extends BaseActivity
         int id = v.getId();
         switch (id) {
             case R.id.img_nav_head:
-                LoginActivity.launch(MainActivity.this);
+                if (isLogin) {
+                    MyUserActivity.launch(MainActivity.this,mUserId,mUserName);
+                }else {
+                    LoginActivity.launch(MainActivity.this);
+                }
                 break;
             case R.id.tv_nav_username:
 

@@ -293,7 +293,7 @@ public class LoginActivity extends BaseActivity {
         //用户个人信息
         SPUtils.put(getApplicationContext(), Constant.ISLOGIN, Boolean.TRUE);
         SPUtils.put(getApplicationContext(), Constant.USERNAME, result.getUsername());
-        SPUtils.put(getApplicationContext(), Constant.USERID, result.getUser_id());
+        SPUtils.put(getApplicationContext(), Constant.USERID, String.valueOf(result.getUser_id()));
         SPUtils.put(getApplicationContext(), Constant.USERHEADKEY, result.getAvatar().getKey());
         SPUtils.put(getApplicationContext(), Constant.USEREMAIL, result.getEmail());
     }

@@ -11,22 +11,20 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
 import de.greenrobot.event.EventBus;
+import licola.demo.com.huabandemo.API.OnBoardDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
-import licola.demo.com.huabandemo.Base.HuaBanApplication;
-import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Bean.ListPinsBean;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitGsonRx;
-import licola.demo.com.huabandemo.View.LoadingFooter;
+import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Logger;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -58,7 +56,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     TextView mTVBoardAttention;
     TextView mTVBoardGather;
 
-    private OnPinsFragmentInteractionListener mListener;
+    private OnBoardDetailFragmentInteractionListener mListener;
 
 
     @Override
@@ -84,6 +82,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
             @Override
             public void onClick(View v) {
                 Logger.d();
+
             }
         });//画板栏事件
         mAdapter.setOnClickItemListener(new RecyclerPinsHeadCardAdapter.OnAdapterListener() {
@@ -180,6 +179,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
                         return listPinsBean.getPins();
                     }
                 })
+                .filter(getFilterFunc1())
                 .subscribe(new Subscriber<List<PinsAndUserEntity>>() {
                     @Override
                     public void onCompleted() {
@@ -289,7 +289,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnPinsFragmentInteractionListener) {
-            mListener = (OnPinsFragmentInteractionListener) context;//在绑定时候得到listener的真正引用
+            mListener = (OnBoardDetailFragmentInteractionListener) context;//在绑定时候得到listener的真正引用
         } else {
             throwRuntimeException(context);
         }

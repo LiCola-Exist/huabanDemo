@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.My;
+package licola.demo.com.huabandemo.MyFollowing;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -100,7 +100,7 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
             @Override
             public void onClickTextInfo(BoardPinsBean bean, View view) {
                 Logger.d();
-                mListener.onClickItemText(bean, view);
+                mListener.onClickItemOperate(bean, view);
             }
         });
     }

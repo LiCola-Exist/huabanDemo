@@ -11,9 +11,8 @@ import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitPinsRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitAvatarRx;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.View.LoadingFooter;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -138,6 +137,6 @@ public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     private Observable<SearchImageBean> getSearchImage(String key, int index, int limit) {
-        return RetrofitPinsRx.service.httpImageSearchRx(key, index, limit);
+        return RetrofitAvatarRx.service.httpImageSearchRx(key, index, limit);
     }
 }

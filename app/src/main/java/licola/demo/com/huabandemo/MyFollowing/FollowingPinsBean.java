@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.My;
+package licola.demo.com.huabandemo.MyFollowing;
 
 import java.util.List;
 

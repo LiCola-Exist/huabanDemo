@@ -77,8 +77,8 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void throwRuntimeException(Context context) {
-        throw new RuntimeException(context.toString()
-                + " must implement OnFragmentInteractionListener");
+//        throw new RuntimeException(context.toString()
+//                + " must implement OnFragmentInteractionListener");
     }
 
     @Override

@@ -9,6 +9,8 @@ import android.view.WindowManager;
 
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.Util.Logger;
+import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by LiYi on 2015/11/4 0004 14:59.
@@ -26,6 +28,29 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     public String toString() {
         return getClass().getSimpleName() + " @" + Integer.toHexString(hashCode());
+    }
+
+
+    private CompositeSubscription mCompositeSubscription;
+
+    public CompositeSubscription getCompositeSubscription() {
+        if (this.mCompositeSubscription == null) {
+            this.mCompositeSubscription = new CompositeSubscription();
+        }
+
+        return this.mCompositeSubscription;
+    }
+
+    public void addSubscription(Subscription s) {
+        if (s==null){
+            return;
+        }
+
+        if (this.mCompositeSubscription == null) {
+            this.mCompositeSubscription = new CompositeSubscription();
+        }
+
+        this.mCompositeSubscription.add(s);
     }
 
     @Override
@@ -81,6 +106,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         Logger.d(TAG);
+        if (this.mCompositeSubscription != null) {
+
+            this.mCompositeSubscription.unsubscribe();
+        }
     }
 
     @Override

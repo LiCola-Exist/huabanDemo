@@ -13,10 +13,13 @@
     <string name="title_activity_module">Module</string>
     <string name="title_activity_board_detail">BoardDetail</string>
     <string name="title_activity_my_following">Following</string>
+    <string name="title_activity_my_user">My HomePage</string>
 
-    <string name="title_fragment_image">Images</string>
+    <string name="title_fragment_gather">Gather</string>
     <string name="title_fragment_board">Boards</string>
     <string name="title_fragment_user">User</string>
+    <string name="title_fragment_like">Like</string>
+
 
     <string name="title_fragment_attention_pins">Attention Gather</string>
     <string name="title_fragment_attention_board">Attention Board</string>
@@ -104,6 +107,11 @@
     <string name="text_attention_number">%d attention</string>
     <string name="text_by_username">by %s</string>
     <string name="text_fans_number">fans %d</string>
+    <string name="text_fans_attention">%1$d fans %2$d follower</string>
+    <string name="text_edit">Edit</string>
+    <string name="text_following">Following</string>
+    <string name="text_followed">Followed</string>
+
 
     <string name="text_image_describe_null">noting describe</string>
     <string name="text_board_describe_null">noting describe</string>
@@ -168,6 +176,8 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+
 
 
 </resources>

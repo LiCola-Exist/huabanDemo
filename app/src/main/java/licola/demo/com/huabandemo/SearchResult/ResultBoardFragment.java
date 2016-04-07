@@ -12,7 +12,6 @@ import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.BoardPinsBean;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsPinsRx;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.View.LoadingFooter;
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -104,7 +103,7 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
 
             @Override
             public void onClickTextInfo(BoardPinsBean bean, View view) {
-                mListener.onClickItemText(bean,view);
+                mListener.onClickItemOperate(bean,view);
             }
         });
     }

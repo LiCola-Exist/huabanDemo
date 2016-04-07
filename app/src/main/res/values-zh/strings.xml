@@ -67,9 +67,11 @@
     <string name="title_activity_search_result">搜索%s</string>
     <string name="title_activity_module">模块</string>
     <string name="title_activity_my_following">我的关注</string>
-    <string name="title_fragment_image">图片</string>
+    <string name="title_activity_my_user">我的主页</string>
+    <string name="title_fragment_gather">采集</string>
     <string name="title_fragment_board">画板</string>
     <string name="title_fragment_user">用户</string>
+    <string name="title_fragment_like">喜欢</string>
     <string name="title_fragment_attention_pins">关注的采集</string>
     <string name="title_fragment_attention_board">关注的画板</string>
 
@@ -100,9 +102,12 @@
     <string name="text_attention_number">%d 关注</string>
     <string name="text_by_username">by %s</string>
     <string name="text_fans_number">粉丝 %d</string>
+    <string name="text_fans_attention">%1$d粉丝 %2$d关注</string>
     <string name="text_image_describe_null">暂无图片描述</string>
     <string name="text_board_describe_null">暂无画板描述</string>
     <string name="text_recommend">推荐</string>
     <string name="text_to">采集到</string>
-
+    <string name="text_edit">编辑</string>
+    <string name="text_following">关注</string>
+    <string name="text_followed">已关注</string>
 </resources>

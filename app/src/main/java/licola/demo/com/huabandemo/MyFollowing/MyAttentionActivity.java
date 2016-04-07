@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.My;
+package licola.demo.com.huabandemo.MyFollowing;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -152,7 +152,7 @@ public class MyAttentionActivity extends BaseActivity
     }
 
     @Override
-    public void onClickItemText(BoardPinsBean bean, View view) {
+    public void onClickItemOperate(BoardPinsBean bean, View view) {
         String boardId = String.valueOf(bean.getBoard_id());
         BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }

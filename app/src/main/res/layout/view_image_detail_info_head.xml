@@ -66,7 +66,7 @@
 
     </RelativeLayout>
 
-    <include layout="@layout/view_item_user_info"/>
+    <include layout="@layout/view_bar_user_info"/>
 
     <RelativeLayout
         android:id="@+id/relativelayout_image_board"
@@ -126,7 +126,7 @@
 
         <TextView
             android:id="@+id/tv_image_board"
-            style="@style/text_image_detail_primary"
+            style="@style/text_primary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/relativelayout_image_board_group"

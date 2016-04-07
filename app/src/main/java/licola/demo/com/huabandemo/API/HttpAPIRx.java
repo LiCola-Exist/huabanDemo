@@ -8,8 +8,10 @@ import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
 import licola.demo.com.huabandemo.ImageDetail.PinsDetailBean;
 import licola.demo.com.huabandemo.Login.TokenBean;
 import licola.demo.com.huabandemo.Login.UserMeBean;
-import licola.demo.com.huabandemo.My.FollowingBoardListBean;
-import licola.demo.com.huabandemo.My.FollowingPinsBean;
+import licola.demo.com.huabandemo.MyFollowing.FollowingBoardListBean;
+import licola.demo.com.huabandemo.MyFollowing.FollowingPinsBean;
+import licola.demo.com.huabandemo.MyUser.UserBoardListBean;
+import licola.demo.com.huabandemo.MyUser.UserInfoBean;
 import licola.demo.com.huabandemo.Search.SearchHintBean;
 import licola.demo.com.huabandemo.SearchResult.SearchBoardListBean;
 import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
@@ -110,4 +112,19 @@ public interface HttpAPIRx {
     //我的关注画板
     @GET("boards/following")
     Observable<FollowingBoardListBean> httpsMyFollowingBoardRx(@Header("Authorization") String authorization, @Query("page") int page, @Query("per_page") int per_page);
+
+    //https://api.huaban.com/users/15246080
+    //我的个人信息
+    @GET("users/{userId}")
+    Observable<UserInfoBean> httpsUserInfoRx(@Header("Authorization") String authorization,@Path("userId") String pinsId);
+
+    //https://api.huaban.com/users/15246080/boards?limit=20
+    //用户画板信息
+    @GET("users/{userId}/boards")
+    Observable<UserBoardListBean> httpsUserBoardRx(@Header("Authorization") String authorization, @Path("userId") String pinsId, @Query("limit") int limit);
+
+    //https://api.huaban.com/users/16211815/boards?limit=20&max=18375118
+    @GET("users/{userId}/boards")
+    Observable<UserBoardListBean> httpsUserBoardMaxRx(@Header("Authorization") String authorization,@Path("userId") String pinsId,@Query("max") int max,@Query("limit") int limit);
+
 }

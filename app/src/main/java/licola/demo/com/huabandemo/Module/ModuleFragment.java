@@ -15,7 +15,6 @@ import java.util.List;
 import butterknife.Bind;
 import de.greenrobot.event.EventBus;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
-import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -23,7 +22,7 @@ import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Bean.ListPinsBean;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.Base.BaseFragment;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitPinsRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitAvatarRx;
 import licola.demo.com.huabandemo.View.LoadingFooter;
 import licola.demo.com.huabandemo.View.recyclerview.HeaderAndFooterRecyclerViewAdapter;
 import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
@@ -31,7 +30,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -189,11 +187,11 @@ public class ModuleFragment extends BaseFragment {
     }
 
     private Observable<ListPinsBean> getPins(String type,int limit){
-        return RetrofitPinsRx.service.httpTypeLimitRx(type, limit);
+        return RetrofitAvatarRx.service.httpTypeLimitRx(type, limit);
     }
 
     private Observable<ListPinsBean> getPinsMax(String type,int max,int limit){
-        return RetrofitPinsRx.service.httpTypeMaxLimitRx(type, max, limit);
+        return RetrofitAvatarRx.service.httpTypeMaxLimitRx(type, max, limit);
     }
 
     /**

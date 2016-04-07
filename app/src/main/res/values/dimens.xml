@@ -10,6 +10,7 @@
 
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="viewpager_height">180dp</dimen>
+    <dimen name="head_height">244dp</dimen>
 
     <!--严格根据material design准侧设计的距离-->
     <dimen name="weight_0dp">0dp</dimen>
@@ -34,12 +35,14 @@
 
     <dimen name="button_padding_default">12dp</dimen>
     <dimen name="text_padding_default">12dp</dimen>
+    <dimen name="text_padding_double">24dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
 
     <dimen name="nav_info_height">56dp</dimen>
     <dimen name="nav_marginTop">40dp</dimen>
 
     <dimen name="user_head_circle_size">48dp</dimen>
+    <dimen name="user_head_circle_big_size">56dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
 
     <dimen name="progressbar_size">22dp</dimen>
