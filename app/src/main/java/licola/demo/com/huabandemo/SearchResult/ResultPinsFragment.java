@@ -23,8 +23,8 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/04/05  16:48
  */
-public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter, List<PinsAndUserEntity>> {
-    private static final String TAG = "ResultImageFragment";
+public class ResultPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter, List<PinsAndUserEntity>> {
+    private static final String TAG = "ResultPinsFragment";
 
     private int mIndex = 1;//联网的起始页 默认1
 
@@ -37,8 +37,8 @@ public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     //只需要一个Key作为关键字联网
-    public static ResultImageFragment newInstance(String key) {
-        ResultImageFragment fragment = new ResultImageFragment();
+    public static ResultPinsFragment newInstance(String key) {
+        ResultPinsFragment fragment = new ResultPinsFragment();
         Bundle args = new Bundle();
         args.putString(TYPE_KEY, key);
         fragment.setArguments(args);
@@ -100,13 +100,13 @@ public class ResultImageFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
             @Override
             public void onClickImage(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);
-                mListener.onClickItemImage(bean, view);
+                mListener.onClickPinsItemImage(bean, view);
             }
 
             @Override
             public void onClickTitleInfo(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);
-                mListener.onClickItemText(bean, view);
+                mListener.onClickPinsItemText(bean, view);
             }
 
             @Override

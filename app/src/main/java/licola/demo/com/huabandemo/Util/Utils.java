@@ -66,11 +66,6 @@ public final class Utils {
     }
 
 
-    public static Drawable getTintCompatDrawable(Context mContext, int mResDrawableId, int ResTintId){
-        Drawable drawable = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, mResDrawableId).mutate());
-        DrawableCompat.setTintList(drawable, ContextCompat.getColorStateList(mContext, ResTintId));
-        return drawable;
-    }
 
     public static boolean checkIsGif(String type) {
         if (type.isEmpty()) return false;

@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.MyUser;
+package licola.demo.com.huabandemo.UserInfo;
 
 /**
  * Created by LiCola on  2016/04/07  15:45

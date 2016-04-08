@@ -2,20 +2,24 @@ package licola.demo.com.huabandemo.Adapter;
 
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import licola.demo.com.huabandemo.Base.BaseRecyclerAdapter;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.MyUser.UserBoardItemBean;
+import licola.demo.com.huabandemo.UserInfo.UserBoardItemBean;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 
 import static android.view.View.OnClickListener;
@@ -57,9 +61,10 @@ public class RecyclerBoardUserAdapter extends BaseRecyclerAdapter<UserBoardItemB
         this.mOperateEdit =resources.getString(R.string.text_edit);
         this.mOperateFollowing =resources.getString(R.string.text_following);
         this.mOperateFollowed =resources.getString(R.string.text_followed);
-        this.mDrawableEdit=resources.getDrawable(R.drawable.ic_mode_edit_black_24dp);
-        this.mDrawableFollowing=resources.getDrawable(R.drawable.ic_add_black_24dp);
-        this.mDrawableFollowed=resources.getDrawable(R.drawable.ic_check_black_24dp);
+        this.mDrawableEdit= CompatUtil.getTintCompatDrawable(mContext,R.drawable.ic_mode_edit_black_24dp,R.color.tint_list_grey);
+
+        this.mDrawableFollowing=CompatUtil.getTintCompatDrawable(mContext,R.drawable.ic_add_black_24dp,R.color.tint_list_grey);
+        this.mDrawableFollowed=CompatUtil.getTintCompatDrawable(mContext,R.drawable.ic_check_black_24dp,R.color.tint_list_grey);
     }
 
 
@@ -145,7 +150,7 @@ public class RecyclerBoardUserAdapter extends BaseRecyclerAdapter<UserBoardItemB
         float ratio = 1f;//固定宽高比 为1:1 矩形图
         holder.img_card_image.setAspectRatio(ratio);//设置宽高比
         Drawable dProgressImage =
-                Utils.getTintCompatDrawable(mContext, R.drawable.ic_toys_black_48dp, R.color.tint_list_pink);
+                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_toys_black_48dp, R.color.tint_list_pink);
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
                 .setProgressBarImage(dProgressImage)
@@ -181,10 +186,16 @@ public class RecyclerBoardUserAdapter extends BaseRecyclerAdapter<UserBoardItemB
             }
         });
 
-        holder.tv_board_operate.setOnClickListener(new OnClickListener() {
+//        holder.tv_board_operate.setOnClickListener(new OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mListener.onClickOperate(bean, v);
+//            }
+//        });
+        holder.linearLayout_gourp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onClickOperate(bean, v);
+                mListener.onClickOperate(bean,v);
             }
         });
     }
@@ -193,6 +204,7 @@ public class RecyclerBoardUserAdapter extends BaseRecyclerAdapter<UserBoardItemB
         //这个CardView采用两层操作
         public final View mView;
 
+        public final LinearLayout linearLayout_gourp;
         public final FrameLayout frameLayout_image;//第一层 
         public final SimpleDraweeView img_card_image;
 
@@ -205,6 +217,7 @@ public class RecyclerBoardUserAdapter extends BaseRecyclerAdapter<UserBoardItemB
         public ViewHolderBoard(View view) {
             super(view);
             mView = view;
+            linearLayout_gourp= (LinearLayout) view.findViewById(R.id.linearlayout_group);
             frameLayout_image = (FrameLayout) view.findViewById(R.id.framelayout_image);
             img_card_image = (SimpleDraweeView) view.findViewById(R.id.img_card_image);//主图
 

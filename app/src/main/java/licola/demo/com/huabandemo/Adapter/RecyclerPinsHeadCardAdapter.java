@@ -20,6 +20,7 @@ import licola.demo.com.huabandemo.Base.BaseRecyclerAdapter;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Utils;
 
 import static android.view.View.GONE;
@@ -79,12 +80,12 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUser
         holder = new ViewHolderGeneral(view);//使用子类初始化ViewHolder
 
         holder.tv_card_like.setCompoundDrawablesWithIntrinsicBounds(
-                Utils.getTintCompatDrawable(mContext, R.drawable.ic_favorite_black_18dp, R.color.tint_list_grey),
+                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_favorite_black_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);
         holder.tv_card_gather.setCompoundDrawablesWithIntrinsicBounds(
-                Utils.getTintCompatDrawable(mContext, R.drawable.ic_explore_black_18dp, R.color.tint_list_grey),
+                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_explore_black_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);
@@ -145,27 +146,33 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUser
 
 //        String mImageUrl = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
 
+        if (Utils.checkIsGif(bean.getFile().getType())){
+            holder.ibtn_card_gif.setVisibility(VISIBLE);
+        }else {
+            holder.ibtn_card_gif.setVisibility(INVISIBLE);
+        }
+
         float ratio = Utils.getAspectRatio(bean.getFile().getWidth(), bean.getFile().getHeight());
         //长图 "width":440,"height":5040,
         holder.img_card_image.setAspectRatio(ratio);//设置宽高比
         Drawable dProgressImage =
-                Utils.getTintCompatDrawable(mContext, R.drawable.ic_toys_black_48dp, R.color.tint_list_pink);
+                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_toys_black_48dp, R.color.tint_list_pink);
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
                 .setProgressBarImage(dProgressImage)
-                .setControllerListener(new BaseControllerListener<ImageInfo>() {
-                    @Override
-                    public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
-                        super.onFinalImageSet(id, imageInfo, animatable);
-                        if (animatable != null) {
-                            holder.ibtn_card_gif.setVisibility(VISIBLE);
-                            setPlayListener(holder, animatable);
-                            setPlayDrawable(holder, false);
-                        } else {
-                            holder.ibtn_card_gif.setVisibility(INVISIBLE);
-                        }
-                    }
-                })
+//                .setControllerListener(new BaseControllerListener<ImageInfo>() {
+//                    @Override
+//                    public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
+//                        super.onFinalImageSet(id, imageInfo, animatable);
+//                        if (animatable != null) {
+//                            holder.ibtn_card_gif.setVisibility(VISIBLE);
+//                            setPlayListener(holder, animatable);
+//                            setPlayDrawable(holder, false);
+//                        } else {
+//                            holder.ibtn_card_gif.setVisibility(INVISIBLE);
+//                        }
+//                    }
+//                })
                 .build();
     }
 

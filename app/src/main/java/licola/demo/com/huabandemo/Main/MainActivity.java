@@ -30,10 +30,11 @@ import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Login.LoginActivity;
 import licola.demo.com.huabandemo.MyFollowing.MyAttentionActivity;
-import licola.demo.com.huabandemo.MyUser.MyUserActivity;
+import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Search.SearchActivity;
 import licola.demo.com.huabandemo.Setting.SettingsActivity;
+import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
@@ -204,7 +205,7 @@ public class MainActivity extends BaseActivity
             btn = (Button) group.getChildAt(i);
             btn.setCompoundDrawablesWithIntrinsicBounds(
                     null,
-                    Utils.getTintCompatDrawable(mContext, mDrawableList[i], R.color.tint_list_pink),
+                    CompatUtil.getTintCompatDrawable(mContext, mDrawableList[i], R.color.tint_list_pink),
                     null,
                     null);
             btn.setOnClickListener(this);
@@ -313,7 +314,7 @@ public class MainActivity extends BaseActivity
         switch (id) {
             case R.id.img_nav_head:
                 if (isLogin) {
-                    MyUserActivity.launch(MainActivity.this,mUserId,mUserName);
+                    UserInfoActivity.launch(MainActivity.this,mUserId,mUserName);
                 }else {
                     LoginActivity.launch(MainActivity.this);
                 }
@@ -334,13 +335,13 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onClickItemImage(PinsAndUserEntity bean, View view) {
+    public void onClickPinsItemImage(PinsAndUserEntity bean, View view) {
         Logger.d();
         ImageDetailActivity.launch(this,ImageDetailActivity.ACTION_MAIN);
     }
 
     @Override
-    public void onClickItemText(PinsAndUserEntity bean, View view) {
+    public void onClickPinsItemText(PinsAndUserEntity bean, View view) {
         Logger.d();
         ImageDetailActivity.launch(this);
     }

@@ -10,8 +10,8 @@ import licola.demo.com.huabandemo.Login.TokenBean;
 import licola.demo.com.huabandemo.Login.UserMeBean;
 import licola.demo.com.huabandemo.MyFollowing.FollowingBoardListBean;
 import licola.demo.com.huabandemo.MyFollowing.FollowingPinsBean;
-import licola.demo.com.huabandemo.MyUser.UserBoardListBean;
-import licola.demo.com.huabandemo.MyUser.UserInfoBean;
+import licola.demo.com.huabandemo.UserInfo.UserBoardListBean;
+import licola.demo.com.huabandemo.UserInfo.UserInfoBean;
 import licola.demo.com.huabandemo.Search.SearchHintBean;
 import licola.demo.com.huabandemo.SearchResult.SearchBoardListBean;
 import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
@@ -116,7 +116,7 @@ public interface HttpAPIRx {
     //https://api.huaban.com/users/15246080
     //我的个人信息
     @GET("users/{userId}")
-    Observable<UserInfoBean> httpsUserInfoRx(@Header("Authorization") String authorization,@Path("userId") String pinsId);
+    Observable<UserInfoBean> httpsUserInfoRx(@Header("Authorization") String authorization, @Path("userId") String pinsId);
 
     //https://api.huaban.com/users/15246080/boards?limit=20
     //用户画板信息
@@ -125,6 +125,26 @@ public interface HttpAPIRx {
 
     //https://api.huaban.com/users/16211815/boards?limit=20&max=18375118
     @GET("users/{userId}/boards")
-    Observable<UserBoardListBean> httpsUserBoardMaxRx(@Header("Authorization") String authorization,@Path("userId") String pinsId,@Query("max") int max,@Query("limit") int limit);
+    Observable<UserBoardListBean> httpsUserBoardMaxRx(@Header("Authorization") String authorization, @Path("userId") String pinsId, @Query("max") int max, @Query("limit") int limit);
+
+    //https://api.huaban.com/users/188174/pins?limit=40
+    //用户的采集
+    @GET("users/{userId}/pins")
+    Observable<ListPinsBean> httpsUserPinsRx(@Header("Authorization") String authorization, @Path("userId") String pinsId, @Query("limit") int limit);
+
+    //https://api.huaban.com/users/188174/pins?limit=40&max=19532400
+    //后续滑动联网
+    @GET("users/{userId}/pins")
+    Observable<ListPinsBean> httpsUserPinsMaxRx(@Header("Authorization") String authorization, @Path("userId") String pinsId, @Query("max") int max, @Query("limit") int limit);
+
+    //https://api.huaban.com/users/188174/likes?limit=40
+    //用户的喜欢
+    @GET("users/{userId}/likes")
+    Observable<ListPinsBean> httpsUserLikePinsRx(@Header("Authorization") String authorization, @Path("userId") String pinsId, @Query("limit") int limit);
+
+    //https://api.huaban.com/users/743988/likes?limit=40&max=4338219
+    //用户喜欢的后续联网
+    @GET("users/{userId}/likes")
+    Observable<ListPinsBean> httpsUserLikePinsMaxRx(@Header("Authorization") String authorization, @Path("userId") String pinsId, @Query("max") int max, @Query("limit") int limit);
 
 }

@@ -17,18 +17,24 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="?selectableItemBackground"
+        android:id="@+id/linearlayout_group"
+        >
 
         <include layout="@layout/view_board_image_text"/>
 
         <TextView
             android:id="@+id/tv_board_operate"
-            style="@style/card_text_secondary_info"
+            style="@style/text_secondary"
+            android:padding="@dimen/text_padding_default"
             android:gravity="center"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?selectableItemBackground"
+
             tools:text="相关操作"
+            tools:drawableLeft="@drawable/ic_mode_edit_black_18dp"
 
             />
     </LinearLayout>

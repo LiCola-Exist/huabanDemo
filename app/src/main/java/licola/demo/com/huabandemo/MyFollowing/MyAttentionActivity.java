@@ -134,25 +134,25 @@ public class MyAttentionActivity extends BaseActivity
     }
 
     @Override
-    public void onClickItemImage(PinsAndUserEntity bean, View view) {
+    public void onClickPinsItemImage(PinsAndUserEntity bean, View view) {
         //我的关注 画板的点击跳转
         ImageDetailActivity.launch(this, ImageDetailActivity.ACTION_ATTENTION);
     }
 
     @Override
-    public void onClickItemText(PinsAndUserEntity bean, View view) {
+    public void onClickPinsItemText(PinsAndUserEntity bean, View view) {
         //我的关注 画板的点击跳转
         ImageDetailActivity.launch(this, ImageDetailActivity.ACTION_ATTENTION);
     }
 
     @Override
-    public void onClickItemImage(BoardPinsBean bean, View view) {
+    public void onClickBoardItemImage(BoardPinsBean bean, View view) {
         String boardId = String.valueOf(bean.getBoard_id());
         BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }
 
     @Override
-    public void onClickItemOperate(BoardPinsBean bean, View view) {
+    public void onClickBoardItemOperate(BoardPinsBean bean, View view) {
         String boardId = String.valueOf(bean.getBoard_id());
         BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }

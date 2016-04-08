@@ -1,5 +1,4 @@
-package licola.demo.com.huabandemo.MyFollowing;
-
+package licola.demo.com.huabandemo.UserInfo;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,6 +10,7 @@ import de.greenrobot.event.EventBus;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
+import licola.demo.com.huabandemo.Bean.ListPinsBean;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsPinsRx;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -22,59 +22,47 @@ import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by LiCola on  2016/04/04  14:46
+ * Created by LiCola on  2016/04/08  15:05
  */
-public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter,List<PinsAndUserEntity>>{
-    private static final String TAG = "MyAttentionPinsFragment";
-    //联网关键参数
-    private int mMaxId;//下一次联网的pinsId开始
+public class UserPinsFragment extends
+        BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter, List<PinsAndUserEntity>> {
+
+    private static final String TAG = "UserPinsFragment";
+    private int mMax;
     private String mTokenType;
     private String mTokenAccess;
 
-
     private OnPinsFragmentInteractionListener mListener;
-
 
     @Override
     protected String getTAG() {
         return this.toString();
     }
 
-    public static MyAttentionPinsFragment newInstance() {
-        MyAttentionPinsFragment fragment = new MyAttentionPinsFragment();
-//        Bundle args = new Bundle();
-//        args.putString(TYPE_KEY, type);
-//        args.putString(TYPE_TITLE, title);
-//        fragment.setArguments(args);
+    public static UserPinsFragment newInstance(String key) {
+        UserPinsFragment fragment = new UserPinsFragment();
+        Bundle args = new Bundle();
+        args.putString(TYPE_KEY, key);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mTokenType=((MyAttentionActivity)getActivity()).mTokenType;
-        this.mTokenAccess=((MyAttentionActivity)getActivity()).mTokenAccess;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnPinsFragmentInteractionListener){
-            mListener= (OnPinsFragmentInteractionListener) context;
-        }else {
-            throwRuntimeException(context);
-        }
+        mTokenAccess = ((UserInfoActivity) getActivity()).mTokenAccess;
+        mTokenType = ((UserInfoActivity) getActivity()).mTokenType;
     }
 
     @Override
     protected Subscription getHttpFirst() {
-        return getMyFollowingPins(mTokenType,mTokenAccess,mLimit)
+        return getPins(mTokenType, mTokenAccess, mKey, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<FollowingPinsBean, List<PinsAndUserEntity>>() {
+                .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
                     @Override
-                    public List<PinsAndUserEntity> call(FollowingPinsBean followingPinsBean) {
-                        return followingPinsBean.getPins();
+                    public List<PinsAndUserEntity> call(ListPinsBean listPinsBean) {
+                        return listPinsBean.getPins();
                     }
                 })
                 .filter(getFilterFunc1())
@@ -92,25 +80,27 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
 
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsAndUserEntities) {
-                        mAdapter.setList(pinsAndUserEntities);
-                        mMaxId=getMaxId(pinsAndUserEntities);
+                        Logger.d();
+                        mAdapter.addList(pinsAndUserEntities);
+                        mMax = getMax(pinsAndUserEntities);
                     }
                 });
     }
 
-    private int getMaxId(List<PinsAndUserEntity> result) {
-        return result.get(result.size() - 1).getPin_id();
+    private int getMax(List<PinsAndUserEntity> bean) {
+        return bean.get(bean.size() - 1).getPin_id();
     }
+
 
     @Override
     protected Subscription getHttpScroll() {
-        return getMyFollowingPinsMax(mTokenType,mTokenAccess,mMaxId,mLimit)
+        return getPinsMax(mTokenType, mTokenAccess, mKey, mMax, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<FollowingPinsBean, List<PinsAndUserEntity>>() {
+                .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
                     @Override
-                    public List<PinsAndUserEntity> call(FollowingPinsBean followingPinsBean) {
-                        return followingPinsBean.getPins();
+                    public List<PinsAndUserEntity> call(ListPinsBean listPinsBean) {
+                        return listPinsBean.getPins();
                     }
                 })
                 .filter(getFilterFunc1())
@@ -128,41 +118,12 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
 
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsAndUserEntities) {
+                        Logger.d();
                         mAdapter.addList(pinsAndUserEntities);
-                        mMaxId=getMaxId(pinsAndUserEntities);
+                        mMax = getMax(pinsAndUserEntities);
                     }
                 });
     }
-
-    @Override
-    protected void initListener() {
-        super.initListener();
-        mAdapter.setOnClickItemListener(new RecyclerPinsHeadCardAdapter.OnAdapterListener() {
-            @Override
-            public void onClickImage(PinsAndUserEntity bean, View view) {
-                EventBus.getDefault().postSticky(bean);
-                mListener.onClickPinsItemImage(bean,view);
-            }
-
-            @Override
-            public void onClickTitleInfo(PinsAndUserEntity bean, View view) {
-                EventBus.getDefault().postSticky(bean);
-                mListener.onClickPinsItemText(bean,view);
-            }
-
-            @Override
-            public void onClickInfoGather(PinsAndUserEntity bean, View view) {
-                Logger.d();
-                //todo 收集时间 类内部处理不传递
-            }
-
-            @Override
-            public void onClickInfoLike(PinsAndUserEntity bean, View view) {
-                Logger.d();
-            }
-        });
-    }
-
 
     @Override
     protected View getHeadView() {
@@ -175,22 +136,53 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
     }
 
     @Override
+    protected void initListener() {
+        super.initListener();
+        mAdapter.setOnClickItemListener(new RecyclerPinsHeadCardAdapter.OnAdapterListener() {
+            @Override
+            public void onClickImage(PinsAndUserEntity bean, View view) {
+                EventBus.getDefault().postSticky(bean);
+                mListener.onClickPinsItemImage(bean, view);
+            }
+
+            @Override
+            public void onClickTitleInfo(PinsAndUserEntity bean, View view) {
+                EventBus.getDefault().postSticky(bean);
+                mListener.onClickPinsItemText(bean, view);
+            }
+
+            @Override
+            public void onClickInfoGather(PinsAndUserEntity bean, View view) {
+                Logger.d();
+            }
+
+            @Override
+            public void onClickInfoLike(PinsAndUserEntity bean, View view) {
+                Logger.d();
+            }
+        });
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnPinsFragmentInteractionListener) {
+            mListener = (OnPinsFragmentInteractionListener) context;
+        } else {
+            throwRuntimeException(context);
+        }
+    }
+
+    @Override
     protected RecyclerPinsHeadCardAdapter setAdapter() {
         return new RecyclerPinsHeadCardAdapter(mRecyclerView);
     }
 
-    private Observable<FollowingPinsBean> getMyFollowingPins(String bearer, String key, int limit){
-        return RetrofitHttpsPinsRx.service.httpsMyFollowingPinsRx(bearer + " " + key,limit);
+    private Observable<ListPinsBean> getPins(String bearer, String key, String userId, int limit) {
+        return RetrofitHttpsPinsRx.service.httpsUserPinsRx(bearer + " " + key, userId, limit);
     }
 
-    private Observable<FollowingPinsBean> getMyFollowingPinsMax(String bearer, String key, int maxId, int limit){
-        return RetrofitHttpsPinsRx.service.httpsMyFollowingPinsMaxRx(bearer + " " + key,maxId,limit);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.mTokenType=null;
-        this.mTokenAccess=null;
+    private Observable<ListPinsBean> getPinsMax(String bearer, String key, String userId, int max, int limit) {
+        return RetrofitHttpsPinsRx.service.httpsUserPinsMaxRx(bearer + " " + key, userId, max, limit);
     }
 }

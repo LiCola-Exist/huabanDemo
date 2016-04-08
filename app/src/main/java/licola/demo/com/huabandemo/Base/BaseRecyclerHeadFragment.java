@@ -41,8 +41,6 @@ public abstract class BaseRecyclerHeadFragment
     //是否还监听滑动的联网 标志位 默认为true 表示需要监听
     protected boolean isScorllLisener = true;
 
-    @BindString(R.string.urlImageRoot)
-    protected String mUrlImageRoot;
 
     @Bind(R.id.recycler_list)
     protected RecyclerView mRecyclerView;

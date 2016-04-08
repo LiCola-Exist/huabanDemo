@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.PointF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
@@ -206,7 +207,7 @@ public class ImageLoadFresco {
         }
 
         public LoadImageFrescoBuilder setBackgroupImageColor(int colorId) {
-            Drawable color = mContext.getResources().getDrawable(colorId);
+            Drawable color = ContextCompat.getDrawable(mContext,colorId);
             this.mBackgroundImage = color;
             return this;
         }

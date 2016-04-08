@@ -91,12 +91,12 @@ public class ModuleActivity extends BaseActivity implements OnPinsFragmentIntera
     }
 
     @Override
-    public void onClickItemImage(PinsAndUserEntity bean, View view) {
+    public void onClickPinsItemImage(PinsAndUserEntity bean, View view) {
         ImageDetailActivity.launch(this,ImageDetailActivity.ACTION_MODULE);
     }
 
     @Override
-    public void onClickItemText(PinsAndUserEntity bean, View view) {
+    public void onClickPinsItemText(PinsAndUserEntity bean, View view) {
         ImageDetailActivity.launch(this,ImageDetailActivity.ACTION_MODULE);
     }
 }

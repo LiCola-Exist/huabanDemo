@@ -37,6 +37,7 @@ import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Module.ModuleActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.SearchResult.SearchResultActivity;
+import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
@@ -107,7 +108,7 @@ public class SearchActivity extends BaseActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
 
-        mIBtnClearHistory.setImageDrawable(Utils.getTintCompatDrawable(mContext, R.drawable.ic_close_black_24dp, R.color.tint_list_grey));
+        mIBtnClearHistory.setImageDrawable(CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_close_black_24dp, R.color.tint_list_grey));
         initFlowReference(mFlowReference);
 
         initHintAdapter();
@@ -281,7 +282,7 @@ public class SearchActivity extends BaseActivity {
         layoutParams.setMargins(mItemMargin, mItemMargin, mItemMargin, mItemMargin);
         btnChild.setCompoundDrawablesWithIntrinsicBounds(
                 null,
-                Utils.getTintCompatDrawable(mContext, ResId, R.color.tint_list_pink),
+                CompatUtil.getTintCompatDrawable(mContext, ResId, R.color.tint_list_pink),
                 null,
                 null);
         btnChild.setText(text);

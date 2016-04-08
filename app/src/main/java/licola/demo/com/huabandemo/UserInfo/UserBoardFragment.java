@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.MyUser;
+package licola.demo.com.huabandemo.UserInfo;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -46,9 +46,9 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isMe = ((MyUserActivity) getActivity()).isMe;
-        mTokenAccess = ((MyUserActivity) getActivity()).mTokenAccess;
-        mTokenType = ((MyUserActivity) getActivity()).mTokenType;
+        isMe = ((UserInfoActivity) getActivity()).isMe;
+        mTokenAccess = ((UserInfoActivity) getActivity()).mTokenAccess;
+        mTokenType = ((UserInfoActivity) getActivity()).mTokenType;
     }
 
     @Override
@@ -144,12 +144,12 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
         mAdapter.setOnClickItemListener(new RecyclerBoardUserAdapter.onAdapterListener() {
             @Override
             public void onClickImage(UserBoardItemBean bean, View view) {
-                mListener.onClickItemImage(bean,view);
+                mListener.onClickBoardItemImage(bean,view);
             }
 
             @Override
             public void onClickOperate(UserBoardItemBean bean, View view) {
-                mListener.onClickItemOperate(bean,view);
+                mListener.onClickBoardItemOperate(bean,view);
             }
         });
     }

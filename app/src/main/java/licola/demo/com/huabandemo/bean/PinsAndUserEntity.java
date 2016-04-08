@@ -12,7 +12,7 @@ public class PinsAndUserEntity {
      * farm : farm1
      * bucket : hbimg
      * key : a2945bdf440f492c5144d24eebe45f23b82f3ff84d81f-4vhC2L
-     * type : image/jpeg
+     * type : image/jpeg /type=image/gif
      * width : 900
      * height : 1350
      * frames : 1
@@ -28,6 +28,7 @@ public class PinsAndUserEntity {
     private int original;
     private int created_at;
     private int like_count;
+    private int seq;
     private int comment_count;
     private int repin_count;
     private int is_private;
@@ -123,6 +124,10 @@ public class PinsAndUserEntity {
         this.like_count = like_count;
     }
 
+    public void setSeq(int seq){
+        this.seq=seq;
+    }
+
     public void setComment_count(int comment_count) {
         this.comment_count = comment_count;
     }
@@ -203,6 +208,8 @@ public class PinsAndUserEntity {
     public int getLike_count() {
         return like_count;
     }
+
+    public int getSeq(){return seq;}
 
     public int getComment_count() {
         return comment_count;

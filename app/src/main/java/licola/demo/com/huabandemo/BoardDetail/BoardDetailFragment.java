@@ -89,13 +89,13 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
             @Override
             public void onClickImage(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);//发送bean 而不用知晓接受得类
-                mListener.onClickItemImage(bean, view);
+                mListener.onClickPinsItemImage(bean, view);
             }
 
             @Override
             public void onClickTitleInfo(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);//发送bean 而不用知晓接受得类
-                mListener.onClickItemText(bean, view);
+                mListener.onClickPinsItemText(bean, view);
             }
 
             @Override

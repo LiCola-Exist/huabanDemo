@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.MyUser;
+package licola.demo.com.huabandemo.UserInfo;
 
 import java.util.List;
 

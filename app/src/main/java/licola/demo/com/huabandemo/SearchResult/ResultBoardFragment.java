@@ -98,12 +98,12 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
         mAdapter.setOnClickItemListener(new RecyclerBoardAdapter.onAdapterListener() {
             @Override
             public void onClickImage(BoardPinsBean bean, View view) {
-                mListener.onClickItemImage(bean,view);
+                mListener.onClickBoardItemImage(bean,view);
             }
 
             @Override
             public void onClickTextInfo(BoardPinsBean bean, View view) {
-                mListener.onClickItemOperate(bean,view);
+                mListener.onClickBoardItemOperate(bean,view);
             }
         });
     }

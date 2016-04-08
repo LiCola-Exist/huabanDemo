@@ -22,6 +22,7 @@ import java.util.List;
 
 
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
 
@@ -99,12 +100,12 @@ public class RecyclerPinsCardAdapter extends RecyclerView.Adapter<RecyclerPinsCa
         ViewHolder holder = new ViewHolder(view);
 
         holder.tv_card_like.setCompoundDrawablesWithIntrinsicBounds(
-                Utils.getTintCompatDrawable(mContext, R.drawable.ic_favorite_black_18dp, R.color.tint_list_grey),
+                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_favorite_black_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);
         holder.tv_card_gather.setCompoundDrawablesWithIntrinsicBounds(
-                Utils.getTintCompatDrawable(mContext, R.drawable.ic_explore_black_18dp, R.color.tint_list_grey),
+                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_explore_black_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);
@@ -182,7 +183,7 @@ public class RecyclerPinsCardAdapter extends RecyclerView.Adapter<RecyclerPinsCa
         holder.img_card_image.setAspectRatio(ratio);//设置宽高比
 
         Drawable dProgressImage =
-                Utils.getTintCompatDrawable(mContext,R.drawable.ic_toys_black_48dp,R.color.tint_list_pink);
+                CompatUtil.getTintCompatDrawable(mContext,R.drawable.ic_toys_black_48dp,R.color.tint_list_pink);
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
                 .setProgressBarImage(dProgressImage)

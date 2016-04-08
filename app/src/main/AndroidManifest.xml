@@ -99,7 +99,7 @@
                 android:value="licola.demo.com.huabandemo.Main.MainActivity" />
         </activity>
         <activity
-            android:name=".MyUser.MyUserActivity"
+            android:name=".UserInfo.UserInfoActivity"
             android:label="@string/title_activity_my_user"
             android:parentActivityName=".Main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">

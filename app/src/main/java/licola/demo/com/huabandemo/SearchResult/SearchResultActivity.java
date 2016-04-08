@@ -24,6 +24,7 @@ import licola.demo.com.huabandemo.API.OnPeopleFragmentInteraction;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Bean.BoardPinsBean;
+import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.SearchResult.SearchPeopleListBean.UsersBean;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
@@ -145,25 +146,23 @@ public class SearchResultActivity extends BaseActivity implements
     }
 
     @Override
-    public void onClickItemImage(PinsAndUserEntity bean, View view) {
-        Logger.d();
+    public void onClickPinsItemImage(PinsAndUserEntity bean, View view) {
         ImageDetailActivity.launch(this);
     }
 
     @Override
-    public void onClickItemText(PinsAndUserEntity bean, View view) {
-        Logger.d();
+    public void onClickPinsItemText(PinsAndUserEntity bean, View view) {
         ImageDetailActivity.launch(this);
     }
 
     @Override
-    public void onClickItemImage(BoardPinsBean bean, View view) {
+    public void onClickBoardItemImage(BoardPinsBean bean, View view) {
         String boardId = String.valueOf(bean.getBoard_id());
         BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }
 
     @Override
-    public void onClickItemOperate(BoardPinsBean bean, View view) {
+    public void onClickBoardItemOperate(BoardPinsBean bean, View view) {
         String boardId = String.valueOf(bean.getBoard_id());
         BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }
@@ -171,6 +170,7 @@ public class SearchResultActivity extends BaseActivity implements
     @Override
     public void onClickItemUser(UsersBean bean, View view) {
         Logger.d();
+        UserInfoActivity.launch(this,String.valueOf(bean.getUser_id()),bean.getUsername());
     }
 
 
@@ -189,7 +189,7 @@ public class SearchResultActivity extends BaseActivity implements
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             if (position == 0) {
-                return ResultImageFragment.newInstance(key);
+                return ResultPinsFragment.newInstance(key);
             } else if (position == 1) {
                 return ResultBoardFragment.newInstance(key);
             } else {

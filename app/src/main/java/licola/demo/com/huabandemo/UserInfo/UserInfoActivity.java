@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.MyUser;
+package licola.demo.com.huabandemo.UserInfo;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -21,13 +21,15 @@ import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
+import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitAvatarRx;
+import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.SearchResult.ResultBoardFragment;
-import licola.demo.com.huabandemo.SearchResult.ResultImageFragment;
 import licola.demo.com.huabandemo.SearchResult.ResultPeopleFragment;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -38,7 +40,8 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MyUserActivity extends BaseActivity implements OnBoardFragmentInteractionListener<UserBoardItemBean> {
+public class UserInfoActivity
+        extends BaseActivity implements OnBoardFragmentInteractionListener<UserBoardItemBean>, OnPinsFragmentInteractionListener {
     private static final String TYPE_KEY = "TYPE_KEY";
     private static final String TYPE_TITLE = "TYPE_TITLE";
 
@@ -89,7 +92,7 @@ public class MyUserActivity extends BaseActivity implements OnBoardFragmentInter
     }
 
     public static void launch(Activity activity, String key, String title) {
-        Intent intent = new Intent(activity, MyUserActivity.class);
+        Intent intent = new Intent(activity, UserInfoActivity.class);
         intent.putExtra(TYPE_TITLE, title);
         intent.putExtra(TYPE_KEY, key);
         activity.startActivity(intent);
@@ -118,8 +121,8 @@ public class MyUserActivity extends BaseActivity implements OnBoardFragmentInter
         mKey = getIntent().getStringExtra(TYPE_KEY);
         mTokenType = (String) SPUtils.get(mContext, Constant.TOKENTYPE, "");
         mTokenAccess = (String) SPUtils.get(mContext, Constant.TOKENACCESS, "");
-        String userId= (String) SPUtils.get(mContext,Constant.USERID,"");
-        isMe=mKey.equals(userId);
+        String userId = (String) SPUtils.get(mContext, Constant.USERID, "");
+        isMe = mKey.equals(userId);
     }
 
     @Override
@@ -207,15 +210,25 @@ public class MyUserActivity extends BaseActivity implements OnBoardFragmentInter
     }
 
     @Override
-    public void onClickItemImage(UserBoardItemBean bean, View view) {
+    public void onClickBoardItemImage(UserBoardItemBean bean, View view) {
         String boardId = String.valueOf(bean.getBoard_id());
         BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }
 
     @Override
-    public void onClickItemOperate(UserBoardItemBean bean, View view) {
+    public void onClickBoardItemOperate(UserBoardItemBean bean, View view) {
         //// TODO: 2016/4/7 0007 回调过来的 操作事件 需要联网
         Logger.d();
+    }
+
+    @Override
+    public void onClickPinsItemImage(PinsAndUserEntity bean, View view) {
+        ImageDetailActivity.launch(this);
+    }
+
+    @Override
+    public void onClickPinsItemText(PinsAndUserEntity bean, View view) {
+        ImageDetailActivity.launch(this);
     }
 
 
@@ -232,9 +245,9 @@ public class MyUserActivity extends BaseActivity implements OnBoardFragmentInter
             if (position == 0) {
                 return UserBoardFragment.newInstance(mKey);
             } else if (position == 1) {
-                return ResultBoardFragment.newInstance("文艺");
+                return UserPinsFragment.newInstance(mKey);
             } else {
-                return ResultPeopleFragment.newInstance("文艺");
+                return UserLikeFragment.newInstance(mKey);
             }
         }
 

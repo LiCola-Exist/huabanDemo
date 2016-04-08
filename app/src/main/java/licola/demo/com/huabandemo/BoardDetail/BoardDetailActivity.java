@@ -89,13 +89,13 @@ public class BoardDetailActivity extends BaseActivity
 
 
     @Override
-    public void onClickItemImage(PinsAndUserEntity bean, View view) {
+    public void onClickPinsItemImage(PinsAndUserEntity bean, View view) {
         //绑定的fragment 需要跳转的点击事件
         ImageDetailActivity.launch(BoardDetailActivity.this);
     }
 
     @Override
-    public void onClickItemText(PinsAndUserEntity bean, View view) {
+    public void onClickPinsItemText(PinsAndUserEntity bean, View view) {
         //绑定的fragment 需要跳转的点击事件
         ImageDetailActivity.launch(BoardDetailActivity.this);
     }

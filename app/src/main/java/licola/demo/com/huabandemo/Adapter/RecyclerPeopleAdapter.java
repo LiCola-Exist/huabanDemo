@@ -16,6 +16,7 @@ import java.util.List;
 import licola.demo.com.huabandemo.Base.BaseRecyclerAdapter;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
@@ -61,7 +62,7 @@ public class RecyclerPeopleAdapter extends BaseRecyclerAdapter<UsersBean> {
         holder = new ViewHolderGeneral(view);//使用子类初始化ViewHolder
 
         holder.ibtn_image_user_chevron_right.setImageDrawable(
-                Utils.getTintCompatDrawable(mContext, R.drawable.ic_chevron_right_black_36dp, R.color.tint_list_grey));
+                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_chevron_right_black_36dp, R.color.tint_list_grey));
 
         //子类可以自动转型为父类
         return holder;

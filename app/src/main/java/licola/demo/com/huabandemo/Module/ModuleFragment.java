@@ -303,14 +303,14 @@ public class ModuleFragment extends BaseFragment {
             public void onClickImage(PinsAndUserEntity bean, View view) {
                 Logger.d();
                 EventBus.getDefault().postSticky(bean);
-                mListener.onClickItemImage(bean, view);
+                mListener.onClickPinsItemImage(bean, view);
             }
 
             @Override
             public void onClickTitleInfo(PinsAndUserEntity bean, View view) {
                 Logger.d();
                 EventBus.getDefault().postSticky(bean);
-                mListener.onClickItemText(bean, view);
+                mListener.onClickPinsItemText(bean, view);
             }
 
             @Override

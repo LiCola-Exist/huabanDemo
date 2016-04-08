@@ -94,13 +94,13 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
             @Override
             public void onClickImage(BoardPinsBean bean, View view) {
                 Logger.d();
-                mListener.onClickItemImage(bean, view);
+                mListener.onClickBoardItemImage(bean, view);
             }
 
             @Override
             public void onClickTextInfo(BoardPinsBean bean, View view) {
                 Logger.d();
-                mListener.onClickItemOperate(bean, view);
+                mListener.onClickBoardItemOperate(bean, view);
             }
         });
     }

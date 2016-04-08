@@ -9,7 +9,7 @@ import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
  * 所有有pins对象列表的 共用接口
  */
 public interface OnPinsFragmentInteractionListener {
-    void onClickItemImage(PinsAndUserEntity bean, View view);
+    void onClickPinsItemImage(PinsAndUserEntity bean, View view);
 
-    void onClickItemText(PinsAndUserEntity bean, View view);
+    void onClickPinsItemText(PinsAndUserEntity bean, View view);
 }

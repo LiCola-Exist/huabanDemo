@@ -23,6 +23,7 @@ import licola.demo.com.huabandemo.API.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.TimeUtils;
 import licola.demo.com.huabandemo.Util.Utils;
@@ -127,13 +128,13 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
             @Override
             public void onClickImage(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);
-                mListener.onClickItemImage(bean, view);
+                mListener.onClickPinsItemImage(bean, view);
             }
 
             @Override
             public void onClickTitleInfo(PinsAndUserEntity bean, View view) {
                 EventBus.getDefault().postSticky(bean);
-                mListener.onClickItemText(bean, view);
+                mListener.onClickPinsItemText(bean, view);
             }
 
             @Override
@@ -219,12 +220,12 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
         if (view instanceof ImageButton) {
             ((ImageButton) view).setImageDrawable
-                    (Utils.getTintCompatDrawable(getContext(), resId, R.color.tint_list_grey));
+                    (CompatUtil.getTintCompatDrawable(getContext(), resId, R.color.tint_list_grey));
             return;
         }
         if (view instanceof TextView) {
             ((TextView) view).setCompoundDrawablesWithIntrinsicBounds(
-                    Utils.getTintCompatDrawable(getContext(), resId, R.color.tint_list_grey),
+                    CompatUtil.getTintCompatDrawable(getContext(), resId, R.color.tint_list_grey),
                     null,
                     null,
                     null);

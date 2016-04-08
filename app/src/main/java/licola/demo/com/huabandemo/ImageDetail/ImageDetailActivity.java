@@ -25,7 +25,7 @@ import de.greenrobot.event.EventBus;
 import de.greenrobot.event.Subscribe;
 import licola.demo.com.huabandemo.API.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.Module.ModuleActivity;
-import licola.demo.com.huabandemo.MyUser.MyUserActivity;
+import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
@@ -206,12 +206,12 @@ public class ImageDetailActivity extends BaseActivity
 
 
     @Override
-    public void onClickItemImage(PinsAndUserEntity bean, View view) {
+    public void onClickPinsItemImage(PinsAndUserEntity bean, View view) {
         ImageDetailActivity.launch(this, mActionFrom);
     }
 
     @Override
-    public void onClickItemText(PinsAndUserEntity bean, View view) {
+    public void onClickPinsItemText(PinsAndUserEntity bean, View view) {
         ImageDetailActivity.launch(this, mActionFrom);
     }
 
@@ -223,7 +223,7 @@ public class ImageDetailActivity extends BaseActivity
     @Override
     public void onClickUserField(String key, String title) {
         // TODO: 2016/4/2 0002 图片详情的用户跳转
-        MyUserActivity.launch(this,key,title);
+        UserInfoActivity.launch(this,key,title);
     }
 
 
