@@ -1,6 +1,5 @@
 package licola.demo.com.huabandemo.Adapter;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,16 +10,11 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import licola.demo.com.huabandemo.Base.BaseRecyclerAdapter;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.Bean.BoardPinsBean;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.CompatUtil;
-import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
 
 import static android.view.View.OnClickListener;
 
@@ -108,7 +102,7 @@ public class RecyclerBoardAdapter extends BaseRecyclerAdapter<BoardPinsBean> {
         float ratio = 1f;//固定宽高比 为1:1 矩形图
         holder.img_card_image.setAspectRatio(ratio);//设置宽高比
         Drawable dProgressImage =
-                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_toys_black_48dp, R.color.tint_list_pink);
+                CompatUtil.getTintListDrawable(mContext, R.drawable.ic_toys_black_48dp, R.color.tint_list_pink);
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
                 .setProgressBarImage(dProgressImage)

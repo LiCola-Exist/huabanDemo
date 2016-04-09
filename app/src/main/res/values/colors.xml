@@ -39,4 +39,6 @@
     <color name="pink_700">#C2185B</color>
     <color name="pink_800">#AD1457</color>
     <color name="pink_900">#880E4F</color>
+
+    <color name="black_overlay">#66000000</color>
 </resources>

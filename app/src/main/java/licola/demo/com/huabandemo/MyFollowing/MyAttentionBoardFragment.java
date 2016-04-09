@@ -10,7 +10,7 @@ import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerBoardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.BoardPinsBean;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsPinsRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
 import licola.demo.com.huabandemo.Util.Logger;
 import rx.Observable;
 import rx.Subscriber;
@@ -133,6 +133,6 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
     }
 
     public Observable<FollowingBoardListBean> getMyFollowingBoard(String bearer, String key, int index, int limit) {
-        return RetrofitHttpsPinsRx.service.httpsMyFollowingBoardRx(bearer + " " + key, index, limit);
+        return RetrofitHttpsAvatarRx.service.httpsMyFollowingBoardRx(bearer + " " + key, index, limit);
     }
 }

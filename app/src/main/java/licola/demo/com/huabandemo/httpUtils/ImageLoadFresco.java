@@ -18,6 +18,7 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
+import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 
 /**
@@ -25,7 +26,7 @@ import licola.demo.com.huabandemo.Util.Logger;
  * 用Fresco加载图片的类
  * 针对这个Demo已经配置很多默认的值
  * 用构造器模式便于设置更多形式
- * <p>
+ * <p/>
  * 使用示例：
  * new ImageLoadFresco.LoadImageFrescoBuilder(mContext,img_image_user,url_head)
  * .setIsCircle(true)
@@ -60,7 +61,7 @@ public class ImageLoadFresco {
         //初始化C层 用于控制图片的加载
         PipelineDraweeControllerBuilder builderC = Fresco.newDraweeControllerBuilder();
 
-        if (frescoBuilder.mUrlLow!=null){
+        if (frescoBuilder.mUrlLow != null) {
             builderC.setLowResImageRequest(ImageRequest.fromUri(frescoBuilder.mUrlLow));
         }
 
@@ -97,7 +98,14 @@ public class ImageLoadFresco {
         }
 
         if (frescoBuilder.mIsCircle) {
-            builderM.setRoundingParams(RoundingParams.asCircle());
+
+            if (frescoBuilder.mIsBorder) {
+                //默认白色包边
+                builderM.setRoundingParams(RoundingParams.asCircle().setBorder(0xFFFFFFFF, 2));
+            }else {
+                builderM.setRoundingParams(RoundingParams.asCircle());
+            }
+//            builderM.setRoundingParams(RoundingParams.asCircle());
         }
 
         //如果圆角取默认值10 或者是已经修改过的mRadius值
@@ -133,6 +141,7 @@ public class ImageLoadFresco {
         private ScalingUtils.ScaleType mActualImageScaleType = ScalingUtils.ScaleType.CENTER_CROP;
         private boolean mIsCircle = false;//是否圆形图片
         private boolean mIsRadius = false;//是否圆角
+        private boolean mIsBorder = false;//是否有包边
         private float mRadius = 10;//圆角度数 默认10
         private ResizeOptions mResizeOptions = new ResizeOptions(3000, 3000);//图片的大小限制
 
@@ -171,8 +180,8 @@ public class ImageLoadFresco {
             return new ImageLoadFresco(this);
         }
 
-        public LoadImageFrescoBuilder setUrlLow(String urlLow){
-            this.mUrlLow=urlLow;
+        public LoadImageFrescoBuilder setUrlLow(String urlLow) {
+            this.mUrlLow = urlLow;
             return this;
         }
 
@@ -207,12 +216,18 @@ public class ImageLoadFresco {
         }
 
         public LoadImageFrescoBuilder setBackgroupImageColor(int colorId) {
-            Drawable color = ContextCompat.getDrawable(mContext,colorId);
+            Drawable color = ContextCompat.getDrawable(mContext, colorId);
             this.mBackgroundImage = color;
             return this;
         }
 
         public LoadImageFrescoBuilder setIsCircle(boolean mIsCircle) {
+            this.mIsCircle = mIsCircle;
+            return this;
+        }
+
+        public LoadImageFrescoBuilder setIsCircle(boolean mIsCircle, boolean mIsBorder) {
+            this.mIsBorder = mIsBorder;
             this.mIsCircle = mIsCircle;
             return this;
         }
@@ -224,8 +239,7 @@ public class ImageLoadFresco {
 
         public LoadImageFrescoBuilder setIsRadius(boolean mIsRadius, float mRadius) {
             this.mRadius = mRadius;
-            this.mIsRadius = mIsRadius;
-            return this;
+            return setIsRadius(mIsRadius);
         }
 
         public LoadImageFrescoBuilder setRadius(float mRadius) {

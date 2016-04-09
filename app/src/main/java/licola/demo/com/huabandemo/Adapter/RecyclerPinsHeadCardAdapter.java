@@ -12,16 +12,19 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.image.ImageInfo;
+import com.jakewharton.rxbinding.view.RxView;
 
 import licola.demo.com.huabandemo.Base.BaseRecyclerAdapter;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.CompatUtil;
+import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.RxBus;
 import licola.demo.com.huabandemo.Util.Utils;
+import rx.Observable;
+import rx.Subscriber;
 
 import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
@@ -33,7 +36,7 @@ import static android.view.ViewGroup.VISIBLE;
  * Created by LiCola on  2016/03/22  18:00
  * 负责展示  图片CardView 的adapter
  */
-public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUserEntity>{
+public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUserEntity>  {
 
     private boolean mIsShowUser = false;//是否显示用户头像和名字的标志位
 
@@ -51,6 +54,8 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUser
         void onClickInfoLike(PinsAndUserEntity bean, View view);
 
     }
+
+
 
     public RecyclerPinsHeadCardAdapter(RecyclerView mRecyclerView) {
         super(mRecyclerView);
@@ -70,9 +75,10 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUser
         this.mListener = mListener;
     }
 
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //Logger.d(life);
+        Logger.d(life);
         ViewHolderGeneral holder = null;//ViewHolder的子类
 
         View view = LayoutInflater.from(parent.getContext())
@@ -80,15 +86,16 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUser
         holder = new ViewHolderGeneral(view);//使用子类初始化ViewHolder
 
         holder.tv_card_like.setCompoundDrawablesWithIntrinsicBounds(
-                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_favorite_black_18dp, R.color.tint_list_grey),
+                CompatUtil.getTintListDrawable(mContext, R.drawable.ic_favorite_black_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);
         holder.tv_card_gather.setCompoundDrawablesWithIntrinsicBounds(
-                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_explore_black_18dp, R.color.tint_list_grey),
+                CompatUtil.getTintListDrawable(mContext, R.drawable.ic_explore_black_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);
+
 
         //子类可以自动转型为父类
         return holder;
@@ -104,7 +111,7 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUser
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        //Logger.d(life);
+        Logger.d(life);
         final PinsAndUserEntity bean = mList.get(position);
 
         //注释的是 动态修改image高度
@@ -141,14 +148,15 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUser
             holder.ll_title_info.setVisibility(GONE);
         }
 
+
 //        String url_img = mUrlFormat + bean.getFile().getKey()+"_fw320sf";
-        String url_img = String.format(mUrlGeneralFormat,bean.getFile().getKey());
+        String url_img = String.format(mUrlGeneralFormat, bean.getFile().getKey());
 
 //        String mImageUrl = "http://img.hb.aicdn.com/1d16a79ac7cffbec844eb48e7e714c9f8c0afffc7f997-ZZCJsm";
 
-        if (Utils.checkIsGif(bean.getFile().getType())){
+        if (Utils.checkIsGif(bean.getFile().getType())) {
             holder.ibtn_card_gif.setVisibility(VISIBLE);
-        }else {
+        } else {
             holder.ibtn_card_gif.setVisibility(INVISIBLE);
         }
 
@@ -156,7 +164,7 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUser
         //长图 "width":440,"height":5040,
         holder.img_card_image.setAspectRatio(ratio);//设置宽高比
         Drawable dProgressImage =
-                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_toys_black_48dp, R.color.tint_list_pink);
+                CompatUtil.getTintListDrawable(mContext, R.drawable.ic_toys_black_48dp, R.color.tint_list_pink);
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
                 .setProgressBarImage(dProgressImage)
@@ -224,9 +232,14 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUser
             @Override
             public void onClick(View v) {
                 mListener.onClickInfoLike(bean, v);
+//                    RxBus.getDefault().post(bean);
             }
+
         });
+
     }
+
+
 
     /**
      * 设置ibtn_card_gif的显示
@@ -262,7 +275,7 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsAndUser
     }
 
 
-    public static class  ViewHolderGeneral extends RecyclerView.ViewHolder {
+    public static class ViewHolderGeneral extends RecyclerView.ViewHolder {
         //这个CardView采用两层操作
         public final View mView;
 

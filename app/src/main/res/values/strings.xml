@@ -69,6 +69,9 @@
     <string name="action_bar_search">Search</string>
     <string name="action_bar_add">Add</string>
     <string name="action_bar_edit">Edit</string>
+    <string name="action_bar_like">Like</string>
+    <string name="action_bar_download">Download</string>
+    <string name="action_bar_gather">Gather</string>
 
     <string name="hint_search">key</string>
     <string name="hint_not_history">noting</string>
@@ -177,7 +180,9 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
 
-
+    <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 
 
 </resources>

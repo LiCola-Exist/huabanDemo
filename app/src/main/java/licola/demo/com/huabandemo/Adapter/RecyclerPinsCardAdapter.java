@@ -100,12 +100,12 @@ public class RecyclerPinsCardAdapter extends RecyclerView.Adapter<RecyclerPinsCa
         ViewHolder holder = new ViewHolder(view);
 
         holder.tv_card_like.setCompoundDrawablesWithIntrinsicBounds(
-                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_favorite_black_18dp, R.color.tint_list_grey),
+                CompatUtil.getTintListDrawable(mContext, R.drawable.ic_favorite_black_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);
         holder.tv_card_gather.setCompoundDrawablesWithIntrinsicBounds(
-                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_explore_black_18dp, R.color.tint_list_grey),
+                CompatUtil.getTintListDrawable(mContext, R.drawable.ic_explore_black_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);
@@ -183,7 +183,7 @@ public class RecyclerPinsCardAdapter extends RecyclerView.Adapter<RecyclerPinsCa
         holder.img_card_image.setAspectRatio(ratio);//设置宽高比
 
         Drawable dProgressImage =
-                CompatUtil.getTintCompatDrawable(mContext,R.drawable.ic_toys_black_48dp,R.color.tint_list_pink);
+                CompatUtil.getTintListDrawable(mContext,R.drawable.ic_toys_black_48dp,R.color.tint_list_pink);
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
                 .setProgressBarImage(dProgressImage)

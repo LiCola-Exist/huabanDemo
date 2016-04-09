@@ -3,6 +3,7 @@ package licola.demo.com.huabandemo.UserInfo;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -109,7 +110,7 @@ public class UserInfoActivity
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getData();
 
         mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置折叠后的文字颜色
@@ -164,8 +165,9 @@ public class UserInfoActivity
                 url = String.format(mFormatUrlSmall, url);
             }
             new ImageLoadFresco.LoadImageFrescoBuilder(getApplicationContext(), mImageUser, url)
-                    .setIsCircle(true)
+                    .setIsCircle(true,true)
                     .build();
+//            mImageUser.setImageURI(Uri.parse(url));
         }
         String name = bean.getUsername();
         if (!TextUtils.isEmpty(name)) {

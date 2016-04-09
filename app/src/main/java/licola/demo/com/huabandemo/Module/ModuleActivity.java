@@ -10,10 +10,12 @@ import android.view.View;
 import butterknife.Bind;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.Util.SPUtils;
 
 /**
  * Created by LiCola on  2016/03/20  12:00
@@ -28,6 +30,10 @@ public class ModuleActivity extends BaseActivity implements OnPinsFragmentIntera
 
     protected String mType;
     protected String mTitle;
+
+    //包含的两个fragment共享联网关键字段
+    public String mTokenType;
+    public String mTokenAccess;
 
     @Bind(R.id.fab_module)
     FloatingActionButton mFABModule;
@@ -68,8 +74,7 @@ public class ModuleActivity extends BaseActivity implements OnPinsFragmentIntera
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mTitle=getIntent().getStringExtra(TYPE_TITLE);
-        mType=getIntent().getStringExtra(TYPE_KEY);
+        getData();
         setTitle(mTitle);
 
 //        getFragmentManager().beginTransaction().replace(R.id.framelayout_module, ModuleFragment.newInstance(type,title)).commit();
@@ -82,6 +87,13 @@ public class ModuleActivity extends BaseActivity implements OnPinsFragmentIntera
                 finish();
             }
         });
+    }
+
+    private void getData() {
+        mTitle=getIntent().getStringExtra(TYPE_TITLE);
+        mType=getIntent().getStringExtra(TYPE_KEY);
+        mTokenType = (String) SPUtils.get(mContext, Constant.TOKENTYPE, "");
+        mTokenAccess = (String) SPUtils.get(mContext, Constant.TOKENACCESS, "");
     }
 
     @Override

@@ -108,7 +108,7 @@ public class SearchActivity extends BaseActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
 
-        mIBtnClearHistory.setImageDrawable(CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_close_black_24dp, R.color.tint_list_grey));
+        mIBtnClearHistory.setImageDrawable(CompatUtil.getTintListDrawable(mContext, R.drawable.ic_close_black_24dp, R.color.tint_list_grey));
         initFlowReference(mFlowReference);
 
         initHintAdapter();
@@ -282,7 +282,7 @@ public class SearchActivity extends BaseActivity {
         layoutParams.setMargins(mItemMargin, mItemMargin, mItemMargin, mItemMargin);
         btnChild.setCompoundDrawablesWithIntrinsicBounds(
                 null,
-                CompatUtil.getTintCompatDrawable(mContext, ResId, R.color.tint_list_pink),
+                CompatUtil.getTintListDrawable(mContext, ResId, R.color.tint_list_pink),
                 null,
                 null);
         btnChild.setText(text);

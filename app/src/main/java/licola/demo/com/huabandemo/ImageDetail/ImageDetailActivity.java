@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -19,6 +21,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 
 import butterknife.Bind;
+import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindString;
 import de.greenrobot.event.EventBus;
@@ -27,7 +30,10 @@ import licola.demo.com.huabandemo.API.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.Module.ModuleActivity;
 import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.CompatUtil;
+import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
@@ -52,9 +58,12 @@ public class ImageDetailActivity extends BaseActivity
     private int mActionFrom;
 
     @BindDrawable(R.drawable.ic_cancel_black_24dp)
-    Drawable drawable_cancel;
+    Drawable mDrawableCancel;
     @BindDrawable(R.drawable.ic_refresh_black_24dp)
-    Drawable drawable_refresh;
+    Drawable mDrawableRefresh;
+    @BindDrawable(R.drawable.ic_favorite_accent_24dp)
+    Drawable mDrawableLiked;
+
 
     //小图的后缀
     @BindString(R.string.url_image_big)
@@ -63,6 +72,8 @@ public class ImageDetailActivity extends BaseActivity
     @BindString(R.string.url_image_general)
     String mFormatImageGeneral;
 
+    @Bind(R.id.appbar_image_detail)
+    AppBarLayout mAppBar;
     @Bind(R.id.colltoolbar_layout)
     CollapsingToolbarLayout mCollapsingToolbar;
     @Bind(R.id.toolbar_image)
@@ -76,6 +87,12 @@ public class ImageDetailActivity extends BaseActivity
 
     public String mImageUrl;//图片地址
     public String mPinsId;
+
+    //包含的两个fragment共享联网关键字段
+    public String mTokenType;
+    public String mTokenAccess;
+
+    private MenuItem mMenuItemLike;
 
     @Override
     protected int getLayoutId() {
@@ -99,20 +116,47 @@ public class ImageDetailActivity extends BaseActivity
     }
 
     @Override
+    protected boolean isTranslucentStatusBar() {
+        return false;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);//注册
         mActionFrom = getIntent().getIntExtra(ACTION_KEY, ACTION_DEFAULT);
+
+        mTokenType = (String) SPUtils.get(mContext, Constant.TOKENTYPE, "");
+        mTokenAccess = (String) SPUtils.get(mContext, Constant.TOKENACCESS, "");
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置折叠后的文字颜色
         initFloatingAction();
         //设置图片空间的宽高比
+        initListener();
+
         img_image_big.setAspectRatio(
                 Utils.getAspectRatio(mPinsBean.getFile().getWidth(), mPinsBean.getFile().getHeight()));
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.framelayout_info_recycler, ImageDetailFragment.newInstance(mPinsId)).commit();
+    }
+
+    private void initListener() {
+        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                Logger.d("verticalOffset=" + verticalOffset + "appBarLayout.getTotalScrollRange()" + appBarLayout.getTotalScrollRange());
+//                if (menuItem!=null) {
+//                    if (verticalOffset == -appBarLayout.getTotalScrollRange()) {
+//                        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+//                    } else {
+//                        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+//                    }
+//                }
+            }
+        });
+
     }
 
 
@@ -136,8 +180,8 @@ public class ImageDetailActivity extends BaseActivity
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_image_big, url)
 //                .setActualImageScaleType(ScalingUtils.ScaleType.FOCUS_CROP)
                 .setUrlLow(url_low)
-                .setRetryImage(drawable_refresh)
-                .setFailureImage(drawable_cancel)
+                .setRetryImage(mDrawableRefresh)
+                .setFailureImage(mDrawableCancel)
                 .setControllerListener(new BaseControllerListener<ImageInfo>() {
                     @Override
                     public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
@@ -152,10 +196,21 @@ public class ImageDetailActivity extends BaseActivity
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_scrolling, menu);
+        //创建menu视图
+        Logger.d();
+        getMenuInflater().inflate(R.menu.menu_image_detail, menu);
         return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        //onCreateOptionsMenu的后续
+        mMenuItemLike = menu.getItem(0);
+        Logger.d();
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -166,7 +221,11 @@ public class ImageDetailActivity extends BaseActivity
             case android.R.id.home:
                 selectHomeAsUp(mActionFrom);//根据action值 选择向上键的 操作结果
                 break;
+            case R.id.action_like:
+
+                break;
         }
+
         // boolean Return false to allow normal menu processing to
         // proceed, true to consume it here.
         // false：允许继续事件传递  true：就自己消耗事件 不再传递
@@ -223,7 +282,14 @@ public class ImageDetailActivity extends BaseActivity
     @Override
     public void onClickUserField(String key, String title) {
         // TODO: 2016/4/2 0002 图片详情的用户跳转
-        UserInfoActivity.launch(this,key,title);
+        UserInfoActivity.launch(this, key, title);
+    }
+
+    @Override
+    public void onNetLikeResult(boolean isLike) {
+        if (isLike) {
+            mMenuItemLike.setIcon(mDrawableLiked);
+        }
     }
 
 

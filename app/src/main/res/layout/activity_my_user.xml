@@ -20,24 +20,29 @@
             android:layout_height="@dimen/head_height"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
 
-            <include layout="@layout/view_user_info_head" />
+            >
+
+            <include layout="@layout/view_user_info_head"
+
+                />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar_user"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
+                app:layout_collapseMode="none"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tablayout_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom" />
         </android.support.design.widget.CollapsingToolbarLayout>
 
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tablayout_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager

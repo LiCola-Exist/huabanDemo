@@ -22,11 +22,11 @@ import de.greenrobot.event.EventBus;
 import licola.demo.com.huabandemo.API.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.TimeUtils;
-import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitAvatarRx;
@@ -40,7 +40,8 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/03/26  19:05
  */
-public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter, List<PinsAndUserEntity>> {
+public class ImageDetailFragment extends
+        BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter, List<PinsAndUserEntity>> {
     private static final String TAG = "ImageDetailFragment";
     protected int mIndex = 1;//默认值为1
 
@@ -83,6 +84,10 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     private String mBoardName;
     private String mUserName;
 
+    //包含的两个fragment共享联网关键字段
+    private String mTokenType;
+    private String mTokenAccess;
+
     private OnImageDetailFragmentInteractionListener mListener;
 
 
@@ -103,11 +108,18 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        this.mPinsBean = ((ImageDetailActivity) getActivity()).mPinsBean;//取出Activity的全局变量
+
 
         setViewDrawable();
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.mPinsBean = ((ImageDetailActivity) getActivity()).mPinsBean;//取出Activity的全局变量
+        this.mTokenType = ((ImageDetailActivity) getActivity()).mTokenType;
+        this.mTokenAccess = ((ImageDetailActivity) getActivity()).mTokenAccess;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -220,12 +232,12 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
         if (view instanceof ImageButton) {
             ((ImageButton) view).setImageDrawable
-                    (CompatUtil.getTintCompatDrawable(getContext(), resId, R.color.tint_list_grey));
+                    (CompatUtil.getTintListDrawable(getContext(), resId, R.color.tint_list_grey));
             return;
         }
         if (view instanceof TextView) {
             ((TextView) view).setCompoundDrawablesWithIntrinsicBounds(
-                    CompatUtil.getTintCompatDrawable(getContext(), resId, R.color.tint_list_grey),
+                    CompatUtil.getTintListDrawable(getContext(), resId, R.color.tint_list_grey),
                     null,
                     null,
                     null);
@@ -235,7 +247,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     @Override
     protected Subscription getHttpOther() {
-        return getPinsDetail(mKey)
+        return getPinsDetail(mTokenType,mTokenAccess,mKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<PinsDetailBean>() {
@@ -256,6 +268,7 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
                         Logger.d();
                         //联网成功使用 正确的网络数据
                         setImageInfo(pinsDetailBean);
+                        mListener.onNetLikeResult(pinsDetailBean.getPin().isLiked());
                     }
                 });
 
@@ -388,12 +401,16 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
 
         new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_1, url1)
+                .setIsRadius(true,5)
                 .build();
         new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_2, url2)
+                .setIsRadius(true,5)
                 .build();
         new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_3, url3)
+                .setIsRadius(true,5)
                 .build();
         new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_4, url4)
+                .setIsRadius(true,5)
                 .build();
 
     }
@@ -481,8 +498,8 @@ public class ImageDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     }
 
-    private Observable<PinsDetailBean> getPinsDetail(String pinsId) {
-        return RetrofitAvatarRx.service.httpPinsDetailRx(pinsId);
+    private Observable<PinsDetailBean> getPinsDetail(String bearer, String key,String pinsId) {
+        return RetrofitHttpsAvatarRx.service.httpPinsDetailRx(bearer+" "+key,pinsId);
     }
 
     private Observable<List<PinsAndUserEntity>> getRecommend(String pinsId, int page, int limit) {

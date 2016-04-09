@@ -1,6 +1,5 @@
 package licola.demo.com.huabandemo.Adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,16 +9,10 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import licola.demo.com.huabandemo.Base.BaseRecyclerAdapter;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.CompatUtil;
-import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
 
 import static android.view.View.OnClickListener;
 import static licola.demo.com.huabandemo.SearchResult.SearchPeopleListBean.UsersBean;
@@ -62,7 +55,7 @@ public class RecyclerPeopleAdapter extends BaseRecyclerAdapter<UsersBean> {
         holder = new ViewHolderGeneral(view);//使用子类初始化ViewHolder
 
         holder.ibtn_image_user_chevron_right.setImageDrawable(
-                CompatUtil.getTintCompatDrawable(mContext, R.drawable.ic_chevron_right_black_36dp, R.color.tint_list_grey));
+                CompatUtil.getTintListDrawable(mContext, R.drawable.ic_chevron_right_black_36dp, R.color.tint_list_grey));
 
         //子类可以自动转型为父类
         return holder;

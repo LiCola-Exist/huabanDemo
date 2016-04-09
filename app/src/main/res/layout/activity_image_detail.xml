@@ -8,7 +8,7 @@
     tools:context=".ImageDetail.ImageDetailActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
+        android:id="@+id/appbar_image_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
@@ -37,7 +37,7 @@
                 android:id="@+id/toolbar_image"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent"
+                android:background="@color/grey_a700"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
@@ -58,7 +58,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:tint="@color/white"
         android:src="@drawable/ic_explore_black_24dp"
-        app:layout_anchor="@id/app_bar"
+        app:layout_anchor="@id/appbar_image_detail"
         app:layout_anchorGravity="bottom|end" />
 
 </android.support.design.widget.CoordinatorLayout>

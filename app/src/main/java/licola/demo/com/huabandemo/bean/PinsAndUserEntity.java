@@ -1,9 +1,12 @@
 package licola.demo.com.huabandemo.Bean;
 
+import rx.Observable;
+import rx.Subscriber;
+
 /**
  * Created by LiCola on  2016/03/22  20:14
  */
-public class PinsAndUserEntity {
+public class PinsAndUserEntity  {
     private int pin_id;
     private int user_id;
     private int board_id;
@@ -33,6 +36,8 @@ public class PinsAndUserEntity {
     private int repin_count;
     private int is_private;
     private String orig_source;
+    private boolean liked;
+
     /**
      * user_id : 17344184
      * username : 蓝枫芊柔
@@ -67,6 +72,8 @@ public class PinsAndUserEntity {
      * created_at : 1344088961
      * avatar : https
      */
+
+
 
     public void setPin_id(int pin_id) {
         this.pin_id = pin_id;
@@ -138,6 +145,10 @@ public class PinsAndUserEntity {
 
     public void setIs_private(int is_private) {
         this.is_private = is_private;
+    }
+
+    public void setLiked(boolean liked){
+        this.liked=liked;
     }
 
     public void setOrig_source(String orig_source) {
@@ -221,6 +232,10 @@ public class PinsAndUserEntity {
 
     public int getIs_private() {
         return is_private;
+    }
+
+    public boolean isLiked() {
+        return liked;
     }
 
     public String getOrig_source() {

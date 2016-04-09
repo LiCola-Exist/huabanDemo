@@ -8,4 +8,6 @@ public interface OnImageDetailFragmentInteractionListener
     void onClickBoardField(String key, String title);
 
     void onClickUserField(String key,String title);
+
+    void onNetLikeResult(boolean isLike);
 }

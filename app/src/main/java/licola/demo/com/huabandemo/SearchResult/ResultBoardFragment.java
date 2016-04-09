@@ -10,7 +10,7 @@ import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerBoardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.BoardPinsBean;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsPinsRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
 import licola.demo.com.huabandemo.Util.Logger;
 import rx.Observable;
 import rx.Subscriber;
@@ -125,7 +125,7 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
     }
 
     public Observable<SearchBoardListBean> getBoard(String key,int index,int limit){
-        return RetrofitHttpsPinsRx.service.httpBoardSearchRx(key,index,limit);
+        return RetrofitHttpsAvatarRx.service.httpBoardSearchRx(key,index,limit);
     }
     
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerBoardUserAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsPinsRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
 import licola.demo.com.huabandemo.Util.Logger;
 import rx.Observable;
 import rx.Subscriber;
@@ -155,11 +155,11 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
     }
 
     public Observable<UserBoardListBean> getBoard(String bearer, String key, String userId, int limit) {
-        return RetrofitHttpsPinsRx.service.httpsUserBoardRx(bearer + " " + key, userId, limit);
+        return RetrofitHttpsAvatarRx.service.httpsUserBoardRx(bearer + " " + key, userId, limit);
     }
 
     public Observable<UserBoardListBean> getBoardMax(String bearer, String key, String userId, int max, int limit) {
-        return RetrofitHttpsPinsRx.service.httpsUserBoardMaxRx(bearer + " " + key, userId, max, limit);
+        return RetrofitHttpsAvatarRx.service.httpsUserBoardMaxRx(bearer + " " + key, userId, max, limit);
     }
 
     @Override

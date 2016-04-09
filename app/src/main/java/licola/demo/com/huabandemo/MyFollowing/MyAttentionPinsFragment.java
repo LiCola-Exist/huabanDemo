@@ -12,7 +12,7 @@ import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsPinsRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
 import licola.demo.com.huabandemo.Util.Logger;
 import rx.Observable;
 import rx.Subscriber;
@@ -180,11 +180,11 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
     }
 
     private Observable<FollowingPinsBean> getMyFollowingPins(String bearer, String key, int limit){
-        return RetrofitHttpsPinsRx.service.httpsMyFollowingPinsRx(bearer + " " + key,limit);
+        return RetrofitHttpsAvatarRx.service.httpsMyFollowingPinsRx(bearer + " " + key,limit);
     }
 
     private Observable<FollowingPinsBean> getMyFollowingPinsMax(String bearer, String key, int maxId, int limit){
-        return RetrofitHttpsPinsRx.service.httpsMyFollowingPinsMaxRx(bearer + " " + key,maxId,limit);
+        return RetrofitHttpsAvatarRx.service.httpsMyFollowingPinsMaxRx(bearer + " " + key,maxId,limit);
     }
 
     @Override

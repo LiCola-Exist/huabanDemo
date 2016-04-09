@@ -34,12 +34,13 @@ public interface HttpAPIRx {
     //http://api.huaban.com/favorite/food_drink?limit=20
     // 模板类型
     @GET("favorite/{type}")
-    Observable<ListPinsBean> httpTypeLimitRx(@Path("type") String type, @Query("limit") int limit);
+    Observable<ListPinsBean> httpTypeLimitRx(@Header("Authorization") String authorization,@Path("type") String type, @Query("limit") int limit);
 
     //http://api.huaban.com/favorite/food_drink?max=5445324325&limit=20
     //模板类型 的后续联网 max
     @GET("favorite/{type}")
-    Observable<ListPinsBean> httpTypeMaxLimitRx(@Path("type") String type, @Query("max") int max, @Query("limit") int limit);
+    Observable<ListPinsBean> httpTypeMaxLimitRx(@Header("Authorization") String authorization,@Path("type") String type, @Query("max") int max, @Query("limit") int limit);
+
 
     //http://api.huaban.com/search/hint?q=%E4%BA%BA
     //搜索关键字 提示
@@ -61,10 +62,10 @@ public interface HttpAPIRx {
     @GET("search/people/")
     Observable<SearchPeopleListBean> httpPeopleSearchRx(@Query("q") String key, @Query("page") int page, @Query("per_page") int per_page);
 
-    //http://api.huaban.com/pins/663478425
+    //https://api.huaban.com/pins/663478425
     //根据图片id获取详情
     @GET("pins/{pinsId}")
-    Observable<PinsDetailBean> httpPinsDetailRx(@Path("pinsId") String pinsId);
+    Observable<PinsDetailBean> httpPinsDetailRx(@Header("Authorization") String authorization,@Path("pinsId") String pinsId);
 
     //http://api.huaban.com/boards/3514299
     //获取画板的详情

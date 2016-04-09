@@ -12,7 +12,6 @@ import android.view.View;
 
 import butterknife.Bind;
 import licola.demo.com.huabandemo.API.OnBoardDetailFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
@@ -77,7 +76,7 @@ public class BoardDetailActivity extends BaseActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_scrolling, menu);
+        getMenuInflater().inflate(R.menu.menu_image_detail, menu);
         return true;
     }
 

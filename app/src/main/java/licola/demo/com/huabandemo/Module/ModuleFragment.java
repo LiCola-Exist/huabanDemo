@@ -9,12 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import de.greenrobot.event.EventBus;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
+import licola.demo.com.huabandemo.Main.MainActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -23,6 +27,7 @@ import licola.demo.com.huabandemo.Bean.ListPinsBean;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.Base.BaseFragment;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitAvatarRx;
+import licola.demo.com.huabandemo.Util.RxBus;
 import licola.demo.com.huabandemo.View.LoadingFooter;
 import licola.demo.com.huabandemo.View.recyclerview.HeaderAndFooterRecyclerViewAdapter;
 import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
@@ -30,7 +35,9 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.observers.Observers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -46,7 +53,9 @@ public class ModuleFragment extends BaseFragment {
     protected String type;
     protected String title;
     private static int limit = Constant.LIMIT;
-
+    //包含的两个fragment共享联网关键字段
+    public String mTokenType;
+    public String mTokenAccess;
 
     @Bind(R.id.recycler_list)
     RecyclerView mRecyclerView;
@@ -97,6 +106,9 @@ public class ModuleFragment extends BaseFragment {
         initRecyclerView();
         initListener();
         getHttpFirstAndRefresh();//默认的联网，区分于滑动的联网加载
+
+
+
     }
 
 
@@ -147,7 +159,7 @@ public class ModuleFragment extends BaseFragment {
      *
      */
     private void getHttpMaxId(int max) {
-         Subscription s= getPinsMax(type,max,limit)
+         Subscription s= getPinsMax(mTokenType,mTokenAccess,type,max,limit)
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
                     @Override
                     public List<PinsAndUserEntity> call(ListPinsBean listPinsBean) {
@@ -186,12 +198,12 @@ public class ModuleFragment extends BaseFragment {
         addSubscription(s);
     }
 
-    private Observable<ListPinsBean> getPins(String type,int limit){
-        return RetrofitAvatarRx.service.httpTypeLimitRx(type, limit);
+    private Observable<ListPinsBean> getPins(String mTokenType,String mTokenKey,String type,int limit){
+        return RetrofitHttpsAvatarRx.service.httpTypeLimitRx(mTokenType+" "+mTokenKey,type, limit);
     }
 
-    private Observable<ListPinsBean> getPinsMax(String type,int max,int limit){
-        return RetrofitAvatarRx.service.httpTypeMaxLimitRx(type, max, limit);
+    private Observable<ListPinsBean> getPinsMax(String mTokenType,String mTokenKey,String type,int max,int limit){
+        return RetrofitHttpsAvatarRx.service.httpTypeMaxLimitRx(mTokenType+" "+mTokenKey,type, max, limit);
     }
 
     /**
@@ -199,7 +211,7 @@ public class ModuleFragment extends BaseFragment {
      *
      */
     private void getHttpFirstAndRefresh() {
-        Subscription s= getPins(type,limit)
+        Subscription s= getPins(mTokenType,mTokenAccess,type,limit)
                 .filter(new Func1<ListPinsBean, Boolean>() {
                     @Override
                     public Boolean call(ListPinsBean Bean) {
@@ -286,6 +298,14 @@ public class ModuleFragment extends BaseFragment {
         } else {
             throwRuntimeException(context);
         }
+
+        if (context instanceof MainActivity){
+            mTokenType=((MainActivity) context).mTokenType;
+            mTokenAccess=((MainActivity) context).mTokenAccess;
+        }else if (context instanceof ModuleActivity){
+            mTokenType=((ModuleActivity) context).mTokenType;
+            mTokenAccess=((ModuleActivity) context).mTokenAccess;
+        }
     }
 
     private void initListener() {
@@ -320,10 +340,21 @@ public class ModuleFragment extends BaseFragment {
 
             @Override
             public void onClickInfoLike(PinsAndUserEntity bean, View view) {
-                Logger.d();
+                Logger.d(bean.toString());
+//                int count=bean.getLike_count()+1;
+//                bean.setLike_count(count);
+//                mAdapter.notifyDataSetChanged();
+                startLike();
             }
 
         });
+
+
+
+    }
+
+    private void startLike() {
+
     }
 
 

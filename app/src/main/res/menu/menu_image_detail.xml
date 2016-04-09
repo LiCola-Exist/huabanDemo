@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="licola.demo.com.huabandemo.Main.ScrollingActivity">
+
+    <item android:id="@+id/action_like"
+        android:title="@string/action_bar_like"
+        android:icon="@drawable/ic_favorite_white_24dp"
+        app:showAsAction="ifRoom"
+        />
+    <item android:id="@+id/action_download"
+        android:title="@string/action_bar_download"
+        android:icon="@drawable/ic_move_to_inbox_white_24dp"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_bar_gather"
+        android:icon="@drawable/ic_explore_black_24dp"
+        app:showAsAction="never" />
+</menu>

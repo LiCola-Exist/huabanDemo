@@ -22,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.jakewharton.rxbinding.view.RxView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,16 +33,16 @@ import licola.demo.com.huabandemo.Login.LoginActivity;
 import licola.demo.com.huabandemo.MyFollowing.MyAttentionActivity;
 import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Search.SearchActivity;
 import licola.demo.com.huabandemo.Setting.SettingsActivity;
 import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
-import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.Module.ModuleFragment;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.Welcome.WelcomeActivity;
+import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -64,7 +65,7 @@ public class MainActivity extends BaseActivity
 
     private FragmentManager fragmentManager;
 
-    private final int mDrawableList[] = {R.drawable.ic_loyalty_black_36dp, R.drawable.ic_cloud_upload_black_36dp,
+    private final int mDrawableList[] = {R.drawable.ic_loyalty_black_36dp, R.drawable.ic_explore_black_36dp,
             R.drawable.ic_message_black_36dp, R.drawable.ic_people_black_36dp};
     private String[] types;
     private String[] titles;
@@ -72,6 +73,10 @@ public class MainActivity extends BaseActivity
     private Boolean isLogin;
     private String mUserName;
     private String mUserId;
+
+    //包含的两个fragment共享联网关键字段
+    public String mTokenType;
+    public String mTokenAccess;
 
     @Override
     protected int getLayoutId() {
@@ -121,6 +126,8 @@ public class MainActivity extends BaseActivity
         isLogin = (Boolean) SPUtils.get(mContext, Constant.ISLOGIN, false);
         mUserName = (String) SPUtils.get(mContext, Constant.USERNAME, "");
         mUserId= (String) SPUtils.get(mContext,Constant.USERID,"");
+        mTokenType = (String) SPUtils.get(mContext, Constant.TOKENTYPE, "");
+        mTokenAccess = (String) SPUtils.get(mContext, Constant.TOKENACCESS, "");
     }
 
     @Override
@@ -130,12 +137,17 @@ public class MainActivity extends BaseActivity
     }
 
     private void initFloatingActionButton() {
-        mFab_main.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SearchActivity.launch(MainActivity.this);
-            }
-        });
+        RxView.clicks(mFab_main)
+//                .throttleFirst(500, TimeUnit.MILLISECONDS)//设置500毫秒的间隔 防止抖动 用户点击太快登录多次
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+//                        Logger.d();
+//                        SearchActivity.launch(MainActivity.this);
+                        WelcomeActivity.launch(MainActivity.this);
+                    }
+                });
+
     }
 
     @Override
@@ -155,7 +167,7 @@ public class MainActivity extends BaseActivity
             if (!TextUtils.isEmpty(key)) {
                 key = getString(R.string.urlImageRoot) + key;
                 new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_nav_head, key)
-                        .setIsCircle(true)
+                        .setIsCircle(true,true)
                         .build();
             } else {
                 Logger.d("user head key is empty");
@@ -205,7 +217,7 @@ public class MainActivity extends BaseActivity
             btn = (Button) group.getChildAt(i);
             btn.setCompoundDrawablesWithIntrinsicBounds(
                     null,
-                    CompatUtil.getTintCompatDrawable(mContext, mDrawableList[i], R.color.tint_list_pink),
+                    CompatUtil.getTintListDrawable(mContext, mDrawableList[i], R.color.tint_list_pink),
                     null,
                     null);
             btn.setOnClickListener(this);
