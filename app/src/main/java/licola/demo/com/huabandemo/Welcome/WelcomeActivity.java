@@ -1,91 +1,59 @@
 package licola.demo.com.huabandemo.Welcome;
 
-import android.annotation.SuppressLint;
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.MotionEvent;
-import android.view.View;
+import android.widget.ImageView;
 
+import java.util.concurrent.TimeUnit;
+
+import butterknife.Bind;
+import licola.demo.com.huabandemo.Base.BaseActivity;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitGsonRx;
+import licola.demo.com.huabandemo.Login.TokenBean;
+import licola.demo.com.huabandemo.Main.MainActivity;
+import licola.demo.com.huabandemo.Observable.MyRxObservable;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Base64;
+import licola.demo.com.huabandemo.Util.Constant;
+import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.SPUtils;
+import licola.demo.com.huabandemo.Util.TimeUtils;
+import licola.demo.com.huabandemo.Util.Utils;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
+ * Created by LiYi on 2016/04/11  14:26
+ * 欢迎页 进行登录判断 和联网重获token
  */
-public class WelcomeActivity extends AppCompatActivity {
-    /**
-     * Whether or not the system UI should be auto-hidden after
-     * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
-     */
-    private static final boolean AUTO_HIDE = true;
 
-    /**
-     * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
-     * user interaction before hiding the system UI.
-     */
-    private static final int AUTO_HIDE_DELAY_MILLIS = 3000;
+public class WelcomeActivity extends BaseActivity {
+    //登录的报文需要
+    private static final String BASIC = "Basic ";
+    private static final String PASSWORD = "password";
+    private static final int mTimeDifference= TimeUtils.HOUR*2;
 
-    /**
-     * Some older devices needs a small delay between UI widget updates
-     * and a change of the status and navigation bar.
-     */
-    private static final int UI_ANIMATION_DELAY = 300;
-    private final Handler mHideHandler = new Handler();
-    private View mContentView;
-    private final Runnable mHidePart2Runnable = new Runnable() {
-        @SuppressLint("InlinedApi")
-        @Override
-        public void run() {
-            // Delayed removal of status and navigation bar
+    @Bind(R.id.img_welcome)
+    ImageView mImageView;
 
-            // Note that some of these constants are new as of API 16 (Jelly Bean)
-            // and API 19 (KitKat). It is safe to use them, as they are inlined
-            // at compile-time and do nothing on earlier devices.
-            mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        }
-    };
-    private View mControlsView;
-    private final Runnable mShowPart2Runnable = new Runnable() {
-        @Override
-        public void run() {
-            // Delayed display of UI elements
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.show();
-            }
-            mControlsView.setVisibility(View.VISIBLE);
-        }
-    };
-    private boolean mVisible;
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-        }
-    };
-    /**
-     * Touch listener to use for in-layout UI controls to delay hiding the
-     * system UI. This is to prevent the jarring behavior of controls going away
-     * while interacting with activity UI.
-     */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-            return false;
-        }
-    };
+    private Boolean isLogin = false;
+
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_welcome;
+    }
+
+    @Override
+    protected String getTAG() {
+        return this.toString();
+    }
 
     public static void launch(Activity activity) {
         Intent intent = new Intent(activity, WelcomeActivity.class);
@@ -95,78 +63,74 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        isLogin = (Boolean) SPUtils.get(getApplicationContext(), Constant.ISLOGIN, isLogin);
 
-        setContentView(R.layout.activity_welcome);
-
-        mVisible = true;
-        mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView = findViewById(R.id.fullscreen_content);
-
-
-        // Set up the user interaction to manually show or hide the system UI.
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggle();
-            }
-        });
-
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
     }
 
     @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    protected void onResume() {
+        super.onResume();
+        Animator animation = AnimatorInflater.loadAnimator(mContext, R.animator.welcome_animator);
+        animation.setTarget(mImageView);
 
-        // Trigger the initial hide() shortly after the activity has been
-        // created, to briefly hint to the user that UI controls
-        // are available.
-        delayedHide(100);
+        //observeOn() 指定的是它之后的操作所在的线程
+        //subscribeOn() 作用于Observable对象
+        MyRxObservable.add(animation)
+                .subscribeOn(AndroidSchedulers.mainThread())//指定订阅的Observable对象的call方法运行在ui线程中
+                .observeOn(Schedulers.io())
+                .filter(new Func1<Void, Boolean>() {
+                    @Override
+                    public Boolean call(Void aVoid) {
+                        return isLogin;
+                    }
+                })
+                .filter(new Func1<Void, Boolean>() {
+                    @Override
+                    public Boolean call(Void aVoid) {
+                        Long lastTime= (Long) SPUtils.get(getApplicationContext(),Constant.LOGINTIME,0L);
+                        long dTime=System.currentTimeMillis()-lastTime;
+                        Logger.d("dTime "+dTime);
+                        return  dTime>mTimeDifference;
+                    }
+                })
+                .flatMap(new Func1<Void, Observable<TokenBean>>() {
+                    @Override
+                    public Observable<TokenBean> call(Void aVoid) {
+                        String userAccount= (String) SPUtils.get(getApplicationContext(),Constant.USERACCOUNT,"");
+                        String userPassword= (String) SPUtils.get(getApplicationContext(),Constant.USERPASSWORD,"");
+                        return getUserToken(userAccount,userPassword);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())//最后统一回到UI线程中处理
+                .subscribe(new Subscriber<TokenBean>() {
+                    @Override
+                    public void onCompleted() {
+                        Logger.d();
+                        MainActivity.launch(WelcomeActivity.this);
+                        finish();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.toString());
+                    }
+
+                    @Override
+                    public void onNext(TokenBean tokenBean) {
+                        Logger.d("https success");
+                        saveToken(tokenBean);
+                    }
+                });
+
     }
 
-    private void toggle() {
-        if (mVisible) {
-            hide();
-        } else {
-            show();
-        }
+    private void saveToken(TokenBean tokenBean) {
+        SPUtils.put(getApplicationContext(),Constant.TOKENACCESS,tokenBean.getAccess_token());
+        SPUtils.put(getApplicationContext(),Constant.TOKENTYPE,tokenBean.getToken_type());
     }
 
-    private void hide() {
-        // Hide UI first
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
-        mControlsView.setVisibility(View.GONE);
-        mVisible = false;
-
-        // Schedule a runnable to remove the status and navigation bar after a delay
-        mHideHandler.removeCallbacks(mShowPart2Runnable);
-        mHideHandler.postDelayed(mHidePart2Runnable, UI_ANIMATION_DELAY);
+    private Observable<TokenBean> getUserToken(String username, String password) {
+        return RetrofitGsonRx.service.httpsTokenRx(BASIC + Base64.getClientInfo(), PASSWORD, username, password);
     }
 
-    @SuppressLint("InlinedApi")
-    private void show() {
-        // Show the system bar
-        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        mVisible = true;
-
-        // Schedule a runnable to display UI elements after a delay
-        mHideHandler.removeCallbacks(mHidePart2Runnable);
-        mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
-    }
-
-    /**
-     * Schedules a call to hide() in [delay] milliseconds, canceling any
-     * previously scheduled calls.
-     */
-    private void delayedHide(int delayMillis) {
-        mHideHandler.removeCallbacks(mHideRunnable);
-        mHideHandler.postDelayed(mHideRunnable, delayMillis);
-    }
 }

@@ -8,18 +8,18 @@
         <item name="android:windowContentTransitions">true</item>
     </style>
 
-    <style name="AppTheme.ActionBar_StatusBarPrimaryDark">
+    <style name="AppTheme.ActionBar_StatusBarDark">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@color/primary_dark</item>
         <item name="android:windowContentTransitions">false</item>
     </style>
 
-    <style name="AppTheme.ActionBar_StatusBarGreyDark">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
+    <style name="AppTheme.ActionBar_StatusBarPrimaryDark" parent="AppTheme.ActionBar_StatusBarDark">
+        <item name="android:statusBarColor">@color/primary_dark</item>
+    </style>
+
+    <style name="AppTheme.ActionBar_StatusBarGreyDark" parent="AppTheme.ActionBar_StatusBarDark">
         <item name="android:statusBarColor">@color/grey_a900</item>
-        <item name="android:windowContentTransitions">false</item>
     </style>
 
 </resources>

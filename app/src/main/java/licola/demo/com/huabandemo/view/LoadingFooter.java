@@ -26,13 +26,12 @@ public class LoadingFooter extends RelativeLayout {
     private TextView mLoadingText;
 
     public LoadingFooter(Context context) {
-        super(context);
-        init(context);
+        this(context,null);
     }
 
     public LoadingFooter(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context);
+        this(context, attrs,0);
+
     }
 
     public LoadingFooter(Context context, AttributeSet attrs, int defStyleAttr) {

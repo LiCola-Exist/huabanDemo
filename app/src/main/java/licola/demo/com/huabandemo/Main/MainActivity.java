@@ -31,6 +31,7 @@ import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Login.LoginActivity;
 import licola.demo.com.huabandemo.MyFollowing.MyAttentionActivity;
+import licola.demo.com.huabandemo.Search.SearchActivity;
 import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Setting.SettingsActivity;

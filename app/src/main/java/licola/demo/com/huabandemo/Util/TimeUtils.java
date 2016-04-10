@@ -10,11 +10,11 @@ import java.util.Locale;
 public class TimeUtils {
     private static final String TAG = "TimeUtils";
 
-    private static final int SECOND = 1000;
-    private static final int MINUTES = SECOND * 60;
-    private static final int HOUR = MINUTES * 60;
-    private static final int DAY = HOUR * 24;
-    private static final int WEEK = DAY * 7;
+    public static final int SECOND = 1000;
+    public static final int MINUTES = SECOND * 60;
+    public static final int HOUR = MINUTES * 60;
+    public static final int DAY = HOUR * 24;
+    public static final int WEEK = DAY * 7;
 
     /**
      * 返回用户友好的时间差

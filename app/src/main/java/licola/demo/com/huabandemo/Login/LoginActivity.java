@@ -218,7 +218,7 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    private void httpLogin(String username, String password) {
+    private void httpLogin(final String username, final String password) {
         getUserToken(username, password)
                 //得到toke成功 用内部字段保存 在最后得到用户信息一起保存写入
                 .map(new Func1<TokenBean, TokenBean>() {
@@ -275,23 +275,32 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onNext(UserMeBean userMeBean) {
                         NetUtils.showSnackBar(mContext, mScrollViewLogin, snack_message_login_success);
-                        saveUserInfo(userMeBean, mTokenAccess, mTokenRefresh, mTokenType, mTokenExpiresIn);
+                        saveUserInfo(userMeBean, mTokenAccess, mTokenRefresh, mTokenType, mTokenExpiresIn, username, password);
                     }
                 });
     }
 
 
     private void saveUserInfo(UserMeBean result,
-                              String mTokenAccess, String mTokenRefresh, String mTokenType, int mTokenExpiresIn) {
+                              String mTokenAccess, String mTokenRefresh,
+                              String mTokenType, int mTokenExpiresIn,
+                              String mUserAccount, String mUserPassword) {
+
         //保存先清空内容
         SPUtils.clear(getApplicationContext());
+        //逻辑的关键信息
+        SPUtils.put(getApplicationContext(), Constant.ISLOGIN, Boolean.TRUE);
+        SPUtils.put(getApplicationContext(), Constant.LOGINTIME, System.currentTimeMillis());//获取当前时间作为登录时间
+        SPUtils.put(getApplicationContext(), Constant.USERACCOUNT, mUserAccount);
+        SPUtils.put(getApplicationContext(), Constant.USERPASSWORD, mUserPassword);
+
         //token 信息
         SPUtils.put(getApplicationContext(), Constant.TOKENACCESS, mTokenAccess);
         SPUtils.put(getApplicationContext(), Constant.TOKENREFRESH, mTokenRefresh);
         SPUtils.put(getApplicationContext(), Constant.TOKENTYPE, mTokenType);
         SPUtils.put(getApplicationContext(), Constant.TOKENEXPIRESIN, mTokenExpiresIn);
         //用户个人信息
-        SPUtils.put(getApplicationContext(), Constant.ISLOGIN, Boolean.TRUE);
+
         SPUtils.put(getApplicationContext(), Constant.USERNAME, result.getUsername());
         SPUtils.put(getApplicationContext(), Constant.USERID, String.valueOf(result.getUser_id()));
         SPUtils.put(getApplicationContext(), Constant.USERHEADKEY, result.getAvatar().getKey());

@@ -3,6 +3,7 @@ package licola.demo.com.huabandemo.Util;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -18,11 +19,28 @@ import licola.demo.com.huabandemo.R;
  * Created by LiCola on  2015/12/05  14:12
  */
 public final class Utils {
+    /**
+     * 检查对昂非空
+     * @param object
+     * @param message
+     * @param <T>
+     * @return
+     */
     public static <T> T checkNotNull(T object, String message) {
         if (object == null) {
             throw new NullPointerException(message);
         }
         return object;
+    }
+
+    /**
+     * 检查是否在主线程
+     */
+    public static void checkUiThread() {
+        if (Looper.getMainLooper() != Looper.myLooper()) {
+            throw new IllegalStateException(
+                    "Must be called from the main thread. Was: " + Thread.currentThread());
+        }
     }
 
     /**
