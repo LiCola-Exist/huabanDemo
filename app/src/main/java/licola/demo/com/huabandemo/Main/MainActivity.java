@@ -3,6 +3,7 @@ package licola.demo.com.huabandemo.Main;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -31,7 +32,6 @@ import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Login.LoginActivity;
 import licola.demo.com.huabandemo.MyFollowing.MyAttentionActivity;
-import licola.demo.com.huabandemo.Search.SearchActivity;
 import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Setting.SettingsActivity;
@@ -47,8 +47,9 @@ import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        OnClickListener ,
-        OnPinsFragmentInteractionListener {
+        OnClickListener,
+        OnPinsFragmentInteractionListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     //布局中控件 自动生成
     @Bind(R.id.navigation_view)
@@ -101,7 +102,6 @@ public class MainActivity extends BaseActivity
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,7 +111,7 @@ public class MainActivity extends BaseActivity
         fragmentManager = getSupportFragmentManager();
         getData();
         initFloatingActionButton();
-
+        getSharedPreferences(SPUtils.FILE_NAME, SPUtils.MODE).registerOnSharedPreferenceChangeListener(this);
         intiDrawer(toolbar);//初始化DrawerLayout
         initHeadView();//为Drawer添加头部
         intiMenuView();//为Drawer添加menu菜单项目
@@ -125,10 +125,18 @@ public class MainActivity extends BaseActivity
         types = getResources().getStringArray(R.array.type_array);
         titles = getResources().getStringArray(R.array.title_array);
         isLogin = (Boolean) SPUtils.get(mContext, Constant.ISLOGIN, false);
-        mUserName = (String) SPUtils.get(mContext, Constant.USERNAME, "");
-        mUserId= (String) SPUtils.get(mContext,Constant.USERID,"");
-        mTokenType = (String) SPUtils.get(mContext, Constant.TOKENTYPE, "");
-        mTokenAccess = (String) SPUtils.get(mContext, Constant.TOKENACCESS, "");
+        if (isLogin) {
+            //如果登录才有取以下值的意义
+            getDataByLogin();
+        }
+
+    }
+
+    private void getDataByLogin() {
+        mUserName = (String) SPUtils.get(mContext, Constant.USERNAME, mUserName);
+        mUserId = (String) SPUtils.get(mContext, Constant.USERID, mUserId);
+        mTokenType = (String) SPUtils.get(mContext, Constant.TOKENTYPE, mTokenType);
+        mTokenAccess = (String) SPUtils.get(mContext, Constant.TOKENACCESS, mTokenAccess);
     }
 
     @Override
@@ -168,7 +176,7 @@ public class MainActivity extends BaseActivity
             if (!TextUtils.isEmpty(key)) {
                 key = getString(R.string.urlImageRoot) + key;
                 new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_nav_head, key)
-                        .setIsCircle(true,true)
+                        .setIsCircle(true, true)
                         .build();
             } else {
                 Logger.d("user head key is empty");
@@ -183,8 +191,6 @@ public class MainActivity extends BaseActivity
             if (!TextUtils.isEmpty(email)) {
                 tv_nav_email.setText(email);
             }
-        }else {
-
         }
     }
 
@@ -276,6 +282,12 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        getSharedPreferences(SPUtils.FILE_NAME, SPUtils.MODE).registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -302,11 +314,13 @@ public class MainActivity extends BaseActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        if (item.getGroupId()==R.id.menu_group_type){
+        if (item.getGroupId() == R.id.menu_group_type) {
             selectFragment(item.getItemId());
-        }else {
-            if (item.getItemId()==R.id.nav_set){
+        } else {
+            if (item.getItemId() == R.id.nav_set) {
                 SettingsActivity.launch(this);
+            } else if (item.getItemId() == R.id.nav_exit) {
+                exitOperate();//退出操作
             }
             //// TODO: 2016/3/24 0024 处理 设置 关于 界面
             Logger.d(item.getTitle().toString());
@@ -316,9 +330,15 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
+    private void exitOperate() {
+        SPUtils.clear(mContext);
+        finish();
+    }
+
 
     /**
      * 主界面 drawer 所有控件的点击事件 回调处理
+     *
      * @param v
      */
     @Override
@@ -327,8 +347,8 @@ public class MainActivity extends BaseActivity
         switch (id) {
             case R.id.img_nav_head:
                 if (isLogin) {
-                    UserInfoActivity.launch(MainActivity.this,mUserId,mUserName);
-                }else {
+                    UserInfoActivity.launch(MainActivity.this, mUserId, mUserName);
+                } else {
                     LoginActivity.launch(MainActivity.this);
                 }
                 break;
@@ -350,12 +370,20 @@ public class MainActivity extends BaseActivity
     @Override
     public void onClickPinsItemImage(PinsAndUserEntity bean, View view) {
         Logger.d();
-        ImageDetailActivity.launch(this,ImageDetailActivity.ACTION_MAIN);
+        ImageDetailActivity.launch(this, ImageDetailActivity.ACTION_MAIN);
     }
 
     @Override
     public void onClickPinsItemText(PinsAndUserEntity bean, View view) {
         Logger.d();
         ImageDetailActivity.launch(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Logger.d(key);
+        if (Constant.ISLOGIN.equals(key)) {
+            isLogin = sharedPreferences.getBoolean(Constant.ISLOGIN, false);
+        }
     }
 }

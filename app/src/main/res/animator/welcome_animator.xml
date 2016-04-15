@@ -6,13 +6,13 @@
         android:valueTo="1.2f"
         android:valueType="floatType"
         android:propertyName="scaleY"
-        android:interpolator="@android:interpolator/decelerate_cubic"
+        android:interpolator="@android:interpolator/decelerate_quint"
         />
     <objectAnimator android:duration="2000"
         android:valueFrom="1f"
         android:valueTo="1.2f"
         android:valueType="floatType"
         android:propertyName="scaleX"
-        android:interpolator="@android:interpolator/decelerate_cubic"
+        android:interpolator="@android:interpolator/decelerate_quint"
         />
 </set>

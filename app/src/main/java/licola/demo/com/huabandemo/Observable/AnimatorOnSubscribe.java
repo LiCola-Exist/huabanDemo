@@ -29,14 +29,14 @@ public class AnimatorOnSubscribe implements Observable.OnSubscribe<Void> {
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
                 subscriber.onNext(null);
-                Logger.d("onAnimationStart");
+//                Logger.d("onAnimationStart");
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 subscriber.onCompleted();
-                Logger.d("onAnimationEnd");
+//                Logger.d("onAnimationEnd");
             }
         };
 

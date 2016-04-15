@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
+import com.jakewharton.rxbinding.support.design.widget.RxSnackbar;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
@@ -31,10 +32,12 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
+import licola.demo.com.huabandemo.Util.SPBuild;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitGsonRx;
@@ -54,6 +57,8 @@ public class LoginActivity extends BaseActivity {
     //登录的报文需要
     private static final String BASIC = "Basic ";
     private static final String PASSWORD = "password";
+    private static final String TYPE_KEY = "type_key";
+
 
     private String mTokenAccess;//后续所有的https联网都使用 需要暂时保存
     private String mTokenRefresh;
@@ -61,12 +66,6 @@ public class LoginActivity extends BaseActivity {
     private int mTokenExpiresIn;
 
     //需要的资源
-    @BindString(R.string.snack_message_net_error)
-    String snack_message_net_error;
-    @BindString(R.string.snack_message_password_error)
-    String snack_message_password_error;
-    @BindString(R.string.snack_action_to_setting)
-    String snack_action_to_setting;
     @BindString(R.string.snack_message_login_success)
     String snack_message_login_success;
 
@@ -100,18 +99,27 @@ public class LoginActivity extends BaseActivity {
         activity.startActivity(intent);
     }
 
+    public static void launch(Activity activity, String message) {
+        Intent intent = new Intent(activity, LoginActivity.class);
+        intent.putExtra(TYPE_KEY, message);
+        activity.startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        TAG = this.getClass().getSimpleName();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_login);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        String message = getIntent().getStringExtra(TYPE_KEY);
+        if (!TextUtils.isEmpty(message)) {
+            NetUtils.showSnackBar(mScrollViewLogin, message);
+        }
         // Set up the login form.
         addUsernameAutoComplete();
 
         initListener();
+
 
     }
 
@@ -251,31 +259,30 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onCompleted() {
                         Logger.d();
-                        showProgress(false);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Logger.d(e.toString());
                         showProgress(false);
-                        if (e instanceof SocketTimeoutException) {
-                            //SocketTimeoutException socket连接超时
-                            NetUtils.showNetworkErrorSnackBar(mContext, mScrollViewLogin, snack_message_net_error, snack_action_to_setting);
-                        }
-                        if (e instanceof UnknownHostException) {
-                            //未知的网络主机 一般是没有联网
-                            NetUtils.showNetworkErrorSnackBar(mContext, mScrollViewLogin, snack_message_net_error, snack_action_to_setting);
-                        }
-                        if (e instanceof HttpException) {
-                            Snackbar.make(mScrollViewLogin, snack_message_password_error, Snackbar.LENGTH_LONG)
-                                    .show();
-                        }
+                        NetUtils.checkHttpException(mContext, e, mScrollViewLogin);
                     }
 
                     @Override
                     public void onNext(UserMeBean userMeBean) {
-                        NetUtils.showSnackBar(mContext, mScrollViewLogin, snack_message_login_success);
+                        Logger.d();
+                        showProgress(false);
+                        NetUtils.showSnackBar(mScrollViewLogin, snack_message_login_success).setCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                super.onDismissed(snackbar, event);
+                                UserInfoActivity.launch(LoginActivity.this, String.valueOf(userMeBean.getUser_id()), userMeBean.getUsername());
+                                finish();
+                            }
+                        });
                         saveUserInfo(userMeBean, mTokenAccess, mTokenRefresh, mTokenType, mTokenExpiresIn, username, password);
+                        Logger.d();
+
                     }
                 });
     }
@@ -286,25 +293,40 @@ public class LoginActivity extends BaseActivity {
                               String mTokenType, int mTokenExpiresIn,
                               String mUserAccount, String mUserPassword) {
 
-        //保存先清空内容
-        SPUtils.clear(getApplicationContext());
-        //逻辑的关键信息
-        SPUtils.put(getApplicationContext(), Constant.ISLOGIN, Boolean.TRUE);
-        SPUtils.put(getApplicationContext(), Constant.LOGINTIME, System.currentTimeMillis());//获取当前时间作为登录时间
-        SPUtils.put(getApplicationContext(), Constant.USERACCOUNT, mUserAccount);
-        SPUtils.put(getApplicationContext(), Constant.USERPASSWORD, mUserPassword);
+//        //保存先清空内容
+//        SPUtils.clear(getApplicationContext());
+//        //逻辑的关键信息
+//        SPUtils.put(getApplicationContext(), Constant.ISLOGIN, Boolean.TRUE);
+//        SPUtils.put(getApplicationContext(), Constant.LOGINTIME, System.currentTimeMillis());//获取当前时间作为登录时间
+//        SPUtils.put(getApplicationContext(), Constant.USERACCOUNT, mUserAccount);
+//        SPUtils.put(getApplicationContext(), Constant.USERPASSWORD, mUserPassword);
+//
+//        //token 信息
+//        SPUtils.put(getApplicationContext(), Constant.TOKENACCESS, mTokenAccess);
+//        SPUtils.put(getApplicationContext(), Constant.TOKENREFRESH, mTokenRefresh);
+//        SPUtils.put(getApplicationContext(), Constant.TOKENTYPE, mTokenType);
+//        SPUtils.put(getApplicationContext(), Constant.TOKENEXPIRESIN, mTokenExpiresIn);
+//        //用户个人信息
+//
+//        SPUtils.put(getApplicationContext(), Constant.USERNAME, result.getUsername());
+//        SPUtils.put(getApplicationContext(), Constant.USERID, String.valueOf(result.getUser_id()));
+//        SPUtils.put(getApplicationContext(), Constant.USERHEADKEY, result.getAvatar().getKey());
+//        SPUtils.put(getApplicationContext(), Constant.USEREMAIL, result.getEmail());
 
-        //token 信息
-        SPUtils.put(getApplicationContext(), Constant.TOKENACCESS, mTokenAccess);
-        SPUtils.put(getApplicationContext(), Constant.TOKENREFRESH, mTokenRefresh);
-        SPUtils.put(getApplicationContext(), Constant.TOKENTYPE, mTokenType);
-        SPUtils.put(getApplicationContext(), Constant.TOKENEXPIRESIN, mTokenExpiresIn);
-        //用户个人信息
-
-        SPUtils.put(getApplicationContext(), Constant.USERNAME, result.getUsername());
-        SPUtils.put(getApplicationContext(), Constant.USERID, String.valueOf(result.getUser_id()));
-        SPUtils.put(getApplicationContext(), Constant.USERHEADKEY, result.getAvatar().getKey());
-        SPUtils.put(getApplicationContext(), Constant.USEREMAIL, result.getEmail());
+        new SPBuild(getApplicationContext())
+                .addData(Constant.ISLOGIN, Boolean.TRUE)
+                .addData(Constant.LOGINTIME, System.currentTimeMillis())
+                .addData(Constant.USERACCOUNT, mUserAccount)
+                .addData(Constant.USERPASSWORD, mUserPassword)
+                .addData(Constant.TOKENACCESS, mTokenAccess)
+                .addData(Constant.TOKENREFRESH, mTokenRefresh)
+                .addData(Constant.TOKENTYPE, mTokenType)
+                .addData(Constant.TOKENEXPIRESIN, mTokenExpiresIn)
+                .addData(Constant.USERNAME, result.getUsername())
+                .addData(Constant.USERID, String.valueOf(result.getUser_id()))
+                .addData(Constant.USERHEADKEY, result.getAvatar().getKey())
+                .addData(Constant.USEREMAIL, result.getEmail())
+                .build();
     }
 
     private boolean isEmailValid(String email) {

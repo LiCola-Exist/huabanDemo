@@ -10,6 +10,14 @@ import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
+import com.google.gson.JsonSyntaxException;
+
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+
+import licola.demo.com.huabandemo.R;
+
 /**
  * 跟网络相关的工具类
  *
@@ -37,16 +45,36 @@ public class NetUtils {
                         Intent intent = new Intent(Settings.ACTION_SETTINGS);
                         context.startActivity(intent);
                     }
-                }).show();
-    }
-
-    public static void showSnackBar(final Context context, View view, String message) {
-        Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
+                })
                 .show();
+
     }
 
+    public static Snackbar showSnackBar(View view, String message) {
+        Snackbar snackbar=Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
+        snackbar.show();
+        return snackbar;
+    }
 
+    public static void checkHttpException(Context mContext, Throwable mThrowable, View mRootView) {
+        String snack_action_to_setting = mContext.getString(R.string.snack_action_to_setting);
+        if ((mThrowable instanceof UnknownHostException)) {
+            String snack_message_net_error = mContext.getString(R.string.snack_message_net_error);
+            NetUtils.showNetworkErrorSnackBar(mContext, mRootView, snack_message_net_error, snack_action_to_setting);
+        } else if (mThrowable instanceof JsonSyntaxException) {
+            String snack_message_data_error = mContext.getString(R.string.snack_message_data_error);
+            NetUtils.showNetworkErrorSnackBar(mContext, mRootView, snack_message_data_error, snack_action_to_setting);
+        } else if (mThrowable instanceof SocketTimeoutException) {
+            String snack_message_time_out = mContext.getString(R.string.snack_message_timeout_error);
+            NetUtils.showNetworkErrorSnackBar(mContext, mRootView, snack_message_time_out, snack_action_to_setting);
+        } else if (mThrowable instanceof ConnectException) {
+            String snack_message_net_error = mContext.getString(R.string.snack_message_net_error);
+            NetUtils.showNetworkErrorSnackBar(mContext, mRootView, snack_message_net_error, snack_action_to_setting);
+        } else {
+            String snack_message_unknown_error = mContext.getString(R.string.snack_message_unknown_error);
+            Snackbar.make(mRootView, snack_message_unknown_error, Snackbar.LENGTH_LONG);
+        }
+    }
 
     /**
      * 判断网络是否连接

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.google.gson.JsonSyntaxException;
 
+import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
@@ -29,15 +30,6 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class BaseFragment extends Fragment {
 
-    //网络错误 提示文字 放在父类方便子类使用
-    @BindString(R.string.snack_message_net_error)
-    protected String snack_message_net_error;
-    @BindString(R.string.snack_action_to_setting)
-    protected String snack_action_to_setting;
-    @BindString(R.string.snack_message_unknown_error)
-    protected String snack_message_unknown_error;
-    @BindString(R.string.snack_message_data_error)
-    protected String snack_message_data_error;
 
     protected String TAG = getTAG();
 
@@ -57,7 +49,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void addSubscription(Subscription s) {
-        if (s==null){
+        if (s == null) {
             return;
         }
 
@@ -167,15 +159,7 @@ public abstract class BaseFragment extends Fragment {
      * @param e
      */
     protected void checkException(Throwable e) {
-        if ((e instanceof UnknownHostException)) {
-            NetUtils.showNetworkErrorSnackBar(getActivity(), mRootView, snack_message_net_error, snack_action_to_setting);
-        } else if (e instanceof JsonSyntaxException) {
-            NetUtils.showNetworkErrorSnackBar(getActivity(), mRootView, snack_message_data_error, snack_action_to_setting);
-        } else if (e instanceof SocketTimeoutException) {
-            NetUtils.showNetworkErrorSnackBar(getActivity(), mRootView, snack_message_net_error, snack_action_to_setting);
-        } else {
-            Snackbar.make(mRootView, snack_message_unknown_error, Snackbar.LENGTH_LONG);
-        }
+        NetUtils.checkHttpException(getContext(),e,mRootView);
     }
 
 }

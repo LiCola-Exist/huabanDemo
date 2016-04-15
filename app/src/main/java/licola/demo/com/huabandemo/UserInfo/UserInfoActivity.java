@@ -41,6 +41,11 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+/**
+ *  用户界面 我和其他用公用
+ *  区别 在toolbar不同功能
+ *  在于每个Fragment中的的Adapter中的item项目操作不同
+ */
 public class UserInfoActivity
         extends BaseActivity implements OnBoardFragmentInteractionListener<UserBoardItemBean>, OnPinsFragmentInteractionListener {
     private static final String TYPE_KEY = "TYPE_KEY";

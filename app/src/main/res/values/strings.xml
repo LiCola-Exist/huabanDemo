@@ -29,7 +29,8 @@
 
     <string name="snack_message_main_gather">start to gather</string>
     <string name="snack_message_login_success">login success</string>
-    <string name="snack_message_net_error">network error to system setting</string>
+    <string name="snack_message_net_error">network error please to check network</string>
+    <string name="snack_message_timeout_error">time out please to check network</string>
     <string name="snack_message_password_error">This password is incorrect</string>
     <string name="snack_message_unknown_error">unknown error</string>
     <string name="snack_message_data_error">data error</string>
@@ -114,7 +115,7 @@
     <string name="text_edit">Edit</string>
     <string name="text_following">Following</string>
     <string name="text_followed">Followed</string>
-
+    <string name="text_auto_login_fail">Auto Login Fail</string>
 
     <string name="text_image_describe_null">noting describe</string>
     <string name="text_board_describe_null">noting describe</string>

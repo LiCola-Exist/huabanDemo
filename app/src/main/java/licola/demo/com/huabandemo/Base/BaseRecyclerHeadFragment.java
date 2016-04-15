@@ -70,6 +70,7 @@ public abstract class BaseRecyclerHeadFragment
 
     /**
      * 提供给子类过滤 网络返回list 并休息ui状态的方法
+     *
      * @return
      */
     protected Func1<K, Boolean> getFilterFunc1() {
@@ -131,7 +132,7 @@ public abstract class BaseRecyclerHeadFragment
 
     }
 
-    protected RecyclerView.LayoutManager getLayoutManager(){
+    protected RecyclerView.LayoutManager getLayoutManager() {
         return new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
     }
 

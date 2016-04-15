@@ -3,12 +3,18 @@ package licola.demo.com.huabandemo.Base;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.NetUtils;
+import retrofit.HttpException;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
@@ -82,6 +88,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected boolean isTranslucentStatusBar() {
         return true;
     }
+
+
 
     @Override
     protected void onStart() {
