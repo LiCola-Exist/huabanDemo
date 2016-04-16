@@ -5,8 +5,10 @@ import rx.Subscriber;
 
 /**
  * Created by LiCola on  2016/03/22  20:14
+ * 多数网络返会都是使用 这个类
+ * 配合AvatarConverter使用 正则转 Object avatar 为String
  */
-public class PinsAndUserEntity  {
+public class PinsAndUserEntity {
     private int pin_id;
     private int user_id;
     private int board_id;
@@ -65,6 +67,7 @@ public class PinsAndUserEntity  {
      */
 
     private BoardEntity board;
+
     /**
      * user_id : 605533
      * username : 宁馨郁金香
@@ -72,7 +75,6 @@ public class PinsAndUserEntity  {
      * created_at : 1344088961
      * avatar : https
      */
-
 
 
     public void setPin_id(int pin_id) {
@@ -131,8 +133,8 @@ public class PinsAndUserEntity  {
         this.like_count = like_count;
     }
 
-    public void setSeq(int seq){
-        this.seq=seq;
+    public void setSeq(int seq) {
+        this.seq = seq;
     }
 
     public void setComment_count(int comment_count) {
@@ -147,8 +149,8 @@ public class PinsAndUserEntity  {
         this.is_private = is_private;
     }
 
-    public void setLiked(boolean liked){
-        this.liked=liked;
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 
     public void setOrig_source(String orig_source) {
@@ -220,7 +222,9 @@ public class PinsAndUserEntity  {
         return like_count;
     }
 
-    public int getSeq(){return seq;}
+    public int getSeq() {
+        return seq;
+    }
 
     public int getComment_count() {
         return comment_count;

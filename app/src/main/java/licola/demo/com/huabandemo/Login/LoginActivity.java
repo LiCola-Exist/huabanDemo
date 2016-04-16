@@ -20,17 +20,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
-import com.jakewharton.rxbinding.support.design.widget.RxSnackbar;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.BindString;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.Util.Base64;
@@ -38,10 +36,7 @@ import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPBuild;
-import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Base.BaseActivity;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitGsonRx;
-import retrofit.HttpException;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -55,7 +50,7 @@ import rx.schedulers.Schedulers;
  */
 public class LoginActivity extends BaseActivity {
     //登录的报文需要
-    private static final String BASIC = "Basic ";
+
     private static final String PASSWORD = "password";
     private static final String TYPE_KEY = "type_key";
 
@@ -227,7 +222,8 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void httpLogin(final String username, final String password) {
-        getUserToken(username, password)
+        RetrofitService.createGonsService()
+                .httpsTokenRx(Base64.mClientInto, PASSWORD, username, password)
                 //得到toke成功 用内部字段保存 在最后得到用户信息一起保存写入
                 .map(new Func1<TokenBean, TokenBean>() {
                     @Override
@@ -243,7 +239,7 @@ public class LoginActivity extends BaseActivity {
                 .flatMap(new Func1<TokenBean, Observable<UserMeBean>>() {
                     @Override
                     public Observable<UserMeBean> call(TokenBean tokenBean) {
-                        return getUserInfo(tokenBean.getToken_type(), tokenBean.getAccess_token());
+                        return RetrofitService.createGonsService().httpUserRx(tokenBean.getToken_type() + " " + tokenBean.getAccess_token());
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -327,6 +323,7 @@ public class LoginActivity extends BaseActivity {
                 .addData(Constant.USERHEADKEY, result.getAvatar().getKey())
                 .addData(Constant.USEREMAIL, result.getEmail())
                 .build();
+
     }
 
     private boolean isEmailValid(String email) {
@@ -336,14 +333,6 @@ public class LoginActivity extends BaseActivity {
     private boolean isPasswordValid(String password) {
 
         return password.length() > 4;
-    }
-
-    private Observable<TokenBean> getUserToken(String username, String password) {
-        return RetrofitGsonRx.service.httpsTokenRx(BASIC + Base64.getClientInfo(), PASSWORD, username, password);
-    }
-
-    private Observable<UserMeBean> getUserInfo(String bearer, String key) {
-        return RetrofitGsonRx.service.httpUserRx(bearer + " " + key);
     }
 
 

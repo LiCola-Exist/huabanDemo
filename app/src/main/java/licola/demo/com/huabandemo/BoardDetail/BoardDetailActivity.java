@@ -16,11 +16,15 @@ import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.Util.Base64;
 
 public class BoardDetailActivity extends BaseActivity
         implements OnBoardDetailFragmentInteractionListener {
     protected static final String TYPE_KEY = "TYPE_KEY";
     protected static final String TYPE_TITLE = "TYPE_TITLE";
+
+    //联网的授权字段 提供子Fragment使用
+    public String mAuthorization = Base64.mClientInto;
 
     @Bind(R.id.fab_board_detail)
     FloatingActionButton mFABBoard;
@@ -59,7 +63,7 @@ public class BoardDetailActivity extends BaseActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mKey = getIntent().getStringExtra(TYPE_KEY);
         mTitle = getIntent().getStringExtra(TYPE_TITLE);
-
+        mAuthorization=getAuthorization();
         setTitle(mTitle);
 
         mFABBoard.setOnClickListener(new View.OnClickListener() {

@@ -10,9 +10,8 @@ import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerBoardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.BoardPinsBean;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.Util.Logger;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -44,14 +43,13 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mTokenType = ((MyAttentionActivity) getActivity()).mTokenType;
-        this.mTokenAccess = ((MyAttentionActivity) getActivity()).mTokenAccess;
     }
 
     @Override
     protected Subscription getHttpFirst() {
 
-        return getMyFollowingBoard(mTokenType, mTokenAccess, mIndex, mLimit)
+        return RetrofitService.createAvatarService()
+                .httpsMyFollowingBoardRx(mAuthorization,mIndex,mLimit)
                 .map(new Func1<FollowingBoardListBean, List<BoardPinsBean>>() {
                     @Override
                     public List<BoardPinsBean> call(FollowingBoardListBean followingBoardListBean) {
@@ -130,9 +128,10 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
         } else {
             throwRuntimeException(context);
         }
+
+        if (context instanceof MyAttentionActivity){
+            mAuthorization=((MyAttentionActivity) context).mAuthorization;
+        }
     }
 
-    public Observable<FollowingBoardListBean> getMyFollowingBoard(String bearer, String key, int index, int limit) {
-        return RetrofitHttpsAvatarRx.service.httpsMyFollowingBoardRx(bearer + " " + key, index, limit);
-    }
 }

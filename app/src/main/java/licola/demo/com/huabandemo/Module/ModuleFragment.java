@@ -9,35 +9,28 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import de.greenrobot.event.EventBus;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
+import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
+import licola.demo.com.huabandemo.Base.BaseFragment;
+import licola.demo.com.huabandemo.Bean.ListPinsBean;
+import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.Main.MainActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
-import licola.demo.com.huabandemo.Bean.ListPinsBean;
-import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
-import licola.demo.com.huabandemo.Base.BaseFragment;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitAvatarRx;
-import licola.demo.com.huabandemo.Util.RxBus;
 import licola.demo.com.huabandemo.View.LoadingFooter;
 import licola.demo.com.huabandemo.View.recyclerview.HeaderAndFooterRecyclerViewAdapter;
 import licola.demo.com.huabandemo.View.recyclerview.RecyclerViewUtils;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.functions.Func1;
-import rx.observers.Observers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -53,9 +46,8 @@ public class ModuleFragment extends BaseFragment {
     protected String type;
     protected String title;
     private static int limit = Constant.LIMIT;
-    //包含的两个fragment共享联网关键字段
-    public String mTokenType;
-    public String mTokenAccess;
+
+
 
     @Bind(R.id.recycler_list)
     RecyclerView mRecyclerView;
@@ -96,7 +88,6 @@ public class ModuleFragment extends BaseFragment {
         Bundle args = getArguments();
         type = args.getString(TYPE_KEY);
         title = args.getString(TYPE_TITLE);
-//        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -106,7 +97,6 @@ public class ModuleFragment extends BaseFragment {
         initRecyclerView();
         initListener();
         getHttpFirstAndRefresh();//默认的联网，区分于滑动的联网加载
-
 
 
     }
@@ -156,10 +146,10 @@ public class ModuleFragment extends BaseFragment {
 
     /**
      * 根据max值联网 在滑动时调用 继续加载后续内容
-     *
      */
     private void getHttpMaxId(int max) {
-         Subscription s= getPinsMax(mTokenType,mTokenAccess,type,max,limit)
+        Subscription s = RetrofitService.createAvatarService()
+                .httpTypeMaxLimitRx(mAuthorization, type, max, limit)
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
                     @Override
                     public List<PinsAndUserEntity> call(ListPinsBean listPinsBean) {
@@ -196,22 +186,17 @@ public class ModuleFragment extends BaseFragment {
                     }
                 });
         addSubscription(s);
-    }
 
-    private Observable<ListPinsBean> getPins(String mTokenType,String mTokenKey,String type,int limit){
-        return RetrofitHttpsAvatarRx.service.httpTypeLimitRx(mTokenType+" "+mTokenKey,type, limit);
-    }
 
-    private Observable<ListPinsBean> getPinsMax(String mTokenType,String mTokenKey,String type,int max,int limit){
-        return RetrofitHttpsAvatarRx.service.httpTypeMaxLimitRx(mTokenType+" "+mTokenKey,type, max, limit);
     }
 
     /**
      * 联网得到内容 每次都会清空之前内容
-     *
      */
     private void getHttpFirstAndRefresh() {
-        Subscription s= getPins(mTokenType,mTokenAccess,type,limit)
+
+        Subscription s = RetrofitService.createAvatarService()
+                .httpTypeLimitRx(mAuthorization, type, limit)
                 .filter(new Func1<ListPinsBean, Boolean>() {
                     @Override
                     public Boolean call(ListPinsBean Bean) {
@@ -299,12 +284,10 @@ public class ModuleFragment extends BaseFragment {
             throwRuntimeException(context);
         }
 
-        if (context instanceof MainActivity){
-            mTokenType=((MainActivity) context).mTokenType;
-            mTokenAccess=((MainActivity) context).mTokenAccess;
-        }else if (context instanceof ModuleActivity){
-            mTokenType=((ModuleActivity) context).mTokenType;
-            mTokenAccess=((ModuleActivity) context).mTokenAccess;
+        if (context instanceof MainActivity) {
+            mAuthorization=((MainActivity)context).mAuthorization;
+        } else if (context instanceof ModuleActivity) {
+            mAuthorization=((ModuleActivity)context).mAuthorization;
         }
     }
 
@@ -348,7 +331,6 @@ public class ModuleFragment extends BaseFragment {
             }
 
         });
-
 
 
     }

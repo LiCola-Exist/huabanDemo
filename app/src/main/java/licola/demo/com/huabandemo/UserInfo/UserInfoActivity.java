@@ -3,7 +3,6 @@ package licola.demo.com.huabandemo.UserInfo;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -27,24 +26,22 @@ import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitAvatarRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.SearchResult.ResultBoardFragment;
-import licola.demo.com.huabandemo.SearchResult.ResultPeopleFragment;
+import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- *  用户界面 我和其他用公用
- *  区别 在toolbar不同功能
- *  在于每个Fragment中的的Adapter中的item项目操作不同
+ * 用户界面 我和其他用公用
+ * 区别 在toolbar不同功能
+ * 在于每个Fragment中的的Adapter中的item项目操作不同
  */
 public class UserInfoActivity
         extends BaseActivity implements OnBoardFragmentInteractionListener<UserBoardItemBean>, OnPinsFragmentInteractionListener {
@@ -89,8 +86,9 @@ public class UserInfoActivity
     public String mKey;
     public String mTitle;
     public boolean isMe;
-    public String mTokenType;
-    public String mTokenAccess;
+
+    //联网的授权字段 提供子Fragment使用
+    public String mAuthorization = Base64.mClientInto;
 
     @Override
     protected int getLayoutId() {
@@ -125,8 +123,7 @@ public class UserInfoActivity
     private void getData() {
         mTitle = getIntent().getStringExtra(TYPE_TITLE);
         mKey = getIntent().getStringExtra(TYPE_KEY);
-        mTokenType = (String) SPUtils.get(mContext, Constant.TOKENTYPE, "");
-        mTokenAccess = (String) SPUtils.get(mContext, Constant.TOKENACCESS, "");
+        mAuthorization = getAuthorization();
         String userId = (String) SPUtils.get(mContext, Constant.USERID, "");
         isMe = mKey.equals(userId);
     }
@@ -139,7 +136,8 @@ public class UserInfoActivity
 
     //联网获取用户信息
     private Subscription getHttpsUserInfo() {
-        return getUserInfo(mTokenType, mTokenAccess, mKey)
+        return RetrofitService.createAvatarService()
+                .httpsUserInfoRx(mAuthorization, mKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<UserInfoBean>() {
@@ -170,7 +168,7 @@ public class UserInfoActivity
                 url = String.format(mFormatUrlSmall, url);
             }
             new ImageLoadFresco.LoadImageFrescoBuilder(getApplicationContext(), mImageUser, url)
-                    .setIsCircle(true,true)
+                    .setIsCircle(true, true)
                     .build();
 //            mImageUser.setImageURI(Uri.parse(url));
         }
@@ -199,9 +197,6 @@ public class UserInfoActivity
 
     }
 
-    private Observable<UserInfoBean> getUserInfo(String bearer, String key, String userId) {
-        return RetrofitAvatarRx.service.httpsUserInfoRx(bearer + " " + key, userId);
-    }
 
     private void initAdapter() {
         // Create the adapter that will return a fragment for each of the three

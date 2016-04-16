@@ -34,15 +34,16 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.Base.BaseActivity;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.Module.ModuleActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.SearchResult.SearchResultActivity;
+import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitGsonRx;
 import licola.demo.com.huabandemo.View.FlowLayout;
 import rx.Observable;
 import rx.Subscriber;
@@ -72,6 +73,9 @@ public class SearchActivity extends BaseActivity {
     final int mItemMargin = 1;
     final int mItemTVMargin = 10;
     int mItemWidth;//子控件的宽度
+
+    //联网的授权字段 提供子Fragment使用
+    public String mAuthorization = Base64.mClientInto;
 
     private ArrayAdapter<String> mAdapter;
     private ArrayList<String> mListHttpHint = new ArrayList<>();
@@ -107,7 +111,7 @@ public class SearchActivity extends BaseActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
-
+        mAuthorization=getAuthorization();
         mIBtnClearHistory.setImageDrawable(CompatUtil.getTintListDrawable(mContext, R.drawable.ic_close_black_24dp, R.color.tint_list_grey));
         initFlowReference(mFlowReference);
 
@@ -139,7 +143,7 @@ public class SearchActivity extends BaseActivity {
                 .switchMap(new Func1<CharSequence, Observable<SearchHintBean>>() {
                     @Override
                     public Observable<SearchHintBean> call(CharSequence charSequence) {
-                        return getSearHit(charSequence.toString());//Retrofit开始联网 直接返回Observable<SearchHintBean>
+                        return RetrofitService.createGonsService().httpSearHintBean(mAuthorization,charSequence.toString());
                     }
                 })
                 .map(new Func1<SearchHintBean, List<String>>() {
@@ -171,7 +175,7 @@ public class SearchActivity extends BaseActivity {
                         mListHttpHint.clear();
                         mListHttpHint.addAll(strings);
                         mAdapter.notifyDataSetChanged();
-                        Logger.d("strings.size()=" + strings.size() + " mAdapter.getCount()=" + mAdapter.getCount());
+//                        Logger.d("strings.size()=" + strings.size() + " mAdapter.getCount()=" + mAdapter.getCount());
                     }
                 });
     }
@@ -302,9 +306,6 @@ public class SearchActivity extends BaseActivity {
         group.addView(btnChild);
     }
 
-    private Observable<SearchHintBean> getSearHit(String key) {
-        return RetrofitGsonRx.service.httpSearHintBean(key);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

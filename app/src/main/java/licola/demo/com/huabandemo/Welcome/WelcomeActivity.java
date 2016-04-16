@@ -7,17 +7,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.Bind;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.Base.BaseActivity;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitGsonRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.Login.LoginActivity;
 import licola.demo.com.huabandemo.Login.TokenBean;
 import licola.demo.com.huabandemo.Main.MainActivity;
 import licola.demo.com.huabandemo.Observable.MyRxObservable;
-import licola.demo.com.huabandemo.Observable.RetryWithConnectivityIncremental;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
@@ -37,7 +34,6 @@ import rx.schedulers.Schedulers;
 
 public class WelcomeActivity extends BaseActivity {
     //登录的报文需要
-    private static final String BASIC = "Basic ";
     private static final String PASSWORD = "password";
     private static final int mTimeDifference = TimeUtils.HOUR * 2;
 //    private static final int mTimeDifference = 0;
@@ -110,7 +106,7 @@ public class WelcomeActivity extends BaseActivity {
                         return getUserToken(userAccount, userPassword);
                     }
                 })
-                .retryWhen(new RetryWithConnectivityIncremental(WelcomeActivity.this, 3, 15, TimeUnit.SECONDS))
+//                .retryWhen(new RetryWithConnectivityIncremental(WelcomeActivity.this, 4, 15, TimeUnit.SECONDS))
                 .observeOn(AndroidSchedulers.mainThread())//最后统一回到UI线程中处理
                 .subscribe(new Subscriber<TokenBean>() {
                     @Override
@@ -143,7 +139,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private Observable<TokenBean> getUserToken(String username, String password) {
-        return RetrofitGsonRx.service.httpsTokenRx(BASIC + Base64.getClientInfo(), PASSWORD, username, password);
+        return RetrofitService.createGonsService().httpsTokenRx(Base64.mClientInto, PASSWORD, username, password);
     }
 
 }

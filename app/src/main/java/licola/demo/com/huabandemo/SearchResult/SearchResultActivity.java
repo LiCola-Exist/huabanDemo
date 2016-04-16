@@ -29,6 +29,7 @@ import licola.demo.com.huabandemo.SearchResult.SearchPeopleListBean.UsersBean;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
@@ -60,6 +61,9 @@ public class SearchResultActivity extends BaseActivity implements
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
+    //联网的授权字段 提供子Fragment使用
+    public String mAuthorization = Base64.mClientInto;
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_result;
@@ -90,6 +94,7 @@ public class SearchResultActivity extends BaseActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         key = getIntent().getStringExtra(SEARCHKEY);
+        mAuthorization=getAuthorization();
         Logger.d(key);
         saveSearchHistory(key);
         initAdapter();

@@ -12,9 +12,8 @@ import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.Util.Logger;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -52,8 +51,7 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mTokenType=((MyAttentionActivity)getActivity()).mTokenType;
-        this.mTokenAccess=((MyAttentionActivity)getActivity()).mTokenAccess;
+
     }
 
     @Override
@@ -64,11 +62,16 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
         }else {
             throwRuntimeException(context);
         }
+
+        if (context instanceof MyAttentionActivity){
+            mAuthorization=((MyAttentionActivity) context).mAuthorization;
+        }
     }
 
     @Override
     protected Subscription getHttpFirst() {
-        return getMyFollowingPins(mTokenType,mTokenAccess,mLimit)
+        return RetrofitService.createAvatarService()
+                .httpsMyFollowingPinsRx(mAuthorization,mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<FollowingPinsBean, List<PinsAndUserEntity>>() {
@@ -104,7 +107,8 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
 
     @Override
     protected Subscription getHttpScroll() {
-        return getMyFollowingPinsMax(mTokenType,mTokenAccess,mMaxId,mLimit)
+        return RetrofitService.createAvatarService()
+                .httpsMyFollowingPinsMaxRx(mAuthorization,mMaxId,mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<FollowingPinsBean, List<PinsAndUserEntity>>() {
@@ -179,13 +183,6 @@ public class MyAttentionPinsFragment extends BaseRecyclerHeadFragment<RecyclerPi
         return new RecyclerPinsHeadCardAdapter(mRecyclerView);
     }
 
-    private Observable<FollowingPinsBean> getMyFollowingPins(String bearer, String key, int limit){
-        return RetrofitHttpsAvatarRx.service.httpsMyFollowingPinsRx(bearer + " " + key,limit);
-    }
-
-    private Observable<FollowingPinsBean> getMyFollowingPinsMax(String bearer, String key, int maxId, int limit){
-        return RetrofitHttpsAvatarRx.service.httpsMyFollowingPinsMaxRx(bearer + " " + key,maxId,limit);
-    }
 
     @Override
     public void onDestroy() {

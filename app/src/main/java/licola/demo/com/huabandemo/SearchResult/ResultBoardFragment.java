@@ -10,9 +10,8 @@ import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerBoardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.BoardPinsBean;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.Util.Logger;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -46,7 +45,8 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
     
     @Override
     protected Subscription getHttpFirst() {
-        return getBoard(mKey,mIndex,mLimit)
+        return RetrofitService.createAvatarService()
+                .httpBoardSearchRx(mAuthorization,mKey,mIndex,mLimit)
                 .map(new Func1<SearchBoardListBean, List<BoardPinsBean>>() {
                     @Override
                     public List<BoardPinsBean> call(SearchBoardListBean searchBoardListBean) {
@@ -90,6 +90,10 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
         }else {
             throwRuntimeException(context);
         }
+
+        if (context instanceof SearchResultActivity){
+            mAuthorization=((SearchResultActivity) context).mAuthorization;
+        }
     }
 
     @Override
@@ -124,8 +128,5 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
         return new RecyclerBoardAdapter(mRecyclerView);
     }
 
-    public Observable<SearchBoardListBean> getBoard(String key,int index,int limit){
-        return RetrofitHttpsAvatarRx.service.httpBoardSearchRx(key,index,limit);
-    }
     
 }

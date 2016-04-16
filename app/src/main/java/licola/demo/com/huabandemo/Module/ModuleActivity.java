@@ -10,6 +10,7 @@ import android.view.View;
 import butterknife.Bind;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Base.BaseActivity;
@@ -31,9 +32,8 @@ public class ModuleActivity extends BaseActivity implements OnPinsFragmentIntera
     protected String mType;
     protected String mTitle;
 
-    //包含的两个fragment共享联网关键字段
-    public String mTokenType;
-    public String mTokenAccess;
+    //联网的授权字段 提供子Fragment使用
+    public String mAuthorization = Base64.mClientInto;
 
     @Bind(R.id.fab_module)
     FloatingActionButton mFABModule;
@@ -92,8 +92,7 @@ public class ModuleActivity extends BaseActivity implements OnPinsFragmentIntera
     private void getData() {
         mTitle=getIntent().getStringExtra(TYPE_TITLE);
         mType=getIntent().getStringExtra(TYPE_KEY);
-        mTokenType = (String) SPUtils.get(mContext, Constant.TOKENTYPE, "");
-        mTokenAccess = (String) SPUtils.get(mContext, Constant.TOKENACCESS, "");
+        mAuthorization=getAuthorization();
     }
 
     @Override

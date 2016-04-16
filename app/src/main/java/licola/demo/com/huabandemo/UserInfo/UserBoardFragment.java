@@ -9,9 +9,8 @@ import java.util.List;
 import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerBoardUserAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.Util.Logger;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -25,8 +24,7 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
     private static final String TAG = "UserBoardFragment";
     private int mMaxId;
     private boolean isMe;
-    private String mTokenType;
-    private String mTokenAccess;
+
 
     private OnBoardFragmentInteractionListener<UserBoardItemBean> mListener;
 
@@ -46,14 +44,12 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        isMe = ((UserInfoActivity) getActivity()).isMe;
-        mTokenAccess = ((UserInfoActivity) getActivity()).mTokenAccess;
-        mTokenType = ((UserInfoActivity) getActivity()).mTokenType;
     }
 
     @Override
     protected Subscription getHttpFirst() {
-        return getBoard(mTokenType, mTokenAccess, mKey, mLimit)
+        return RetrofitService.createAvatarService()
+                .httpsUserBoardRx(mAuthorization, mKey, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<UserBoardListBean, List<UserBoardItemBean>>() {
@@ -92,7 +88,8 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
 
     @Override
     protected Subscription getHttpScroll() {
-        return getBoardMax(mTokenType, mTokenAccess, mKey, mMaxId, mLimit)
+        return RetrofitService.createAvatarService()
+                .httpsUserBoardMaxRx(mAuthorization,mKey, mMaxId, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<UserBoardListBean, List<UserBoardItemBean>>() {
@@ -136,6 +133,11 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
         }else {
             throwRuntimeException(context);
         }
+
+        if (context instanceof UserInfoActivity){
+            mAuthorization=((UserInfoActivity) context).mAuthorization;
+            isMe=((UserInfoActivity) context).isMe;
+        }
     }
 
     @Override
@@ -154,13 +156,6 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
         });
     }
 
-    public Observable<UserBoardListBean> getBoard(String bearer, String key, String userId, int limit) {
-        return RetrofitHttpsAvatarRx.service.httpsUserBoardRx(bearer + " " + key, userId, limit);
-    }
-
-    public Observable<UserBoardListBean> getBoardMax(String bearer, String key, String userId, int max, int limit) {
-        return RetrofitHttpsAvatarRx.service.httpsUserBoardMaxRx(bearer + " " + key, userId, max, limit);
-    }
 
     @Override
     protected int getAdapterPosition() {

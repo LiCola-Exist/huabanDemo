@@ -11,9 +11,8 @@ import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitAvatarRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.Util.Logger;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -47,7 +46,8 @@ public class ResultPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHea
 
     @Override
     protected Subscription getHttpFirst() {
-        return getSearchImage(mKey, mIndex, mLimit)
+        return RetrofitService.createAvatarService()
+                .httpImageSearchRx(mAuthorization,mKey, mIndex, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<SearchImageBean, List<PinsAndUserEntity>>() {
@@ -90,6 +90,10 @@ public class ResultPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHea
             mListener = (OnPinsFragmentInteractionListener) context;
         } else {
             throwRuntimeException(context);
+        }
+
+        if (context instanceof SearchResultActivity){
+            mAuthorization=((SearchResultActivity) context).mAuthorization;
         }
     }
 
@@ -136,7 +140,4 @@ public class ResultPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHea
         return new RecyclerPinsHeadCardAdapter(mRecyclerView);
     }
 
-    private Observable<SearchImageBean> getSearchImage(String key, int index, int limit) {
-        return RetrofitAvatarRx.service.httpImageSearchRx(key, index, limit);
-    }
 }

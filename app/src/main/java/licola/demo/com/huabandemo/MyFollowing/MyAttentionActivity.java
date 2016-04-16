@@ -25,6 +25,7 @@ import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
@@ -50,9 +51,8 @@ public class MyAttentionActivity extends BaseActivity
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    //包含的两个fragment共享联网关键字段
-    public String mTokenType;
-    public String mTokenAccess;
+    //联网的授权字段 提供子Fragment使用
+    public String mAuthorization = Base64.mClientInto;
 
     public static void launch(Activity activity, int flag) {
         Intent intent = new Intent(activity, MyAttentionActivity.class);
@@ -89,9 +89,7 @@ public class MyAttentionActivity extends BaseActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initViewPagerTab();
 
-
-        mTokenType = (String) SPUtils.get(mContext, Constant.TOKENTYPE, "");
-        mTokenAccess = (String) SPUtils.get(mContext, Constant.TOKENACCESS, "");
+        mAuthorization=getAuthorization();
     }
 
     private void initViewPagerTab() {

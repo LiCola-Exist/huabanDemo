@@ -32,9 +32,11 @@ import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Login.LoginActivity;
 import licola.demo.com.huabandemo.MyFollowing.MyAttentionActivity;
+import licola.demo.com.huabandemo.Search.SearchActivity;
 import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Setting.SettingsActivity;
+import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -76,9 +78,8 @@ public class MainActivity extends BaseActivity
     private String mUserName;
     private String mUserId;
 
-    //包含的两个fragment共享联网关键字段
-    public String mTokenType;
-    public String mTokenAccess;
+    //联网的授权字段 提供子Fragment使用
+    public String mAuthorization = Base64.mClientInto;
 
     @Override
     protected int getLayoutId() {
@@ -135,8 +136,7 @@ public class MainActivity extends BaseActivity
     private void getDataByLogin() {
         mUserName = (String) SPUtils.get(mContext, Constant.USERNAME, mUserName);
         mUserId = (String) SPUtils.get(mContext, Constant.USERID, mUserId);
-        mTokenType = (String) SPUtils.get(mContext, Constant.TOKENTYPE, mTokenType);
-        mTokenAccess = (String) SPUtils.get(mContext, Constant.TOKENACCESS, mTokenAccess);
+        mAuthorization=getAuthorization();
     }
 
     @Override
@@ -152,8 +152,7 @@ public class MainActivity extends BaseActivity
                     @Override
                     public void call(Void aVoid) {
 //                        Logger.d();
-//                        SearchActivity.launch(MainActivity.this);
-                        WelcomeActivity.launch(MainActivity.this);
+                        SearchActivity.launch(MainActivity.this);
                     }
                 });
 

@@ -22,15 +22,13 @@ import de.greenrobot.event.EventBus;
 import licola.demo.com.huabandemo.API.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.TimeUtils;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitAvatarRx;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -247,7 +245,8 @@ public class ImageDetailFragment extends
 
     @Override
     protected Subscription getHttpOther() {
-        return getPinsDetail(mTokenType,mTokenAccess,mKey)
+        return RetrofitService.createAvatarService()
+                .httpPinsDetailRx(mAuthorization,mKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<PinsDetailBean>() {
@@ -276,8 +275,8 @@ public class ImageDetailFragment extends
 
     @Override
     protected Subscription getHttpFirst() {
-
-        return getRecommend(mKey, mIndex, mLimit)
+        return RetrofitService.createAvatarService()
+                .httpPinsRecommendRx(mAuthorization,mKey,mIndex,mLimit)
                 .filter(new Func1<List<PinsAndUserEntity>, Boolean>() {
                     @Override
                     public Boolean call(List<PinsAndUserEntity> pinsEntities) {
@@ -498,13 +497,6 @@ public class ImageDetailFragment extends
 
     }
 
-    private Observable<PinsDetailBean> getPinsDetail(String bearer, String key,String pinsId) {
-        return RetrofitHttpsAvatarRx.service.httpPinsDetailRx(bearer+" "+key,pinsId);
-    }
-
-    private Observable<List<PinsAndUserEntity>> getRecommend(String pinsId, int page, int limit) {
-        return RetrofitAvatarRx.service.httpPinsRecommendRx(pinsId, page, limit);
-    }
 
     @Override
     public void onDestroy() {

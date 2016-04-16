@@ -22,10 +22,9 @@ import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.ListPinsBean;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitGsonRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -112,9 +111,11 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
         });
     }
 
+
     @Override
     protected Subscription getHttpOther() {
-        return getBoardDetail(mKey)
+        return RetrofitService.createGonsService()
+                .httpBoardDetailRx(mAuthorization, mKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<BoardDetailBean>() {
@@ -170,7 +171,8 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     @Override
     protected Subscription getHttpFirst() {
-        return getBoardPins(mKey, mLimit)
+        return RetrofitService.createGonsService()
+                .httpBoardPinsRx(mAuthorization, mKey, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
@@ -207,7 +209,8 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     @Override
     protected Subscription getHttpScroll() {
-        return getBoardPinsMax(mKey, mMaxId, mLimit)
+        return RetrofitService.createGonsService()
+                .httpBoardPinsMaxRx(mAuthorization,mKey,mMaxId,mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
@@ -267,18 +270,6 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     }
 
-    private Observable<BoardDetailBean> getBoardDetail(String boarId) {
-        return RetrofitGsonRx.service.httpBoardDetailRx(boarId);
-    }
-
-    private Observable<ListPinsBean> getBoardPins(String boardId, int limit) {
-        return RetrofitGsonRx.service.httpBoardPinsRx(boardId, limit);
-    }
-
-    private Observable<ListPinsBean> getBoardPinsMax(String boardId, int max, int limit) {
-        return RetrofitGsonRx.service.httpBoardPinsMaxRx(boardId, max, limit);
-    }
-
 
     /**
      * 检查绑定的activity 并得到引用 否则抛出异常
@@ -292,6 +283,10 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
             mListener = (OnBoardDetailFragmentInteractionListener) context;//在绑定时候得到listener的真正引用
         } else {
             throwRuntimeException(context);
+        }
+
+        if (context instanceof BoardDetailActivity) {
+            mAuthorization = ((BoardDetailActivity) context).mAuthorization;
         }
     }
 

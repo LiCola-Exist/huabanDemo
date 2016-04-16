@@ -12,9 +12,8 @@ import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.ListPinsBean;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitHttpsAvatarRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.Util.Logger;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -29,8 +28,6 @@ public class UserLikeFragment extends
 
     private static final String TAG = "UserPinsFragment";
     private int mMax;
-    private String mTokenType;
-    private String mTokenAccess;
 
     private OnPinsFragmentInteractionListener mListener;
 
@@ -47,16 +44,11 @@ public class UserLikeFragment extends
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mTokenAccess = ((UserInfoActivity) getActivity()).mTokenAccess;
-        mTokenType = ((UserInfoActivity) getActivity()).mTokenType;
-    }
 
     @Override
     protected Subscription getHttpFirst() {
-        return getPins(mTokenType, mTokenAccess, mKey, mLimit)
+        return RetrofitService.createAvatarService()
+                .httpsUserLikePinsRx(mAuthorization,mKey,mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
@@ -94,7 +86,8 @@ public class UserLikeFragment extends
 
     @Override
     protected Subscription getHttpScroll() {
-        return getPinsMax(mTokenType, mTokenAccess, mKey, mMax, mLimit)
+        return RetrofitService.createAvatarService()
+                .httpsUserLikePinsMaxRx(mAuthorization,mKey, mMax, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
@@ -171,6 +164,10 @@ public class UserLikeFragment extends
         } else {
             throwRuntimeException(context);
         }
+
+        if (context instanceof UserInfoActivity){
+            mAuthorization=((UserInfoActivity) context).mAuthorization;
+        }
     }
 
     @Override
@@ -178,11 +175,4 @@ public class UserLikeFragment extends
         return new RecyclerPinsHeadCardAdapter(mRecyclerView);
     }
 
-    private Observable<ListPinsBean> getPins(String bearer, String key, String userId, int limit) {
-        return RetrofitHttpsAvatarRx.service.httpsUserLikePinsRx(bearer + " " + key, userId, limit);
-    }
-
-    private Observable<ListPinsBean> getPinsMax(String bearer, String key, String userId, int max, int limit) {
-        return RetrofitHttpsAvatarRx.service.httpsUserLikePinsMaxRx(bearer + " " + key, userId, max, limit);
-    }
 }

@@ -72,7 +72,7 @@ public class NetUtils {
             NetUtils.showNetworkErrorSnackBar(mContext, mRootView, snack_message_net_error, snack_action_to_setting);
         } else {
             String snack_message_unknown_error = mContext.getString(R.string.snack_message_unknown_error);
-            Snackbar.make(mRootView, snack_message_unknown_error, Snackbar.LENGTH_LONG);
+            NetUtils.showSnackBar(mRootView,snack_message_unknown_error);
         }
     }
 

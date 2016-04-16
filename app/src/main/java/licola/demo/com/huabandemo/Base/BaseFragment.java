@@ -37,6 +37,8 @@ public abstract class BaseFragment extends Fragment {
 
     protected View mRootView;
 
+    //联网的授权字段 几乎所有的Fragment子类都有联网功能 故父类提供变量
+    protected String mAuthorization;
 
     private CompositeSubscription mCompositeSubscription;
 
@@ -159,7 +161,7 @@ public abstract class BaseFragment extends Fragment {
      * @param e
      */
     protected void checkException(Throwable e) {
-        NetUtils.checkHttpException(getContext(),e,mRootView);
+        NetUtils.checkHttpException(getContext(), e, mRootView);
     }
 
 }

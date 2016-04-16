@@ -12,8 +12,10 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import butterknife.ButterKnife;
+import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
+import licola.demo.com.huabandemo.Util.SPUtils;
 import retrofit.HttpException;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
@@ -48,7 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public void addSubscription(Subscription s) {
-        if (s==null){
+        if (s == null) {
             return;
         }
 
@@ -89,7 +91,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         return true;
     }
 
+    protected String getAuthorization() {
+        String temp = " ";
 
+        return SPUtils.get(mContext, Constant.TOKENTYPE, temp)
+                + temp
+                + SPUtils.get(mContext, Constant.TOKENACCESS, temp);
+    }
 
     @Override
     protected void onStart() {

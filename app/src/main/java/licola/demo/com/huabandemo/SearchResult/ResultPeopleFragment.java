@@ -11,10 +11,9 @@ import java.util.List;
 import licola.demo.com.huabandemo.API.OnPeopleFragmentInteraction;
 import licola.demo.com.huabandemo.Adapter.RecyclerPeopleAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitAvatarRx;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.SearchResult.SearchPeopleListBean.UsersBean;
 import licola.demo.com.huabandemo.Util.Logger;
-import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -49,7 +48,8 @@ public class ResultPeopleFragment extends
 
     @Override
     protected Subscription getHttpFirst() {
-        return getPeople(mKey, mIndex, mLimit)
+        return RetrofitService.createAvatarService()
+                .httpPeopleSearchRx(mAuthorization,mKey,mIndex,mLimit)
                 .map(new Func1<SearchPeopleListBean, List<UsersBean>>() {
                     @Override
                     public List<UsersBean> call(SearchPeopleListBean searchPeopleListBean) {
@@ -127,7 +127,5 @@ public class ResultPeopleFragment extends
         return new RecyclerPeopleAdapter(mRecyclerView);
     }
 
-    private Observable<SearchPeopleListBean> getPeople(String key, int index, int limit) {
-        return RetrofitAvatarRx.service.httpPeopleSearchRx(key, index, limit);
-    }
+
 }
