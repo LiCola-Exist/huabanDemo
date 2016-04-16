@@ -114,9 +114,6 @@ public class ImageDetailFragment extends
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.mPinsBean = ((ImageDetailActivity) getActivity()).mPinsBean;//取出Activity的全局变量
-        this.mTokenType = ((ImageDetailActivity) getActivity()).mTokenType;
-        this.mTokenAccess = ((ImageDetailActivity) getActivity()).mTokenAccess;
     }
 
     @Override
@@ -126,6 +123,11 @@ public class ImageDetailFragment extends
             mListener = (OnImageDetailFragmentInteractionListener) context;
         } else {
             throwRuntimeException(context);
+        }
+
+        if (context instanceof ImageDetailActivity){
+            mAuthorization=((ImageDetailActivity) context).mAuthorization;
+            mPinsBean=((ImageDetailActivity) context).mPinsBean;
         }
     }
 

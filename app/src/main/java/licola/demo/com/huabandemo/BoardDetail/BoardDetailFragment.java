@@ -114,7 +114,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     @Override
     protected Subscription getHttpOther() {
-        return RetrofitService.createGonsService()
+        return RetrofitService.createAvatarService()
                 .httpBoardDetailRx(mAuthorization, mKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -145,7 +145,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
      */
     private void setBoardInfo(BoardDetailBean bean) {
 
-        String url_head = String.format(mFormatUrlSmall, bean.getBoard().getUser().getAvatar().getKey());
+        String url_head = String.format(mFormatUrlSmall, bean.getBoard().getUser().getAvatar());
         setBoardUserInfo(url_head, bean.getBoard().getUser().getUsername());
 
         setBoardTextInfo(bean.getBoard().getDescription(), bean.getBoard().getPin_count(), bean.getBoard().getFollow_count());
@@ -171,7 +171,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     @Override
     protected Subscription getHttpFirst() {
-        return RetrofitService.createGonsService()
+        return RetrofitService.createAvatarService()
                 .httpBoardPinsRx(mAuthorization, mKey, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -209,7 +209,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     @Override
     protected Subscription getHttpScroll() {
-        return RetrofitService.createGonsService()
+        return RetrofitService.createAvatarService()
                 .httpBoardPinsMaxRx(mAuthorization,mKey,mMaxId,mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * Created by LiCola on  2016/03/29  16:50
- * 画板的详情介绍
+ * 画板的详情介绍 已经将avatar 改为String
  */
 public class BoardDetailBean {
 
@@ -218,7 +218,7 @@ public class BoardDetailBean {
              * frames : 1
              */
 
-            private AvatarBean avatar;
+            private String avatar;
             private int pin_count;
             private int boards_like_count;
             private int follower_count;
@@ -286,11 +286,11 @@ public class BoardDetailBean {
                 this.created_at = created_at;
             }
 
-            public AvatarBean getAvatar() {
+            public String getAvatar() {
                 return avatar;
             }
 
-            public void setAvatar(AvatarBean avatar) {
+            public void setAvatar(String avatar) {
                 this.avatar = avatar;
             }
 
@@ -380,81 +380,6 @@ public class BoardDetailBean {
 
             public void setStatus(StatusBean status) {
                 this.status = status;
-            }
-
-            public static class AvatarBean {
-                private int id;
-                private String farm;
-                private String bucket;
-                private String key;
-                private String type;
-                private int width;
-                private int height;
-                private int frames;
-
-                public int getId() {
-                    return id;
-                }
-
-                public void setId(int id) {
-                    this.id = id;
-                }
-
-                public String getFarm() {
-                    return farm;
-                }
-
-                public void setFarm(String farm) {
-                    this.farm = farm;
-                }
-
-                public String getBucket() {
-                    return bucket;
-                }
-
-                public void setBucket(String bucket) {
-                    this.bucket = bucket;
-                }
-
-                public String getKey() {
-                    return key;
-                }
-
-                public void setKey(String key) {
-                    this.key = key;
-                }
-
-                public String getType() {
-                    return type;
-                }
-
-                public void setType(String type) {
-                    this.type = type;
-                }
-
-                public int getWidth() {
-                    return width;
-                }
-
-                public void setWidth(int width) {
-                    this.width = width;
-                }
-
-                public int getHeight() {
-                    return height;
-                }
-
-                public void setHeight(int height) {
-                    this.height = height;
-                }
-
-                public int getFrames() {
-                    return frames;
-                }
-
-                public void setFrames(int frames) {
-                    this.frames = frames;
-                }
             }
 
             public static class ProfileBean {

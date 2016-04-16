@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -21,7 +20,6 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
 
 import butterknife.Bind;
-import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindString;
 import de.greenrobot.event.EventBus;
@@ -30,7 +28,7 @@ import licola.demo.com.huabandemo.API.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.Module.ModuleActivity;
 import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Util.CompatUtil;
+import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
@@ -88,9 +86,8 @@ public class ImageDetailActivity extends BaseActivity
     public String mImageUrl;//图片地址
     public String mPinsId;
 
-    //包含的两个fragment共享联网关键字段
-    public String mTokenType;
-    public String mTokenAccess;
+    //联网的授权字段 提供子Fragment使用
+    public String mAuthorization = Base64.mClientInto;
 
     private MenuItem mMenuItemLike;
 
@@ -125,9 +122,8 @@ public class ImageDetailActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);//注册
         mActionFrom = getIntent().getIntExtra(ACTION_KEY, ACTION_DEFAULT);
+        mAuthorization=getAuthorization();
 
-        mTokenType = (String) SPUtils.get(mContext, Constant.TOKENTYPE, "");
-        mTokenAccess = (String) SPUtils.get(mContext, Constant.TOKENACCESS, "");
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -143,19 +139,19 @@ public class ImageDetailActivity extends BaseActivity
     }
 
     private void initListener() {
-        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-//                Logger.d("verticalOffset=" + verticalOffset + "appBarLayout.getTotalScrollRange()" + appBarLayout.getTotalScrollRange());
-//                if (menuItem!=null) {
-//                    if (verticalOffset == -appBarLayout.getTotalScrollRange()) {
-//                        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-//                    } else {
-//                        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-//                    }
-//                }
-            }
-        });
+//        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+//            @Override
+//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+////                Logger.d("verticalOffset=" + verticalOffset + "appBarLayout.getTotalScrollRange()" + appBarLayout.getTotalScrollRange());
+////                if (menuItem!=null) {
+////                    if (verticalOffset == -appBarLayout.getTotalScrollRange()) {
+////                        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+////                    } else {
+////                        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+////                    }
+////                }
+//            }
+//        });
 
     }
 
@@ -219,10 +215,13 @@ public class ImageDetailActivity extends BaseActivity
         int id = item.getItemId();
         switch (id) {
             case android.R.id.home:
-                selectHomeAsUp(mActionFrom);//根据action值 选择向上键的 操作结果
+                actionHome(mActionFrom);//根据action值 选择向上键的 操作结果
                 break;
             case R.id.action_like:
-
+                actionLike();
+                break;
+            case R.id.action_download:
+                actionDownload();
                 break;
         }
 
@@ -232,7 +231,15 @@ public class ImageDetailActivity extends BaseActivity
         return true;
     }
 
-    private void selectHomeAsUp(int mActionFrom) {
+    private void actionLike() {
+
+    }
+
+    private void actionDownload() {
+
+    }
+
+    private void actionHome(int mActionFrom) {
         switch (mActionFrom) {
             case ACTION_MAIN:
                 //在maxifest已经定义 默认处理

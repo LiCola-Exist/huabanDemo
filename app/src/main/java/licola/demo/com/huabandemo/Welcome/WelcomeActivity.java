@@ -139,7 +139,7 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private Observable<TokenBean> getUserToken(String username, String password) {
-        return RetrofitService.createGonsService().httpsTokenRx(Base64.mClientInto, PASSWORD, username, password);
+        return RetrofitService.createAvatarService().httpsTokenRx(Base64.mClientInto, PASSWORD, username, password);
     }
 
 }

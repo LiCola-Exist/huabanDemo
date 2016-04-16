@@ -143,7 +143,7 @@ public class SearchActivity extends BaseActivity {
                 .switchMap(new Func1<CharSequence, Observable<SearchHintBean>>() {
                     @Override
                     public Observable<SearchHintBean> call(CharSequence charSequence) {
-                        return RetrofitService.createGonsService().httpSearHintBean(mAuthorization,charSequence.toString());
+                        return RetrofitService.createAvatarService().httpSearHintBean(mAuthorization,charSequence.toString());
                     }
                 })
                 .map(new Func1<SearchHintBean, List<String>>() {

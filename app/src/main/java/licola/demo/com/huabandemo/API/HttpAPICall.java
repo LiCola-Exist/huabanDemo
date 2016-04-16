@@ -5,7 +5,7 @@
 //import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
 //import licola.demo.com.huabandemo.SearchResult.SearchPeopleBean;
 //import licola.demo.com.huabandemo.Login.TokenBean;
-//import licola.demo.com.huabandemo.Login.UserMeBean;
+//import licola.demo.com.huabandemo.Login.UserMeAndOtherBean;
 //import retrofit.Call;
 //import retrofit.http.Field;
 //import retrofit.http.FormUrlEncoded;
@@ -56,5 +56,5 @@
 //                               @Field("username") String username, @Field("password")String password);
 //
 //    @GET("users/me")
-//    Call<UserMeBean> httpUsers(@Header("Authorization") String authorization);
+//    Call<UserMeAndOtherBean> httpUsers(@Header("Authorization") String authorization);
 //}

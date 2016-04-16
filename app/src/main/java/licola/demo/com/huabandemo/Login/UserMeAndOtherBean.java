@@ -1,9 +1,9 @@
-package licola.demo.com.huabandemo.UserInfo;
+package licola.demo.com.huabandemo.Login;
 
 /**
- * Created by LiCola on  2016/04/07  15:45
+ * Created by LiCola on  2015/12/16  16:51
  */
-public class UserInfoBean {
+public class UserMeAndOtherBean {
 
     /**
      * user_id : 15246080
@@ -12,14 +12,14 @@ public class UserInfoBean {
      * avatar : 图片地址
      * email : 361401376@qq.com
      * created_at : 1410013135
-     * like_count : 4
+     * like_count : 12
      * boards_like_count : 0
      * following_count : 103
      * commodity_count : 1
      * board_count : 2
      * follower_count : 114
      * creations_count : 0
-     * pin_count : 742
+     * pin_count : 743
      * profile : {"location":"金华","sex":"1","birthday":"1992-6-10","job":"工程师","url":"","about":"Android开发工程师"}
      */
 

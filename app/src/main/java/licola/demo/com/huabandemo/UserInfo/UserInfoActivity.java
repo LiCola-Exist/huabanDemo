@@ -28,6 +28,7 @@ import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
+import licola.demo.com.huabandemo.Login.UserMeAndOtherBean;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
@@ -125,6 +126,7 @@ public class UserInfoActivity
         mKey = getIntent().getStringExtra(TYPE_KEY);
         mAuthorization = getAuthorization();
         String userId = (String) SPUtils.get(mContext, Constant.USERID, "");
+        Logger.d(userId+" ");
         isMe = mKey.equals(userId);
     }
 
@@ -140,7 +142,7 @@ public class UserInfoActivity
                 .httpsUserInfoRx(mAuthorization, mKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UserInfoBean>() {
+                .subscribe(new Subscriber<UserMeAndOtherBean>() {
                     @Override
                     public void onCompleted() {
                         Logger.d();
@@ -153,7 +155,7 @@ public class UserInfoActivity
                     }
 
                     @Override
-                    public void onNext(UserInfoBean userInfoBean) {
+                    public void onNext(UserMeAndOtherBean userInfoBean) {
                         setUserData(userInfoBean);
                     }
                 });
@@ -161,7 +163,7 @@ public class UserInfoActivity
 
     }
 
-    private void setUserData(UserInfoBean bean) {
+    private void setUserData(UserMeAndOtherBean bean) {
         String url = bean.getAvatar();
         if (!TextUtils.isEmpty(url)) {
             if (!url.contains(mHttpRoot)) {

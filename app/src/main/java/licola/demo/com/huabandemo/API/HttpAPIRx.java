@@ -7,11 +7,10 @@ import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
 import licola.demo.com.huabandemo.ImageDetail.PinsDetailBean;
 import licola.demo.com.huabandemo.Login.TokenBean;
-import licola.demo.com.huabandemo.Login.UserMeBean;
+import licola.demo.com.huabandemo.Login.UserMeAndOtherBean;
 import licola.demo.com.huabandemo.MyFollowing.FollowingBoardListBean;
 import licola.demo.com.huabandemo.MyFollowing.FollowingPinsBean;
 import licola.demo.com.huabandemo.UserInfo.UserBoardListBean;
-import licola.demo.com.huabandemo.UserInfo.UserInfoBean;
 import licola.demo.com.huabandemo.Search.SearchHintBean;
 import licola.demo.com.huabandemo.SearchResult.SearchBoardListBean;
 import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
@@ -97,7 +96,7 @@ public interface HttpAPIRx {
 
     //登录第二步 用上一步结果联网
     @GET("users/me")
-    Observable<UserMeBean> httpUserRx(@Header("Authorization") String authorization);
+    Observable<UserMeAndOtherBean> httpUserRx(@Header("Authorization") String authorization);
 
     //https://api.huaban.com/following?limit=40
     //我的关注图片  需要 报头 bearer getAccess_token
@@ -117,7 +116,7 @@ public interface HttpAPIRx {
     //https://api.huaban.com/users/15246080
     //我的个人信息
     @GET("users/{userId}")
-    Observable<UserInfoBean> httpsUserInfoRx(@Header("Authorization") String authorization, @Path("userId") String pinsId);
+    Observable<UserMeAndOtherBean> httpsUserInfoRx(@Header("Authorization") String authorization, @Path("userId") String pinsId);
 
     //https://api.huaban.com/users/15246080/boards?limit=20
     //用户画板信息

@@ -76,7 +76,7 @@ public class MainActivity extends BaseActivity
 
     private Boolean isLogin;
     private String mUserName;
-    private String mUserId;
+    private String mUserId = "";
 
     //联网的授权字段 提供子Fragment使用
     public String mAuthorization = Base64.mClientInto;
@@ -136,7 +136,7 @@ public class MainActivity extends BaseActivity
     private void getDataByLogin() {
         mUserName = (String) SPUtils.get(mContext, Constant.USERNAME, mUserName);
         mUserId = (String) SPUtils.get(mContext, Constant.USERID, mUserId);
-        mAuthorization=getAuthorization();
+        mAuthorization = getAuthorization();
     }
 
     @Override

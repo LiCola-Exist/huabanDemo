@@ -222,7 +222,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void httpLogin(final String username, final String password) {
-        RetrofitService.createGonsService()
+        RetrofitService.createAvatarService()
                 .httpsTokenRx(Base64.mClientInto, PASSWORD, username, password)
                 //得到toke成功 用内部字段保存 在最后得到用户信息一起保存写入
                 .map(new Func1<TokenBean, TokenBean>() {
@@ -236,15 +236,15 @@ public class LoginActivity extends BaseActivity {
                     }
                 })
                 //得到Observable<> 将它转换成另一个Observable<>
-                .flatMap(new Func1<TokenBean, Observable<UserMeBean>>() {
+                .flatMap(new Func1<TokenBean, Observable<UserMeAndOtherBean>>() {
                     @Override
-                    public Observable<UserMeBean> call(TokenBean tokenBean) {
-                        return RetrofitService.createGonsService().httpUserRx(tokenBean.getToken_type() + " " + tokenBean.getAccess_token());
+                    public Observable<UserMeAndOtherBean> call(TokenBean tokenBean) {
+                        return RetrofitService.createAvatarService().httpUserRx(tokenBean.getToken_type() + " " + tokenBean.getAccess_token());
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UserMeBean>() {
+                .subscribe(new Subscriber<UserMeAndOtherBean>() {
                     @Override
                     public void onStart() {
                         super.onStart();
@@ -265,7 +265,7 @@ public class LoginActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onNext(UserMeBean userMeBean) {
+                    public void onNext(UserMeAndOtherBean userMeBean) {
                         Logger.d();
                         showProgress(false);
                         NetUtils.showSnackBar(mScrollViewLogin, snack_message_login_success).setCallback(new Snackbar.Callback() {
@@ -284,7 +284,7 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    private void saveUserInfo(UserMeBean result,
+    private void saveUserInfo(UserMeAndOtherBean result,
                               String mTokenAccess, String mTokenRefresh,
                               String mTokenType, int mTokenExpiresIn,
                               String mUserAccount, String mUserPassword) {
@@ -320,7 +320,7 @@ public class LoginActivity extends BaseActivity {
                 .addData(Constant.TOKENEXPIRESIN, mTokenExpiresIn)
                 .addData(Constant.USERNAME, result.getUsername())
                 .addData(Constant.USERID, String.valueOf(result.getUser_id()))
-                .addData(Constant.USERHEADKEY, result.getAvatar().getKey())
+                .addData(Constant.USERHEADKEY, result.getAvatar())
                 .addData(Constant.USEREMAIL, result.getEmail())
                 .build();
 

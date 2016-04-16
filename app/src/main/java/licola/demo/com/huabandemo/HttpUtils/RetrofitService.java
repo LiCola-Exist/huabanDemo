@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import licola.demo.com.huabandemo.API.HttpAPIRx;
 import licola.demo.com.huabandemo.HttpUtils.Converter.AvatarConverter;
+import licola.demo.com.huabandemo.Util.Logger;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
@@ -22,13 +23,6 @@ public class RetrofitService {
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
     public static Gson gson = new Gson();
 
-    public static HttpAPIRx createGonsService() {
-        Retrofit retrofit = builder
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-
-        return retrofit.create(HttpAPIRx.class);
-    }
 
     public static HttpAPIRx createAvatarService() {
         Retrofit retrofit = builder

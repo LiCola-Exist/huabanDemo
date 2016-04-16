@@ -12,6 +12,7 @@ import java.lang.reflect.Type;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
 
 /**
@@ -45,6 +46,7 @@ public class AvatarConverter extends retrofit.Converter.Factory {
     private AvatarConverter(Gson gson) {
         if (gson == null) throw new NullPointerException("gson == null");
         this.gson = gson;
+        Logger.d();
     }
 
     @Override
@@ -68,6 +70,7 @@ public class AvatarConverter extends retrofit.Converter.Factory {
         public StringResponseBodyConverter(Gson gson, Type type) {
             this.gson = gson;
             this.type = type;
+            Logger.d();
         }
 
         @Override
@@ -85,6 +88,7 @@ public class AvatarConverter extends retrofit.Converter.Factory {
             } finally {
                 Utils.closeQuietly(reader);//记得关闭流
             }
+            Logger.d();
             return gson.fromJson(regexChange(result), type);//返回解析后的对象
         }
 
@@ -102,12 +106,13 @@ public class AvatarConverter extends retrofit.Converter.Factory {
             while (mMAvatar.find()) {//如果找到 开始替换
                 result = result.replaceFirst("\"avatar\":\\{([^\\}]*)\\}", getKey(mMAvatar.group()));
             }
+            Logger.d();
             return result;
         }
 
         /**
          * 取出关键值返回
-         * 取出key值 统一拼接成http://img.hb.aicdn.com/+图片key 作为String返回
+         * 取出key值 统一拼接成 avatar:"key" 作为String返回
          *
          * @param group
          * @return
