@@ -76,7 +76,7 @@ public class UserPinsFragment extends
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsAndUserEntities) {
                         Logger.d();
-                        mAdapter.addList(pinsAndUserEntities);
+                        mAdapter.addListNotify(pinsAndUserEntities);
                         mMax = getMax(pinsAndUserEntities);
                     }
                 });
@@ -115,7 +115,7 @@ public class UserPinsFragment extends
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsAndUserEntities) {
                         Logger.d();
-                        mAdapter.addList(pinsAndUserEntities);
+                        mAdapter.addListNotify(pinsAndUserEntities);
                         mMax = getMax(pinsAndUserEntities);
                     }
                 });

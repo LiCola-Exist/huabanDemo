@@ -239,7 +239,7 @@ public class LoginActivity extends BaseActivity {
                 .flatMap(new Func1<TokenBean, Observable<UserMeAndOtherBean>>() {
                     @Override
                     public Observable<UserMeAndOtherBean> call(TokenBean tokenBean) {
-                        return RetrofitService.createAvatarService().httpUserRx(tokenBean.getToken_type() + " " + tokenBean.getAccess_token());
+                        return RetrofitService.createAvatarService().httpsUserRx(tokenBean.getToken_type() + " " + tokenBean.getAccess_token());
                     }
                 })
                 .subscribeOn(Schedulers.io())

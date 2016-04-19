@@ -64,7 +64,7 @@ public class ModuleNewFragment
     @Override
     protected Subscription getHttpFirst() {
         return RetrofitService.createAvatarService()
-                .httpTypeLimitRx(mAuthorization, mKey, mLimit)
+                .httpsTypeLimitRx(mAuthorization, mKey, mLimit)
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
                     @Override
                     public List<PinsAndUserEntity> call(ListPinsBean listPinsBean) {
@@ -91,7 +91,7 @@ public class ModuleNewFragment
                         Logger.d();
                         //保存maxId值 后续加载需要
                         mMaxId = getMaxId(result);
-                        mAdapter.setList(result);
+                        mAdapter.setListNotify(result);
                     }
                 });
 
@@ -112,7 +112,7 @@ public class ModuleNewFragment
     @Override
     protected Subscription getHttpScroll() {
         return RetrofitService.createAvatarService()
-                .httpTypeMaxLimitRx(mAuthorization, mKey, mMaxId, mLimit)
+                .httpsTypeMaxLimitRx(mAuthorization, mKey, mMaxId, mLimit)
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
                     @Override
                     public List<PinsAndUserEntity> call(ListPinsBean listPinsBean) {
@@ -138,7 +138,7 @@ public class ModuleNewFragment
                     public void onNext(List<PinsAndUserEntity> pinsEntities) {
                         Logger.d();
                         mMaxId = getMaxId(pinsEntities);
-                        mAdapter.addList(pinsEntities);
+                        mAdapter.addListNotify(pinsEntities);
                     }
                 });
     }

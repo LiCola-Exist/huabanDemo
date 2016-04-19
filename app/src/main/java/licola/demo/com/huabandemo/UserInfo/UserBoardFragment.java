@@ -74,7 +74,7 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
                     @Override
                     public void onNext(List<UserBoardItemBean> userBoardItemBeen) {
                         Logger.d();
-                        mAdapter.addList(userBoardItemBeen);
+                        mAdapter.addListNotify(userBoardItemBeen);
                         mMaxId = getMax(userBoardItemBeen);
                     }
                 });
@@ -114,7 +114,7 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
                     @Override
                     public void onNext(List<UserBoardItemBean> userBoardItemBeen) {
                         Logger.d();
-                        mAdapter.addList(userBoardItemBeen);
+                        mAdapter.addListNotify(userBoardItemBeen);
                         mMaxId = getMax(userBoardItemBeen);
                     }
                 });

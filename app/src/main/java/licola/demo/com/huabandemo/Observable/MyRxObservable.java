@@ -10,8 +10,10 @@ import rx.Observable;
  * Created by LiCola on  2016/04/10  15:49
  */
 public class MyRxObservable {
-    public static Observable<Void> add(Animator animator){
+    public static Observable<Void> add(Animator animator,Object target){
         Utils.checkNotNull(animator,"Animation is null");
+        Utils.checkNotNull(target,"target is null");
+        animator.setTarget(target);
         return Observable.create(new AnimatorOnSubscribe(animator));
     }
 }

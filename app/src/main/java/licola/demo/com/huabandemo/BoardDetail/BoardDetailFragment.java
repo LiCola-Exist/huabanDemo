@@ -115,7 +115,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     @Override
     protected Subscription getHttpOther() {
         return RetrofitService.createAvatarService()
-                .httpBoardDetailRx(mAuthorization, mKey)
+                .httpsBoardDetailRx(mAuthorization, mKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<BoardDetailBean>() {
@@ -172,7 +172,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     @Override
     protected Subscription getHttpFirst() {
         return RetrofitService.createAvatarService()
-                .httpBoardPinsRx(mAuthorization, mKey, mLimit)
+                .httpsBoardPinsRx(mAuthorization, mKey, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
@@ -197,7 +197,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsEntities) {
                         mMaxId = getMaxId(pinsEntities);
-                        mAdapter.addList(pinsEntities);
+                        mAdapter.addListNotify(pinsEntities);
                     }
                 });
     }
@@ -210,7 +210,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     @Override
     protected Subscription getHttpScroll() {
         return RetrofitService.createAvatarService()
-                .httpBoardPinsMaxRx(mAuthorization,mKey,mMaxId,mLimit)
+                .httpsBoardPinsMaxRx(mAuthorization,mKey,mMaxId,mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<ListPinsBean, List<PinsAndUserEntity>>() {
@@ -236,7 +236,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
                     public void onNext(List<PinsAndUserEntity> pinsEntities) {
                         Logger.d();
                         mMaxId = getMaxId(pinsEntities);
-                        mAdapter.addList(pinsEntities);
+                        mAdapter.addListNotify(pinsEntities);
                     }
                 });
 

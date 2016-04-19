@@ -46,7 +46,7 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
     @Override
     protected Subscription getHttpFirst() {
         return RetrofitService.createAvatarService()
-                .httpBoardSearchRx(mAuthorization,mKey,mIndex,mLimit)
+                .httpsBoardSearchRx(mAuthorization,mKey,mIndex,mLimit)
                 .map(new Func1<SearchBoardListBean, List<BoardPinsBean>>() {
                     @Override
                     public List<BoardPinsBean> call(SearchBoardListBean searchBoardListBean) {
@@ -71,7 +71,7 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
                     @Override
                     public void onNext(List<BoardPinsBean> boardPinsBeen) {
                         Logger.d();
-                        mAdapter.addList(boardPinsBeen);
+                        mAdapter.addListNotify(boardPinsBeen);
                         mIndex++;
                     }
                 });

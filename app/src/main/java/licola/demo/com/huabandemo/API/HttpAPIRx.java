@@ -1,12 +1,12 @@
 package licola.demo.com.huabandemo.API;
 
 
-
 import java.util.List;
 
 import licola.demo.com.huabandemo.Bean.ListPinsBean;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
+import licola.demo.com.huabandemo.ImageDetail.LikeOperateBean;
 import licola.demo.com.huabandemo.ImageDetail.PinsDetailBean;
 import licola.demo.com.huabandemo.Login.TokenBean;
 import licola.demo.com.huabandemo.Login.UserMeAndOtherBean;
@@ -37,53 +37,53 @@ public interface HttpAPIRx {
     //https//api.huaban.com/favorite/food_drink?limit=20
     // 模板类型
     @GET("favorite/{type}")
-    Observable<ListPinsBean> httpTypeLimitRx(@Header("Authorization") String authorization, @Path("type") String type, @Query("limit") int limit);
+    Observable<ListPinsBean> httpsTypeLimitRx(@Header("Authorization") String authorization, @Path("type") String type, @Query("limit") int limit);
 
     //https//api.huaban.com/favorite/food_drink?max=5445324325&limit=20
     //模板类型 的后续联网 max
     @GET("favorite/{type}")
-    Observable<ListPinsBean> httpTypeMaxLimitRx(@Header("Authorization") String authorization, @Path("type") String type, @Query("max") int max, @Query("limit") int limit);
+    Observable<ListPinsBean> httpsTypeMaxLimitRx(@Header("Authorization") String authorization, @Path("type") String type, @Query("max") int max, @Query("limit") int limit);
 
 
     //https//api.huaban.com/search/hint?q=%E4%BA%BA
     //搜索关键字 提示
     @GET("search/hint")
-    Observable<SearchHintBean> httpSearHintBean(@Header("Authorization") String authorization, @Query("q") String key);
+    Observable<SearchHintBean> httpsSearHintBean(@Header("Authorization") String authorization, @Query("q") String key);
 
     //https//api.huaban.com/search/?q=%E7%BE%8E%E9%A3%9F&page=1&per_page=2
     //图片搜索 返回结果跟模板类型差不多
     @GET("search/")
-    Observable<SearchImageBean> httpImageSearchRx(@Header("Authorization") String authorization, @Query("q") String key, @Query("page") int page, @Query("per_page") int per_page);
+    Observable<SearchImageBean> httpsImageSearchRx(@Header("Authorization") String authorization, @Query("q") String key, @Query("page") int page, @Query("per_page") int per_page);
 
     //https//api.huaban.com/search/boards/?q=%E7%BE%8E%E9%A3%9F&page=1&per_page=1
     //画板搜索
     @GET("search/boards/")
-    Observable<SearchBoardListBean> httpBoardSearchRx(@Header("Authorization") String authorization, @Query("q") String key, @Query("page") int page, @Query("per_page") int per_page);
+    Observable<SearchBoardListBean> httpsBoardSearchRx(@Header("Authorization") String authorization, @Query("q") String key, @Query("page") int page, @Query("per_page") int per_page);
 
     //https//api.huaban.com/search/people/?q=%E7%BE%8E%E9%A3%9F&page=1&per_page=2
     //用户搜索
     @GET("search/people/")
-    Observable<SearchPeopleListBean> httpPeopleSearchRx(@Header("Authorization") String authorization, @Query("q") String key, @Query("page") int page, @Query("per_page") int per_page);
+    Observable<SearchPeopleListBean> httpsPeopleSearchRx(@Header("Authorization") String authorization, @Query("q") String key, @Query("page") int page, @Query("per_page") int per_page);
 
     //https://api.huaban.com/pins/663478425
     //根据图片id获取详情
     @GET("pins/{pinsId}")
-    Observable<PinsDetailBean> httpPinsDetailRx(@Header("Authorization") String authorization, @Path("pinsId") String pinsId);
+    Observable<PinsDetailBean> httpsPinsDetailRx(@Header("Authorization") String authorization, @Path("pinsId") String pinsId);
 
     //https//api.huaban.com/boards/3514299
     //获取画板的详情
     @GET("boards/{boardId}")
-    Observable<BoardDetailBean> httpBoardDetailRx(@Header("Authorization") String authorization, @Path("boardId") String boardId);
+    Observable<BoardDetailBean> httpsBoardDetailRx(@Header("Authorization") String authorization, @Path("boardId") String boardId);
 
     //https//api.huaban.com/boards/19196160/pins?limit=40
     //获取画板的图片集合
     @GET("boards/{boardId}/pins")
-    Observable<ListPinsBean> httpBoardPinsRx(@Header("Authorization") String authorization, @Path("boardId") String boardId, @Query("limit") int limit);
+    Observable<ListPinsBean> httpsBoardPinsRx(@Header("Authorization") String authorization, @Path("boardId") String boardId, @Query("limit") int limit);
 
     //https//api.huaban.com/boards/19196160/pins?limit=40&max=508414882
     //获取画板的图片集合 根据上一个图片的id继续加载
     @GET("boards/{boardId}/pins")
-    Observable<ListPinsBean> httpBoardPinsMaxRx(@Header("Authorization") String authorization, @Path("boardId") String boardId, @Query("max") int max, @Query("limit") int limit);
+    Observable<ListPinsBean> httpsBoardPinsMaxRx(@Header("Authorization") String authorization, @Path("boardId") String boardId, @Query("max") int max, @Query("limit") int limit);
 
     //https//api.huaban.com/pins/654197326/recommend/?page=1&limit=40
     //获取某个图片的推荐图片列表
@@ -100,7 +100,7 @@ public interface HttpAPIRx {
 
     //登录第二步 用上一步结果联网
     @GET("users/me")
-    Observable<UserMeAndOtherBean> httpUserRx(@Header("Authorization") String authorization);
+    Observable<UserMeAndOtherBean> httpsUserRx(@Header("Authorization") String authorization);
 
     //https://api.huaban.com/following?limit=40
     //我的关注图片  需要 报头 bearer getAccess_token
@@ -154,4 +154,10 @@ public interface HttpAPIRx {
     @Streaming
     @GET("http://img.hb.aicdn.com/{pinId}")
     Observable<ResponseBody> httpDownImage(@Path("pinId") String pinId);
+
+    //POST https://api.huaban.com/pins/687738004/like
+    //https://api.huaban.com/pins/687738004/unlike 这两个统一成一个接口
+    @POST("pins/{pinId}/{operate}")
+    Observable<LikeOperateBean> httpsLikeOperate(@Header("Authorization") String authorization, @Path("pinId") String pinsId, @Path("operate") String operate);
+
 }

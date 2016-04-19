@@ -6,12 +6,14 @@ import android.view.View;
 
 import java.util.List;
 
+import butterknife.BindString;
 import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.OnRefreshFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerBoardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.BoardPinsBean;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
+import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import rx.Subscriber;
 import rx.Subscription;
@@ -24,6 +26,9 @@ import rx.schedulers.Schedulers;
  */
 public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardAdapter, List<BoardPinsBean>> {
     private static final String TAG = "MyAttentionBoardFragment";
+
+    @BindString(R.string.snack_message_not_notify)
+    String mStringNotNotify;
 
     private int mIndex = 1;//联网的起始页 默认1
 
@@ -76,11 +81,13 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
                     @Override
                     public void onNext(List<BoardPinsBean> followingBoardItemBeen) {
                         Logger.d();
-                        mAdapter.addList(followingBoardItemBeen);
+                        mAdapter.addListNotify(followingBoardItemBeen);
                         mIndex++;
                     }
                 });
     }
+
+
 
     @Override
     protected Subscription getHttpScroll() {

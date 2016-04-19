@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -101,10 +102,10 @@ public class MyAttentionActivity extends BaseActivity
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mFragmentList=new ArrayList<>(2);
+        mFragmentList = new ArrayList<>(2);
         mFragmentList.add(MyAttentionPinsFragment.newInstance());
         mFragmentList.add(MyAttentionBoardFragment.newInstance());
-        mListenerRefresh=mFragmentList.get(0);
+        mListenerRefresh = mFragmentList.get(0);
         initViewPagerTab();
         initListener();
         mAuthorization = getAuthorization();
@@ -119,6 +120,23 @@ public class MyAttentionActivity extends BaseActivity
             }
         });
 
+        //上下滑动mSwipeRefresh 和左右滑动mViewPager 滑动冲突解决
+        mViewPager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_MOVE:
+                        mSwipeRefresh.setEnabled(false);
+                        break;
+                    case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        mSwipeRefresh.setEnabled(true);
+                        break;
+                }
+                return false;
+            }
+        });
+
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -127,13 +145,13 @@ public class MyAttentionActivity extends BaseActivity
 
             @Override
             public void onPageSelected(int position) {
-                Logger.d("position="+position);
-                mListenerRefresh=mFragmentList.get(position);
+                Logger.d("position=" + position);
+                mListenerRefresh = mFragmentList.get(position);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                Logger.d("state="+state);
+                Logger.d("state=" + state);
             }
         });
     }

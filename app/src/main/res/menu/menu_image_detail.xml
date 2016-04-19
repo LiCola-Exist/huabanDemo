@@ -5,7 +5,8 @@
 
     <item android:id="@+id/action_like"
         android:title="@string/action_bar_like"
-        android:icon="@drawable/ic_favorite_white_24dp"
+        android:checked="true"
+        android:icon="@drawable/drawable_animation_favorite_do"
         app:showAsAction="ifRoom"
         />
     <item android:id="@+id/action_download"

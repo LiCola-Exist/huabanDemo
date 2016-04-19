@@ -28,6 +28,7 @@
     <string name="action_settings">setting</string>
 
     <string name="snack_message_main_gather">start to gather</string>
+    <string name="snack_message_not_notify">not new data</string>
     <string name="snack_message_login_success">login success</string>
     <string name="snack_message_net_error">network error please to check network</string>
     <string name="snack_message_timeout_error">time out please to check network</string>

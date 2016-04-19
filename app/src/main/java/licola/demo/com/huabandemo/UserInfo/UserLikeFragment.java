@@ -73,7 +73,7 @@ public class UserLikeFragment extends
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsAndUserEntities) {
                         Logger.d();
-                        mAdapter.addList(pinsAndUserEntities);
+                        mAdapter.addListNotify(pinsAndUserEntities);
                         mMax = getMax(pinsAndUserEntities);
                     }
                 });
@@ -112,7 +112,7 @@ public class UserLikeFragment extends
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsAndUserEntities) {
                         Logger.d();
-                        mAdapter.addList(pinsAndUserEntities);
+                        mAdapter.addListNotify(pinsAndUserEntities);
                         mMax = getMax(pinsAndUserEntities);
                     }
                 });

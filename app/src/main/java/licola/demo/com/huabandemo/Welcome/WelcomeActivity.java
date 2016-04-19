@@ -4,8 +4,12 @@ import android.animation.Animator;
 import android.animation.AnimatorInflater;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
+import android.support.graphics.drawable.VectorDrawableCompat;
 import android.widget.ImageView;
+
+import java.util.Vector;
 
 import butterknife.Bind;
 import butterknife.BindString;
@@ -35,8 +39,8 @@ import rx.schedulers.Schedulers;
 public class WelcomeActivity extends BaseActivity {
     //登录的报文需要
     private static final String PASSWORD = "password";
-//    private static final int mTimeDifference = TimeUtils.HOUR ;
-    private static final int mTimeDifference = 0;
+    private static final int mTimeDifference = TimeUtils.MINUTES;
+//    private static final int mTimeDifference = 0;
 
     @BindString(R.string.text_auto_login_fail)
     String mMessageFail;
@@ -71,14 +75,13 @@ public class WelcomeActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         Animator animation = AnimatorInflater.loadAnimator(mContext, R.animator.welcome_animator);
-        animation.setTarget(mImageView);
-
+//        Logger.d(mImageView.getDrawable().getClass() + " ");
         //observeOn() 指定的是它之后的操作所在的线程
         //subscribeOn() 作用于Observable对象
         //onCompleted() 和 onError() 二者是互斥的 调用一个就不会再调用另一个
-        MyRxObservable.add(animation)
-                .subscribeOn(AndroidSchedulers.mainThread())//指定订阅的Observable对象的call方法运行在ui线程中
+        MyRxObservable.add(animation, mImageView)
                 .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())//指定订阅的Observable对象的call方法运行在ui线程中
                 .filter(new Func1<Void, Boolean>() {
                     @Override
                     public Boolean call(Void aVoid) {
@@ -93,7 +96,7 @@ public class WelcomeActivity extends BaseActivity {
                     public Boolean call(Void aVoid) {
                         Long lastTime = (Long) SPUtils.get(getApplicationContext(), Constant.LOGINTIME, 0L);
                         long dTime = System.currentTimeMillis() - lastTime;
-                        Logger.d("dTime=" + dTime);
+                        Logger.d("dTime=" + dTime + " default" + mTimeDifference);
                         return dTime > mTimeDifference;
                     }
                 })

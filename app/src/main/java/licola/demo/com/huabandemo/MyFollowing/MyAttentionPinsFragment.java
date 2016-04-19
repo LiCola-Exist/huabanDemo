@@ -6,15 +6,17 @@ import android.view.View;
 
 import java.util.List;
 
+import butterknife.BindString;
 import de.greenrobot.event.EventBus;
-import licola.demo.com.huabandemo.API.OnFragmentRefreshListener;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.OnRefreshFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Bean.PinsAndUserEntity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
+import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.NetUtils;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -31,10 +33,11 @@ public class MyAttentionPinsFragment
     //联网关键参数
     private int mMaxId;//下一次联网的pinsId开始
 
-
     private OnPinsFragmentInteractionListener mListener;
     private OnRefreshFragmentInteractionListener mRefreshListener;
 
+    @BindString(R.string.snack_message_not_notify)
+    String mStringNotNotify;
 
     @Override
     protected String getTAG() {
@@ -92,10 +95,25 @@ public class MyAttentionPinsFragment
 
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsAndUserEntities) {
-                        mAdapter.setList(pinsAndUserEntities);
-                        mMaxId = getMaxId(pinsAndUserEntities);
+                        if (checkNotify(pinsAndUserEntities)) {
+                            Logger.d();
+                            mAdapter.setListNotify(pinsAndUserEntities);
+                            mMaxId = getMaxId(pinsAndUserEntities);
+                        }else {
+                            Logger.d("not notify");
+                            NetUtils.showSnackBar(mRootView,mStringNotNotify);
+                        }
                     }
                 });
+    }
+
+    private boolean checkNotify(List<PinsAndUserEntity> result) {
+        if (!mAdapter.getList().isEmpty()){
+            if (mAdapter.getList().get(0).getFile().getKey().equals(result.get(0).getFile().getKey())){
+                return false;
+            }
+        }
+        return true;
     }
 
     private int getMaxId(List<PinsAndUserEntity> result) {
@@ -129,7 +147,7 @@ public class MyAttentionPinsFragment
 
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsAndUserEntities) {
-                        mAdapter.addList(pinsAndUserEntities);
+                        mAdapter.addListNotify(pinsAndUserEntities);
                         mMaxId = getMaxId(pinsAndUserEntities);
                     }
                 });

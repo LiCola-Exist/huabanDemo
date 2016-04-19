@@ -16,7 +16,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter   {
     protected final String life = "AdapterLife";
     protected RecyclerView mRecyclerView;
     protected Context mContext;
-    protected List<T> mList =new ArrayList<>();
+    protected List<T> mList =new ArrayList<>(20);
     protected int mAdapterPosition = 0;
     protected final String mUrlSmallFormat;//小图地址
     protected final String mUrlGeneralFormat;//普通地址
@@ -26,12 +26,12 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter   {
         return mList;
     }
 
-    public void setList(List<T> mList) {
+    public void setListNotify(List<T> mList) {
         this.mList = mList;
         notifyDataSetChanged();
     }
 
-    public void addList(List<T> mList){
+    public void addListNotify(List<T> mList){
         this.mList.addAll(mList);
         notifyDataSetChanged();
     }

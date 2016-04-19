@@ -47,7 +47,7 @@ public class ResultPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHea
     @Override
     protected Subscription getHttpFirst() {
         return RetrofitService.createAvatarService()
-                .httpImageSearchRx(mAuthorization,mKey, mIndex, mLimit)
+                .httpsImageSearchRx(mAuthorization,mKey, mIndex, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<SearchImageBean, List<PinsAndUserEntity>>() {
@@ -72,7 +72,7 @@ public class ResultPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHea
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsAndUserEntities) {
                         Logger.d();
-                        mAdapter.addList(pinsAndUserEntities);
+                        mAdapter.addListNotify(pinsAndUserEntities);
                         mIndex++;
                     }
                 });

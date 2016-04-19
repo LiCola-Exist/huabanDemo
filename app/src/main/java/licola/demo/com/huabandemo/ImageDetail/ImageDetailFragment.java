@@ -248,7 +248,7 @@ public class ImageDetailFragment extends
     @Override
     protected Subscription getHttpOther() {
         return RetrofitService.createAvatarService()
-                .httpPinsDetailRx(mAuthorization,mKey)
+                .httpsPinsDetailRx(mAuthorization,mKey)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<PinsDetailBean>() {
@@ -301,7 +301,7 @@ public class ImageDetailFragment extends
 
                     @Override
                     public void onNext(List<PinsAndUserEntity> pinsEntities) {
-                        mAdapter.addList(pinsEntities);
+                        mAdapter.addListNotify(pinsEntities);
                         mIndex++;//联网成功 +1
                     }
                 });

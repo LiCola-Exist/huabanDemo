@@ -49,7 +49,7 @@ public class ResultPeopleFragment extends
     @Override
     protected Subscription getHttpFirst() {
         return RetrofitService.createAvatarService()
-                .httpPeopleSearchRx(mAuthorization,mKey,mIndex,mLimit)
+                .httpsPeopleSearchRx(mAuthorization,mKey,mIndex,mLimit)
                 .map(new Func1<SearchPeopleListBean, List<UsersBean>>() {
                     @Override
                     public List<UsersBean> call(SearchPeopleListBean searchPeopleListBean) {
@@ -73,7 +73,7 @@ public class ResultPeopleFragment extends
 
                     @Override
                     public void onNext(List<UsersBean> usersBeen) {
-                        mAdapter.addList(usersBeen);
+                        mAdapter.addListNotify(usersBeen);
                         mIndex++;
                     }
                 });
