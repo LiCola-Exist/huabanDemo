@@ -1,0 +1,25 @@
+<resources>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
+    <style name="AppTheme.ActionBar_StatusBarDark">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowContentTransitions">false</item>
+    </style>
+
+    <style name="AppTheme.ActionBar_StatusBarPrimaryDark" parent="AppTheme.ActionBar_StatusBarDark">
+        <item name="android:statusBarColor">@color/primary_dark</item>
+    </style>
+
+    <style name="AppTheme.ActionBar_StatusBarGreyDark" parent="AppTheme.ActionBar_StatusBarDark">
+        <item name="android:statusBarColor">@color/grey_a900</item>
+    </style>
+
+</resources>

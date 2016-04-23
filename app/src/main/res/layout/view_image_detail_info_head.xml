@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:divider="@drawable/divider_padding_linear"
+    android:orientation="vertical"
+    android:showDividers="middle">
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_image_describe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_margin"
+        android:paddingRight="@dimen/activity_margin"
+        android:paddingTop="@dimen/activity_margin">
+
+        <TextView
+            android:id="@+id/tv_image_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:textColor="?android:textColorPrimary"
+            android:textSize="@dimen/card_context_size_16sp"
+            tools:text="图片的文字描述" />
+
+        <TextView
+            android:id="@+id/tv_image_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/tv_image_text"
+            android:layout_marginTop="@dimen/text_spacing_default"
+            android:gravity="left|center"
+            android:maxLines="1"
+            android:textColor="?android:textColorSecondary"
+            android:textSize="@dimen/card_context_size_14sp"
+            tools:text="图片的来源" />
+
+
+        <TextView
+            android:id="@+id/tv_image_gather"
+            style="@style/card_text_secondary_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_image_link"
+            android:layout_toLeftOf="@+id/tv_image_like"
+            android:layout_toStartOf="@+id/tv_image_like"
+            android:background="@drawable/drawable_default_selector"
+            tools:text="被采集的数量"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_image_like"
+            style="@style/card_text_secondary_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_image_link"
+            android:background="@drawable/drawable_default_selector"
+            tools:text="被喜欢的数量" />
+
+    </RelativeLayout>
+
+    <include layout="@layout/view_bar_user_info"/>
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_image_board"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:padding="@dimen/activity_margin">
+
+        <!--<com.facebook.drawee.view.SimpleDraweeView-->
+        <!--android:id="@+id/img_image_board"-->
+        <!--android:layout_width="@dimen/user_head_circle_size"-->
+        <!--android:layout_height="@dimen/user_head_circle_size"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentTop="true" />-->
+
+        <RelativeLayout
+            android:id="@+id/relativelayout_image_board_group"
+            android:layout_width="49dp"
+            android:layout_height="49dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/img_image_board_1"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/img_image_board_2"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/img_image_board_3"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/img_image_board_4"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_image_board"
+            style="@style/text_primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/relativelayout_image_board_group"
+            android:layout_alignLeft="@+id/tv_image_board_title"
+            android:layout_alignStart="@+id/tv_image_board_title"
+            android:layout_toLeftOf="@+id/ibtn_image_board_chevron_right"
+            android:paddingLeft="@dimen/text_spacing_default"
+            android:paddingRight="@dimen/text_spacing_default"
+            tools:text="画板" />
+
+        <TextView
+            android:id="@+id/tv_image_board_title"
+            style="@style/text_image_detail_secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_toEndOf="@id/relativelayout_image_board_group"
+            android:layout_toRightOf="@id/relativelayout_image_board_group"
+            android:paddingLeft="@dimen/text_spacing_default"
+            android:paddingRight="@dimen/text_spacing_default"
+            android:text="@string/text_to"
+
+            />
+
+        <ImageButton
+            android:id="@+id/ibtn_image_board_chevron_right"
+            android:layout_width="@dimen/user_head_circle_size"
+            android:layout_height="@dimen/user_head_circle_size"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/transparent" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/text_padding_default"
+        android:text="@string/text_recommend"
+        android:textColor="?android:textColorSecondary" />
+</LinearLayout>

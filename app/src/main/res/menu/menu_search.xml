@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_search"
+        android:title="@string/action_bar_search"
+        android:icon="@drawable/abc_ic_search_api_mtrl_alpha"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/action_add"
+    android:icon="@android:drawable/ic_menu_add"
+    android:title="@string/action_bar_add" />
+    <!--有点击效果的menu-->
+    <!--<item android:id="@+id/action_search"-->
+        <!--android:title="@string/action_bar_search"-->
+        <!--android:icon="@drawable/abc_ic_search_api_mtrl_alpha"-->
+        <!--app:showAsAction="ifRoom|collapseActionView"-->
+        <!--app:actionViewClass="android.support.v7.widget.SearchView"-->
+        <!--/>-->
+    <!--多余的menu记录-->
+    <!--<item android:id="@+id/action_add"-->
+        <!--android:icon="@android:drawable/ic_menu_add"-->
+        <!--android:title="@string/action_bar_add" />-->
+    <!--<item android:id="@+id/action_edit"-->
+        <!--android:icon="@android:drawable/ic_menu_edit"-->
+        <!--android:title="@string/action_bar_edit"-->
+        <!--app:showAsAction="always" />-->
+
+</menu>

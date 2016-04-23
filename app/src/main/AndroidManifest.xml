@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="licola.demo.com.huabandemo">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".Base.HuaBanApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".Main.MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
+        <activity
+            android:name=".Welcome.WelcomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".Login.LoginActivity"
+            android:label="@string/title_activity_Login"
+            android:parentActivityName=".Main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="licola.demo.com.huabandemo.Main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".ImageDetail.ImageDetailActivity"
+            android:label="@string/title_activity_image_detail"
+            android:launchMode="standard"
+            android:parentActivityName=".Main.MainActivity"
+            android:theme="@style/AppTheme.ActionBar_StatusBarGreyDark">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="licola.demo.com.huabandemo.Main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".BoardDetail.BoardDetailActivity"
+            android:label="@string/title_activity_board_detail"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SearchResult.SearchResultActivity"
+            android:label="@string/title_activity_search_result"
+            android:parentActivityName=".Search.SearchActivity"
+            android:theme="@style/AppTheme.ActionBar_StatusBarPrimaryDark">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="licola.demo.com.huabandemo.Main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Search.SearchActivity"
+            android:label="@string/title_activity_search"
+            android:parentActivityName=".Main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="licola.demo.com.huabandemo.Main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Module.ModuleActivity"
+            android:label="@string/title_activity_module"
+            android:parentActivityName=".Search.SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Search.SearchActivity" />
+        </activity>
+        //todo 注册广播暂时不不处理 网络状态变换
+        <receiver android:name=".HttpUtils.ConnectionChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".MyFollowing.MyAttentionActivityNew"
+            android:label="@string/title_activity_my_following"
+            android:parentActivityName=".Main.MainActivity"
+            android:theme="@style/AppTheme.ActionBar_StatusBarPrimaryDark">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="licola.demo.com.huabandemo.Main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Setting.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".Main.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="licola.demo.com.huabandemo.Main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".UserInfo.UserInfoActivity"
+            android:label="@string/title_activity_my_user"
+            android:parentActivityName=".Main.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="licola.demo.com.huabandemo.Main.MainActivity" />
+        </activity>
+
+    </application>
+
+</manifest>

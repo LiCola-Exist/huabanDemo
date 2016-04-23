@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <objectAnimator android:duration="800"
+        android:propertyName="fillColor"
+        android:valueType="intType"
+        android:valueFrom="@color/white"
+        android:valueTo="@color/accent"
+        android:interpolator="@android:interpolator/decelerate_quint"
+        />
+</set>
