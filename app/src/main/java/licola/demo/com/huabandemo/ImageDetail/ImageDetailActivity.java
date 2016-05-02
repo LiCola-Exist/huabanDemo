@@ -2,6 +2,7 @@ package licola.demo.com.huabandemo.ImageDetail;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
@@ -81,8 +82,8 @@ public class ImageDetailActivity extends BaseActivity
     CollapsingToolbarLayout mCollapsingToolbar;
     @Bind(R.id.toolbar_image)
     Toolbar toolbar;
-    @Bind(R.id.fab_main)
-    FloatingActionButton fab;
+    @Bind(R.id.fab_image_detail)
+    FloatingActionButton mFabActionBtn;
     @Bind(R.id.img_image_big)
     SimpleDraweeView img_image_big;
 
@@ -133,7 +134,7 @@ public class ImageDetailActivity extends BaseActivity
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        initListener();
         mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置折叠后的文字颜色
         //设置图片空间的宽高比
         img_image_big.setAspectRatio(
@@ -157,11 +158,12 @@ public class ImageDetailActivity extends BaseActivity
 //            }
 //        });
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFabActionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+
             }
         });
 
@@ -232,7 +234,7 @@ public class ImageDetailActivity extends BaseActivity
 
                 break;
             case R.id.action_download:
-                actionDownload();
+                actionDownload(item);
                 break;
         }
 
@@ -249,7 +251,7 @@ public class ImageDetailActivity extends BaseActivity
         RetrofitService.createAvatarService()
                 .httpsLikeOperate(mAuthorization, mPinsId, operate)
                 .subscribeOn(Schedulers.io())
-                .delay(900, TimeUnit.MILLISECONDS)//延迟 使得能够完成动画
+                .delay(600, TimeUnit.MILLISECONDS)//延迟 使得能够完成动画
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<LikeOperateBean>() {
                     @Override
@@ -302,7 +304,7 @@ public class ImageDetailActivity extends BaseActivity
         item.setIcon(drawableCompat);
     }
 
-    private void actionDownload() {
+    private void actionDownload(MenuItem item) {
 //        getSupportActionBar().invalidateOptionsMenu();
 //        RetrofitService.createAvatarService()
 //                .httpDownImage(mImageUrl)

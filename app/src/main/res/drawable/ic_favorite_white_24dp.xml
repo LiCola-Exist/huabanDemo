@@ -3,7 +3,7 @@
         android:height="24dp"
         android:viewportWidth="24.0"
         android:viewportHeight="24.0">
-    <group android:name="group_favorite">
+    <group android:name="group_favorite" android:pivotX="12" android:pivotY="12">
     <path
         android:name="path_favorite"
         android:fillColor="#FFFFFF"

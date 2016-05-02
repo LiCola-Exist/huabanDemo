@@ -6,7 +6,9 @@
     android:background="@color/white"
     android:divider="@drawable/divider_padding_linear"
     android:orientation="vertical"
-    android:showDividers="middle">
+    android:showDividers="middle"
+    android:gravity="center"
+    >
 
     <RelativeLayout
         android:id="@+id/relativelayout_image_describe"

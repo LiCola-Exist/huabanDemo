@@ -18,17 +18,18 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android" android:ordering="together">
 
     <objectAnimator android:duration="500"
-        android:valueFrom="0.7f"
+        android:valueFrom="0.8f"
         android:valueTo="1f"
         android:valueType="floatType"
         android:propertyName="scaleY"
-        android:interpolator="@android:interpolator/overshoot"
+        android:interpolator="@android:interpolator/anticipate_overshoot"
         />
     <objectAnimator android:duration="500"
-        android:valueFrom="0.7f"
+        android:valueFrom="0.8f"
         android:valueTo="1f"
+
         android:valueType="floatType"
         android:propertyName="scaleX"
-        android:interpolator="@android:interpolator/overshoot"
+        android:interpolator="@android:interpolator/anticipate_overshoot"
         />
 </set>

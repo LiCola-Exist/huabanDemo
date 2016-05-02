@@ -62,8 +62,8 @@ public class MainActivity extends BaseActivity
     NavigationView mNavigation;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-    @Bind(R.id.fab_main)
-    FloatingActionButton mFab_main;
+    @Bind(R.id.fab_search)
+    FloatingActionButton mFabSearch;
     @Bind(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefresh;
 
@@ -154,7 +154,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void initListener() {
-        RxView.clicks(mFab_main)
+        RxView.clicks(mFabSearch)
 //                .throttleFirst(500, TimeUnit.MILLISECONDS)//设置500毫秒的间隔 防止抖动 用户点击太快登录多次
                 .subscribe(new Action1<Void>() {
                     @Override

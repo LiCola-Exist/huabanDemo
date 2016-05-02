@@ -41,8 +41,8 @@ public class ModuleActivity extends BaseActivity
 
     @Bind(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefresh;
-    @Bind(R.id.fab_module)
-    FloatingActionButton mFABModule;
+    @Bind(R.id.fab_search)
+    FloatingActionButton mFabSearch;
 
     //刷新的接口 子Fragment实现
     private OnFragmentRefreshListener mListenerRefresh;
@@ -105,7 +105,7 @@ public class ModuleActivity extends BaseActivity
             }
         });
 
-        mFABModule.setOnClickListener(v -> finish());
+        mFabSearch.setOnClickListener(v -> finish());
     }
 
     private void getData() {

@@ -27,14 +27,6 @@
     <include layout="@layout/view_swipe_frame"/>
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_main"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:tint="@color/white"
-        android:src="@drawable/ic_search_black_24dp"
-        />
+    <include layout="@layout/view_floatingactionbutton_search"/>
 
 </android.support.design.widget.CoordinatorLayout>
