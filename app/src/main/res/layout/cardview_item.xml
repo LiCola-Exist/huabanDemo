@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+
+    android:id="@+id/card_item_main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/card_spacing_default_half"
+    android:layout_marginRight="@dimen/card_spacing_default_half"
+    android:layout_marginTop="@dimen/text_spacing_default"
+    app:cardCornerRadius="@dimen/card_radius_default"
+    app:elevation="@dimen/card_elevation_static"
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/framelayout_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="@drawable/drawable_default_selector"
+            android:transitionName="card_image">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/img_card_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="2000dp"
+                android:maxWidth="2000dp"
+                fresco:progressBarAutoRotateInterval="1000" />
+
+            <ImageButton
+                android:id="@+id/ibtn_card_gif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:background="@android:color/transparent" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_board"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/drawable_default_selector"
+            android:orientation="vertical"
+            android:padding="@dimen/text_spacing_default">
+
+            <TextView
+                android:id="@+id/tv_card_gather"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:text="@string/card_gather"
+                android:textColor="?android:textColorPrimary"
+                android:textSize="@dimen/card_context_size_14sp" />
+
+            <TextView
+                android:id="@+id/tv_card_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:paddingTop="@dimen/text_spacing_default"
+                android:textColor="?android:textColorSecondary"
+                android:textSize="@dimen/card_context_size_14sp"
+                tools:text="测试Card的title应该是很长的文本" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearlayout_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/drawable_default_selector"
+            android:orientation="horizontal"
+            android:padding="@dimen/text_spacing_default">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/img_card_head"
+                android:layout_width="@dimen/user_head_circle_size"
+                android:layout_height="@dimen/user_head_circle_size" />
+
+            <TextView
+                android:id="@+id/tv_card_username"
+                style="@style/card_text_secondary_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/card_username" />
+        </LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

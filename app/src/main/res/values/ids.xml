@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tag_anim" type="id"></item>
+    <item name="tag_isPlay" type="id"></item>
+
+</resources>

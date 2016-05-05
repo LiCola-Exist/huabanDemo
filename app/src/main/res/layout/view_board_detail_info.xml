@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:divider="@drawable/divider_linear"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:showDividers="middle">
+
+    <LinearLayout
+        android:id="@+id/linearlayout_board_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:orientation="horizontal"
+        android:padding="@dimen/activity_margin">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/img_board_user"
+            android:layout_width="@dimen/user_head_circle_size"
+            android:layout_height="@dimen/user_head_circle_size" />
+
+        <TextView
+            android:id="@+id/tv_board_user"
+            style="@style/text_primary"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/text_spacing_default"
+            tools:text="用户名" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativelayout_board_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_margin">
+
+        <TextView
+            android:id="@+id/tv_board_describe"
+            style="@style/text_image_detail_secondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:paddingBottom="@dimen/activity_horizontal_margin"
+            tools:text="画板的文字描述" />
+
+        <TextView
+            android:id="@+id/tv_board_attention"
+            style="@style/text_image_detail_secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/tv_board_describe"
+            android:paddingLeft="@dimen/text_padding_default"
+            tools:text="关注数量"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_board_gather"
+            style="@style/text_image_detail_secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_board_describe"
+            android:layout_toLeftOf="@+id/tv_board_attention"
+            android:layout_toStartOf="@+id/tv_board_attention"
+            tools:text="采集数量" />
+    </RelativeLayout>
+</LinearLayout>
