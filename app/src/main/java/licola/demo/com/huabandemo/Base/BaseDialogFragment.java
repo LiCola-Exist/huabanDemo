@@ -2,6 +2,7 @@ package licola.demo.com.huabandemo.Base;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -62,6 +63,10 @@ public abstract class BaseDialogFragment extends AppCompatDialogFragment {
         Logger.d(TAG);
     }
 
+    public void throwRuntimeException(Context context) {
+        throw new RuntimeException(context.toString()
+                + " must implement OnDialogInteractionListener");
+    }
 
     @Override
     public void onDestroyView() {

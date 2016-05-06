@@ -8,6 +8,7 @@ import licola.demo.com.huabandemo.Entity.ListPinsBean;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
 import licola.demo.com.huabandemo.ImageDetail.GatherInfoBean;
+import licola.demo.com.huabandemo.ImageDetail.GatherResultBean;
 import licola.demo.com.huabandemo.ImageDetail.LikeOperateBean;
 import licola.demo.com.huabandemo.ImageDetail.PinsDetailBean;
 import licola.demo.com.huabandemo.Login.TokenBean;
@@ -20,6 +21,7 @@ import licola.demo.com.huabandemo.SearchResult.SearchBoardListBean;
 import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
 import licola.demo.com.huabandemo.SearchResult.SearchPeopleListBean;
 import okhttp3.ResponseBody;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -165,10 +167,17 @@ public interface HttpAPIRx {
     //获取我的画板集合信息
     //https://api.huaban.com/last_boards/?extra=recommend_tags
     @GET("last_boards/")
-    Observable<BoardListInfoBean> httpsBoardListInfo(@Header("Authorization") String authorization,@Query("extra") String extra);
+    Observable<BoardListInfoBean> httpsBoardListInfo(@Header("Authorization") String authorization, @Query("extra") String extra);
 
     //对某个图片进行采集前网络访问 判断是否被采集过
     //https://api.huaban.com/pins/707907583/repin/?check=true
     @GET("pins/{viaId}/repin/")
-    Observable<GatherInfoBean> httpsGatherInfo(@Header("Authorization") String authorization,@Path("viaId") String viaId,@Query("check") boolean check);
+    Observable<GatherInfoBean> httpsGatherInfo(@Header("Authorization") String authorization, @Path("viaId") String viaId, @Query("check") boolean check);
+
+    //采集某个图片 用body形式传输数据
+    //board_id=17891564&text=描述内容&via=707423726
+    //https://api.huaban.com/pins/
+    @FormUrlEncoded
+    @POST("pins/")
+    Observable<GatherResultBean> httpsGatherPins(@Header("Authorization") String authorization, @Field("board_id") String boardId, @Field("text") String describe, @Field("via") String PinsIda);
 }

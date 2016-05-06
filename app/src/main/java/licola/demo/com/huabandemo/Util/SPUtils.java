@@ -53,7 +53,6 @@ public class SPUtils {
     }
 
     public static void put(SharedPreferences.Editor editor, String key, Object object) {
-
         if (object instanceof String) {
             editor.putString(key, (String) object);
         } else if (object instanceof Integer) {

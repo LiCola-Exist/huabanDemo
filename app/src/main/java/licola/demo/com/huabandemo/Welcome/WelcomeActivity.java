@@ -39,7 +39,7 @@ import rx.schedulers.Schedulers;
 public class WelcomeActivity extends BaseActivity {
     //登录的报文需要
     private static final String PASSWORD = "password";
-    private static final int mTimeDifference = TimeUtils.MINUTES;
+    private static final int mTimeDifference = TimeUtils.HOUR;
 //    private static final int mTimeDifference = 0;
 
     @BindString(R.string.text_auto_login_fail)

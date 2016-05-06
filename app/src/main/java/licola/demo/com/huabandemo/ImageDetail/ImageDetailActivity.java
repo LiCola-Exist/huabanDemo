@@ -10,13 +10,10 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -30,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.BindDrawable;
 import butterknife.BindString;
+import licola.demo.com.huabandemo.API.OnGatherDialogInteractionListener;
 import licola.demo.com.huabandemo.API.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
@@ -43,13 +41,14 @@ import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class ImageDetailActivity extends BaseActivity
-        implements OnImageDetailFragmentInteractionListener {
+        implements OnImageDetailFragmentInteractionListener, OnGatherDialogInteractionListener {
 
     //定义调用ImageDetailActivity的类 来自什么类型 在结束作为判断条件
 
@@ -99,6 +98,7 @@ public class ImageDetailActivity extends BaseActivity
 
     private boolean isLike = false;//该图片是否被喜欢操作 默认false 没有被操作过
 
+    private String[] mBoardIdArray;
 
     @Override
     protected int getLayoutId() {
@@ -140,10 +140,10 @@ public class ImageDetailActivity extends BaseActivity
         initListener();
         mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置折叠后的文字颜色
 
-        if (savedInstanceState!=null) {
-            if ((savedInstanceState.getParcelable(KEYPARCELABLE)!=null)&&(mPinsBean==null)){
+        if (savedInstanceState != null) {
+            if ((savedInstanceState.getParcelable(KEYPARCELABLE) != null) && (mPinsBean == null)) {
                 Logger.d();
-                mPinsBean=savedInstanceState.getParcelable(KEYPARCELABLE);
+                mPinsBean = savedInstanceState.getParcelable(KEYPARCELABLE);
             }
         }
         mImageUrl = mPinsBean.getFile().getKey();
@@ -158,6 +158,8 @@ public class ImageDetailActivity extends BaseActivity
         } else {
             img_image_big.setAspectRatio(1);
         }
+
+
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.framelayout_info_recycler, ImageDetailFragment.newInstance(mPinsId)).commit();
     }
@@ -166,7 +168,7 @@ public class ImageDetailActivity extends BaseActivity
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Logger.d(TAG);
-        outState.putParcelable(KEYPARCELABLE,mPinsBean);
+        outState.putParcelable(KEYPARCELABLE, mPinsBean);
     }
 
     private void initListener() {
@@ -201,8 +203,14 @@ public class ImageDetailActivity extends BaseActivity
     }
 
     private void showGatherDialog() {
-        String[] array=getResources().getStringArray(R.array.title_array);
-        GatherDialogFragment fragment = GatherDialogFragment.create(mPinsId,mPinsBean.getRaw_text(),array);
+
+        String boardTitleArray = (String) SPUtils.get(mContext, Constant.BOARDTILTARRAY, "");
+        String mBoardId = (String) SPUtils.get(mContext, Constant.BOARDIDARRAY, "");
+        Logger.d("title is " + boardTitleArray);
+
+        String[] array = boardTitleArray != null ? boardTitleArray.split(Constant.SEPARATECOMMA) : new String[0];
+        mBoardIdArray = mBoardId != null ? mBoardId.split(Constant.SEPARATECOMMA) : new String[0];
+        GatherDialogFragment fragment = GatherDialogFragment.create(mAuthorization, mPinsId, mPinsBean.getRaw_text(), array);
         fragment.show(getSupportFragmentManager(), null);
     }
 
@@ -385,8 +393,6 @@ public class ImageDetailActivity extends BaseActivity
     }
 
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -423,4 +429,29 @@ public class ImageDetailActivity extends BaseActivity
         UserInfoActivity.launch(this, key, title);
     }
 
+    @Override
+    public void onDialogPositiveClick(String describe, int selectPosition) {
+        Logger.d("describe=" + describe + " selectPosition=" + selectPosition);
+
+        RetrofitService.createAvatarService()
+                .httpsGatherPins(mAuthorization, mBoardIdArray[selectPosition], describe, mPinsId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GatherResultBean>() {
+                    @Override
+                    public void onCompleted() {
+                        Logger.d();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.toString());
+                    }
+
+                    @Override
+                    public void onNext(GatherResultBean gatherResultBean) {
+                        Logger.d();
+                    }
+                });
+    }
 }

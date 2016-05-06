@@ -35,6 +35,7 @@ import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
+import licola.demo.com.huabandemo.Util.TimeUtils;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -115,7 +116,7 @@ public class UserInfoActivity
 
         mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置折叠后的文字颜色
 
-        if (isMe){
+        if (isMe) {
             addSubscription(getMyBoardListInfo());
         }
     }
@@ -141,7 +142,7 @@ public class UserInfoActivity
         mKey = getIntent().getStringExtra(TYPE_KEY);
         mAuthorization = getAuthorization();
         String userId = (String) SPUtils.get(mContext, Constant.USERID, "");
-        Logger.d(userId + " ");
+        Logger.d("is me " + mKey.equals(userId));
         isMe = mKey.equals(userId);
     }
 
@@ -155,7 +156,7 @@ public class UserInfoActivity
 
     private Subscription getMyBoardListInfo() {
         return RetrofitService.createAvatarService()
-                .httpsBoardListInfo(mAuthorization,Constant.OPERATEBOARDEXTRA)
+                .httpsBoardListInfo(mAuthorization, Constant.OPERATEBOARDEXTRA)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<BoardListInfoBean>() {
@@ -171,7 +172,9 @@ public class UserInfoActivity
 
                     @Override
                     public void onNext(BoardListInfoBean boardListInfoBean) {
-                        Logger.d(boardListInfoBean.getBoards().size()+" ");
+                        Logger.d(boardListInfoBean.getBoards().size() + " ");
+
+
                     }
                 })
                 ;

@@ -116,4 +116,7 @@
     <string name="text_followed">已关注</string>
     <string name="text_auto_login_fail">自动登录失败，请重新登录</string>
     <string name="text_gather_warning">已经被采集到画板 《%s》</string>
+
+    <string name="dialog_gather_positive">确定采集</string>
+    <string name="dialog_gather_negative">取消</string>
 </resources>

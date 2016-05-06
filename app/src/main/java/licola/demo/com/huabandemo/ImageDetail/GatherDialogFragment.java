@@ -9,12 +9,14 @@ import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
+import licola.demo.com.huabandemo.API.OnGatherDialogInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseDialogFragment;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.R;
@@ -30,6 +32,7 @@ import rx.schedulers.Schedulers;
  */
 public class GatherDialogFragment extends BaseDialogFragment {
 
+    private static final String KEYAUTHORIZATION = "keyAuthorization";
     private static final String KEYVIAID = "keyViaId";
     private static final String KEYDESCRIBE = "keyDescribe";
     private static final String KEYBOARDTITLEARRAY = "keyBoardTitleArray";
@@ -45,6 +48,9 @@ public class GatherDialogFragment extends BaseDialogFragment {
     private String mDescribeText;
     private String[] mBoardTitleArray;
 
+    private int mSelectPosition=0;//默认的选中项
+
+    OnGatherDialogInteractionListener mListener;
 
     @Override
     protected String getTAG() {
@@ -55,13 +61,17 @@ public class GatherDialogFragment extends BaseDialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        if (context instanceof ImageDetailActivity) {
-            mAuthorization = ((ImageDetailActivity) context).mAuthorization;
+        if (context instanceof OnGatherDialogInteractionListener){
+            mListener= (OnGatherDialogInteractionListener) context;
+        }else {
+            throwRuntimeException(context);
         }
+
     }
 
-    static GatherDialogFragment create(String viaId, String describe, String[] boardTitleArray) {
+    static GatherDialogFragment create(String Authorization,String viaId, String describe, String[] boardTitleArray) {
         Bundle bundle = new Bundle();
+        bundle.putString(KEYAUTHORIZATION,Authorization);
         bundle.putString(KEYVIAID, viaId);
         bundle.putString(KEYDESCRIBE, describe);
         bundle.putStringArray(KEYBOARDTITLEARRAY, boardTitleArray);
@@ -76,6 +86,7 @@ public class GatherDialogFragment extends BaseDialogFragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
+            mAuthorization=args.getString(KEYAUTHORIZATION);
             mViaId = args.getString(KEYVIAID);
             mDescribeText = args.getString(KEYDESCRIBE);
             mBoardTitleArray = args.getStringArray(KEYBOARDTITLEARRAY);
@@ -93,16 +104,17 @@ public class GatherDialogFragment extends BaseDialogFragment {
         initView(dialogView);
         builder.setView(dialogView);
 
-        builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.dialog_gather_negative,null);
+        builder.setPositiveButton(R.string.dialog_gather_positive, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Logger.d();
-            }
-        });
-        builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Logger.d();
+                //取出输入字符串 没有输入用hint文本作为默认值
+                String input=mEditTextDescribe.getText().toString();
+                if (TextUtils.isEmpty(input)){
+                    input=mEditTextDescribe.getHint().toString();
+                }
+                mListener.onDialogPositiveClick(input,mSelectPosition);
             }
         });
 
@@ -123,7 +135,18 @@ public class GatherDialogFragment extends BaseDialogFragment {
             mEditTextDescribe.setHint(R.string.text_image_describe_null);
         }
         mSpinnerBoardTitle.setAdapter(adapter);
+        mSpinnerBoardTitle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Logger.d("position="+position);
+                mSelectPosition=position;
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
     }
 

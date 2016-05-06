@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Created by LiCola on  2015/12/16  15:42
  */
-public class TokenBean implements Parcelable {
+public class TokenBean  {
 
     /**
      * access_token : edd1fc77-7d46-4e5c-92b9-3a84a290df0c
@@ -61,39 +61,4 @@ public class TokenBean implements Parcelable {
                 ", refresh_token='" + refresh_token + '\'' +
                 '}';
     }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.access_token);
-        dest.writeString(this.token_type);
-        dest.writeInt(this.expires_in);
-        dest.writeString(this.refresh_token);
-    }
-
-    public TokenBean() {
-    }
-
-    protected TokenBean(Parcel in) {
-        this.access_token = in.readString();
-        this.token_type = in.readString();
-        this.expires_in = in.readInt();
-        this.refresh_token = in.readString();
-    }
-
-    public static final Parcelable.Creator<TokenBean> CREATOR = new Parcelable.Creator<TokenBean>() {
-        @Override
-        public TokenBean createFromParcel(Parcel source) {
-            return new TokenBean(source);
-        }
-
-        @Override
-        public TokenBean[] newArray(int size) {
-            return new TokenBean[size];
-        }
-    };
 }

@@ -24,10 +24,13 @@ import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.BindString;
+import licola.demo.com.huabandemo.Entity.BoardItemInfoBean;
+import licola.demo.com.huabandemo.Entity.BoardListInfoBean;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
@@ -54,11 +57,8 @@ public class LoginActivity extends BaseActivity {
     private static final String PASSWORD = "password";
     private static final String TYPE_KEY = "type_key";
 
-
-    private String mTokenAccess;//后续所有的https联网都使用 需要暂时保存
-    private String mTokenRefresh;
-    private String mTokenType;
-    private int mTokenExpiresIn;
+    private TokenBean mTokenBean;
+    private UserMeAndOtherBean mUserBean;
 
     //需要的资源
     @BindString(R.string.snack_message_login_success)
@@ -78,6 +78,8 @@ public class LoginActivity extends BaseActivity {
     @Bind(R.id.scroll_login_form)
     ScrollView mScrollViewLogin;
 
+    //联网的授权字段 提供子Fragment使用
+    public String mAuthorization = Base64.mClientInto;
 
     @Override
     protected int getLayoutId() {
@@ -223,29 +225,33 @@ public class LoginActivity extends BaseActivity {
 
     private void httpLogin(final String username, final String password) {
         RetrofitService.createAvatarService()
-                .httpsTokenRx(Base64.mClientInto, PASSWORD, username, password)
+                .httpsTokenRx(mAuthorization, PASSWORD, username, password)
                 //得到toke成功 用内部字段保存 在最后得到用户信息一起保存写入
-                .map(new Func1<TokenBean, TokenBean>() {
-                    @Override
-                    public TokenBean call(TokenBean tokenBean) {
-                        mTokenAccess = tokenBean.getAccess_token();
-                        mTokenRefresh = tokenBean.getRefresh_token();
-                        mTokenType = tokenBean.getToken_type();
-                        mTokenExpiresIn = tokenBean.getExpires_in();
-                        return tokenBean;
 
-                    }
-                })
                 //得到Observable<> 将它转换成另一个Observable<>
                 .flatMap(new Func1<TokenBean, Observable<UserMeAndOtherBean>>() {
                     @Override
                     public Observable<UserMeAndOtherBean> call(TokenBean tokenBean) {
-                        return RetrofitService.createAvatarService().httpsUserRx(tokenBean.getToken_type() + " " + tokenBean.getAccess_token());
+//                        mTokenAccess = tokenBean.getAccess_token();
+//                        mTokenRefresh = tokenBean.getRefresh_token();
+//                        mTokenType = tokenBean.getToken_type();
+//                        mTokenExpiresIn = tokenBean.getExpires_in();
+                        mTokenBean = tokenBean;
+                        mAuthorization = tokenBean.getToken_type() + " " + tokenBean.getAccess_token();
+                        return RetrofitService.createAvatarService().httpsUserRx(mAuthorization);
+                    }
+                })
+                .flatMap(new Func1<UserMeAndOtherBean, Observable<BoardListInfoBean>>() {
+                    @Override
+                    public Observable<BoardListInfoBean> call(UserMeAndOtherBean userMeAndOtherBean) {
+                        mUserBean = userMeAndOtherBean;
+                        return RetrofitService.createAvatarService()
+                                .httpsBoardListInfo(mAuthorization, Constant.OPERATEBOARDEXTRA);
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UserMeAndOtherBean>() {
+                .subscribe(new Subscriber<BoardListInfoBean>() {
                     @Override
                     public void onStart() {
                         super.onStart();
@@ -266,29 +272,80 @@ public class LoginActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onNext(UserMeAndOtherBean userMeBean) {
+                    public void onNext(BoardListInfoBean boardListInfoBean) {
                         Logger.d();
                         showProgress(false);
                         NetUtils.showSnackBar(mScrollViewLogin, snack_message_login_success).setCallback(new Snackbar.Callback() {
                             @Override
                             public void onDismissed(Snackbar snackbar, int event) {
                                 super.onDismissed(snackbar, event);
-                                UserInfoActivity.launch(LoginActivity.this, String.valueOf(userMeBean.getUser_id()), userMeBean.getUsername());
+                                UserInfoActivity.launch(LoginActivity.this, String.valueOf(mUserBean.getUser_id()), mUserBean.getUsername());
                                 finish();
                             }
                         });
-                        saveUserInfo(userMeBean, mTokenAccess, mTokenRefresh, mTokenType, mTokenExpiresIn, username, password);
+                        saveUserInfo(mUserBean, mTokenBean, username, password, boardListInfoBean.getBoards());
                         Logger.d();
-
                     }
                 });
+
+//                    @Override
+//                    public void onNext(UserMeAndOtherBean userMeBean) {
+//                        Logger.d();
+//                        showProgress(false);
+//                        NetUtils.showSnackBar(mScrollViewLogin, snack_message_login_success).setCallback(new Snackbar.Callback() {
+//                            @Override
+//                            public void onDismissed(Snackbar snackbar, int event) {
+//                                super.onDismissed(snackbar, event);
+//                                UserInfoActivity.launch(LoginActivity.this, String.valueOf(userMeBean.getUser_id()), userMeBean.getUsername());
+//                                finish();
+//                            }
+//                        });
+//                        saveUserInfo(userMeBean, mTokenAccess, mTokenRefresh, mTokenType, mTokenExpiresIn, username, password);
+//                        Logger.d();
+//
+//                    }
+//                });
     }
 
 
     private void saveUserInfo(UserMeAndOtherBean result,
-                              String mTokenAccess, String mTokenRefresh,
-                              String mTokenType, int mTokenExpiresIn,
-                              String mUserAccount, String mUserPassword) {
+                              TokenBean mTokenBean,
+                              String mUserAccount, String mUserPassword, List<BoardItemInfoBean> mBoardList) {
+
+        //构造两个StringBuilder对象 拼接用逗号分隔 写入 SharedPreferences
+        StringBuilder boardTitle = new StringBuilder();
+        StringBuilder boardId = new StringBuilder();
+
+//        for (BoardItemInfoBean item : mBoardList) {
+//            boardTitle.append(item.getTitle());
+//            boardId.append(item.getBoard_id());
+//        }
+        for (int i = 0, size = mBoardList.size(); i < size; i++) {
+            boardTitle.append(mBoardList.get(i).getTitle());
+            boardId.append(mBoardList.get(i).getBoard_id());
+
+            if (i != size - 1) {
+                boardTitle.append(Constant.SEPARATECOMMA);
+                boardId.append(Constant.SEPARATECOMMA);
+            }
+        }
+
+        new SPBuild(getApplicationContext())
+                .addData(Constant.ISLOGIN, Boolean.TRUE)//登陆志位
+                .addData(Constant.LOGINTIME, System.currentTimeMillis())//登陆时间
+                .addData(Constant.USERACCOUNT, mUserAccount)//账号
+                .addData(Constant.USERPASSWORD, mUserPassword)//密码
+                .addData(Constant.TOKENACCESS, mTokenBean.getAccess_token())
+                .addData(Constant.TOKENREFRESH, mTokenBean.getRefresh_token())
+                .addData(Constant.TOKENTYPE, mTokenBean.getToken_type())
+                .addData(Constant.TOKENEXPIRESIN, mTokenBean.getExpires_in())
+                .addData(Constant.USERNAME, result.getUsername())
+                .addData(Constant.USERID, String.valueOf(result.getUser_id()))
+                .addData(Constant.USERHEADKEY, result.getAvatar())
+                .addData(Constant.USEREMAIL, result.getEmail())
+                .addData(Constant.BOARDTILTARRAY, boardTitle.toString())
+                .addData(Constant.BOARDIDARRAY, boardId.toString())
+                .build();
 
 //        //保存先清空内容
 //        SPUtils.clear(getApplicationContext());
@@ -310,20 +367,6 @@ public class LoginActivity extends BaseActivity {
 //        SPUtils.put(getApplicationContext(), Constant.USERHEADKEY, result.getAvatar().getKey());
 //        SPUtils.put(getApplicationContext(), Constant.USEREMAIL, result.getEmail());
 
-        new SPBuild(getApplicationContext())
-                .addData(Constant.ISLOGIN, Boolean.TRUE)
-                .addData(Constant.LOGINTIME, System.currentTimeMillis())
-                .addData(Constant.USERACCOUNT, mUserAccount)
-                .addData(Constant.USERPASSWORD, mUserPassword)
-                .addData(Constant.TOKENACCESS, mTokenAccess)
-                .addData(Constant.TOKENREFRESH, mTokenRefresh)
-                .addData(Constant.TOKENTYPE, mTokenType)
-                .addData(Constant.TOKENEXPIRESIN, mTokenExpiresIn)
-                .addData(Constant.USERNAME, result.getUsername())
-                .addData(Constant.USERID, String.valueOf(result.getUser_id()))
-                .addData(Constant.USERHEADKEY, result.getAvatar())
-                .addData(Constant.USEREMAIL, result.getEmail())
-                .build();
 
     }
 

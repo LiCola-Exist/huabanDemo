@@ -24,6 +24,14 @@ public class Constant {
     public static final String USERHEADKEY = "userHeadKey";
 
     public static final String USEREMAIL = "userEmail";
+
+    //board info
+    public static final String BOARDTILTARRAY="boardTitleArray";
+    public static final String BOARDIDARRAY="boardIdArray";
+
+    //,
+    public static final String SEPARATECOMMA=",";
+
     //search
     public static final String HISTORYTEXT = "historyText";
 
