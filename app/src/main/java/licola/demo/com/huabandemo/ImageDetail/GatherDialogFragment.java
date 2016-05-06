@@ -1,0 +1,160 @@
+package licola.demo.com.huabandemo.ImageDetail;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import butterknife.ButterKnife;
+import licola.demo.com.huabandemo.Base.BaseDialogFragment;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
+import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Constant;
+import licola.demo.com.huabandemo.Util.Logger;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
+/**
+ * Created by LiCola on  2016/05/06  14:40
+ */
+public class GatherDialogFragment extends BaseDialogFragment {
+
+    private static final String KEYVIAID = "keyViaId";
+    private static final String KEYDESCRIBE = "keyDescribe";
+    private static final String KEYBOARDTITLEARRAY = "keyBoardTitleArray";
+
+
+    EditText mEditTextDescribe;
+    TextView mTVGatherWarning;
+    Spinner mSpinnerBoardTitle;
+
+
+    private Context mContext;
+    private String mViaId;
+    private String mDescribeText;
+    private String[] mBoardTitleArray;
+
+
+    @Override
+    protected String getTAG() {
+        return this.toString();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
+        if (context instanceof ImageDetailActivity) {
+            mAuthorization = ((ImageDetailActivity) context).mAuthorization;
+        }
+    }
+
+    static GatherDialogFragment create(String viaId, String describe, String[] boardTitleArray) {
+        Bundle bundle = new Bundle();
+        bundle.putString(KEYVIAID, viaId);
+        bundle.putString(KEYDESCRIBE, describe);
+        bundle.putStringArray(KEYBOARDTITLEARRAY, boardTitleArray);
+        GatherDialogFragment fragment = new GatherDialogFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle args = getArguments();
+        if (args != null) {
+            mViaId = args.getString(KEYVIAID);
+            mDescribeText = args.getString(KEYDESCRIBE);
+            mBoardTitleArray = args.getStringArray(KEYBOARDTITLEARRAY);
+        }
+    }
+
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        Logger.d(TAG);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle("采集");
+        LayoutInflater factory = LayoutInflater.from(mContext);
+        final View dialogView = factory.inflate(R.layout.dialog_gather, null);
+        initView(dialogView);
+        builder.setView(dialogView);
+
+        builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Logger.d();
+            }
+        });
+        builder.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Logger.d();
+            }
+        });
+
+        addSubscription(getGatherInfo());
+
+        return builder.create();
+    }
+
+    private void initView(View dialogView) {
+        mEditTextDescribe = ButterKnife.findById(dialogView, R.id.edit_describe);
+        mTVGatherWarning = ButterKnife.findById(dialogView, R.id.tv_gather_warning);
+        mSpinnerBoardTitle = ButterKnife.findById(dialogView, R.id.spinner_board_title);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.support_simple_spinner_dropdown_item, mBoardTitleArray);
+        if (!TextUtils.isEmpty(mDescribeText)) {
+            mEditTextDescribe.setHint(mDescribeText);
+        }else {
+            mEditTextDescribe.setHint(R.string.text_image_describe_null);
+        }
+        mSpinnerBoardTitle.setAdapter(adapter);
+
+
+    }
+
+
+    public Subscription getGatherInfo() {
+        return RetrofitService.createAvatarService()
+                .httpsGatherInfo(mAuthorization, mViaId, Constant.OPERATECHECK)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<GatherInfoBean>() {
+                    @Override
+                    public void onCompleted() {
+                        Logger.d();
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.toString());
+                    }
+
+                    @Override
+                    public void onNext(GatherInfoBean gatherInfoBean) {
+                        Logger.d("this pin exist =" + (gatherInfoBean.getExist_pin() != null));
+                        if (gatherInfoBean.getExist_pin()!=null){
+                            String formatWarning = getResources().getString(R.string.text_gather_warning);
+                            mTVGatherWarning.setVisibility(View.VISIBLE);
+                            mTVGatherWarning.setText(String.format(formatWarning, gatherInfoBean.getExist_pin().getBoard().getTitle()));
+                        }
+
+                    }
+                });
+    }
+}

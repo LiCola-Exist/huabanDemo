@@ -18,7 +18,9 @@ import java.util.List;
 
 import butterknife.BindString;
 import butterknife.ButterKnife;
+
 import org.greenrobot.eventbus.EventBus;
+
 import licola.demo.com.huabandemo.API.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
@@ -38,17 +40,16 @@ import rx.schedulers.Schedulers;
  * Created by LiCola on  2016/03/26  19:05
  */
 public class ImageDetailFragment extends
-        BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter, List<PinsMainEntity>>
-{
+        BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter, List<PinsMainEntity>> {
     private static final String TAG = "ImageDetailFragment";
     protected int mIndex = 1;//默认值为1
 
     @BindString(R.string.text_like_number)
-     String mStringLikeNumber;
+    String mStringLikeNumber;
     @BindString(R.string.text_gather_number)
-     String mStringGatherNumber;
+    String mStringGatherNumber;
     @BindString(R.string.text_image_describe_null)
-     String mStringNullDescribe;
+    String mStringNullDescribe;
 
     @BindString(R.string.url_image_small)
     String mFormatUrlSmall;

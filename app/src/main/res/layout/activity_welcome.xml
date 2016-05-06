@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:id="@+id/img_welcome"
     android:scaleType="centerCrop"
-    android:src="@drawable/welcome_thirdly" />
+    android:src="@drawable/welcome_fourthly" />
 
 
 

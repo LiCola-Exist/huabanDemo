@@ -48,5 +48,6 @@
     <dimen name="progressbar_size">22dp</dimen>
     <dimen name="tv_to_progressbar_margin">4dp</dimen>
     <dimen name="viewstub_height">60dp</dimen>
+    <dimen name="dialog_padding">24dp</dimen>
 
 </resources>

@@ -7,6 +7,7 @@ import licola.demo.com.huabandemo.Entity.BoardListInfoBean;
 import licola.demo.com.huabandemo.Entity.ListPinsBean;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
+import licola.demo.com.huabandemo.ImageDetail.GatherInfoBean;
 import licola.demo.com.huabandemo.ImageDetail.LikeOperateBean;
 import licola.demo.com.huabandemo.ImageDetail.PinsDetailBean;
 import licola.demo.com.huabandemo.Login.TokenBean;
@@ -161,7 +162,13 @@ public interface HttpAPIRx {
     @POST("pins/{pinId}/{operate}")
     Observable<LikeOperateBean> httpsLikeOperate(@Header("Authorization") String authorization, @Path("pinId") String pinsId, @Path("operate") String operate);
 
+    //获取我的画板集合信息
     //https://api.huaban.com/last_boards/?extra=recommend_tags
     @GET("last_boards/")
     Observable<BoardListInfoBean> httpsBoardListInfo(@Header("Authorization") String authorization,@Query("extra") String extra);
+
+    //对某个图片进行采集前网络访问 判断是否被采集过
+    //https://api.huaban.com/pins/707907583/repin/?check=true
+    @GET("pins/{viaId}/repin/")
+    Observable<GatherInfoBean> httpsGatherInfo(@Header("Authorization") String authorization,@Path("viaId") String viaId,@Query("check") boolean check);
 }

@@ -30,7 +30,6 @@ import rx.subscriptions.CompositeSubscription;
  */
 public abstract class BaseFragment extends Fragment {
 
-
     protected String TAG = getTAG();
 
     protected abstract String getTAG();

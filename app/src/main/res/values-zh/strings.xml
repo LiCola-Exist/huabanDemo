@@ -115,4 +115,5 @@
     <string name="text_following">关注</string>
     <string name="text_followed">已关注</string>
     <string name="text_auto_login_fail">自动登录失败，请重新登录</string>
+    <string name="text_gather_warning">已经被采集到画板 《%s》</string>
 </resources>

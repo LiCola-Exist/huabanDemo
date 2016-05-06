@@ -10,10 +10,13 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -190,11 +193,17 @@ public class ImageDetailActivity extends BaseActivity
 //                if (src instanceof Animatable) {
 //                    ((Animatable) src).start();
 //                }
-
+                showGatherDialog();
             }
         });
 
 
+    }
+
+    private void showGatherDialog() {
+        String[] array=getResources().getStringArray(R.array.title_array);
+        GatherDialogFragment fragment = GatherDialogFragment.create(mPinsId,mPinsBean.getRaw_text(),array);
+        fragment.show(getSupportFragmentManager(), null);
     }
 
 
