@@ -7,4 +7,6 @@ public interface OnBoardDetailFragmentInteractionListener
         extends OnPinsFragmentInteractionListener {
 
     void onClickUserField(String key, String title);
+
+    void onHttpBoardAttentionState(boolean isAttention);
 }

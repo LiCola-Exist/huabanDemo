@@ -74,6 +74,7 @@
     <string name="action_bar_like">Like</string>
     <string name="action_bar_download">Download</string>
     <string name="action_bar_gather">Gather</string>
+    <string name="action_bar_attention">Attention</string>
 
     <string name="hint_search">key</string>
     <string name="hint_not_history">noting</string>

@@ -52,6 +52,7 @@
     <string name="action_bar_like">喜欢</string>
     <string name="action_bar_download">下载</string>
     <string name="action_bar_gather">采集</string>
+    <string name="action_bar_attention">关注</string>
 
     <string name="hint_search">关键字</string>
     <string name="hint_not_history">空</string>

@@ -20,8 +20,7 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-            >
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/img_image_big"
@@ -52,12 +51,13 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_image_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/drawable_animated_loading"
-        app:layout_anchor="@id/appbar_image_detail"
-        app:layout_anchorGravity="bottom|end" />
+    android:id="@+id/fab_image_detail"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/fab_margin"
+    android:src="@drawable/ic_camera_white_24dp"
+    app:layout_anchor="@id/appbar_image_detail"
+    app:layout_anchorGravity="bottom|end" />
+
 
 </android.support.design.widget.CoordinatorLayout>

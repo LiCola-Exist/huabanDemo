@@ -105,7 +105,7 @@ public class RecyclerPinsCardAdapter extends RecyclerView.Adapter<RecyclerPinsCa
                 null,
                 null);
         holder.tv_card_gather.setCompoundDrawablesWithIntrinsicBounds(
-                CompatUtil.getTintListDrawable(mContext, R.drawable.ic_explore_black_18dp, R.color.tint_list_grey),
+                CompatUtil.getTintListDrawable(mContext, R.drawable.ic_camera_black_18dp, R.color.tint_list_grey),
                 null,
                 null,
                 null);

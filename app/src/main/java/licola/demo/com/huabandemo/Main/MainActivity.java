@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity
 
     private FragmentManager fragmentManager;
 
-    private final int mDrawableList[] = {R.drawable.ic_loyalty_black_36dp, R.drawable.ic_explore_black_36dp,
+    private final int mDrawableList[] = {R.drawable.ic_loyalty_black_36dp, R.drawable.ic_camera_black_36dp,
             R.drawable.ic_message_black_36dp, R.drawable.ic_people_black_36dp};
     private String[] types;
     private String[] titles;

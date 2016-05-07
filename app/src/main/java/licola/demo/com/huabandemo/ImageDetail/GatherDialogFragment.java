@@ -177,6 +177,7 @@ public class GatherDialogFragment extends BaseDialogFragment {
                             mTVGatherWarning.setText(String.format(formatWarning, gatherInfoBean.getExist_pin().getBoard().getTitle()));
                         }
 
+
                     }
                 });
     }

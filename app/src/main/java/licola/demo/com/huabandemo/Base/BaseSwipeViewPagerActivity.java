@@ -145,5 +145,7 @@ public abstract class BaseSwipeViewPagerActivity<T extends BaseFragment>
         public CharSequence getPageTitle(int position) {
             return mTitleList[position];
         }
+
+
     }
 }

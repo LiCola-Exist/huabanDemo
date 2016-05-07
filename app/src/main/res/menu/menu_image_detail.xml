@@ -15,9 +15,8 @@
         app:showAsAction="ifRoom"
         />
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:id="@+id/action_gather"
         android:title="@string/action_bar_gather"
-        android:icon="@drawable/ic_explore_black_24dp"
+        android:icon="@drawable/ic_camera_white_24dp"
         app:showAsAction="never" />
 </menu>

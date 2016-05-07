@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".BoardDetail.BoardDetailActivity">
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:id="@+id/action_attention"
+        android:title="@string/action_bar_attention"
         app:showAsAction="never" />
 </menu>

@@ -3,10 +3,11 @@ package licola.demo.com.huabandemo.API;
 
 import java.util.List;
 
+import licola.demo.com.huabandemo.BoardDetail.AttentionOperateBean;
+import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
 import licola.demo.com.huabandemo.Entity.BoardListInfoBean;
 import licola.demo.com.huabandemo.Entity.ListPinsBean;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
-import licola.demo.com.huabandemo.BoardDetail.BoardDetailBean;
 import licola.demo.com.huabandemo.ImageDetail.GatherInfoBean;
 import licola.demo.com.huabandemo.ImageDetail.GatherResultBean;
 import licola.demo.com.huabandemo.ImageDetail.LikeOperateBean;
@@ -15,13 +16,12 @@ import licola.demo.com.huabandemo.Login.TokenBean;
 import licola.demo.com.huabandemo.Login.UserMeAndOtherBean;
 import licola.demo.com.huabandemo.MyFollowing.FollowingBoardListBean;
 import licola.demo.com.huabandemo.MyFollowing.FollowingPinsBean;
-import licola.demo.com.huabandemo.UserInfo.UserBoardListBean;
 import licola.demo.com.huabandemo.Search.SearchHintBean;
 import licola.demo.com.huabandemo.SearchResult.SearchBoardListBean;
 import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
 import licola.demo.com.huabandemo.SearchResult.SearchPeopleListBean;
+import licola.demo.com.huabandemo.UserInfo.UserBoardListBean;
 import okhttp3.ResponseBody;
-import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -159,10 +159,17 @@ public interface HttpAPIRx {
     @GET("http://img.hb.aicdn.com/{pinId}")
     Observable<ResponseBody> httpDownImage(@Path("pinId") String pinId);
 
-    //POST https://api.huaban.com/pins/687738004/like
-    //https://api.huaban.com/pins/687738004/unlike 这两个统一成一个接口
+    //https://api.huaban.com/pins/687738004/like
+    //https://api.huaban.com/pins/687738004/unlike POST方法 这两个统一成一个接口
+    //对图片的进行like操作
     @POST("pins/{pinId}/{operate}")
     Observable<LikeOperateBean> httpsLikeOperate(@Header("Authorization") String authorization, @Path("pinId") String pinsId, @Path("operate") String operate);
+
+    //https://api.huaban.com/boards/967118/follow
+    //https://api.huaban.com/boards/967118/unfollow POST方法 统一成一个接口
+    //对画板进行关注操作
+    @POST("boards/{boardId}/{operate}")
+    Observable<AttentionOperateBean> httpsAttentionOperate(@Header("Authorization") String authorization, @Path("boardId") String pinsId, @Path("operate") String operate);
 
     //获取我的画板集合信息
     //https://api.huaban.com/last_boards/?extra=recommend_tags
@@ -180,4 +187,6 @@ public interface HttpAPIRx {
     @FormUrlEncoded
     @POST("pins/")
     Observable<GatherResultBean> httpsGatherPins(@Header("Authorization") String authorization, @Field("board_id") String boardId, @Field("text") String describe, @Field("via") String PinsIda);
+
+
 }

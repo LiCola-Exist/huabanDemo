@@ -209,7 +209,7 @@ public class ImageDetailFragment extends
     }
 
     private void setViewDrawable() {
-        initTintDrawable(tv_image_gather, R.drawable.ic_explore_black_24dp);
+        initTintDrawable(tv_image_gather, R.drawable.ic_camera_black_24dp);
         initTintDrawable(tv_image_like, R.drawable.ic_favorite_black_24dp);
         initTintDrawable(ibtn_image_user_chevron_right, R.drawable.ic_chevron_right_black_36dp);
         initTintDrawable(ibtn_image_board_chevron_right, R.drawable.ic_chevron_right_black_36dp);

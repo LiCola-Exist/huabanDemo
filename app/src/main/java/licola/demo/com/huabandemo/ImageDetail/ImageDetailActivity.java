@@ -1,6 +1,9 @@
 package licola.demo.com.huabandemo.ImageDetail;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
@@ -36,15 +39,19 @@ import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.Main.MainActivity;
 import licola.demo.com.huabandemo.Module.ModuleActivity;
+import licola.demo.com.huabandemo.Observable.MyRxObservable;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class ImageDetailActivity extends BaseActivity
@@ -97,6 +104,7 @@ public class ImageDetailActivity extends BaseActivity
     public String mAuthorization = Base64.mClientInto;
 
     private boolean isLike = false;//该图片是否被喜欢操作 默认false 没有被操作过
+    private boolean isGathered = false;//该图片是否被采集过
 
     private String[] mBoardIdArray;
 
@@ -172,36 +180,19 @@ public class ImageDetailActivity extends BaseActivity
     }
 
     private void initListener() {
-//        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-//            @Override
-//            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-////                Logger.d("verticalOffset=" + verticalOffset + "appBarLayout.getTotalScrollRange()" + appBarLayout.getTotalScrollRange());
-////                if (menuItem!=null) {
-////                    if (verticalOffset == -appBarLayout.getTotalScrollRange()) {
-////                        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-////                    } else {
-////                        menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
-////                    }
-////                }
-//            }
-//        });
-
         mFabActionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//                final Drawable src = mFabActionBtn.getDrawable();
-//                if (src instanceof Animatable) {
-//                    ((Animatable) src).start();
-//                }
+//                startFabAnimatable();
                 showGatherDialog();
             }
         });
-
-
     }
 
+
+    /**
+     * 创建对话框
+     */
     private void showGatherDialog() {
 
         String boardTitleArray = (String) SPUtils.get(mContext, Constant.BOARDTILTARRAY, "");
@@ -239,10 +230,7 @@ public class ImageDetailActivity extends BaseActivity
                     }
                 })
                 .build();
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -250,7 +238,6 @@ public class ImageDetailActivity extends BaseActivity
         super.onCreateOptionsMenu(menu);
         Logger.d();
         getMenuInflater().inflate(R.menu.menu_image_detail, menu);
-
         return true;
     }
 
@@ -260,8 +247,6 @@ public class ImageDetailActivity extends BaseActivity
         Logger.d();
         //menu文件中默认 选择没有选中的drawable
         setIconDynamic(menu.findItem(R.id.action_like), isLike);
-
-
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -281,6 +266,9 @@ public class ImageDetailActivity extends BaseActivity
                 break;
             case R.id.action_download:
                 actionDownload(item);
+                break;
+            case R.id.action_gather:
+                showGatherDialog();
                 break;
         }
 
@@ -309,7 +297,6 @@ public class ImageDetailActivity extends BaseActivity
                         if (drawable != null) {
                             drawable.start();
                         }
-
 
                     }
 
@@ -404,9 +391,7 @@ public class ImageDetailActivity extends BaseActivity
         //接受EvenBus传过来的数据
         Logger.d(TAG + " receive bean");
         this.mPinsBean = bean;
-
     }
-
 
     @Override
     public void onClickPinsItemImage(PinsMainEntity bean, View view) {
@@ -433,25 +418,51 @@ public class ImageDetailActivity extends BaseActivity
     public void onDialogPositiveClick(String describe, int selectPosition) {
         Logger.d("describe=" + describe + " selectPosition=" + selectPosition);
 
-        RetrofitService.createAvatarService()
-                .httpsGatherPins(mAuthorization, mBoardIdArray[selectPosition], describe, mPinsId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        actionGather(describe, selectPosition);
+    }
+
+    private void actionGather(String describe, int selectPosition) {
+
+        Animator animation = AnimatorInflater.loadAnimator(mContext,
+                isGathered ? R.animator.scale_small_animation : R.animator.rotation_scale_small_animation);
+        MyRxObservable.add(animation, mFabActionBtn)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Void, Observable<GatherResultBean>>() {
+                    @Override
+                    public Observable<GatherResultBean> call(Void aVoid) {
+                        return RetrofitService.createAvatarService()
+                                .httpsGatherPins(mAuthorization, mBoardIdArray[selectPosition], describe, mPinsId);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())//最后统一回到UI线程中处理
                 .subscribe(new Subscriber<GatherResultBean>() {
                     @Override
                     public void onCompleted() {
                         Logger.d();
+                        setFabDrawableAndStart(R.drawable.ic_done_white_24dp, mContext, mFabActionBtn);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Logger.d(e.toString());
+                        NetUtils.checkHttpException(mContext, e, mAppBar);
+                        setFabDrawableAndStart(R.drawable.ic_report_white_24dp, mContext, mFabActionBtn);
                     }
 
                     @Override
                     public void onNext(GatherResultBean gatherResultBean) {
                         Logger.d();
+                        //成功后取反
+                        isGathered = !isGathered;
                     }
                 });
+    }
+
+    private void setFabDrawableAndStart(int resId, Context mContext, FloatingActionButton mFabActionBtn) {
+        mFabActionBtn.setImageResource(resId);
+        Animator animation = AnimatorInflater.loadAnimator(mContext, R.animator.scale_magnify_animation);
+        animation.setTarget(mFabActionBtn);
+        animation.start();
     }
 }

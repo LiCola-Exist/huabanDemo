@@ -1,10 +1,14 @@
 package licola.demo.com.huabandemo.BoardDetail;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,10 +18,20 @@ import butterknife.Bind;
 import licola.demo.com.huabandemo.API.OnBoardDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
+import licola.demo.com.huabandemo.Observable.MyRxObservable;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.UserInfo.UserInfoActivity;
 import licola.demo.com.huabandemo.Util.Base64;
+import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.NetUtils;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class BoardDetailActivity extends BaseActivity
         implements OnBoardDetailFragmentInteractionListener {
@@ -30,7 +44,7 @@ public class BoardDetailActivity extends BaseActivity
     @Bind(R.id.toolbar)
     Toolbar mToolBar;
     @Bind(R.id.fab_board_detail)
-    FloatingActionButton mFABBoard;
+    FloatingActionButton mFabBoardAttention;
 
     @Override
     protected int getLayoutId() {
@@ -44,6 +58,9 @@ public class BoardDetailActivity extends BaseActivity
 
     public String mKey;
     public String mTitle;
+    //该画板是否被关注的标志位 默认false
+    public boolean isAttention = false;
+
 
     public static void launch(Activity activity, String key, String title) {
         Intent intent = new Intent(activity, BoardDetailActivity.class);
@@ -68,11 +85,12 @@ public class BoardDetailActivity extends BaseActivity
         mAuthorization = getAuthorization();
         setTitle(mTitle);
 
-        mFABBoard.setOnClickListener(new View.OnClickListener() {
+        //先锁定
+        mFabBoardAttention.setEnabled(false);
+        mFabBoardAttention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "TODO", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                actionAttention();
             }
         });
 
@@ -80,11 +98,49 @@ public class BoardDetailActivity extends BaseActivity
                 beginTransaction().replace(R.id.framelayout_board_detail, BoardDetailFragment.newInstance(mKey)).commit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_base, menu);
-        return true;
+    private void actionAttention() {
+        String operate = isAttention ? Constant.OPERATEUNATTENTION : Constant.OPERATEATTENTION;
+
+        Animator animation = AnimatorInflater.loadAnimator(mContext, R.animator.scale_small_animation);
+        MyRxObservable.add(animation, mFabBoardAttention)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Void, Observable<AttentionOperateBean>>() {
+                    @Override
+                    public Observable<AttentionOperateBean> call(Void aVoid) {
+                        return RetrofitService.createAvatarService()
+                                .httpsAttentionOperate(mAuthorization, mKey, operate);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())//最后统一回到UI线程中处理
+                .subscribe(new Subscriber<AttentionOperateBean>() {
+                    @Override
+                    public void onCompleted() {
+                        Logger.d();
+                        setFabDrawableAndStart(isAttention ? R.drawable.ic_done_white_24dp : R.drawable.ic_loyalty_white_24dp, mContext, mFabBoardAttention);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.toString());
+                        setFabDrawableAndStart(R.drawable.ic_report_white_24dp, mContext, mFabBoardAttention);
+                        NetUtils.checkHttpException(mContext, e, mToolBar);
+                    }
+
+                    @Override
+                    public void onNext(AttentionOperateBean attentionOperateBean) {
+                        isAttention = !isAttention;//取反
+                    }
+                });
     }
+
+    private void setFabDrawableAndStart(int resId, Context mContext, FloatingActionButton mFabActionBtn) {
+        mFabActionBtn.setImageResource(resId);
+        Animator animation = AnimatorInflater.loadAnimator(mContext, R.animator.scale_magnify_animation);
+        animation.setTarget(mFabActionBtn);
+        animation.start();
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -119,5 +175,14 @@ public class BoardDetailActivity extends BaseActivity
     @Override
     public void onClickUserField(String key, String title) {
         //// TODO: 2016/4/7 0007  绑定的fragment headView 的点击事件 跳转到用户界面
+        UserInfoActivity.launch(BoardDetailActivity.this, key, title);
+    }
+
+    @Override
+    public void onHttpBoardAttentionState(boolean isAttention) {
+        this.isAttention = isAttention;
+        mFabBoardAttention.setEnabled(true);
+        mFabBoardAttention.setImageResource(
+                isAttention ? R.drawable.ic_done_white_24dp : R.drawable.ic_loyalty_white_24dp);
     }
 }

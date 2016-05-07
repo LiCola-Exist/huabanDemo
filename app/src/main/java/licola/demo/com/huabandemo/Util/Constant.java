@@ -42,6 +42,10 @@ public class Constant {
     public static final String OPERATELIKE = "like";
     public static final String OPERATEUNLIKE = "unlike";
 
+    //用户对画板的关注操作字段
+    public static final String OPERATEATTENTION = "follow";
+    public static final String OPERATEUNATTENTION = "unfollow";
+
     //获得用户画板列表详情的操作符
     public static final String OPERATEBOARDEXTRA="recommend_tags";
     public static final boolean OPERATECHECK=true;

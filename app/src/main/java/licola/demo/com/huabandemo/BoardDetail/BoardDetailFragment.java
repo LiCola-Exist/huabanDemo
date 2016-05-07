@@ -58,6 +58,8 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
     private OnBoardDetailFragmentInteractionListener mListener;
 
+    private String mStringUserKey;
+    private String mStringUserTitle;
 
     @Override
     protected String getTAG() {
@@ -82,7 +84,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
             @Override
             public void onClick(View v) {
                 Logger.d();
-
+                mListener.onClickUserField(mStringUserKey, mStringUserTitle);
             }
         });//画板栏事件
         mAdapter.setOnClickItemListener(new RecyclerPinsHeadCardAdapter.OnAdapterListener() {
@@ -134,6 +136,9 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
 
                     @Override
                     public void onNext(BoardDetailBean boardDetailBean) {
+                        mLLBoardUser.setEnabled(true);
+                        mStringUserKey = String.valueOf(boardDetailBean.getBoard().getUser().getUser_id());
+                        mStringUserTitle = boardDetailBean.getBoard().getUser().getUsername();
                         setBoardInfo(boardDetailBean);
                     }
                 });
@@ -145,10 +150,10 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
      * @param bean 联网返回的bean
      */
     private void setBoardInfo(BoardDetailBean bean) {
+        mListener.onHttpBoardAttentionState(bean.getBoard().isFollowing());
 
         String url_head = String.format(mFormatUrlSmall, bean.getBoard().getUser().getAvatar());
         setBoardUserInfo(url_head, bean.getBoard().getUser().getUsername());
-
         setBoardTextInfo(bean.getBoard().getDescription(), bean.getBoard().getPin_count(), bean.getBoard().getFollow_count());
     }
 
@@ -211,7 +216,7 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     @Override
     protected Subscription getHttpScroll() {
         return RetrofitService.createAvatarService()
-                .httpsBoardPinsMaxRx(mAuthorization,mKey,mMaxId,mLimit)
+                .httpsBoardPinsMaxRx(mAuthorization, mKey, mMaxId, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(new Func1<ListPinsBean, List<PinsMainEntity>>() {
@@ -268,6 +273,8 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
         mTVBoardDescribe = ButterKnife.findById(headView, R.id.tv_board_describe);
         mTVBoardAttention = ButterKnife.findById(headView, R.id.tv_board_attention);
         mTVBoardGather = ButterKnife.findById(headView, R.id.tv_board_gather);
+
+        mLLBoardUser.setEnabled(false);
 
     }
 
