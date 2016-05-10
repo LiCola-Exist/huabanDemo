@@ -23,11 +23,11 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/04/07  20:34
  */
-public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUserAdapter, List<UserBoardItemBean>> {
+public class UserBoardFragment extends
+        BaseRecyclerHeadFragment<RecyclerBoardUserAdapter, List<UserBoardItemBean>> {
     private static final String TAG = "UserBoardFragment";
     private int mMaxId;
     private boolean isMe;
-
 
     private OnBoardFragmentInteractionListener<UserBoardItemBean> mListener;
     private OnRefreshFragmentInteractionListener mRefreshListener;
@@ -63,9 +63,9 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
                     public void call(List<UserBoardItemBean> userBoardItemBeen) {
                         Logger.d();
                         mAdapter.setListNotify(userBoardItemBeen);
-                        mMaxId=getMax(userBoardItemBeen);
+                        mMaxId = getMax(userBoardItemBeen);
                     }
-                },getErrorAction(),getCompleteAction());
+                }, getErrorAction(), getCompleteAction());
 
 
     }
@@ -92,7 +92,7 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
     @Override
     protected Subscription getHttpScroll() {
         return RetrofitService.createAvatarService()
-                .httpsUserBoardMaxRx(mAuthorization,mKey, mMaxId, mLimit)
+                .httpsUserBoardMaxRx(mAuthorization, mKey, mMaxId, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(UserBoardListBean::getBoards)
@@ -126,16 +126,16 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if ((context instanceof OnBoardFragmentInteractionListener)&&(context instanceof OnRefreshFragmentInteractionListener)){
-            mListener= (OnBoardFragmentInteractionListener<UserBoardItemBean>) context;
-            mRefreshListener= (OnRefreshFragmentInteractionListener) context;
-        }else {
+        if ((context instanceof OnBoardFragmentInteractionListener) && (context instanceof OnRefreshFragmentInteractionListener)) {
+            mListener = (OnBoardFragmentInteractionListener<UserBoardItemBean>) context;
+            mRefreshListener = (OnRefreshFragmentInteractionListener) context;
+        } else {
             throwRuntimeException(context);
         }
 
-        if (context instanceof UserInfoActivity){
-            mAuthorization=((UserInfoActivity) context).mAuthorization;
-            isMe=((UserInfoActivity) context).isMe;
+        if (context instanceof UserInfoActivity) {
+            mAuthorization = ((UserInfoActivity) context).mAuthorization;
+            isMe = ((UserInfoActivity) context).isMe;
         }
     }
 
@@ -145,12 +145,12 @@ public class UserBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardUse
         mAdapter.setOnClickItemListener(new RecyclerBoardUserAdapter.onAdapterListener() {
             @Override
             public void onClickImage(UserBoardItemBean bean, View view) {
-                mListener.onClickBoardItemImage(bean,view);
+                mListener.onClickBoardItemImage(bean, view);
             }
 
             @Override
             public void onClickOperate(UserBoardItemBean bean, View view) {
-                mListener.onClickBoardItemOperate(bean,view);
+                mListener.onClickBoardItemOperate(bean, view);
             }
         });
     }

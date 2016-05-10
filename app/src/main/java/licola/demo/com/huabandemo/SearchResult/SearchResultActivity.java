@@ -61,8 +61,6 @@ public class SearchResultActivity extends BaseActivity implements
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    //联网的授权字段 提供子Fragment使用
-    public String mAuthorization = Base64.mClientInto;
 
     @Override
     protected int getLayoutId() {
@@ -94,7 +92,7 @@ public class SearchResultActivity extends BaseActivity implements
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         key = getIntent().getStringExtra(SEARCHKEY);
-        mAuthorization=getAuthorization();
+
         Logger.d(key);
         saveSearchHistory(key);
         initAdapter();

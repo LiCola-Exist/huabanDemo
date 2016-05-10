@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.ImageDetail;
+package licola.demo.com.huabandemo.Widget.MyDialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -16,9 +16,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
-import licola.demo.com.huabandemo.API.OnGatherDialogInteractionListener;
+import licola.demo.com.huabandemo.API.Dialog.OnGatherDialogInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseDialogFragment;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
+import licola.demo.com.huabandemo.ImageDetail.GatherInfoBean;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -69,7 +70,7 @@ public class GatherDialogFragment extends BaseDialogFragment {
 
     }
 
-    static GatherDialogFragment create(String Authorization,String viaId, String describe, String[] boardTitleArray) {
+    public static GatherDialogFragment create(String Authorization,String viaId, String describe, String[] boardTitleArray) {
         Bundle bundle = new Bundle();
         bundle.putString(KEYAUTHORIZATION,Authorization);
         bundle.putString(KEYVIAID, viaId);
@@ -98,13 +99,13 @@ public class GatherDialogFragment extends BaseDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Logger.d(TAG);
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-        builder.setTitle("采集");
+        builder.setTitle(getString(R.string.dialog_title_gather));
         LayoutInflater factory = LayoutInflater.from(mContext);
         final View dialogView = factory.inflate(R.layout.dialog_gather, null);
         initView(dialogView);
         builder.setView(dialogView);
 
-        builder.setNegativeButton(R.string.dialog_gather_negative,null);
+        builder.setNegativeButton(R.string.dialog_negative,null);
         builder.setPositiveButton(R.string.dialog_gather_positive, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -123,10 +124,25 @@ public class GatherDialogFragment extends BaseDialogFragment {
         return builder.create();
     }
 
+
+    //可能需要保存数据的回调 一般是按下Home键
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Logger.d();
+    }
+
+    //取消的回调
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        Logger.d(dialog.toString());
+    }
+
     private void initView(View dialogView) {
         mEditTextDescribe = ButterKnife.findById(dialogView, R.id.edit_describe);
         mTVGatherWarning = ButterKnife.findById(dialogView, R.id.tv_gather_warning);
-        mSpinnerBoardTitle = ButterKnife.findById(dialogView, R.id.spinner_board_title);
+        mSpinnerBoardTitle = ButterKnife.findById(dialogView, R.id.spinner_title);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.support_simple_spinner_dropdown_item, mBoardTitleArray);
         if (!TextUtils.isEmpty(mDescribeText)) {
@@ -149,6 +165,7 @@ public class GatherDialogFragment extends BaseDialogFragment {
         });
 
     }
+
 
 
     public Subscription getGatherInfo() {

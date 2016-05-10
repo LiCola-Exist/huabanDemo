@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.API;
+package licola.demo.com.huabandemo.API.Dialog;
 
 /**
  * Created by LiCola on  2016/05/06  19:03

@@ -68,13 +68,11 @@ public class SearchActivity extends BaseActivity {
 //    @BindDrawable(R.drawable.bg_tv_text_selector)
 //    Drawable mTextDrawable;
 
-    final int mItemLineNumber = 4;//每行的个数
+    final int mItemLineNumber = 3;//每行的个数
     final int mItemMargin = 1;
     final int mItemTVMargin = 10;
     int mItemWidth;//子控件的宽度
 
-    //联网的授权字段 提供子Fragment使用
-    public String mAuthorization = Base64.mClientInto;
 
     private ArrayAdapter<String> mAdapter;
     private ArrayList<String> mListHttpHint = new ArrayList<>();
@@ -110,7 +108,6 @@ public class SearchActivity extends BaseActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
-        mAuthorization = getAuthorization();
         mIBtnClearHistory.setImageDrawable(CompatUtil.getTintListDrawable(mContext, R.drawable.ic_close_black_24dp, R.color.tint_list_grey));
         initFlowReference(mFlowReference);
 
@@ -212,11 +209,13 @@ public class SearchActivity extends BaseActivity {
     private void initFlowReference(FlowLayout mFlowReference) {
         String mTextList[] = getResources().getStringArray(R.array.title_array_all);//显示的文字
         String mTypeList[] = getResources().getStringArray(R.array.type_array_all);//查询的关键字
+        int[] ColorResId=getResources().getIntArray(R.array.type_array_color);
+//        int[] drawableResIdList=new int[]{R};
         mItemWidth = Utils.getScreenWidth(mContext) / mItemLineNumber - mItemMargin * 2;//每个子控件宽为屏幕的等分
 //        mItemWidth= Utils.getScreenWidth(mContext)/mItemLineNumber;
         //根据内容动态填充
         for (int i = 0, size = mTextList.length; i < size; i++) {
-            addChildButton(mFlowReference, mTextList[i], mTypeList[i], R.drawable.ic_toys_black_36dp);
+            addChildButton(mFlowReference, mTextList[i], mTypeList[i], ColorResId[i]);
         }
 
     }
@@ -260,16 +259,17 @@ public class SearchActivity extends BaseActivity {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mItemWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
         layoutParams.setMargins(mItemMargin, mItemMargin, mItemMargin, mItemMargin);
-        btnChild.setCompoundDrawablesWithIntrinsicBounds(
-                null,
-                CompatUtil.getTintListDrawable(mContext, ResId, R.color.tint_list_pink),
-                null,
-                null);
+//        btnChild.setCompoundDrawablesWithIntrinsicBounds(
+//                null,
+//                CompatUtil.getTintListDrawable(mContext, ResId, R.color.tint_list_pink),
+//                null,
+//                null);
         btnChild.setText(text);
+
         btnChild.setTag(type);
-        btnChild.setBackgroundColor(Color.WHITE);
+        btnChild.setBackgroundColor(ResId);
         btnChild.setLayoutParams(layoutParams);
-        btnChild.setGravity(Gravity.CENTER_HORIZONTAL);
+        btnChild.setGravity(Gravity.CENTER);
 
         btnChild.setOnClickListener(new View.OnClickListener() {
             @Override

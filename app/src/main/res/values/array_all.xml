@@ -26,7 +26,6 @@
         <item>工业设计</item>
         <item>建筑设计</item>
         <item>电影图书</item>
-        <item>生活百科</item>
         <item>人文艺术</item>
         <item>男士风尚</item>
     </string-array>
@@ -53,13 +52,42 @@
         <item>kids</item>
         <item>people</item>
         <item>diy_crafts</item>
+        <item>fitness</item>
         <item>industrial_design</item>
         <item>architecture</item>
         <item>film_music_books</item>
-        <item>tips</item>
         <item>art</item>
-        <item>fitness</item>
         <item>men</item>
     </string-array>
+
+    <integer-array name="type_array_color">
+        <item>@color/pink_50</item>
+        <item>@color/pink_50</item>
+        <item>@color/pink_50</item>
+        <item>@color/pink_100</item>
+        <item>@color/pink_100</item>
+        <item>@color/pink_100</item>
+        <item>@color/pink_200</item>
+        <item>@color/pink_200</item>
+        <item>@color/pink_200</item>
+        <item>@color/pink_300</item>
+        <item>@color/pink_300</item>
+        <item>@color/pink_300</item>
+        <item>@color/pink_400</item>
+        <item>@color/pink_400</item>
+        <item>@color/pink_400</item>
+        <item>@color/pink_500</item>
+        <item>@color/pink_500</item>
+        <item>@color/pink_500</item>
+        <item>@color/pink_600</item>
+        <item>@color/pink_600</item>
+        <item>@color/pink_600</item>
+        <item>@color/pink_700</item>
+        <item>@color/pink_700</item>
+        <item>@color/pink_700</item>
+        <item>@color/pink_800</item>
+        <item>@color/pink_800</item>
+        <item>@color/pink_800</item>
+    </integer-array>
 
 </resources>

@@ -1,9 +1,12 @@
 package licola.demo.com.huabandemo.Main;
 
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -80,11 +83,9 @@ public class MainActivity extends BaseActivity
     private String[] titles;
 
     private Boolean isLogin;
-    private String mUserName;
+    private String mUserName = "";
     private String mUserId = "";
 
-    //联网的授权字段 提供子Fragment使用
-    public String mAuthorization = Base64.mClientInto;
 
     //刷新的接口 子Fragment实现
     private OnFragmentRefreshListener mListenerRefresh;
@@ -146,7 +147,6 @@ public class MainActivity extends BaseActivity
     private void getDataByLogin() {
         mUserName = (String) SPUtils.get(mContext, Constant.USERNAME, mUserName);
         mUserId = (String) SPUtils.get(mContext, Constant.USERID, mUserId);
-        mAuthorization = getAuthorization();
     }
 
     @Override
@@ -167,12 +167,7 @@ public class MainActivity extends BaseActivity
                 });
 
         mSwipeRefresh.setColorSchemeResources(ints);
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mListenerRefresh.getHttpRefresh();
-            }
-        });
+        mSwipeRefresh.setOnRefreshListener(() -> mListenerRefresh.getHttpRefresh());
     }
 
     @Override

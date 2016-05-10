@@ -58,8 +58,6 @@ public class MyAttentionActivity extends BaseActivity
     @BindColor(R.color.white)
     int mColorTabIndicator;
 
-    //联网的授权字段 提供子Fragment使用
-    public String mAuthorization = Base64.mClientInto;
 
     private ArrayList<BaseRecyclerHeadFragment> mFragmentList;
 
@@ -106,7 +104,7 @@ public class MyAttentionActivity extends BaseActivity
         mListenerRefresh = mFragmentList.get(0);
         initViewPagerTab();
         initListener();
-        mAuthorization = getAuthorization();
+
     }
 
     private void initListener() {

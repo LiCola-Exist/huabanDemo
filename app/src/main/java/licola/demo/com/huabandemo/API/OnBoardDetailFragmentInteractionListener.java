@@ -8,5 +8,5 @@ public interface OnBoardDetailFragmentInteractionListener
 
     void onClickUserField(String key, String title);
 
-    void onHttpBoardAttentionState(boolean isAttention);
+    void onHttpBoardAttentionState(String userId,boolean isAttention);
 }

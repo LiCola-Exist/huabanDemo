@@ -1,6 +1,7 @@
 package licola.demo.com.huabandemo.UserInfo;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -19,26 +20,29 @@ import java.util.ArrayList;
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindString;
+import licola.demo.com.huabandemo.API.Dialog.OnEditDialogInteractionListener;
 import licola.demo.com.huabandemo.API.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Base.BaseSwipeViewPagerActivity;
+import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Entity.BoardListInfoBean;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
-import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Login.UserMeAndOtherBean;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
+import licola.demo.com.huabandemo.Util.DialogUtil;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
-import licola.demo.com.huabandemo.Util.TimeUtils;
+import licola.demo.com.huabandemo.Widget.MyDialog.BoardEditDialogFragment;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -48,7 +52,8 @@ import rx.schedulers.Schedulers;
  */
 public class UserInfoActivity
         extends BaseSwipeViewPagerActivity<BaseRecyclerHeadFragment>
-        implements OnBoardFragmentInteractionListener<UserBoardItemBean>, OnPinsFragmentInteractionListener {
+        implements OnBoardFragmentInteractionListener<UserBoardItemBean>,
+        OnPinsFragmentInteractionListener, OnEditDialogInteractionListener {
     private static final String TYPE_KEY = "TYPE_KEY";
     private static final String TYPE_TITLE = "TYPE_TITLE";
 
@@ -82,8 +87,6 @@ public class UserInfoActivity
     public String mTitle;
     public boolean isMe;
 
-    //联网的授权字段 提供子Fragment使用
-    public String mAuthorization = Base64.mClientInto;
 
     @Override
     protected int getLayoutId() {
@@ -136,11 +139,13 @@ public class UserInfoActivity
         mTabLayout.setSelectedTabIndicatorColor(mColorTabIndicator);
     }
 
+
     @Override
-    protected void getData() {
+    protected void getObligatoryData() {
+        super.getObligatoryData();
         mTitle = getIntent().getStringExtra(TYPE_TITLE);
         mKey = getIntent().getStringExtra(TYPE_KEY);
-        mAuthorization = getAuthorization();
+
         String userId = (String) SPUtils.get(mContext, Constant.USERID, "");
         Logger.d("is me " + mKey.equals(userId));
         isMe = mKey.equals(userId);
@@ -176,8 +181,7 @@ public class UserInfoActivity
 
 
                     }
-                })
-                ;
+                });
     }
 
     //联网获取用户信息
@@ -251,8 +255,14 @@ public class UserInfoActivity
 
     @Override
     public void onClickBoardItemOperate(UserBoardItemBean bean, View view) {
-        //// TODO: 2016/4/7 0007 回调过来的 操作事件 需要联网
         Logger.d();
+        if (isMe) {
+            BoardEditDialogFragment fragment = BoardEditDialogFragment.create(String.valueOf(bean.getBoard_id()),
+                    bean.getTitle(), bean.getDescription(), bean.getCategory_id());
+            fragment.show(getSupportFragmentManager(), null);
+        } else {
+            Logger.d();
+        }
     }
 
     @Override
@@ -265,4 +275,50 @@ public class UserInfoActivity
         ImageDetailActivity.launch(this);
     }
 
+    private Action1<UserBoardSingleBean> getNextAction() {
+        return userBoardSingleBean -> {
+            Logger.d();
+            setSwipeRefresh();
+        };
+    }
+
+    private Action1<Throwable> getErrorAction() {
+        return throwable -> {
+            NetUtils.checkHttpException(mContext, throwable, mSwipeRefresh);
+            Logger.d(throwable.toString());
+        };
+    }
+
+    @Override
+    public void onDialogPositiveClick(String boardId, String name, String describe, String selectType) {
+        Logger.d("name=" + name + " describe=" + describe + " selectPosition=" + selectType);
+
+        RetrofitService.createAvatarService()
+                .httpsEditBoard(mAuthorization, boardId, name, describe, selectType)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getNextAction(), getErrorAction());
+    }
+
+
+    @Override
+    public void onDialogNeutralClick(String boardId, String boardTitle) {
+        Logger.d();
+
+        DialogUtil.showDeleteDialog(mContext, boardTitle, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                startDeleteBoard(boardId);
+            }
+        });
+    }
+
+    private void startDeleteBoard(String boardId) {
+
+        RetrofitService.createAvatarService()
+                .httpsDeleteBoard(mAuthorization, boardId, Constant.OPERATEDELETEBOARD)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getNextAction(), getErrorAction());
+    }
 }

@@ -36,9 +36,6 @@ public class ModuleActivity extends BaseActivity
     protected String mType;
     protected String mTitle;
 
-    //联网的授权字段 提供子Fragment使用
-    public String mAuthorization = Base64.mClientInto;
-
     @Bind(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefresh;
     @Bind(R.id.fab_search)
@@ -111,7 +108,7 @@ public class ModuleActivity extends BaseActivity
     private void getData() {
         mTitle = getIntent().getStringExtra(TYPE_TITLE);
         mType = getIntent().getStringExtra(TYPE_KEY);
-        mAuthorization = getAuthorization();
+
     }
 
     @Override

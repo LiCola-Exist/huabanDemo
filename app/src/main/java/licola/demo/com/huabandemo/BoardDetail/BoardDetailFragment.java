@@ -2,6 +2,7 @@ package licola.demo.com.huabandemo.BoardDetail;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.util.LruCache;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.API.OnBoardDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
+import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.ListPinsBean;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
@@ -150,7 +152,8 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
      * @param bean 联网返回的bean
      */
     private void setBoardInfo(BoardDetailBean bean) {
-        mListener.onHttpBoardAttentionState(bean.getBoard().isFollowing());
+
+        mListener.onHttpBoardAttentionState(String.valueOf(bean.getBoard().getUser_id()), bean.getBoard().isFollowing());
 
         String url_head = String.format(mFormatUrlSmall, bean.getBoard().getUser().getAvatar());
         setBoardUserInfo(url_head, bean.getBoard().getUser().getUsername());
@@ -293,8 +296,8 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
             throwRuntimeException(context);
         }
 
-        if (context instanceof BoardDetailActivity) {
-            mAuthorization = ((BoardDetailActivity) context).mAuthorization;
+        if (context instanceof BaseActivity) {
+            mAuthorization = ((BaseActivity) context).mAuthorization;
         }
     }
 

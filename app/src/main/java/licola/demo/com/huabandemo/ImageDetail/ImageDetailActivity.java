@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.BindDrawable;
 import butterknife.BindString;
-import licola.demo.com.huabandemo.API.OnGatherDialogInteractionListener;
+import licola.demo.com.huabandemo.API.Dialog.OnGatherDialogInteractionListener;
 import licola.demo.com.huabandemo.API.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.BoardDetail.BoardDetailActivity;
@@ -48,6 +48,7 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
+import licola.demo.com.huabandemo.Widget.MyDialog.GatherDialogFragment;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -76,7 +77,6 @@ public class ImageDetailActivity extends BaseActivity
     @BindDrawable(R.drawable.ic_refresh_black_24dp)
     Drawable mDrawableRefresh;
 
-
     //小图的后缀
     @BindString(R.string.url_image_big)
     String mFormatImageUrlBig;
@@ -99,9 +99,6 @@ public class ImageDetailActivity extends BaseActivity
 
     public String mImageUrl;//图片地址
     public String mPinsId;
-
-    //联网的授权字段 提供子Fragment使用
-    public String mAuthorization = Base64.mClientInto;
 
     private boolean isLike = false;//该图片是否被喜欢操作 默认false 没有被操作过
     private boolean isGathered = false;//该图片是否被采集过
@@ -140,8 +137,6 @@ public class ImageDetailActivity extends BaseActivity
 
         EventBus.getDefault().register(this);//注册
         mActionFrom = getIntent().getIntExtra(ACTION_KEY, ACTION_DEFAULT);
-        mAuthorization = getAuthorization();
-
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

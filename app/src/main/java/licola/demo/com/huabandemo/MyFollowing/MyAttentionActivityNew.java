@@ -41,8 +41,6 @@ public class MyAttentionActivityNew extends BaseSwipeViewPagerActivity<BaseRecyc
     @BindColor(R.color.white)
     int mColorTabIndicator;
 
-    //联网的授权字段 提供子Fragment使用
-    public String mAuthorization = Base64.mClientInto;
 
     @Override
     protected boolean isTranslucentStatusBar() {
@@ -68,10 +66,6 @@ public class MyAttentionActivityNew extends BaseSwipeViewPagerActivity<BaseRecyc
 
     }
 
-    @Override
-    protected void getData() {
-        mAuthorization = getAuthorization();
-    }
 
     @Override
     protected String[] getTitleList() {

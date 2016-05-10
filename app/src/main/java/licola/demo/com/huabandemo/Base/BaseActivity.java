@@ -9,6 +9,7 @@ import android.view.WindowManager;
 
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
@@ -28,7 +29,12 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected Context mContext;
 
-    protected static final int[] ints= new int[]{R.color.pink_300, R.color.pink_500, R.color.pink_700, R.color.pink_900};
+    //关键的是否登录 由父类提供
+    public boolean isLogin=false;
+    //关键的https联网字段 由父类提供
+    public String mAuthorization ;
+
+    protected static final int[] ints = new int[]{R.color.pink_300, R.color.pink_500, R.color.pink_700, R.color.pink_900};
 
     @Override
     public String toString() {
@@ -75,12 +81,17 @@ public abstract class BaseActivity extends AppCompatActivity {
                         WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             }
         }
-
         setContentView(getLayoutId());
         ButterKnife.bind(this);
         mContext = this;
+        getObligatoryData();
         Logger.d(TAG);
 
+    }
+
+    protected void getObligatoryData() {
+        isLogin = (boolean) SPUtils.get(mContext, Constant.ISLOGIN, false);
+        mAuthorization=getAuthorizations(isLogin);
     }
 
     //是否statusBar 状态栏为透明 的方法 默认为真
@@ -88,14 +99,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         return true;
     }
 
-    protected String getAuthorization() {
+    protected String getAuthorizations(boolean isLogin) {
+
         String temp = " ";
-
-        return SPUtils.get(mContext, Constant.TOKENTYPE, temp)
-                + temp
-                + SPUtils.get(mContext, Constant.TOKENACCESS, temp);
+        if (isLogin) {
+            return SPUtils.get(mContext, Constant.TOKENTYPE, temp)
+                    + temp
+                    + SPUtils.get(mContext, Constant.TOKENACCESS, temp);
+        }
+        return Base64.mClientInto;
     }
-
 
 
     @Override

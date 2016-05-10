@@ -27,9 +27,9 @@ public abstract class BaseSwipeViewPagerActivity<T extends BaseFragment>
         implements OnRefreshFragmentInteractionListener {
 
     @Bind(R.id.container)
-    ViewPager mViewPager;
+    protected ViewPager mViewPager;
     @Bind(R.id.swipe_refresh_widget)
-    SwipeRefreshLayout mSwipeRefresh;
+    protected SwipeRefreshLayout mSwipeRefresh;
 
     protected ArrayList<T> mFragmentList;
 
@@ -43,7 +43,6 @@ public abstract class BaseSwipeViewPagerActivity<T extends BaseFragment>
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getData();
         mTitleList = getTitleList();
         mFragmentList = initFragmentList();
         //默认取第一个为强转为接口
@@ -52,7 +51,6 @@ public abstract class BaseSwipeViewPagerActivity<T extends BaseFragment>
         initListener();
     }
 
-    protected abstract void getData();
 
     //初始创建出 fragment集合
     protected abstract ArrayList<T> initFragmentList();
@@ -70,6 +68,11 @@ public abstract class BaseSwipeViewPagerActivity<T extends BaseFragment>
 
     //抽象方法 绑定viewpager和tablayout
     protected abstract void setupTabLayoutWithViewPager(ViewPager mViewPager);
+
+    protected void setSwipeRefresh(){
+        mSwipeRefresh.setRefreshing(true);
+        mListenerRefresh.getHttpRefresh();
+    }
 
     protected void initListener() {
         mSwipeRefresh.setColorSchemeResources(ints);

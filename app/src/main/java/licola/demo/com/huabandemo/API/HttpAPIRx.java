@@ -21,6 +21,7 @@ import licola.demo.com.huabandemo.SearchResult.SearchBoardListBean;
 import licola.demo.com.huabandemo.SearchResult.SearchImageBean;
 import licola.demo.com.huabandemo.SearchResult.SearchPeopleListBean;
 import licola.demo.com.huabandemo.UserInfo.UserBoardListBean;
+import licola.demo.com.huabandemo.UserInfo.UserBoardSingleBean;
 import okhttp3.ResponseBody;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -169,7 +170,7 @@ public interface HttpAPIRx {
     //https://api.huaban.com/boards/967118/unfollow POST方法 统一成一个接口
     //对画板进行关注操作
     @POST("boards/{boardId}/{operate}")
-    Observable<AttentionOperateBean> httpsAttentionOperate(@Header("Authorization") String authorization, @Path("boardId") String pinsId, @Path("operate") String operate);
+    Observable<AttentionOperateBean> httpsAttentionOperate(@Header("Authorization") String authorization, @Path("boardId") String boardId, @Path("operate") String operate);
 
     //获取我的画板集合信息
     //https://api.huaban.com/last_boards/?extra=recommend_tags
@@ -188,5 +189,14 @@ public interface HttpAPIRx {
     @POST("pins/")
     Observable<GatherResultBean> httpsGatherPins(@Header("Authorization") String authorization, @Field("board_id") String boardId, @Field("text") String describe, @Field("via") String PinsIda);
 
+    //修改某个画板的信息
+    //https://api.huaban.com/boards/29646779 category=photography&description=%E6%B7%BB%E5%8A%A0%E6%8F%8F%E8%BF%B0&title=%E6%B7%BB%E5%8A%A0
+    @FormUrlEncoded
+    @POST("boards/{boardId}")
+    Observable<UserBoardSingleBean> httpsEditBoard(@Header("Authorization") String authorization, @Path("boardId") String boardId, @Field("title") String title, @Field("description") String description, @Field("category") String category);
 
+    //https://api.huaban.com/boards/29653031 POST BODY= _method=DELETE
+    @FormUrlEncoded
+    @POST("boards/{boardId}")
+    Observable<UserBoardSingleBean> httpsDeleteBoard(@Header("Authorization") String authorization, @Path("boardId") String boardId, @Field("_method") String operate);
 }

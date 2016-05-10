@@ -6,6 +6,7 @@ import licola.demo.com.huabandemo.Entity.PinsSimpleBean;
 
 /**
  * Created by LiCola on  2016/04/07  17:40
+ * deleting=1; 提供默认值设置
  */
 public class UserBoardItemBean {
 
@@ -13,8 +14,8 @@ public class UserBoardItemBean {
      * board_id : 17793839
      * user_id : 15246080
      * title : 待归类采集
-     * description :
-     * category_id : null
+     * description : String
+     * category_id : String
      * seq : 2
      * pin_count : 184
      * follow_count : 8
@@ -30,14 +31,14 @@ public class UserBoardItemBean {
     private int user_id;
     private String title;
     private String description;
-    private Object category_id;
+    private String category_id;
     private int seq;
     private int pin_count;
     private int follow_count;
     private int like_count;
     private int created_at;
     private int updated_at;
-    private int deleting;
+    private int deleting=1;
     private int is_private;
     private boolean following;
 
@@ -83,11 +84,11 @@ public class UserBoardItemBean {
         this.description = description;
     }
 
-    public Object getCategory_id() {
+    public String getCategory_id() {
         return category_id;
     }
 
-    public void setCategory_id(Object category_id) {
+    public void setCategory_id(String category_id) {
         this.category_id = category_id;
     }
 

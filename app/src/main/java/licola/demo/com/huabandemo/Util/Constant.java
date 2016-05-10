@@ -49,4 +49,7 @@ public class Constant {
     //获得用户画板列表详情的操作符
     public static final String OPERATEBOARDEXTRA="recommend_tags";
     public static final boolean OPERATECHECK=true;
+
+    //删除画板的操作符
+    public static final String OPERATEDELETEBOARD="DELETE";
 }

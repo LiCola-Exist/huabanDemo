@@ -27,6 +27,7 @@ import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
+import licola.demo.com.huabandemo.Util.SPUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -37,9 +38,6 @@ public class BoardDetailActivity extends BaseActivity
         implements OnBoardDetailFragmentInteractionListener {
     protected static final String TYPE_KEY = "TYPE_KEY";
     protected static final String TYPE_TITLE = "TYPE_TITLE";
-
-    //联网的授权字段 提供子Fragment使用
-    public String mAuthorization = Base64.mClientInto;
 
     @Bind(R.id.toolbar)
     Toolbar mToolBar;
@@ -58,9 +56,10 @@ public class BoardDetailActivity extends BaseActivity
 
     public String mKey;
     public String mTitle;
+    //是否我的画板 音响FloatingActionButton 的显示
+    private boolean isMe=false;
     //该画板是否被关注的标志位 默认false
     public boolean isAttention = false;
-
 
     public static void launch(Activity activity, String key, String title) {
         Intent intent = new Intent(activity, BoardDetailActivity.class);
@@ -82,17 +81,13 @@ public class BoardDetailActivity extends BaseActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mKey = getIntent().getStringExtra(TYPE_KEY);
         mTitle = getIntent().getStringExtra(TYPE_TITLE);
-        mAuthorization = getAuthorization();
-        setTitle(mTitle);
 
+        setTitle(mTitle);
+        Logger.d(mAuthorization);
         //先锁定
         mFabBoardAttention.setEnabled(false);
-        mFabBoardAttention.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                actionAttention();
-            }
-        });
+
+        mFabBoardAttention.setOnClickListener(view -> actionAttention());
 
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.framelayout_board_detail, BoardDetailFragment.newInstance(mKey)).commit();
@@ -105,13 +100,8 @@ public class BoardDetailActivity extends BaseActivity
         MyRxObservable.add(animation, mFabBoardAttention)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<Void, Observable<AttentionOperateBean>>() {
-                    @Override
-                    public Observable<AttentionOperateBean> call(Void aVoid) {
-                        return RetrofitService.createAvatarService()
-                                .httpsAttentionOperate(mAuthorization, mKey, operate);
-                    }
-                })
+                .flatMap(aVoid -> RetrofitService.createAvatarService()
+                        .httpsAttentionOperate(mAuthorization, mKey, operate))
                 .observeOn(AndroidSchedulers.mainThread())//最后统一回到UI线程中处理
                 .subscribe(new Subscriber<AttentionOperateBean>() {
                     @Override
@@ -178,11 +168,21 @@ public class BoardDetailActivity extends BaseActivity
         UserInfoActivity.launch(BoardDetailActivity.this, key, title);
     }
 
+
+    //联网结果回调
     @Override
-    public void onHttpBoardAttentionState(boolean isAttention) {
-        this.isAttention = isAttention;
-        mFabBoardAttention.setEnabled(true);
-        mFabBoardAttention.setImageResource(
-                isAttention ? R.drawable.ic_done_white_24dp : R.drawable.ic_loyalty_white_24dp);
+    public void onHttpBoardAttentionState(String userId,boolean isAttention) {
+        //如果登录 才能取本地userId值
+        if (isLogin){
+            String localUserId = (String) SPUtils.get(mContext, Constant.USERID, "");
+            isMe = userId.equals(localUserId);
+        }
+        if (!isMe){
+            this.isAttention = isAttention;
+            mFabBoardAttention.setVisibility(View.VISIBLE);
+            mFabBoardAttention.setImageResource(
+                    isAttention ? R.drawable.ic_done_white_24dp : R.drawable.ic_loyalty_white_24dp);
+        }
+
     }
 }

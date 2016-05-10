@@ -86,6 +86,10 @@ public final class Utils {
 
 
     public static boolean checkIsGif(String type) {
+        if (type==null){
+            return false;
+        }
+
         if (type.isEmpty()) return false;
 
         if (type.contains("gif") || type.contains("GIF")) {

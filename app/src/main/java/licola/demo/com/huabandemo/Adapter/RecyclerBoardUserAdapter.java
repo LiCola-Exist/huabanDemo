@@ -20,6 +20,7 @@ import licola.demo.com.huabandemo.Util.CompatUtil;
 import licola.demo.com.huabandemo.Util.Logger;
 
 import static android.view.View.OnClickListener;
+import static android.view.View.generateViewId;
 
 
 /**
@@ -40,30 +41,31 @@ public class RecyclerBoardUserAdapter extends BaseRecyclerAdapter<UserBoardItemB
     private final String mOperateFollowing;//关注
     private final String mOperateFollowed;//已关注
 
+    private final Drawable mDrawableBlock;
     private final Drawable mDrawableEdit;
     private final Drawable mDrawableFollowing;
     private final Drawable mDrawableFollowed;
-    
+
     public interface onAdapterListener {
         void onClickImage(UserBoardItemBean bean, View view);
+
         void onClickOperate(UserBoardItemBean bean, View view);
     }
 
     public RecyclerBoardUserAdapter(RecyclerView mRecyclerView, boolean isMe) {
         super(mRecyclerView);
         this.isMe = isMe;
-        Resources resources=mContext.getResources();
+        Resources resources = mContext.getResources();
         this.mGatherFormat = resources.getString(R.string.text_gather_number);
-        this.mAttentionFormat =resources.getString(R.string.text_attention_number);
-        this.mOperateEdit =resources.getString(R.string.text_edit);
-        this.mOperateFollowing =resources.getString(R.string.text_following);
-        this.mOperateFollowed =resources.getString(R.string.text_followed);
-        this.mDrawableEdit= CompatUtil.getTintListDrawable(mContext,R.drawable.ic_mode_edit_black_24dp,R.color.tint_list_grey);
-
-        this.mDrawableFollowing=CompatUtil.getTintListDrawable(mContext,R.drawable.ic_add_black_24dp,R.color.tint_list_grey);
-        this.mDrawableFollowed=CompatUtil.getTintListDrawable(mContext,R.drawable.ic_check_black_24dp,R.color.tint_list_grey);
+        this.mAttentionFormat = resources.getString(R.string.text_attention_number);
+        this.mOperateEdit = resources.getString(R.string.text_edit);
+        this.mOperateFollowing = resources.getString(R.string.text_following);
+        this.mOperateFollowed = resources.getString(R.string.text_followed);
+        this.mDrawableBlock = CompatUtil.getTintListDrawable(mContext, R.drawable.ic_block_black_24dp, R.color.tint_list_grey);
+        this.mDrawableEdit = CompatUtil.getTintListDrawable(mContext, R.drawable.ic_mode_edit_black_24dp, R.color.tint_list_grey);
+        this.mDrawableFollowing = CompatUtil.getTintListDrawable(mContext, R.drawable.ic_add_black_24dp, R.color.tint_list_grey);
+        this.mDrawableFollowed = CompatUtil.getTintListDrawable(mContext, R.drawable.ic_check_black_24dp, R.color.tint_list_grey);
     }
-
 
 
     public void setOnClickItemListener(onAdapterListener mListener) {
@@ -107,32 +109,41 @@ public class RecyclerBoardUserAdapter extends BaseRecyclerAdapter<UserBoardItemB
 
     private void onBindData(final ViewHolderBoard holder, UserBoardItemBean bean) {
         //检查图片信息
-        Logger.d("deleting "+bean.getDeleting());
-        boolean isFollowing=bean.isFollowing();
-        if (isMe){
-            holder.tv_board_operate.setText(mOperateEdit);
-            holder.tv_board_operate.setCompoundDrawablesWithIntrinsicBounds(
-                    mDrawableEdit,
-                    null,
-                    null,
-                    null);
-        }else {
-            if (isFollowing){
-                holder.tv_board_operate.setText(mOperateFollowed);
-                holder.tv_board_operate.setCompoundDrawablesWithIntrinsicBounds(
-                        mDrawableFollowed,
-                        null,
-                        null,
-                        null);
-            }else {
-                holder.tv_board_operate.setText(mOperateFollowing);
-                holder.tv_board_operate.setCompoundDrawablesWithIntrinsicBounds(
-                        mDrawableFollowing,
-                        null,
-                        null,
-                        null);
-            }
+        Logger.d("deleting " + bean.getDeleting());
+        boolean isOperate = false;
+        //不为0的 标志位 才能操作
+        if (bean.getDeleting() != 0) {
+            isOperate = true;
         }
+        boolean isFollowing = bean.isFollowing();
+        Drawable drawable;
+        String text;
+
+        if (isOperate) {
+            if (isMe) {
+                text = mOperateEdit;
+                drawable = mDrawableEdit;
+            } else {
+                if (isFollowing) {
+                    text = mOperateFollowed;
+                    drawable = mDrawableFollowed;
+                } else {
+                    text = mOperateFollowing;
+                    drawable = mDrawableFollowing;
+                }
+            }
+        } else {
+            drawable = mDrawableBlock;
+            text = "";
+        }
+
+        holder.tv_board_operate.setText(text);
+        holder.linearLayout_gourp.setTag(isOperate);
+        holder.tv_board_operate.setCompoundDrawablesWithIntrinsicBounds(
+                drawable,
+                null,
+                null,
+                null);
 
         if (checkInfoContext(bean)) {
             holder.tv_board_title.setText(bean.getTitle());
@@ -183,16 +194,15 @@ public class RecyclerBoardUserAdapter extends BaseRecyclerAdapter<UserBoardItemB
             }
         });
 
-//        holder.tv_board_operate.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mListener.onClickOperate(bean, v);
-//            }
-//        });
         holder.linearLayout_gourp.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mListener.onClickOperate(bean,v);
+                boolean isOperate = (boolean) v.getTag();
+                if (isOperate) {
+                    mListener.onClickOperate(bean, v);
+                } else {
+                    mListener.onClickImage(bean, v);
+                }
             }
         });
     }
@@ -214,7 +224,7 @@ public class RecyclerBoardUserAdapter extends BaseRecyclerAdapter<UserBoardItemB
         public ViewHolderBoard(View view) {
             super(view);
             mView = view;
-            linearLayout_gourp= (LinearLayout) view.findViewById(R.id.linearlayout_group);
+            linearLayout_gourp = (LinearLayout) view.findViewById(R.id.linearlayout_group);
             frameLayout_image = (FrameLayout) view.findViewById(R.id.framelayout_image);
             img_card_image = (SimpleDraweeView) view.findViewById(R.id.img_card_image);//主图
 
