@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="title_array_all">
+        <item>家居</item>
+        <item>摄影</item>
+        <item>美食</item>
+        <item>美图</item>
+        <item>搞笑</item>
+        <item>UI/UX</item>
+        <item>数据图</item>
+        <item>极客</item>
+        <item>运动</item>
+        <item>旅行</item>
+        <item>插画</item>
+        <item>平面</item>
+        <item>搭配</item>
+        <item>造型</item>
+        <item>婚礼</item>
+        <item>礼物</item>
+        <item>美女</item>
+        <item>宠物</item>
+        <item>儿童</item>
+        <item>明星</item>
+        <item>手工/布艺</item>
+        <item>健身/舞蹈</item>
+        <item>工业设计</item>
+        <item>建筑设计</item>
+        <item>电影图书</item>
+        <item>人文艺术</item>
+        <item>男士风尚</item>
+    </string-array>
+
+    <string-array name="type_array_all">
+        <item>home</item>
+        <item>photography</item>
+        <item>food_drink</item>
+        <item>quotes</item>
+        <item>funny</item>
+        <item>web_app_icon</item>
+        <item>data_presentation</item>
+        <item>geek</item>
+        <item>sports</item>
+        <item>travel_places</item>
+        <item>illustration</item>
+        <item>design</item>
+        <item>apparel</item>
+        <item>modeling_hair</item>
+        <item>wedding_events</item>
+        <item>desire</item>
+        <item>beauty</item>
+        <item>pets</item>
+        <item>kids</item>
+        <item>people</item>
+        <item>diy_crafts</item>
+        <item>fitness</item>
+        <item>industrial_design</item>
+        <item>architecture</item>
+        <item>film_music_books</item>
+        <item>art</item>
+        <item>men</item>
+    </string-array>
+
+    <integer-array name="type_array_color">
+        <item>@color/pink_50</item>
+        <item>@color/pink_50</item>
+        <item>@color/pink_50</item>
+        <item>@color/pink_100</item>
+        <item>@color/pink_100</item>
+        <item>@color/pink_100</item>
+        <item>@color/pink_200</item>
+        <item>@color/pink_200</item>
+        <item>@color/pink_200</item>
+        <item>@color/pink_300</item>
+        <item>@color/pink_300</item>
+        <item>@color/pink_300</item>
+        <item>@color/pink_400</item>
+        <item>@color/pink_400</item>
+        <item>@color/pink_400</item>
+        <item>@color/pink_500</item>
+        <item>@color/pink_500</item>
+        <item>@color/pink_500</item>
+        <item>@color/pink_600</item>
+        <item>@color/pink_600</item>
+        <item>@color/pink_600</item>
+        <item>@color/pink_700</item>
+        <item>@color/pink_700</item>
+        <item>@color/pink_700</item>
+        <item>@color/pink_800</item>
+        <item>@color/pink_800</item>
+        <item>@color/pink_800</item>
+    </integer-array>
+
+</resources>

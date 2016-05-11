@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Module.BoardDetail.BoardDetailActivity">
+    <item
+        android:id="@+id/action_attention"
+        android:title="@string/action_bar_attention"
+        app:showAsAction="never" />
+</menu>

@@ -1,0 +1,11 @@
+
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_favorite_white_24dp" >
+    <target
+        android:name="group"
+        android:animation="@animator/scale_percent_magnify_animation" />
+
+    <target
+        android:name="path"
+        android:animation="@animator/color_favorite_do_animation" />
+</animated-vector>

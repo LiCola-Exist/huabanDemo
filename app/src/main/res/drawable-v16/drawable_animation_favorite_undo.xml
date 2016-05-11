@@ -1,0 +1,13 @@
+
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_favorite_accent_24dp" >
+    <target
+        android:name="group_favorite"
+        android:animation="@animator/scale_percent_small_animation" />
+    <target
+        android:name="path_favorite"
+        android:animation="@animator/color_favorite_undo_animation"
+        />
+
+
+</animated-vector>

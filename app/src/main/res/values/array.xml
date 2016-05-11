@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="title_array">
+        <item>首页</item>
+        <item>美图</item>
+        <item>摄影</item>
+        <item>美食</item>
+        <item>美女</item>
+    </string-array>
+
+    <string-array name="type_array">
+        <item>all</item>
+        <item>quotes</item>
+        <item>photography</item>
+        <item>food_drink</item>
+        <item>beauty</item>
+    </string-array>
+
+    <string-array name="title_attention">
+        <item>@string/title_fragment_attention_pins</item>
+        <item>@string/title_fragment_attention_board</item>
+    </string-array>
+
+    <string-array name="title_user_info">
+        <item>@string/title_fragment_board</item>
+        <item>@string/title_fragment_gather</item>
+        <item>@string/title_fragment_like</item>
+    </string-array>
+</resources>

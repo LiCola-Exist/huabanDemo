@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dialog_padding"
+
+    android:paddingRight="@dimen/dialog_padding"
+    android:paddingTop="@dimen/dialog_padding">
+    <TextView
+        android:id="@+id/tv_gather_describe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="文字描述：" />
+    <EditText
+        android:id="@+id/edit_describe"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:gravity="left"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        tools:hint="提示输入文字" />
+
+    <TextView
+        android:id="@+id/tv_gather_warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_info_accent_24dp"
+        android:gravity="left|center"
+        android:text="@string/text_gather_warning"
+        android:visibility="invisible"
+        tools:visibility="visible"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_gather_to"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_spacing_default"
+        android:text="采集到：" />
+
+    <Spinner
+        android:id="@+id/spinner_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       />
+
+</LinearLayout>
