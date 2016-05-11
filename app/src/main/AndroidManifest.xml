@@ -111,7 +111,7 @@
         </activity>
         <activity
             android:name=".Module.User.UserActivity"
-            android:label="@string/title_activity_my_user"
+            android:label="@string/title_activity_user"
             android:parentActivityName=".Module.Main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

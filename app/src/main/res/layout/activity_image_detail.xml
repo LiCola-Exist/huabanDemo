@@ -27,8 +27,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
-                android:maxHeight="2000dp"
-                android:maxWidth="2000dp"
                 app:layout_collapseMode="parallax"
                 app:layout_scrollFlags="scroll|enterAlwaysCollapsed" />
             <!-- app:layout_collapseMode="parallax"  CollapsingToolbarLayout下面子视图的滚动差-->
@@ -51,13 +49,13 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.design.widget.FloatingActionButton
-    android:id="@+id/fab_image_detail"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="@dimen/fab_margin"
-    android:src="@drawable/ic_camera_white_24dp"
-    app:layout_anchor="@id/appbar_image_detail"
-    app:layout_anchorGravity="bottom|end" />
+        android:id="@+id/fab_image_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_camera_white_24dp"
+        app:layout_anchor="@id/appbar_image_detail"
+        app:layout_anchorGravity="bottom|end" />
 
 
 </android.support.design.widget.CoordinatorLayout>

@@ -84,12 +84,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayoutId());
         ButterKnife.bind(this);
         mContext = this;
-        getObligatoryData();
+        getNecessaryData();
         Logger.d(TAG);
 
     }
 
-    protected void getObligatoryData() {
+    protected void getNecessaryData() {
         isLogin = (boolean) SPUtils.get(mContext, Constant.ISLOGIN, false);
         mAuthorization=getAuthorizations(isLogin);
     }

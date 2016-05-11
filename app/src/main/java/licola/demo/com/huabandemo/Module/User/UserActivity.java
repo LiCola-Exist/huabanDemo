@@ -3,17 +3,28 @@ package licola.demo.com.huabandemo.Module.User;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.common.references.CloseableReference;
+import com.facebook.datasource.DataSource;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
+import com.facebook.imagepipeline.image.CloseableImage;
 
 import java.util.ArrayList;
 
@@ -35,6 +46,7 @@ import licola.demo.com.huabandemo.Module.Login.UserMeAndOtherBean;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.DialogUtil;
+import licola.demo.com.huabandemo.Util.FastBlurUtil;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
@@ -69,8 +81,12 @@ public class UserActivity
 
     @Bind(R.id.toolbar_user)
     Toolbar mToolbar;
+    @Bind(R.id.app_bar)
+    AppBarLayout mAppBar;
     @Bind(R.id.collapsingtoolbar_user)
     CollapsingToolbarLayout mCollapsingToolbar;
+    @Bind(R.id.linearlayout_user_info)
+    LinearLayout mLayoutUser;
     @Bind(R.id.img_image_user)
     SimpleDraweeView mImageUser;
     @Bind(R.id.tv_user_name)
@@ -82,6 +98,7 @@ public class UserActivity
 
     @Bind(R.id.tablayout_user)
     TabLayout mTabLayout;
+
 
     public String mKey;
     public String mTitle;
@@ -115,13 +132,24 @@ public class UserActivity
         super.onCreate(savedInstanceState);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置折叠后的文字颜色
-
+        mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置打开时的文字颜色
         if (isMe) {
             addSubscription(getMyBoardListInfo());
         }
+
+        mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+//                Logger.d("verticalOffset=" + verticalOffset + " getTotalScrollRange=" + appBarLayout.getTotalScrollRange());
+                float size = -verticalOffset;
+                float total=appBarLayout.getTotalScrollRange();
+                double per = 1.0f - (size / total);
+                Logger.d("per"+per);
+                mLayoutUser.setAlpha((float) per);
+
+            }
+        });
     }
 
     @Override
@@ -141,8 +169,8 @@ public class UserActivity
 
 
     @Override
-    protected void getObligatoryData() {
-        super.getObligatoryData();
+    protected void getNecessaryData() {
+        super.getNecessaryData();
         mTitle = getIntent().getStringExtra(TYPE_TITLE);
         mKey = getIntent().getStringExtra(TYPE_KEY);
 
@@ -155,7 +183,6 @@ public class UserActivity
     protected void onResume() {
         super.onResume();
         addSubscription(getHttpsUserInfo());
-
     }
 
 
@@ -178,8 +205,6 @@ public class UserActivity
                     @Override
                     public void onNext(BoardListInfoBean boardListInfoBean) {
                         Logger.d(boardListInfoBean.getBoards().size() + " ");
-
-
                     }
                 });
     }
@@ -218,8 +243,21 @@ public class UserActivity
             }
             new ImageLoadFresco.LoadImageFrescoBuilder(getApplicationContext(), mImageUser, url)
                     .setIsCircle(true, true)
+                    .setBitmapDataSubscriber(new BaseBitmapDataSubscriber() {
+                        @Override
+                        protected void onNewResultImpl(Bitmap bitmap) {
+                            Drawable backDrawable = new BitmapDrawable(getResources(), FastBlurUtil.doBlur(bitmap, 25, false));
+
+                            mAppBar.setBackground(backDrawable);
+
+                        }
+
+                        @Override
+                        protected void onFailureImpl(DataSource<CloseableReference<CloseableImage>> dataSource) {
+
+                        }
+                    })
                     .build();
-//            mImageUser.setImageURI(Uri.parse(url));
         }
         String name = bean.getUsername();
         if (!TextUtils.isEmpty(name)) {

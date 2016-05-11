@@ -13,7 +13,7 @@
     <string name="title_activity_module">Module</string>
     <string name="title_activity_board_detail">BoardDetail</string>
     <string name="title_activity_my_following">Following</string>
-    <string name="title_activity_my_user">My HomePage</string>
+    <string name="title_activity_user">User Information</string>
 
     <string name="title_fragment_gather">Gather</string>
     <string name="title_fragment_board">Boards</string>
@@ -137,6 +137,8 @@
     <string name="dialog_delete_positive">Delete</string>
 
     <string name="dialog_delete_message">will delete all image in this %s board</string>
+
+
 
     <!-- Strings related to Settings -->
 

@@ -27,7 +27,8 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter   {
     }
 
     public void setListNotify(List<T> mList) {
-        this.mList = mList;
+        this.mList.clear();
+        this.mList=mList;
         notifyDataSetChanged();
     }
 

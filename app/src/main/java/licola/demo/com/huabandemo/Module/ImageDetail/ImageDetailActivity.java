@@ -140,7 +140,7 @@ public class ImageDetailActivity extends BaseActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initListener();
-        mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置折叠后的文字颜色
+        mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置打开时的文字颜色
 
         if (savedInstanceState != null) {
             if ((savedInstanceState.getParcelable(KEYPARCELABLE) != null) && (mPinsBean == null)) {
@@ -155,11 +155,9 @@ public class ImageDetailActivity extends BaseActivity
         //设置图片空间的宽高比
         int width = mPinsBean.getFile().getWidth();
         int height = mPinsBean.getFile().getHeight();
-        if (width > height) {
-            img_image_big.setAspectRatio(Utils.getAspectRatio(width, height));
-        } else {
-            img_image_big.setAspectRatio(1);
-        }
+        img_image_big.setAspectRatio(Utils.getAspectRatio(width, height));
+        Logger.d("aspect="+img_image_big.getAspectRatio());
+
 
 
         getSupportFragmentManager().

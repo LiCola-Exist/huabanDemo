@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/activity_margin"
         android:paddingRight="@dimen/activity_margin"
-        android:paddingTop="@dimen/activity_margin">
+        android:paddingTop="@dimen/text_margin_top">
 
         <TextView
             android:id="@+id/tv_image_text"

@@ -36,6 +36,7 @@
     <dimen name="button_padding_default">12dp</dimen>
     <dimen name="text_padding_default">12dp</dimen>
     <dimen name="text_padding_double">24dp</dimen>
+    <dimen name="text_margin_top">32dp</dimen>
     <dimen name="app_bar_height">180dp</dimen>
 
     <dimen name="nav_info_height">56dp</dimen>

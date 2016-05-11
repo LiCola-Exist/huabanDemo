@@ -72,7 +72,7 @@
     <string name="title_activity_search_result">搜索%s</string>
     <string name="title_activity_module">模块</string>
     <string name="title_activity_my_following">我的关注</string>
-    <string name="title_activity_my_user">我的主页</string>
+    <string name="title_activity_user">用户信息</string>
     <string name="title_fragment_gather">采集</string>
     <string name="title_fragment_board">画板</string>
     <string name="title_fragment_user">用户</string>
@@ -128,4 +128,5 @@
     <string name="dialog_delete_positive">确定删除</string>
 
     <string name="dialog_delete_message">会同时删除《%s》画板内的所有采集</string>
+
 </resources>

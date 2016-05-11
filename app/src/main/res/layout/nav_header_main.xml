@@ -10,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_header_height"
         android:background="@drawable/header_back_night"
-
         >
 
 
