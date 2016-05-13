@@ -119,6 +119,8 @@
                 android:value=".Module.Main.MainActivity" />
         </activity>
 
+
+        <service android:name=".Service.DownloadService"/>
     </application>
 
 </manifest>

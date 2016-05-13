@@ -156,7 +156,7 @@ public interface HttpAPIRx {
     @GET("users/{userId}/likes")
     Observable<ListPinsBean> httpsUserLikePinsMaxRx(@Header("Authorization") String authorization, @Path("userId") String pinsId, @Query("max") int max, @Query("limit") int limit);
 
-    @Streaming
+
     @GET("http://img.hb.aicdn.com/{pinId}")
     Observable<ResponseBody> httpDownImage(@Path("pinId") String pinId);
 

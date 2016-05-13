@@ -2,13 +2,17 @@ package licola.demo.com.huabandemo.HttpUtils.Converter;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import licola.demo.com.huabandemo.HttpUtils.ProgressResponseBody;
+import licola.demo.com.huabandemo.Util.*;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.*;
 import retrofit2.Converter;
+import retrofit2.http.Streaming;
 
 /**
  * Created by LiCola on  2016/04/17  18:18
@@ -42,7 +46,6 @@ public class AvatarConverter extends retrofit2.Converter.Factory  {
 
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
-        //打包响应体
         return new AvatarResponseBodyConverter<>(gson,type);
     }
 
@@ -51,6 +54,5 @@ public class AvatarConverter extends retrofit2.Converter.Factory  {
         //打包请求体
         return super.requestBodyConverter(type, parameterAnnotations, methodAnnotations, retrofit);
     }
-
 
 }

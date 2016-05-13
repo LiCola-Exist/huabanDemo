@@ -142,8 +142,8 @@ public class UserActivity
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 //                Logger.d("verticalOffset=" + verticalOffset + " getTotalScrollRange=" + appBarLayout.getTotalScrollRange());
-                float size = -verticalOffset;
-                float total=appBarLayout.getTotalScrollRange();
+                final float size = -verticalOffset;
+                final float total=appBarLayout.getTotalScrollRange();
                 double per = 1.0f - (size / total);
                 Logger.d("per"+per);
                 mLayoutUser.setAlpha((float) per);
@@ -246,8 +246,9 @@ public class UserActivity
                     .setBitmapDataSubscriber(new BaseBitmapDataSubscriber() {
                         @Override
                         protected void onNewResultImpl(Bitmap bitmap) {
+                            //得到缓存中的Bitmap对象 这里可以进行操作
+                            //构造Drawable对象 模糊化设置给View控件
                             Drawable backDrawable = new BitmapDrawable(getResources(), FastBlurUtil.doBlur(bitmap, 25, false));
-
                             mAppBar.setBackground(backDrawable);
 
                         }

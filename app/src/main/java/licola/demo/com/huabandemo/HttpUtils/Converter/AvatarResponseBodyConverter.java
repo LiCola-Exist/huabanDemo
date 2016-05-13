@@ -34,6 +34,7 @@ public class AvatarResponseBodyConverter<T> implements retrofit2.Converter<Respo
 
     @Override
     public T convert(ResponseBody value) throws IOException {
+
         Reader reader = value.charStream();//取出字节流
         String result;
         try {

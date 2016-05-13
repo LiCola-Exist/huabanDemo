@@ -74,7 +74,7 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsMainEnt
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Logger.d(life);
+//        Logger.d(life);
         ViewHolderGeneral holder = null;//ViewHolder的子类
 
         View view = LayoutInflater.from(parent.getContext())
@@ -107,7 +107,7 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsMainEnt
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        Logger.d(life);
+//        Logger.d(life);
         final PinsMainEntity bean = mList.get(position);
 
         //注释的是 动态修改image高度

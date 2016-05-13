@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -25,6 +26,11 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
@@ -32,7 +38,9 @@ import butterknife.BindDrawable;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.API.Dialog.OnGatherDialogInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnImageDetailFragmentInteractionListener;
+import licola.demo.com.huabandemo.API.OnProgressResponseListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
+import licola.demo.com.huabandemo.HttpUtils.ProgressResponseBody;
 import licola.demo.com.huabandemo.Module.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
@@ -42,12 +50,14 @@ import licola.demo.com.huabandemo.Module.Type.TypeActivity;
 import licola.demo.com.huabandemo.Observable.MyRxObservable;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Module.User.UserActivity;
+import licola.demo.com.huabandemo.Service.DownloadService;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Widget.MyDialog.GatherDialogFragment;
+import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -156,13 +166,13 @@ public class ImageDetailActivity extends BaseActivity
         int width = mPinsBean.getFile().getWidth();
         int height = mPinsBean.getFile().getHeight();
         img_image_big.setAspectRatio(Utils.getAspectRatio(width, height));
-        Logger.d("aspect="+img_image_big.getAspectRatio());
-
-
+        Logger.d("aspect=" + img_image_big.getAspectRatio());
 
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.framelayout_info_recycler, ImageDetailFragment.newInstance(mPinsId)).commit();
+
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -270,6 +280,11 @@ public class ImageDetailActivity extends BaseActivity
         return true;
     }
 
+    private void actionDownload(MenuItem item) {
+        Logger.d();
+        DownloadService.launch(this,mImageUrl);
+    }
+
     private void actionLike(MenuItem item) {
         Logger.d();
         //根据当前值 取操作符
@@ -312,7 +327,6 @@ public class ImageDetailActivity extends BaseActivity
                         setIconDynamic(item, isLike);
                     }
                 });
-
     }
 
     /**
@@ -331,30 +345,6 @@ public class ImageDetailActivity extends BaseActivity
         item.setIcon(drawableCompat);
     }
 
-    private void actionDownload(MenuItem item) {
-//        getSupportActionBar().invalidateOptionsMenu();
-//        RetrofitService.createAvatarService()
-//                .httpDownImage(mImageUrl)
-//                .subscribeOn(Schedulers.io())//发布者的运行线程 联网操作属于IO操作
-//                .observeOn(AndroidSchedulers.mainThread()) //订阅者的运行线程 在main线程中才能修改UI
-//                .subscribe(new Subscriber<ResponseBody>() {
-//                    @Override
-//                    public void onCompleted() {
-//                        Logger.d();
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        Logger.d(e.toString());
-//                    }
-//
-//                    @Override
-//                    public void onNext(ResponseBody responseBody) {
-//                        Logger.d(responseBody.contentLength()+" ");
-//                    }
-//                });
-
-    }
 
     private void actionHome(int mActionFrom) {
         switch (mActionFrom) {

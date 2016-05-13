@@ -3,6 +3,7 @@ package licola.demo.com.huabandemo.Util;
 import android.content.Context;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.os.Environment;
 import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -12,8 +13,11 @@ import android.view.WindowManager;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 
 import licola.demo.com.huabandemo.R;
+import okhttp3.ResponseBody;
+import okio.Buffer;
 
 /**
  * Created by LiCola on  2015/12/05  14:12
@@ -96,16 +100,32 @@ public final class Utils {
      * @return
      */
     public static boolean checkIsGif(String type) {
-        if (type == null) {
+        if (type == null||type.isEmpty()) {
             return false;
         }
 
-        if (type.isEmpty()) return false;
 
         if (type.contains("gif") || type.contains("GIF")) {
             return true;
         }
         return false;
+    }
+
+
+    public static String getPinsType(String type){
+        if (type == null||type.isEmpty()) {
+            return ".jpeg";
+        }
+
+        if (type.contains("jpeg")){
+            return ".jpeg";
+        }else if (type.contains("png")){
+            return ".png";
+        }else if (type.contains("gif")){
+            return ".gif";
+        }
+
+        return ".jpeg";
     }
 
     /**
@@ -140,5 +160,43 @@ public final class Utils {
         Point point = new Point();
         display.getSize(point);
         return point;
+    }
+
+    /** Returns true if {@code annotations} contains an instance of {@code cls}. */
+    public static boolean isAnnotationPresent(Annotation[] annotations,
+                                       Class<? extends Annotation> cls) {
+        for (Annotation annotation : annotations) {
+            if (cls.isInstance(annotation)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static ResponseBody buffer(final ResponseBody body) throws IOException {
+        Buffer buffer = new Buffer();
+        body.source().readAll(buffer);
+        return ResponseBody.create(body.contentType(), body.contentLength(), buffer);
+    }
+
+
+
+    /* Checks if external storage is available for read and write */
+    public static boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state)) {
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public static boolean isExternalStorageReadable() {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+            return true;
+        }
+        return false;
     }
 }
