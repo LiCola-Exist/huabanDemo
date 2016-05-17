@@ -9,4 +9,5 @@ public interface OnImageDetailFragmentInteractionListener
 
     void onClickUserField(String key,String title);
 
+    void onClickImageLink(String link);
 }

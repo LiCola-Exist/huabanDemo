@@ -9,7 +9,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 /**
  * Created by LiCola on  2016/04/08  14:19
  */
-public final class  CompatUtil {
+public final class CompatUtils {
     public static Drawable getTintListDrawable(Context mContext, int mResDrawableId, int mResTintId){
         Drawable drawable = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, mResDrawableId).mutate());
         DrawableCompat.setTintList(drawable, ContextCompat.getColorStateList(mContext, mResTintId));

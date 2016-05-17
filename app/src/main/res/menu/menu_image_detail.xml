@@ -12,7 +12,7 @@
     <item android:id="@+id/action_download"
         android:title="@string/action_bar_download"
         android:icon="@drawable/ic_move_to_inbox_white_24dp"
-        app:showAsAction="ifRoom"
+        app:showAsAction="never"
         />
     <item
         android:id="@+id/action_gather"

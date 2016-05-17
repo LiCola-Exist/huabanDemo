@@ -15,8 +15,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -45,7 +43,7 @@ import licola.demo.com.huabandemo.Module.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Module.Login.UserMeAndOtherBean;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
-import licola.demo.com.huabandemo.Util.DialogUtil;
+import licola.demo.com.huabandemo.Util.DialogUtils;
 import licola.demo.com.huabandemo.Util.FastBlurUtil;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
@@ -344,7 +342,7 @@ public class UserActivity
     public void onDialogNeutralClick(String boardId, String boardTitle) {
         Logger.d();
 
-        DialogUtil.showDeleteDialog(mContext, boardTitle, new DialogInterface.OnClickListener() {
+        DialogUtils.showDeleteDialog(mContext, boardTitle, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 startDeleteBoard(boardId);

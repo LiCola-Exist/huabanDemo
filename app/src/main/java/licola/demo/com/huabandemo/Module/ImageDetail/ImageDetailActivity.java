@@ -9,12 +9,12 @@ import android.graphics.Color;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,11 +26,6 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
@@ -38,26 +33,24 @@ import butterknife.BindDrawable;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.API.Dialog.OnGatherDialogInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnImageDetailFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.OnProgressResponseListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
-import licola.demo.com.huabandemo.HttpUtils.ProgressResponseBody;
-import licola.demo.com.huabandemo.Module.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
+import licola.demo.com.huabandemo.Module.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Module.Main.MainActivity;
 import licola.demo.com.huabandemo.Module.Type.TypeActivity;
+import licola.demo.com.huabandemo.Module.User.UserActivity;
 import licola.demo.com.huabandemo.Observable.MyRxObservable;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Module.User.UserActivity;
 import licola.demo.com.huabandemo.Service.DownloadService;
 import licola.demo.com.huabandemo.Util.Constant;
+import licola.demo.com.huabandemo.Util.IntentUtils;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Widget.MyDialog.GatherDialogFragment;
-import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -107,6 +100,7 @@ public class ImageDetailActivity extends BaseActivity
     public PinsMainEntity mPinsBean;
 
     public String mImageUrl;//图片地址
+    public String mImageType;//图片类型
     public String mPinsId;
 
     private boolean isLike = false;//该图片是否被喜欢操作 默认false 没有被操作过
@@ -159,6 +153,7 @@ public class ImageDetailActivity extends BaseActivity
             }
         }
         mImageUrl = mPinsBean.getFile().getKey();
+        mImageType=mPinsBean.getFile().getType();
         mPinsId = String.valueOf(mPinsBean.getPin_id());
         isLike = mPinsBean.isLiked();
 
@@ -215,6 +210,9 @@ public class ImageDetailActivity extends BaseActivity
         String url = String.format(mFormatImageUrlBig, mImageUrl);
         String url_low = String.format(mFormatImageGeneral, mImageUrl);
         //加载大图
+        Logger.d();
+        Logger.d("Looger message");
+        Log.d("TAG","Log message");
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_image_big, url)
 //                .setActualImageScaleType(ScalingUtils.ScaleType.FOCUS_CROP)
                 .setUrlLow(url_low)
@@ -282,7 +280,7 @@ public class ImageDetailActivity extends BaseActivity
 
     private void actionDownload(MenuItem item) {
         Logger.d();
-        DownloadService.launch(this,mImageUrl);
+        DownloadService.launch(this, mImageUrl,mImageType);
     }
 
     private void actionLike(MenuItem item) {
@@ -394,6 +392,19 @@ public class ImageDetailActivity extends BaseActivity
     public void onClickUserField(String key, String title) {
         // TODO: 2016/4/2 0002 图片详情的用户跳转
         UserActivity.launch(this, key, title);
+    }
+
+    @Override
+    public void onClickImageLink(String link) {
+        //点击图片链接的回调
+        //打开选择浏览器 再浏览界面
+        Intent intent = IntentUtils.startUriLink(link);
+        if (IntentUtils.checkResolveIntent(this, intent)) {
+            startActivity(intent);
+        } else {
+            Logger.d("checkResolveIntent = null");
+        }
+
     }
 
     @Override

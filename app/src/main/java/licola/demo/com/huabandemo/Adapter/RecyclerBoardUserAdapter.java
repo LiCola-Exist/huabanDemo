@@ -16,7 +16,7 @@ import licola.demo.com.huabandemo.Base.BaseRecyclerAdapter;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.Module.User.UserBoardItemBean;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Util.CompatUtil;
+import licola.demo.com.huabandemo.Util.CompatUtils;
 import licola.demo.com.huabandemo.Util.Logger;
 
 import static android.view.View.OnClickListener;
@@ -60,10 +60,10 @@ public class RecyclerBoardUserAdapter extends BaseRecyclerAdapter<UserBoardItemB
         this.mOperateEdit = resources.getString(R.string.text_edit);
         this.mOperateFollowing = resources.getString(R.string.text_following);
         this.mOperateFollowed = resources.getString(R.string.text_followed);
-        this.mDrawableBlock = CompatUtil.getTintListDrawable(mContext, R.drawable.ic_block_black_24dp, R.color.tint_list_grey);
-        this.mDrawableEdit = CompatUtil.getTintListDrawable(mContext, R.drawable.ic_mode_edit_black_24dp, R.color.tint_list_grey);
-        this.mDrawableFollowing = CompatUtil.getTintListDrawable(mContext, R.drawable.ic_add_black_24dp, R.color.tint_list_grey);
-        this.mDrawableFollowed = CompatUtil.getTintListDrawable(mContext, R.drawable.ic_check_black_24dp, R.color.tint_list_grey);
+        this.mDrawableBlock = CompatUtils.getTintListDrawable(mContext, R.drawable.ic_block_black_24dp, R.color.tint_list_grey);
+        this.mDrawableEdit = CompatUtils.getTintListDrawable(mContext, R.drawable.ic_mode_edit_black_24dp, R.color.tint_list_grey);
+        this.mDrawableFollowing = CompatUtils.getTintListDrawable(mContext, R.drawable.ic_add_black_24dp, R.color.tint_list_grey);
+        this.mDrawableFollowed = CompatUtils.getTintListDrawable(mContext, R.drawable.ic_check_black_24dp, R.color.tint_list_grey);
     }
 
 
@@ -157,7 +157,7 @@ public class RecyclerBoardUserAdapter extends BaseRecyclerAdapter<UserBoardItemB
         float ratio = 1f;//固定宽高比 为1:1 矩形图
         holder.img_card_image.setAspectRatio(ratio);//设置宽高比
         Drawable dProgressImage =
-                CompatUtil.getTintListDrawable(mContext, R.drawable.ic_toys_black_48dp, R.color.tint_list_pink);
+                CompatUtils.getTintListDrawable(mContext, R.drawable.ic_toys_black_48dp, R.color.tint_list_pink);
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
                 .setProgressBarImage(dProgressImage)

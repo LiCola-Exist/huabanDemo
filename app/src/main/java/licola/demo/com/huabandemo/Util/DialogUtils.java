@@ -9,7 +9,7 @@ import licola.demo.com.huabandemo.R;
 /**
  * Created by LiCola on  2016/05/10  18:25
  */
-public class DialogUtil {
+public class DialogUtils {
     public static void showDeleteDialog(Context mContext, String boardTitle, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
         builder.setIcon(R.drawable.ic_report_problem_black_24dp);

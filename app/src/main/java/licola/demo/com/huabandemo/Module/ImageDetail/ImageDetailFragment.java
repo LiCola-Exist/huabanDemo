@@ -1,8 +1,6 @@
 package licola.demo.com.huabandemo.Module.ImageDetail;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -28,7 +26,7 @@ import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Util.CompatUtil;
+import licola.demo.com.huabandemo.Util.CompatUtils;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.TimeUtils;
 import rx.Subscriber;
@@ -167,13 +165,8 @@ public class ImageDetailFragment extends
          */
         tv_image_link.setOnClickListener(v -> {
             String link = (String) v.getTag();
-            Logger.d("link" + link);
-            //打开选择浏览器 再浏览界面
-            Uri uri = Uri.parse(link);
-            Intent it = new Intent(Intent.ACTION_VIEW, uri);
-            if (it.resolveActivity(getActivity().getPackageManager()) != null) {
-                startActivity(it);
-            }
+            Logger.d("link=" + link);
+            mListener.onClickImageLink(link);
         });
 
         tv_image_gather.setOnClickListener(new View.OnClickListener() {
@@ -220,12 +213,12 @@ public class ImageDetailFragment extends
 
         if (view instanceof ImageButton) {
             ((ImageButton) view).setImageDrawable
-                    (CompatUtil.getTintListDrawable(getContext(), resId, R.color.tint_list_grey));
+                    (CompatUtils.getTintListDrawable(getContext(), resId, R.color.tint_list_grey));
             return;
         }
         if (view instanceof TextView) {
             ((TextView) view).setCompoundDrawablesWithIntrinsicBounds(
-                    CompatUtil.getTintListDrawable(getContext(), resId, R.color.tint_list_grey),
+                    CompatUtils.getTintListDrawable(getContext(), resId, R.color.tint_list_grey),
                     null,
                     null,
                     null);

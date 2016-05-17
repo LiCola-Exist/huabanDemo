@@ -104,13 +104,11 @@ public final class Utils {
             return false;
         }
 
-
         if (type.contains("gif") || type.contains("GIF")) {
             return true;
         }
         return false;
     }
-
 
     public static String getPinsType(String type){
         if (type == null||type.isEmpty()) {

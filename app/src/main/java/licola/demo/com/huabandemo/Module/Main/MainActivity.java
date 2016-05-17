@@ -42,7 +42,7 @@ import licola.demo.com.huabandemo.Module.Search.SearchAndTypeActivity;
 import licola.demo.com.huabandemo.Module.User.UserActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Module.Setting.SettingsActivity;
-import licola.demo.com.huabandemo.Util.CompatUtil;
+import licola.demo.com.huabandemo.Util.CompatUtils;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
@@ -231,7 +231,7 @@ public class MainActivity extends BaseActivity
             btn = (Button) group.getChildAt(i);
             btn.setCompoundDrawablesWithIntrinsicBounds(
                     null,
-                    CompatUtil.getTintListDrawable(mContext, mDrawableList[i], R.color.tint_list_pink),
+                    CompatUtils.getTintListDrawable(mContext, mDrawableList[i], R.color.tint_list_pink),
                     null,
                     null);
             btn.setOnClickListener(this);

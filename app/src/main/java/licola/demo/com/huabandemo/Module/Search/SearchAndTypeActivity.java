@@ -2,6 +2,7 @@ package licola.demo.com.huabandemo.Module.Search;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -22,6 +23,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
 
@@ -36,7 +38,7 @@ import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
 import licola.demo.com.huabandemo.Module.Type.TypeActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Module.SearchResult.SearchResultActivity;
-import licola.demo.com.huabandemo.Util.CompatUtil;
+import licola.demo.com.huabandemo.Util.CompatUtils;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
@@ -110,7 +112,7 @@ public class SearchAndTypeActivity extends BaseActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
-        mIBtnClearHistory.setImageDrawable(CompatUtil.getTintListDrawable(mContext, R.drawable.ic_close_black_24dp, R.color.tint_list_grey));
+        mIBtnClearHistory.setImageDrawable(CompatUtils.getTintListDrawable(mContext, R.drawable.ic_close_black_24dp, R.color.tint_list_grey));
         initFlowReference(mFlowReference);
 
         initHintAdapter();
@@ -211,13 +213,13 @@ public class SearchAndTypeActivity extends BaseActivity {
     private void initFlowReference(FlowLayout mFlowReference) {
         String mTextList[] = getResources().getStringArray(R.array.title_array_all);//显示的文字
         String mTypeList[] = getResources().getStringArray(R.array.type_array_all);//查询的关键字
-        int[] ColorResId=getResources().getIntArray(R.array.type_array_color);
+//        int[] ColorResId=getResources().getIntArray(R.array.type_array_color);
 //        int[] drawableResIdList=new int[]{R};
         mItemWidth = Utils.getScreenWidth(mContext) / mItemLineNumber - mItemMargin * 2;//每个子控件宽为屏幕的等分
 //        mItemWidth= Utils.getScreenWidth(mContext)/mItemLineNumber;
         //根据内容动态填充
         for (int i = 0, size = mTextList.length; i < size; i++) {
-            addChildButton(mFlowReference, mTextList[i], mTypeList[i], ColorResId[i]);
+            addChildButton(mFlowReference, mTextList[i], mTypeList[i], R.drawable.ic_loyalty_white_24dp);
         }
 
     }
@@ -261,15 +263,15 @@ public class SearchAndTypeActivity extends BaseActivity {
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mItemWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER;
         layoutParams.setMargins(mItemMargin, mItemMargin, mItemMargin, mItemMargin);
-//        btnChild.setCompoundDrawablesWithIntrinsicBounds(
-//                null,
-//                CompatUtil.getTintListDrawable(mContext, ResId, R.color.tint_list_pink),
-//                null,
-//                null);
+        btnChild.setCompoundDrawablesWithIntrinsicBounds(
+                null,
+                CompatUtils.getTintListDrawable(mContext, ResId, R.color.tint_list_pink),
+                null,
+                null);
         btnChild.setText(text);
-
+        btnChild.setBackgroundColor(Color.WHITE);
         btnChild.setTag(type);
-        btnChild.setBackgroundColor(ResId);
+//        btnChild.setBackgroundColor(ResId);
         btnChild.setLayoutParams(layoutParams);
         btnChild.setGravity(Gravity.CENTER);
 
