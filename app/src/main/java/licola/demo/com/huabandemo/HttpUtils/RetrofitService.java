@@ -55,6 +55,7 @@ public class RetrofitService {
                 return originalResponse.newBuilder().body(new ProgressResponseBody(originalResponse.body(),listener)).build();
             }
         });
+
         return httpBuilder.build();
 
     }
@@ -73,9 +74,11 @@ public class RetrofitService {
     }
 
     public static HttpAPIRx createDownloadService(OnProgressResponseListener listener) {
+        OkHttpClient client= setProgressClient(listener);
         Retrofit retrofit = builder
-                .client(setProgressClient(listener))
+                .client(client)
                 .build();
+
         return retrofit.create(HttpAPIRx.class);
     }
 

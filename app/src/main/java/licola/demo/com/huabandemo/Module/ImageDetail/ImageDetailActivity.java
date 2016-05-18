@@ -210,9 +210,6 @@ public class ImageDetailActivity extends BaseActivity
         String url = String.format(mFormatImageUrlBig, mImageUrl);
         String url_low = String.format(mFormatImageGeneral, mImageUrl);
         //加载大图
-        Logger.d();
-        Logger.d("Looger message");
-        Log.d("TAG","Log message");
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_image_big, url)
 //                .setActualImageScaleType(ScalingUtils.ScaleType.FOCUS_CROP)
                 .setUrlLow(url_low)
