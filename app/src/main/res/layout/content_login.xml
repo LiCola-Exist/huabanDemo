@@ -77,6 +77,18 @@
                 android:textColor="@color/white"
                 android:background="?colorAccent"
                 />
+
+            <Button
+                android:id="@+id/btn_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/action_register"
+                android:textSize="@dimen/card_context_size_18sp"
+                android:textStyle="bold"
+                android:layout_margin="@dimen/button_padding_default"
+                android:textColor="@color/white"
+                android:background="@color/secondary_text"
+                />
             <ProgressBar
                 android:id="@+id/progress_login"
                 style="?android:attr/progressBarStyleLarge"

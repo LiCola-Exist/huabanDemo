@@ -34,6 +34,9 @@ import licola.demo.com.huabandemo.Module.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 
+/**
+ * 已经弃用
+ */
 public class MyAttentionActivity extends BaseActivity
         implements OnPinsFragmentInteractionListener,
         OnBoardFragmentInteractionListener<BoardPinsBean>,

@@ -131,9 +131,9 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void saveToken(TokenBean tokenBean) {
-        SPUtils.put(getApplicationContext(), Constant.LOGINTIME, System.currentTimeMillis());
-        SPUtils.put(getApplicationContext(), Constant.TOKENACCESS, tokenBean.getAccess_token());
-        SPUtils.put(getApplicationContext(), Constant.TOKENTYPE, tokenBean.getToken_type());
+        SPUtils.putApply(getApplicationContext(), Constant.LOGINTIME, System.currentTimeMillis());
+        SPUtils.putApply(getApplicationContext(), Constant.TOKENACCESS, tokenBean.getAccess_token());
+        SPUtils.putApply(getApplicationContext(), Constant.TOKENTYPE, tokenBean.getToken_type());
     }
 
     private Observable<TokenBean> getUserToken(String username, String password) {

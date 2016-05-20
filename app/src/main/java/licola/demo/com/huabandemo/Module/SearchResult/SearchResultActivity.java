@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import butterknife.Bind;
 import butterknife.BindColor;
@@ -37,7 +38,7 @@ import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 
 public class SearchResultActivity extends BaseActivity implements
         OnPinsFragmentInteractionListener, OnBoardFragmentInteractionListener<BoardPinsBean>
-        ,OnPeopleFragmentInteraction<UsersBean>{
+        , OnPeopleFragmentInteraction<UsersBean> {
 
     private static final String SEARCHKEY = "KEY";
     private String key;//搜索的关键字
@@ -102,13 +103,12 @@ public class SearchResultActivity extends BaseActivity implements
     private void saveSearchHistory(String key) {
         //转到这个界面就表示 搜索成功 保存搜索记录
         HashSet<String> hashSet = (HashSet<String>) SPUtils.get(mContext, Constant.HISTORYTEXT, new HashSet<String>());
-        for (String s :
-                hashSet) {
-            Logger.d(s);
-        }
-        hashSet.add(key);
+        //关键操作 需要在新的集合添加值 然后再提交修改
+        Set<String> changeData = new HashSet<>(hashSet);
+        changeData.add(key);
 
-        SPUtils.put(mContext, Constant.HISTORYTEXT, hashSet);
+        boolean isSuccess = SPUtils.putCommit(mContext, Constant.HISTORYTEXT, changeData);
+        Logger.d("isSuccess=" + isSuccess);
     }
 
     private void initAdapter() {
@@ -172,7 +172,7 @@ public class SearchResultActivity extends BaseActivity implements
     @Override
     public void onClickItemUser(UsersBean bean, View view) {
         Logger.d();
-        UserActivity.launch(this,String.valueOf(bean.getUser_id()),bean.getUsername());
+        UserActivity.launch(this, String.valueOf(bean.getUser_id()), bean.getUsername());
     }
 
 

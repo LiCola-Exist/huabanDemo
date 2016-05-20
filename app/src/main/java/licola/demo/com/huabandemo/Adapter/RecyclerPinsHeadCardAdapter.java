@@ -54,7 +54,6 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsMainEnt
 
     public RecyclerPinsHeadCardAdapter(RecyclerView mRecyclerView) {
         super(mRecyclerView);
-
     }
 
 

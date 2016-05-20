@@ -11,6 +11,7 @@ import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener
 import licola.demo.com.huabandemo.API.Fragment.OnRefreshFragmentInteractionListener;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
+import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.Entity.ListPinsBean;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitService;
@@ -211,4 +212,10 @@ public class TypeNewFragment
         return new RecyclerPinsHeadCardAdapter(mRecyclerView);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mAdapter=null;
+        mListener=null;
+    }
 }

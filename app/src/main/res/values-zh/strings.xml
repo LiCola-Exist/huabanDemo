@@ -91,6 +91,7 @@
     <string name="prompt_username">用户名</string>
     <string name="prompt_password">密码</string>
     <string name="action_sign_in">登录</string>
+    <string name="action_register">注册</string>
     <string name="action_sign_in_short">登录</string>
     <string name="error_invalid_username">用户名输入格式错误</string>
     <string name="error_invalid_password">密码太短</string>

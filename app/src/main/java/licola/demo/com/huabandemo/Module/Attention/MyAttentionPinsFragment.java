@@ -106,6 +106,13 @@ public class MyAttentionPinsFragment
         };
     }
 
+
+    /**
+     * 判断集合是否和当前adapter中的集合对象一致 这里只简单实现 应该重写hash方法 用equals做判断
+     * @param result
+     * @return
+     */
+    //// TODO: 2016/5/20 0020 方法需要重写 重写类的hash 和equals
     private boolean checkNotify(List<PinsMainEntity> result) {
         if (!mAdapter.getList().isEmpty()) {
             if (mAdapter.getList().get(0).getFile().getKey().equals(result.get(0).getFile().getKey())) {

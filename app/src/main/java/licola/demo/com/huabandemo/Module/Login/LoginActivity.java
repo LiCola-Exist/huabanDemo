@@ -36,6 +36,7 @@ import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Module.User.UserActivity;
 import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
+import licola.demo.com.huabandemo.Util.IntentUtils;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPBuild;
@@ -73,6 +74,8 @@ public class LoginActivity extends BaseActivity {
     EditText mEditPassword;
     @Bind(R.id.btn_login)
     Button mBtnLogin;
+    @Bind(R.id.btn_register)
+    Button mBtnRegister;
     @Bind(R.id.ll_login)
     LinearLayout mLinearLogin;
     @Bind(R.id.scroll_login_form)
@@ -158,6 +161,24 @@ public class LoginActivity extends BaseActivity {
                         attemptLogin();
                     }
                 });
+        RxView.clicks(mBtnRegister)
+                .throttleFirst(500, TimeUnit.MILLISECONDS)//设置500毫秒的间隔 防止抖动 用户点击太快登录多次
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startNetRegister();
+                    }
+                });
+    }
+
+    private void startNetRegister() {
+        //跳转网络 注册
+        Intent intent = IntentUtils.startUriLink(getResources().getString(R.string.urlRegister));
+        if (IntentUtils.checkResolveIntent(this, intent)) {
+            startActivity(intent);
+        } else {
+            Logger.d("checkResolveIntent = null");
+        }
     }
 
     private void addUsernameAutoComplete() {
@@ -350,22 +371,22 @@ public class LoginActivity extends BaseActivity {
 //        //保存先清空内容
 //        SPUtils.clear(getApplicationContext());
 //        //逻辑的关键信息
-//        SPUtils.put(getApplicationContext(), Constant.ISLOGIN, Boolean.TRUE);
-//        SPUtils.put(getApplicationContext(), Constant.LOGINTIME, System.currentTimeMillis());//获取当前时间作为登录时间
-//        SPUtils.put(getApplicationContext(), Constant.USERACCOUNT, mUserAccount);
-//        SPUtils.put(getApplicationContext(), Constant.USERPASSWORD, mUserPassword);
+//        SPUtils.putApply(getApplicationContext(), Constant.ISLOGIN, Boolean.TRUE);
+//        SPUtils.putApply(getApplicationContext(), Constant.LOGINTIME, System.currentTimeMillis());//获取当前时间作为登录时间
+//        SPUtils.putApply(getApplicationContext(), Constant.USERACCOUNT, mUserAccount);
+//        SPUtils.putApply(getApplicationContext(), Constant.USERPASSWORD, mUserPassword);
 //
 //        //token 信息
-//        SPUtils.put(getApplicationContext(), Constant.TOKENACCESS, mTokenAccess);
-//        SPUtils.put(getApplicationContext(), Constant.TOKENREFRESH, mTokenRefresh);
-//        SPUtils.put(getApplicationContext(), Constant.TOKENTYPE, mTokenType);
-//        SPUtils.put(getApplicationContext(), Constant.TOKENEXPIRESIN, mTokenExpiresIn);
+//        SPUtils.putApply(getApplicationContext(), Constant.TOKENACCESS, mTokenAccess);
+//        SPUtils.putApply(getApplicationContext(), Constant.TOKENREFRESH, mTokenRefresh);
+//        SPUtils.putApply(getApplicationContext(), Constant.TOKENTYPE, mTokenType);
+//        SPUtils.putApply(getApplicationContext(), Constant.TOKENEXPIRESIN, mTokenExpiresIn);
 //        //用户个人信息
 //
-//        SPUtils.put(getApplicationContext(), Constant.USERNAME, result.getUsername());
-//        SPUtils.put(getApplicationContext(), Constant.USERID, String.valueOf(result.getUser_id()));
-//        SPUtils.put(getApplicationContext(), Constant.USERHEADKEY, result.getAvatar().getKey());
-//        SPUtils.put(getApplicationContext(), Constant.USEREMAIL, result.getEmail());
+//        SPUtils.putApply(getApplicationContext(), Constant.USERNAME, result.getUsername());
+//        SPUtils.putApply(getApplicationContext(), Constant.USERID, String.valueOf(result.getUser_id()));
+//        SPUtils.putApply(getApplicationContext(), Constant.USERHEADKEY, result.getAvatar().getKey());
+//        SPUtils.putApply(getApplicationContext(), Constant.USEREMAIL, result.getEmail());
 
 
     }

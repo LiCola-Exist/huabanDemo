@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="urlRegister">http://huaban.com/</string>
+    
     <string name="urlRoot">http://api.huaban.com/</string>
     <string name="urlHttpsRoot">https://api.huaban.com/</string>
     <string name="urlImageRoot">http://img.hb.aicdn.com/</string>

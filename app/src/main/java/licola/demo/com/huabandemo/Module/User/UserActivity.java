@@ -246,8 +246,14 @@ public class UserActivity
                         protected void onNewResultImpl(Bitmap bitmap) {
                             //得到缓存中的Bitmap对象 这里可以进行操作
                             //构造Drawable对象 模糊化设置给View控件
-                            Drawable backDrawable = new BitmapDrawable(getResources(), FastBlurUtil.doBlur(bitmap, 25, false));
-                            mAppBar.setBackground(backDrawable);
+                            if(bitmap==null){
+                                Logger.d("bitmap is null");
+
+                            }else {
+                                Logger.d("bitmap is not null");
+                                Drawable backDrawable = new BitmapDrawable(getResources(), FastBlurUtil.doBlur(bitmap, 25, false));
+                                mAppBar.setBackground(backDrawable);
+                            }
 
                         }
 

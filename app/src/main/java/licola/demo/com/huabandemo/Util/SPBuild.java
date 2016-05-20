@@ -14,7 +14,7 @@ public class SPBuild {
     }
 
     public SPBuild addData(String key,Object object){
-        SPUtils.put(editor,key,object);
+        SPUtils.putAdd(editor,key,object);
         return this;
     }
 

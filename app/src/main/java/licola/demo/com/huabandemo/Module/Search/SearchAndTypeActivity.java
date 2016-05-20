@@ -29,6 +29,7 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
@@ -199,10 +200,10 @@ public class SearchAndTypeActivity extends BaseActivity {
     private void initFlowHistory(FlowLayout mFlowHistory) {
         mFlowHistory.removeAllViews();
 //        String mTextList[] = getResources().getStringArray(R.array.title_array_all);//显示的文字
-        HashSet<String> mTextList = (HashSet<String>) SPUtils.get(mContext, Constant.HISTORYTEXT, new HashSet<>());
+        Set<String> mTextList = (HashSet<String>) SPUtils.get(mContext, Constant.HISTORYTEXT, new HashSet<>());
         if (!mTextList.isEmpty()) {
-            for (String mTextString :
-                    mTextList) {
+            for (String mTextString : mTextList) {
+                Logger.d(mTextString);
                 addChildText(mFlowHistory, mTextString);
             }
         } else {

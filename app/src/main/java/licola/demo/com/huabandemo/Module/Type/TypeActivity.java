@@ -15,9 +15,11 @@ import licola.demo.com.huabandemo.API.Fragment.OnRefreshFragmentInteractionListe
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Module.ImageDetail.ImageDetailActivity;
+import licola.demo.com.huabandemo.Util.SPUtils;
 
 /**
  * Created by LiCola on  2016/03/20  12:00
@@ -89,6 +91,14 @@ public class TypeActivity extends BaseActivity
                 beginTransaction().replace(R.id.container_with_refresh, fragment).commit();
 
         initListener();
+
+        long start=System.currentTimeMillis();
+        for (int i = 0; i < 1000; i++) {
+
+            SPUtils.get(this, Constant.TOKENACCESS,"");
+        }
+        long end=System.currentTimeMillis();
+        Logger.d("used time="+(end-start));
     }
 
 

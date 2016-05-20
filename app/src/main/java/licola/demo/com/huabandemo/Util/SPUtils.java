@@ -1,11 +1,10 @@
 package licola.demo.com.huabandemo.Util;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 
 public class SPUtils {
@@ -22,37 +21,41 @@ public class SPUtils {
 
 
     /**
-     * 保存数据的方法，我们需要拿到保存数据的具体类型，然后根据类型调用不同的保存方法
-     *
+     * 异步提交方法
      * @param context
      * @param key
      * @param object
      */
-    public static void put(Context context, String key, Object object) {
-
+    public static void putApply(Context context, String key, Object object) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
                 MODE);
         SharedPreferences.Editor editor = sp.edit();
-
-        if (object instanceof String) {
-            editor.putString(key, (String) object);
-        } else if (object instanceof Integer) {
-            editor.putInt(key, (Integer) object);
-        } else if (object instanceof Boolean) {
-            editor.putBoolean(key, (Boolean) object);
-        } else if (object instanceof Float) {
-            editor.putFloat(key, (Float) object);
-        } else if (object instanceof Long) {
-            editor.putLong(key, (Long) object);
-        } else if (object instanceof Set) {
-            editor.putStringSet(key, (Set<String>) object);
-        } else {
-            editor.putString(key, object.toString());
-        }
+        judgePutDataType(key, object, editor);
         editor.apply();
     }
 
-    public static void put(SharedPreferences.Editor editor, String key, Object object) {
+    /**
+     * 同步提交方法
+     * @param context
+     * @param key
+     * @param object
+     * @return
+     */
+    public static boolean putCommit(Context context, String key, Object object){
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
+                MODE);
+        SharedPreferences.Editor editor = sp.edit();
+        judgePutDataType(key, object, editor);
+        return editor.commit();
+    }
+
+    /**
+     * 根据不同类型 使用不同的写入方法
+     * @param key
+     * @param object
+     * @param editor
+     */
+    private static void judgePutDataType(String key, Object object, SharedPreferences.Editor editor) {
         if (object instanceof String) {
             editor.putString(key, (String) object);
         } else if (object instanceof Integer) {
@@ -68,6 +71,10 @@ public class SPUtils {
         } else {
             editor.putString(key, object.toString());
         }
+    }
+
+    public static void putAdd(SharedPreferences.Editor editor, String key, Object object) {
+        judgePutDataType(key, object, editor);
     }
 
     /**
@@ -81,7 +88,6 @@ public class SPUtils {
     public static Object get(Context context, String key, Object defaultObject) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
                 MODE);
-
 
         if (defaultObject instanceof String) {
             return sp.getString(key, (String) defaultObject);

@@ -53,6 +53,8 @@ public class DownloadService extends IntentService {
 
     private NotifyHandler mNotifyHandler;
 
+    //// TODO: 2016/5/18 0018 目前存在内存泄露状态 因为OnProgressResponseListener在Service中实例化 然后弃用 但是okhttp的生命周期比较长
+    //哪为什么不在 Handler中实例化 然后和线程一起弃用？
     private final class NotifyHandler extends Handler {
         //下载操作不频繁 可以当做类变量 使用时候再创建
         private NotificationManager mNotificationManager;
@@ -253,7 +255,7 @@ public class DownloadService extends IntentService {
         super.onDestroy();
         Logger.d(TAG + " " + Thread.currentThread().toString());
         mListener = null;
-        mDownloadInfo=null;
+        mDownloadInfo = null;
 
         HuaBanApplication.getRefwatcher(this).watch(this);
 
