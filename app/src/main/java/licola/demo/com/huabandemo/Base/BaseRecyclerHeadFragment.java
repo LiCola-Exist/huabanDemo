@@ -135,6 +135,7 @@ public abstract class BaseRecyclerHeadFragment
 
     protected abstract View getHeadView();
 
+    //返回当前RecyclerView显示的 holder 位置
     protected abstract int getAdapterPosition();
 
     protected abstract T setAdapter(); //这里初始化 adapter

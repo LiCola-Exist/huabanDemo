@@ -5,6 +5,7 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -15,17 +16,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import licola.demo.com.huabandemo.API.HttpAPI.DownUpAPI;
+import licola.demo.com.huabandemo.API.OnProgressResponseListener;
 import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.Entity.DownloadInfo;
+import licola.demo.com.huabandemo.HttpUtils.Converter.AvatarConverter;
 import licola.demo.com.huabandemo.HttpUtils.DownloadProgressHandler;
+import licola.demo.com.huabandemo.HttpUtils.OkHttpHelper;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
+import licola.demo.com.huabandemo.HttpUtils.RetrofitDownClient;
 import licola.demo.com.huabandemo.Util.FileUtils;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NotificationUtils;
 import licola.demo.com.huabandemo.Util.Utils;
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import retrofit2.Retrofit;
 import rx.Subscriber;
 import rx.functions.Func1;
+
+import static licola.demo.com.huabandemo.HttpUtils.OkHttpHelper.addProgressClient;
 
 /**
  * Created by LiCola on  2016/05/13  22:02
@@ -39,18 +48,23 @@ public class DownloadService extends IntentService {
     private static final String KEYURL = "KeyUrl";
     private static final String KEYTYPE = "KeyType";
 
-
     private static final int MSG_START = 0;
     private static final int MSG_LOADING = 1;
     private static final int MSG_COMPLETE = 2;
 
-//    private OnProgressResponseListener mListener;
+    private static final OnProgressResponseListener mListener = new OnProgressResponseListener() {
+        @Override
+        public void onResponseProgress(long bytesRead, long contentLength, boolean done) {
+            Logger.d(Thread.currentThread().toString() + " " + bytesRead + "/" + contentLength + " done=" + done);
+            mDownloadInfo.mProcess = (int) (bytesRead * 100 / contentLength);
+        }
+    };
 
     private long mDelayedTime = 1000;
 
     private Map<Integer, DownloadInfo> mMap = new HashMap<>();
 
-    private DownloadInfo mDownloadInfo;
+    private static DownloadInfo mDownloadInfo;
 
     private NotifyHandler mNotifyHandler;
 
@@ -164,23 +178,13 @@ public class DownloadService extends IntentService {
         String url = intent.getStringExtra(KEYURL);
         Logger.d(url.hashCode() + " " + Thread.currentThread().toString());
         mDownloadInfo = mMap.get(url.hashCode());
-        actionDownload(url, mDownloadInfo);
+        actionDownload(url, mDownloadInfo, mListener);
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         Logger.d(TAG);
-        //获取通知管理器
-//        mListener = new OnProgressResponseListener() {
-//            @Override
-//            public void onResponseProgress(long bytesRead, long contentLength, boolean done) {
-//                //监听器 在下载线程回调 接收下载的具体进度
-////                Logger.d(Thread.currentThread().toString() + " bytesRead=" + bytesRead + " contentLength=" + contentLength + " done=" + done);
-//                mDownloadInfo.mProcess = (int) (bytesRead * 100 / contentLength);
-//            }
-//        };
-
 
         //构造HandlerThread 负责发送通知栏消息的线程
         mHandlerThread = new HandlerThread("notifyThread");
@@ -188,21 +192,15 @@ public class DownloadService extends IntentService {
         mNotifyHandler = new NotifyHandler(mHandlerThread.getLooper());
     }
 
+
     /**
      * 阻塞当前线程的下载方法
      *
      * @param mImageUrl
      */
-    private void actionDownload(String mImageUrl, DownloadInfo DownloadInfo) {
-//        RetrofitClient.setProgressHandler(new DownloadProgressHandler() {
-//            @Override
-//            protected void onProgress(long progress, long total, boolean done) {
-//
-//                Logger.d("onProgress="+ progress+"/"+total+Thread.currentThread().toString());
-//            }
-//        });
+    private void actionDownload(String mImageUrl, DownloadInfo DownloadInfo, OnProgressResponseListener listener) {
 
-        RetrofitClient.createService(DownUpAPI.class)
+        RetrofitDownClient.createService(DownUpAPI.class, listener)
                 .httpDownImage(mImageUrl)
                 //IntentService 有内部变量HandlerThread 运行在子线程中 所以不用切换线程
 //                .subscribeOn(Schedulers.io())
@@ -224,7 +222,7 @@ public class DownloadService extends IntentService {
                     public void onStart() {
                         super.onStart();
                         //开始下载 线程开始轮询
-//                        mNotifyHandler.postDelayed(mRunnable, mDelayedTime);
+                        mNotifyHandler.postDelayed(mRunnable, mDelayedTime);
                     }
 
                     @Override
@@ -240,8 +238,8 @@ public class DownloadService extends IntentService {
                     @Override
                     public void onNext(File file) {
                         Logger.d(file.getAbsolutePath());
-//                        mNotifyHandler.removeCallbacks(mRunnable);
-
+                        Logger.d(Thread.currentThread().toString());
+                        mNotifyHandler.removeCallbacks(mRunnable);
                         sendFileNotifyMessage(file, DownloadInfo);
                     }
                 });
@@ -269,8 +267,8 @@ public class DownloadService extends IntentService {
         super.onDestroy();
         Logger.d(TAG + " " + Thread.currentThread().toString());
 //        mListener = null;
-        mDownloadInfo = null;
-
+//        mDownloadInfo = null;
+        mHandlerThread.quit();//结束轮询
         HuaBanApplication.getRefwatcher(this).watch(this);
 
     }

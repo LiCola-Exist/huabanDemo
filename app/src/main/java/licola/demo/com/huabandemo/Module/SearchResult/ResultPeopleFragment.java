@@ -75,7 +75,6 @@ public class ResultPeopleFragment extends
                         mIndex++;
                     }
                 });
-
     }
 
     @Override

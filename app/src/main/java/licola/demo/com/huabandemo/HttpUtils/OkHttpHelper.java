@@ -26,20 +26,20 @@ public class OkHttpHelper {
         return builder;
     }
 
-    public static OkHttpClient.Builder addProgressClient(OkHttpClient.Builder builder) {
+    public static OkHttpClient.Builder addProgressClient(OkHttpClient.Builder builder,OnProgressResponseListener listener) {
 
-        OnProgressResponseListener listener=new OnProgressResponseListener() {
-            @Override
-            public void onResponseProgress(long bytesRead, long contentLength, boolean done) {
-                if (mProgressHandler==null){
-                    return;
-                }
-                progressBean.setBytesRead(bytesRead);
-                progressBean.setContentLength(contentLength);
-                progressBean.setDone(done);
-                mProgressHandler.sendMessage(progressBean);
-            }
-        };
+//        OnProgressResponseListener listener=new OnProgressResponseListener() {
+//            @Override
+//            public void onResponseProgress(long bytesRead, long contentLength, boolean done) {
+//                if (mProgressHandler==null){
+//                    return;
+//                }
+//                progressBean.setBytesRead(bytesRead);
+//                progressBean.setContentLength(contentLength);
+//                progressBean.setDone(done);
+//                mProgressHandler.sendMessage(progressBean);
+//            }
+//        };
 
         builder.addNetworkInterceptor(new Interceptor() {
             @Override

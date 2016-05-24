@@ -131,7 +131,7 @@ public class TypeNewFragment
 
                     @Override
                     public void onError(Throwable e) {
-                        Logger.d();
+                        Logger.d(e.toString());
                         checkException(e);//检查错误 弹出提示
                     }
 
