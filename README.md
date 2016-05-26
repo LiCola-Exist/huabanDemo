@@ -6,13 +6,13 @@
  - 下面介绍目前的工作内容
 #UI
 既然说是Material-Design版，肯定界面效果要足够MD，眼见为实。
-主界面：瀑布流、下拉自动加载、浮动按钮、CardView![Main](https://github.com/LiCola/huabanDemo/blob/master/ScreenCapture/Main.jpg)
+![Main](https://github.com/LiCola/huabanDemo/blob/master/ScreenCapture/Main.jpg)
   
-侧滑界面：MD的抽屉式导航![Drawer](https://github.com/LiCola/huabanDemo/blob/master/ScreenCapture/Drawer.jpg)
+![Drawer](https://github.com/LiCola/huabanDemo/blob/master/ScreenCapture/Drawer.jpg)
 
-图片界面：向上滑动隐藏图片下拉显示，半透明状态栏![Image](https://github.com/LiCola/huabanDemo/blob/master/ScreenCapture/Image.jpg)
+![Image](https://github.com/LiCola/huabanDemo/blob/master/ScreenCapture/Image.jpg)
 
-用户界面：背景毛玻璃，Tab标签下可以左右滑动![User](https://github.com/LiCola/huabanDemo/blob/master/ScreenCapture/User.jpg)
+![User](https://github.com/LiCola/huabanDemo/blob/master/ScreenCapture/User.jpg)
 
 #架构
  这个项目在写在很久之前，当时MVP架构网络上各种分析描述，但是感觉都是各说各的。不确定项目是否采用MVP架构就先动手写代码，随时准备重构项目。就在不久前Google发布[Android Architecture Blueprints \[beta\]](https://github.com/googlesamples/android-architecture)，终于感觉这事有点靠谱了，我现在已经在动手重构项目了。
