@@ -59,16 +59,19 @@ public class ImageLoadFresco {
         //初始化M层 用于初始化图片中包含的数据
         GenericDraweeHierarchyBuilder builderM=new GenericDraweeHierarchyBuilder(mContext.getResources());
 
+        //请求参数 主要配置url 和C层相关
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(frescoBuilder.mUrl))
+                .setResizeOptions(frescoBuilder.mResizeOptions)
+                .build();
         //初始化C层 用于控制图片的加载 是主要的实现控制类
-        PipelineDraweeControllerBuilder builderC = Fresco.newDraweeControllerBuilder();
+        PipelineDraweeControllerBuilder builderC = Fresco.newDraweeControllerBuilder()
+//                .setOldController(mSimpleDraweeView.getController())
+                ;
 
         if (frescoBuilder.mUrlLow != null) {
             builderC.setLowResImageRequest(ImageRequest.fromUri(frescoBuilder.mUrlLow));
         }
 
-        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(Uri.parse(frescoBuilder.mUrl))
-                .setResizeOptions(frescoBuilder.mResizeOptions)
-                .build();
         builderC.setImageRequest(request);
 
         setViewPerformance(frescoBuilder, builderM, builderC);
@@ -118,7 +121,7 @@ public class ImageLoadFresco {
 //            builderM.setProgressBarImage(progressBarDrawable);
         }
 
-        //设置重试图 同时就是设置支持加载视频时重试
+        //设置重试图 同时需要C层支持点击控制
         if (frescoBuilder.mRetryImage != null) {
             builderC.setTapToRetryEnabled(true);
             builderM.setRetryImage(frescoBuilder.mRetryImage);

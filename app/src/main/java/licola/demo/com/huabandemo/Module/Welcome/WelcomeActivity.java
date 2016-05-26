@@ -20,6 +20,7 @@ import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.SPBuild;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.TimeUtils;
 import rx.Observable;
@@ -132,9 +133,11 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void saveToken(TokenBean tokenBean) {
-        SPUtils.putApply(getApplicationContext(), Constant.LOGINTIME, System.currentTimeMillis());
-        SPUtils.putApply(getApplicationContext(), Constant.TOKENACCESS, tokenBean.getAccess_token());
-        SPUtils.putApply(getApplicationContext(), Constant.TOKENTYPE, tokenBean.getToken_type());
+        new SPBuild(getApplicationContext())
+                .addData(Constant.LOGINTIME, System.currentTimeMillis())
+                .addData(Constant.TOKENACCESS, tokenBean.getAccess_token())
+                .addData(Constant.TOKENTYPE, tokenBean.getToken_type())
+                .build();
     }
 
     private Observable<TokenBean> getUserToken(String username, String password) {

@@ -20,9 +20,7 @@
         fresco:placeholderImageScaleType="fitCenter"
 
         />
-    <!--fresco:roundAsCircle="true"-->
-    <!--fresco:roundingBorderWidth="2dp"-->
-    <!--fresco:roundingBorderColor="@color/white"-->
+
     <TextView
         android:id="@+id/tv_user_name"
         android:layout_width="match_parent"
@@ -32,7 +30,6 @@
         android:maxLines="1"
         android:textColor="@color/white"
         android:textSize="@dimen/card_context_size_18sp"
-
         tools:text="用户名" />
 
     <TextView

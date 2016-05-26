@@ -21,8 +21,8 @@ public class HuaBanApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        Fresco.initialize(HuaBanApplication.getInstance());//初始化Fresco图片加载框架
         refWatcher= LeakCanary.install(this);//初始化 内存检测工具
+        Fresco.initialize(HuaBanApplication.getInstance());//初始化Fresco图片加载框架
 
     }
 

@@ -11,6 +11,7 @@
         android:id="@+id/appbar_image_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -36,7 +37,7 @@
                 android:id="@+id/toolbar_image"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@drawable/bg_tool_bar_gradient"
+                android:background="@drawable/bg_gradient_tool_bar"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 

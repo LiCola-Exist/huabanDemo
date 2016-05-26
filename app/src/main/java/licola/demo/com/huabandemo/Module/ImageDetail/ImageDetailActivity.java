@@ -18,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
@@ -156,7 +158,7 @@ public class ImageDetailActivity extends BaseActivity
             }
         }
         mImageUrl = mPinsBean.getFile().getKey();
-        mImageType=mPinsBean.getFile().getType();
+        mImageType = mPinsBean.getFile().getType();
         mPinsId = String.valueOf(mPinsBean.getPin_id());
         isLike = mPinsBean.isLiked();
 
@@ -165,7 +167,7 @@ public class ImageDetailActivity extends BaseActivity
         int height = mPinsBean.getFile().getHeight();
         mImgImageBig.setAspectRatio(Utils.getAspectRatio(width, height));
         Logger.d("aspect=" + mImgImageBig.getAspectRatio());
-        
+
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.framelayout_info_recycler, ImageDetailFragment.newInstance(mPinsId)).commit();
 
@@ -195,8 +197,8 @@ public class ImageDetailActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 Logger.d();
-                ImageScaleDialogFragment fragment=ImageScaleDialogFragment.create();
-                fragment.show(getSupportFragmentManager(),null);
+                ImageScaleDialogFragment fragment = ImageScaleDialogFragment.create();
+                fragment.show(getSupportFragmentManager(), null);
 
             }
         });
@@ -245,6 +247,7 @@ public class ImageDetailActivity extends BaseActivity
                     }
                 })
                 .build();
+
     }
 
     @Override
@@ -295,7 +298,7 @@ public class ImageDetailActivity extends BaseActivity
 
     private void actionDownload(MenuItem item) {
         Logger.d();
-        DownloadService.launch(this, mImageUrl,mImageType);
+        DownloadService.launch(this, mImageUrl, mImageType);
     }
 
     private void actionLike(MenuItem item) {

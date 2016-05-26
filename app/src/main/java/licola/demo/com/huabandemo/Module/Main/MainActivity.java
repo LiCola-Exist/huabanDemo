@@ -28,25 +28,25 @@ import com.jakewharton.rxbinding.view.RxView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import licola.demo.com.huabandemo.API.OnFragmentRefreshListener;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnRefreshFragmentInteractionListener;
+import licola.demo.com.huabandemo.API.OnFragmentRefreshListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.Module.Attention.MyAttentionActivityNew;
 import licola.demo.com.huabandemo.Module.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Module.Login.LoginActivity;
-import licola.demo.com.huabandemo.Module.Type.TypeNewFragment;
-import licola.demo.com.huabandemo.Module.Attention.MyAttentionActivityNew;
 import licola.demo.com.huabandemo.Module.Search.SearchAndTypeActivity;
+import licola.demo.com.huabandemo.Module.Setting.SettingsActivity;
+import licola.demo.com.huabandemo.Module.Type.TypeNewFragment;
 import licola.demo.com.huabandemo.Module.User.UserActivity;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Module.Setting.SettingsActivity;
 import licola.demo.com.huabandemo.Util.CompatUtils;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
-import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import rx.functions.Action1;
 
 public class MainActivity extends BaseActivity
@@ -82,6 +82,7 @@ public class MainActivity extends BaseActivity
     private String mUserName = "";
     private String mUserId = "";
 
+//    private FirebaseAnalytics mFirebaseAnalytics;
 
     //刷新的接口 子Fragment实现
     private OnFragmentRefreshListener mListenerRefresh;
@@ -111,7 +112,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+//        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
         fragmentManager = getSupportFragmentManager();

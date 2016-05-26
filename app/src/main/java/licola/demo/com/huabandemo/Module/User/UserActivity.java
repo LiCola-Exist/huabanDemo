@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
@@ -50,6 +52,7 @@ import licola.demo.com.huabandemo.Util.FastBlurUtil;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
+import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Widget.MyDialog.BoardEditDialogFragment;
 import rx.Subscriber;
 import rx.Subscription;
@@ -143,9 +146,9 @@ public class UserActivity
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
 //                Logger.d("verticalOffset=" + verticalOffset + " getTotalScrollRange=" + appBarLayout.getTotalScrollRange());
                 final float size = -verticalOffset;
-                final float total=appBarLayout.getTotalScrollRange();
+                final float total = appBarLayout.getTotalScrollRange();
                 double per = 1.0f - (size / total);
-                Logger.d("per"+per);
+                Logger.d("per" + per);
                 mLayoutUser.setAlpha((float) per);
 
             }
@@ -248,20 +251,29 @@ public class UserActivity
                         protected void onNewResultImpl(Bitmap bitmap) {
                             //得到缓存中的Bitmap对象 这里可以进行操作
                             //构造Drawable对象 模糊化设置给View控件
-                            if(bitmap==null){
+                            Logger.d("onNewResultImpl = " + Thread.currentThread().toString());
+                            if (bitmap == null) {
                                 Logger.d("bitmap is null");
-
-                            }else {
+                            } else {
                                 Logger.d("bitmap is not null");
                                 Drawable backDrawable = new BitmapDrawable(getResources(), FastBlurUtil.doBlur(bitmap, 25, false));
-                                mAppBar.setBackground(backDrawable);
+                                if (Looper.getMainLooper() != Looper.myLooper()) {
+                                    mAppBar.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            mAppBar.setBackground(backDrawable);
+                                        }
+                                    });
+                                } else {
+                                    mAppBar.setBackground(backDrawable);
+                                }
                             }
 
                         }
 
                         @Override
                         protected void onFailureImpl(DataSource<CloseableReference<CloseableImage>> dataSource) {
-
+                            Logger.d("onFailureImpl");
                         }
                     })
                     .build();

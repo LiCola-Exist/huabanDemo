@@ -3,10 +3,14 @@ package licola.demo.com.huabandemo.Module.Type;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import java.lang.ref.WeakReference;
 
 import butterknife.Bind;
 import licola.demo.com.huabandemo.API.OnFragmentRefreshListener;
@@ -44,6 +48,7 @@ public class TypeActivity extends BaseActivity
 
     //刷新的接口 子Fragment实现
     private OnFragmentRefreshListener mListenerRefresh;
+
 
     @Override
     protected int getLayoutId() {
@@ -90,19 +95,15 @@ public class TypeActivity extends BaseActivity
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.container_with_refresh, fragment).commit();
 
-
-        long start=System.currentTimeMillis();
-        for (int i = 0; i < 1000; i++) {
-
-            SPUtils.get(this, Constant.TOKENACCESS,"");
-        }
-        long end=System.currentTimeMillis();
-        Logger.d("used time="+(end-start));
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     @Override
-    protected  void initListener() {
+    protected void initListener() {
         mSwipeRefresh.setColorSchemeResources(ints);
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
