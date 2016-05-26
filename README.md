@@ -7,8 +7,9 @@
 
 #UI
 
-既然说是Material-Design版，肯定界面效果要足够MD，眼见为实。
+
 ![Main](https://github.com/LiCola/huabanDemo/blob/master/ScreenCapture/Main.jpg) ![Drawer](https://github.com/LiCola/huabanDemo/blob/master/ScreenCapture/Drawer.jpg)
+
 ![Image](https://github.com/LiCola/huabanDemo/blob/master/ScreenCapture/Image.jpg) ![User](https://github.com/LiCola/huabanDemo/blob/master/ScreenCapture/User.jpg)
 
 
