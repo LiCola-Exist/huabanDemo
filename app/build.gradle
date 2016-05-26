@@ -82,4 +82,5 @@ dependencies {
     compile 'com.squareup.okio:okio:1.7.0'
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.google.android:flexbox:0.1.2'
+    compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.5.0'
 }
