@@ -15,6 +15,8 @@
 
 #架构
  这个项目在写在很久之前，当时MVP架构网络上各种分析描述，但是感觉都是各说各的。不确定项目是否采用MVP架构就先动手写代码，随时准备重构项目。就在不久前Google发布[Android Architecture Blueprints \[beta\]](https://github.com/googlesamples/android-architecture)，终于感觉这事有点靠谱了，我现在已经在动手重构项目了。
+ 分析博文在这里：[MVP架构-官方MVP项目和MVP-RxJava项目架构对比分析解读](http://blog.csdn.net/card361401376/article/details/51518605)
+
 
 ##目前的架构：
 
