@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Widget.MyRecyclerview.RecyclerViewUtils;
 
 /**
@@ -64,4 +65,10 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter   {
         mAdapterPosition = RecyclerViewUtils.getAdapterPosition(mRecyclerView, holder);
 
     }
+
+//    @Override
+//    protected void finalize() throws Throwable {
+//        super.finalize();
+//        Logger.d("finalize"+life);
+//    }
 }

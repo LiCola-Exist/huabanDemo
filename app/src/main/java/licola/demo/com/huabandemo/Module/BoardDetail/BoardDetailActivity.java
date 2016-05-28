@@ -92,7 +92,8 @@ public class BoardDetailActivity extends BaseActivity
         String operate = isAttention ? Constant.OPERATEUNATTENTION : Constant.OPERATEATTENTION;
 
         Animator animation = AnimatorInflater.loadAnimator(mContext, R.animator.scale_small_animation);
-        MyRxObservable.add(animation, mFabBoardAttention)
+        animation.setTarget(mFabBoardAttention);
+        MyRxObservable.add(animation)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .flatMap(aVoid -> RetrofitClient.createService(OperateAPI.class)

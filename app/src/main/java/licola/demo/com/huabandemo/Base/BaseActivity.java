@@ -16,6 +16,8 @@ import licola.demo.com.huabandemo.Util.SPUtils;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
+import static licola.demo.com.huabandemo.Util.LeakUtils.fixInputMethodManagerLeak;
+
 /**
  * Created by LiYi on 2015/11/4 0004 14:59.
  */
@@ -144,7 +146,17 @@ public abstract class BaseActivity extends AppCompatActivity {
 
             this.mCompositeSubscription.unsubscribe();
         }
+        //不知道有没有用
+//        if (isFinishing()) {
+//            fixInputMethodManagerLeak(this);
+//        }
     }
+
+//    @Override
+//    protected void finalize() throws Throwable {
+//        super.finalize();
+//        Logger.d("finalize"+TAG);
+//    }
 
     @Override
     protected void onRestart() {

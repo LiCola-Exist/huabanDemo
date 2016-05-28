@@ -257,7 +257,7 @@ public class UserActivity
                             } else {
                                 Logger.d("bitmap is not null");
                                 Drawable backDrawable = new BitmapDrawable(getResources(), FastBlurUtil.doBlur(bitmap, 25, false));
-                                if (Looper.getMainLooper() != Looper.myLooper()) {
+                                if (Utils.checkUiThreadBoolean()) {
                                     mAppBar.post(new Runnable() {
                                         @Override
                                         public void run() {
@@ -268,7 +268,6 @@ public class UserActivity
                                     mAppBar.setBackground(backDrawable);
                                 }
                             }
-
                         }
 
                         @Override

@@ -37,8 +37,6 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsMainEnt
 
     private OnAdapterListener mListener;
 
-
-
     public interface OnAdapterListener {
         void onClickImage(PinsMainEntity bean, View view);
 

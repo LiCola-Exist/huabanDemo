@@ -30,7 +30,7 @@
                 android:inputType="textAutoComplete"
                 android:maxLines="1"
                 android:popupBackground="@color/white"
-                android:singleLine="true" />
+                />
         </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>

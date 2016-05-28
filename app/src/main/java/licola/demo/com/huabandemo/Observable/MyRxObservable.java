@@ -10,10 +10,10 @@ import rx.Observable;
  * Created by LiCola on  2016/04/10  15:49
  */
 public class MyRxObservable {
-    public static Observable<Void> add(Animator animator,Object target){
+    //动画数据流 添加后会自动开始
+    public static Observable<Void> add(Animator animator){
         Utils.checkNotNull(animator,"Animation is null");
-        Utils.checkNotNull(target,"target is null");
-        animator.setTarget(target);
+
         return Observable.create(new AnimatorOnSubscribe(animator));
     }
 }

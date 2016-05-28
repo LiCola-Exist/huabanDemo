@@ -1,9 +1,8 @@
 package licola.demo.com.huabandemo.Module.ImageDetail;
 
 import android.animation.Animator;
-import android.animation.AnimatorInflater;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
@@ -18,12 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.facebook.drawee.controller.BaseControllerListener;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.image.ImageInfo;
-import com.squareup.leakcanary.CanaryLog;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -35,8 +31,8 @@ import butterknife.BindDrawable;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.API.Dialog.OnGatherDialogInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnImageDetailFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.HttpAPI.LoginAPI;
 import licola.demo.com.huabandemo.API.HttpAPI.OperateAPI;
+import licola.demo.com.huabandemo.Util.AnimatorUtils;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
@@ -55,7 +51,6 @@ import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Widget.MyDialog.GatherDialogFragment;
-import licola.demo.com.huabandemo.Widget.MyDialog.ImageScaleDialogFragment;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -151,12 +146,9 @@ public class ImageDetailActivity extends BaseActivity
 
         mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置打开时的文字颜色
 
-        if (savedInstanceState != null) {
-            if ((savedInstanceState.getParcelable(KEYPARCELABLE) != null) && (mPinsBean == null)) {
-                Logger.d();
-                mPinsBean = savedInstanceState.getParcelable(KEYPARCELABLE);
-            }
-        }
+        recoverData(savedInstanceState);//恢复数据
+
+
         mImageUrl = mPinsBean.getFile().getKey();
         mImageType = mPinsBean.getFile().getType();
         mPinsId = String.valueOf(mPinsBean.getPin_id());
@@ -171,6 +163,16 @@ public class ImageDetailActivity extends BaseActivity
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.framelayout_info_recycler, ImageDetailFragment.newInstance(mPinsId)).commit();
 
+    }
+
+    private void recoverData(Bundle savedInstanceState) {
+        //被销毁之后 恢复数据
+        if (savedInstanceState != null) {
+            if ((savedInstanceState.getParcelable(KEYPARCELABLE) != null) && (mPinsBean == null)) {
+                Logger.d();
+                mPinsBean = savedInstanceState.getParcelable(KEYPARCELABLE);
+            }
+        }
     }
 
 
@@ -197,8 +199,8 @@ public class ImageDetailActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 Logger.d();
-                ImageScaleDialogFragment fragment = ImageScaleDialogFragment.create();
-                fragment.show(getSupportFragmentManager(), null);
+//                ImageScaleDialogFragment fragment = ImageScaleDialogFragment.create();
+//                fragment.show(getSupportFragmentManager(), null);
 
             }
         });
@@ -219,13 +221,21 @@ public class ImageDetailActivity extends BaseActivity
         GatherDialogFragment fragment = GatherDialogFragment.create(mAuthorization, mPinsId, mPinsBean.getRaw_text(), array);
         fragment.show(getSupportFragmentManager(), null);
 
-
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        final ObjectAnimator objectAnimator;
+        if (Utils.checkIsGif(mImageType)) {
+            objectAnimator = AnimatorUtils.getRotationFS(mFabActionBtn);
+            objectAnimator.start();
+        } else {
+            objectAnimator = null;
+        }
+
 
         String url = String.format(mFormatImageUrlBig, mImageUrl);
         String url_low = String.format(mFormatImageGeneral, mImageUrl);
@@ -238,12 +248,33 @@ public class ImageDetailActivity extends BaseActivity
                 .setControllerListener(new BaseControllerListener<ImageInfo>() {
                     @Override
                     public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {
+                        //图片加载成功回调
                         super.onFinalImageSet(id, imageInfo, animatable);
-                        Logger.d();
+                        Logger.d("onFinalImageSet " + Thread.currentThread().toString());
 
                         if (animatable != null) {
                             animatable.start();
                         }
+                        if (objectAnimator != null && objectAnimator.isRunning()) {
+                            objectAnimator.cancel();
+                        }
+
+                    }
+
+                    @Override
+                    public void onSubmit(String id, Object callerContext) {
+                        super.onSubmit(id, callerContext);
+                        //提交申请回调 相当于开始
+                        Logger.d("onSubmit " + Thread.currentThread().toString());
+
+                    }
+
+                    @Override
+                    public void onFailure(String id, Throwable throwable) {
+                        //失败的回调
+                        super.onFailure(id, throwable);
+                        Logger.d(throwable.toString());
+
                     }
                 })
                 .build();
@@ -408,10 +439,19 @@ public class ImageDetailActivity extends BaseActivity
 
     @Override
     public void onClickUserField(String key, String title) {
-        // TODO: 2016/4/2 0002 图片详情的用户跳转
         UserActivity.launch(this, key, title);
     }
 
+    /**
+     *
+     * 警告：用户可能没有任何应用处理您发送到 startActivity() 的隐式 Intent。
+     * 如果出现这种情况，则调用将会失败，且应用会崩溃。
+     * 要验证 Activity 是否会接收 Intent，请对 Intent 对象调用 resolveActivity()。
+     * 如果结果为非空，则至少有一个应用能够处理该 Intent，且可以安全调用 startActivity()。
+     * 如果结果为空，则不应使用该 Intent。如有可能，您应禁用发出该 Intent 的功能。
+     *
+     * @param link
+     */
     @Override
     public void onClickImageLink(String link) {
         //点击图片链接的回调
@@ -434,9 +474,8 @@ public class ImageDetailActivity extends BaseActivity
 
     private void actionGather(String describe, int selectPosition) {
 
-        Animator animation = AnimatorInflater.loadAnimator(mContext,
-                isGathered ? R.animator.scale_small_animation : R.animator.rotation_scale_small_animation);
-        MyRxObservable.add(animation, mFabActionBtn)
+        Animator animation = AnimatorUtils.getRotationAD(mFabActionBtn);
+        MyRxObservable.add(animation)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Func1<Void, Observable<GatherResultBean>>() {
@@ -451,14 +490,14 @@ public class ImageDetailActivity extends BaseActivity
                     @Override
                     public void onCompleted() {
                         Logger.d();
-                        setFabDrawableAndStart(R.drawable.ic_done_white_24dp, mContext, mFabActionBtn);
+                        setFabDrawableAnimator(R.drawable.ic_done_white_24dp, mFabActionBtn);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Logger.d(e.toString());
                         NetUtils.checkHttpException(mContext, e, mAppBar);
-                        setFabDrawableAndStart(R.drawable.ic_report_white_24dp, mContext, mFabActionBtn);
+                        setFabDrawableAnimator(R.drawable.ic_report_white_24dp, mFabActionBtn);
                     }
 
                     @Override
@@ -470,10 +509,22 @@ public class ImageDetailActivity extends BaseActivity
                 });
     }
 
-    private void setFabDrawableAndStart(int resId, Context mContext, FloatingActionButton mFabActionBtn) {
-        mFabActionBtn.setImageResource(resId);
-        Animator animation = AnimatorInflater.loadAnimator(mContext, R.animator.scale_magnify_animation);
-        animation.setTarget(mFabActionBtn);
-        animation.start();
+    /**
+     * 配置fab的drawable 和动画显示
+     *
+     * @param resId
+     * @param mFabActionBtn
+     */
+    private void setFabDrawableAnimator(int resId, FloatingActionButton mFabActionBtn) {
+
+        mFabActionBtn.hide(new FloatingActionButton.OnVisibilityChangedListener() {
+            @Override
+            public void onHidden(FloatingActionButton fab) {
+                super.onHidden(fab);
+                Logger.d("onHidden");
+                fab.setImageResource(resId);
+                fab.show();
+            }
+        });
     }
 }

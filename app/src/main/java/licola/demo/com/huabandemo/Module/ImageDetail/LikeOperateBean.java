@@ -5,7 +5,6 @@ package licola.demo.com.huabandemo.Module.ImageDetail;
  */
 public class LikeOperateBean {
 
-
     /**
      * pin_id : 690448610
      * user_id : 15246080

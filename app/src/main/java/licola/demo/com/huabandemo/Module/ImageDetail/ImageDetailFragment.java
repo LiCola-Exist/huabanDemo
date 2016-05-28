@@ -128,6 +128,7 @@ public class ImageDetailFragment extends
     }
 
 
+    //点击事件 Fragment 不做任何的跳转处理 分发给Activity处理
     @Override
     protected void initListener() {
         super.initListener();
@@ -157,41 +158,21 @@ public class ImageDetailFragment extends
             }
         });
 
-        /**
-         * 警告：用户可能没有任何应用处理您发送到 startActivity() 的隐式 Intent。
-         * 如果出现这种情况，则调用将会失败，且应用会崩溃。
-         * 要验证 Activity 是否会接收 Intent，请对 Intent 对象调用 resolveActivity()。
-         * 如果结果为非空，则至少有一个应用能够处理该 Intent，且可以安全调用 startActivity()。
-         * 如果结果为空，则不应使用该 Intent。如有可能，您应禁用发出该 Intent 的功能。
-         */
         tv_image_link.setOnClickListener(v -> {
             String link = (String) v.getTag();
             Logger.d("link=" + link);
             mListener.onClickImageLink(link);
         });
 
-        tv_image_gather.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Logger.d();
-            }
-        });
+        tv_image_gather.setOnClickListener(v -> Logger.d());
 
-        tv_image_like.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Logger.d();
-            }
-        });
+        tv_image_like.setOnClickListener(v -> Logger.d());
 
         mRLImageUser.setOnClickListener(v -> {
-            Logger.d();
             mListener.onClickUserField(mUserId, mUserName);
         });
 
         mRLImageBoard.setOnClickListener(v -> {
-            Logger.d();
-//                BoardDetailActivity.launch(getActivity(), mBoardId, mBoardName);
             mListener.onClickBoardField(mBoardId, mBoardName);
         });
     }
@@ -356,6 +337,7 @@ public class ImageDetailFragment extends
 
     //图像的用户信息 填充
     private void setImageUserInfo(String url_head, String username, int created_time) {
+        //因为图片来源不定 需要做处理
         if (url_head != null) {
             if (!url_head.contains(mHttpRoot)) {
                 url_head = String.format(mFormatUrlSmall, url_head);
@@ -379,7 +361,6 @@ public class ImageDetailFragment extends
         } else {
             tv_image_board.setText("暂无画板信息");
         }
-
 
         new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_1, url1)
                 .setIsRadius(true, 5)
@@ -419,14 +400,6 @@ public class ImageDetailFragment extends
 
         //用户信息
         String url = bean.getUser().getAvatar();
-//        if (url!=null){
-//            //如果是花瓣本地服务器的图片 不包含只有图片的key 加载时需要添加http头
-//            //否则 可以直接使用
-//            if (!url.contains(mHttpRoot)) {
-//                url = String.format(mFormatUrlSmall, url);
-//            }
-//        }
-
 
         setImageUserInfo(url,
                 bean.getUser().getUsername(),
@@ -463,11 +436,6 @@ public class ImageDetailFragment extends
 
         //用户信息
         String url = bean.getUser().getAvatar();
-//        //如果是花瓣本地服务器的图片 不包含只有图片的key 加载时需要添加http头
-//        //否则 可以直接使用
-//        if (!url.contains(mHttpRoot)) {
-//            url = String.format(mFormatUrlSmall, url);
-//        }
         setImageUserInfo(url,
                 bean.getUser().getUsername(),
                 bean.getCreated_at()

@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 /**
  * Created by jay on 11/7/15.
+ * 高斯模糊 处理类
  */
 public class FastBlurUtil {
 

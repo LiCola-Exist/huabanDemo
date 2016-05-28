@@ -76,7 +76,8 @@ public class WelcomeActivity extends BaseActivity {
         //observeOn() 指定的是它之后的操作所在的线程
         //subscribeOn() 作用于Observable对象
         //onCompleted() 和 onError() 二者是互斥的 调用一个就不会再调用另一个
-        MyRxObservable.add(animation, mImageView)
+        animation.setTarget(mImageView);
+        MyRxObservable.add(animation)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())//指定订阅的Observable对象的call方法运行在ui线程中
                 .filter(new Func1<Void, Boolean>() {

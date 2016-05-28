@@ -3,21 +3,12 @@ package licola.demo.com.huabandemo.Base;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.gson.JsonSyntaxException;
-
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-
-import butterknife.BindString;
 import butterknife.ButterKnife;
-import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import rx.Subscription;
@@ -146,6 +137,12 @@ public abstract class BaseFragment extends Fragment {
 
         HuaBanApplication.getRefwatcher(getActivity()).watch(this);
     }
+
+//    @Override
+//    protected void finalize() throws Throwable {
+//        super.finalize();
+//        Logger.d("finalize"+TAG);
+//    }
 
     @Override
     public void onDetach() {

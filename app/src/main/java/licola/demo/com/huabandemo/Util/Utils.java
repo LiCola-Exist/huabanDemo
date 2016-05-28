@@ -24,7 +24,7 @@ import okio.Buffer;
  */
 public final class Utils {
     /**
-     * 检查对昂非空
+     * 检查对象非空
      *
      * @param object
      * @param message
@@ -39,13 +39,17 @@ public final class Utils {
     }
 
     /**
-     * 检查是否在主线程
+     * 检查是否在主线程 关键检查 弹出异常
      */
     public static void checkUiThread() {
         if (Looper.getMainLooper() != Looper.myLooper()) {
             throw new IllegalStateException(
                     "Must be called from the main thread. Was: " + Thread.currentThread());
         }
+    }
+
+    public static boolean checkUiThreadBoolean(){
+        return Looper.getMainLooper() == Looper.myLooper();
     }
 
     /**

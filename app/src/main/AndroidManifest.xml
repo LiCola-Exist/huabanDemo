@@ -85,12 +85,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Module.Search.SearchAndTypeActivity" />
         </activity>
-        //todo 注册广播暂时不不处理 网络状态变换
-        <receiver android:name=".HttpUtils.ConnectionChangeReceiver">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
 
         <activity
             android:name=".Module.Attention.MyAttentionActivityNew"
@@ -121,6 +115,12 @@
 
 
         <service android:name=".Service.DownloadService"/>
+        //todo 注册广播暂时不不处理 网络状态变换
+        <receiver android:name=".HttpUtils.ConnectionChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
