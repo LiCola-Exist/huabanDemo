@@ -27,6 +27,6 @@
     <include layout="@layout/view_swipe_frame"/>
 
 
-    <include layout="@layout/view_floatingactionbutton_search"/>
+    <include layout="@layout/view_fab"/>
 
 </android.support.design.widget.CoordinatorLayout>

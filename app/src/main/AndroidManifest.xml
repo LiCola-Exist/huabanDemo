@@ -87,7 +87,7 @@
         </activity>
 
         <activity
-            android:name=".Module.Attention.MyAttentionActivityNew"
+            android:name=".Module.Follow.FollowActivity"
             android:label="@string/title_activity_my_following"
             android:parentActivityName=".Module.Main.MainActivity"
             android:theme="@style/AppTheme.ActionBar_StatusBarPrimaryDark">

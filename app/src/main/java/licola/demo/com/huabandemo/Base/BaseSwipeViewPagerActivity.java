@@ -48,7 +48,7 @@ public abstract class BaseSwipeViewPagerActivity<T extends BaseFragment>
         //默认取第一个为强转为接口
         mListenerRefresh = (OnFragmentRefreshListener) mFragmentList.get(0);
         initViewPagerTab();
-        initListener();
+
     }
 
 
@@ -74,7 +74,8 @@ public abstract class BaseSwipeViewPagerActivity<T extends BaseFragment>
         mListenerRefresh.getHttpRefresh();
     }
 
-    protected void initListener() {
+    protected void initResAndListener() {
+
         mSwipeRefresh.setColorSchemeResources(ints);
         mSwipeRefresh.setOnRefreshListener(() -> mListenerRefresh.getHttpRefresh());
 
@@ -107,11 +108,12 @@ public abstract class BaseSwipeViewPagerActivity<T extends BaseFragment>
             public void onPageSelected(int position) {
                 Logger.d("position=" + position);
                 mListenerRefresh = (OnFragmentRefreshListener) mFragmentList.get(position);
+                ViewPagerPageSelected(position);
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                Logger.d("state=" + state);
+//                Logger.d("state=" + state);
             }
         });
     }
@@ -121,6 +123,7 @@ public abstract class BaseSwipeViewPagerActivity<T extends BaseFragment>
         mSwipeRefresh.setRefreshing(isRefreshing);
     }
 
+    protected abstract void ViewPagerPageSelected(int position);
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

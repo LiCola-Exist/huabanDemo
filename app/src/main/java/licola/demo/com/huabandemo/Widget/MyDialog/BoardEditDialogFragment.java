@@ -56,16 +56,15 @@ public class BoardEditDialogFragment extends BaseDialogFragment {
         return this.toString();
     }
 
+    //依赖注入 因为对话框可能由其他Fragment调用 就不在使用onAttach获取实现
+    public void setListener(OnEditDialogInteractionListener mListener) {
+        this.mListener = mListener;
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        if (context instanceof OnEditDialogInteractionListener) {
-            mListener = (OnEditDialogInteractionListener) context;
-        } else {
-            throwRuntimeException(context);
-        }
-
     }
 
     public static BoardEditDialogFragment create(String boardId, String name, String describe, String boardTitle) {
@@ -103,8 +102,9 @@ public class BoardEditDialogFragment extends BaseDialogFragment {
         initView(dialogView);//初始化View
         setData();//设置值
         builder.setView(dialogView);
-
+        //消极操作 不需要返回
         builder.setNegativeButton(R.string.dialog_negative, null);
+        //中立操作 这里修改成删除操作传递回调用者 回调id name
         builder.setNeutralButton("删除", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -112,6 +112,7 @@ public class BoardEditDialogFragment extends BaseDialogFragment {
                 mListener.onDialogNeutralClick(mStringBoardId,mStringBoardName);
             }
         });
+        //积极操作 回调用户输入
         builder.setPositiveButton(R.string.dialog_edit_positive, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -144,6 +145,7 @@ public class BoardEditDialogFragment extends BaseDialogFragment {
         if ((!TextUtils.isEmpty(input)) && (!input.equals(mStringBoardName))) {
             return true;
         }
+
         input = mEditTextBoardDescribe.getText().toString().trim();
         if ((!TextUtils.isEmpty(input)) && (!input.equals(mStringDescribe))) {
             return true;

@@ -1,9 +1,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Module.BoardDetail.BoardDetailActivity">
+    tools:context=".Module.User.UserActivity">
     <item
-        android:id="@+id/action_attention"
-        android:title="@string/action_bar_follow"
+        android:id="@+id/action_user_setting"
+        android:icon="@drawable/ic_settings_white_24dp"
+        android:title="@string/action_bar_user_setting"
         app:showAsAction="never" />
 </menu>

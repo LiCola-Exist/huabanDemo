@@ -124,7 +124,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    protected  void initListener() {
+    protected  void initResAndListener() {
         //软键盘 确定按钮 监听
 
 //        mEditPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {

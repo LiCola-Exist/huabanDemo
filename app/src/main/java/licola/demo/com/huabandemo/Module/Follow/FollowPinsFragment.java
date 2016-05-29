@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.Module.Attention;
+package licola.demo.com.huabandemo.Module.Follow;
 
 
 import android.content.Context;
@@ -29,7 +29,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/04/04  14:46
  */
-public class MyAttentionPinsFragment
+public class FollowPinsFragment
         extends BaseRecyclerHeadFragment<RecyclerPinsHeadCardAdapter,
         List<PinsMainEntity>> {
     //联网关键参数
@@ -46,9 +46,9 @@ public class MyAttentionPinsFragment
         return this.toString();
     }
 
-    public static MyAttentionPinsFragment newInstance() {
+    public static FollowPinsFragment newInstance() {
 
-        return new MyAttentionPinsFragment();
+        return new FollowPinsFragment();
     }
 
 
@@ -63,8 +63,8 @@ public class MyAttentionPinsFragment
             throwRuntimeException(context);
         }
 
-        if (context instanceof MyAttentionActivityNew) {
-            mAuthorization = ((MyAttentionActivityNew) context).mAuthorization;
+        if (context instanceof FollowActivity) {
+            mAuthorization = ((FollowActivity) context).mAuthorization;
         }
     }
 
@@ -74,7 +74,7 @@ public class MyAttentionPinsFragment
                 .httpsMyFollowingPinsRx(mAuthorization, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(AttentionPinsBean::getPins)
+                .map(FollowPinsBean::getPins)
                 .filter(getFilterFunc1())
                 .subscribe(new Action1<List<PinsMainEntity>>() {
                     @Override
@@ -133,9 +133,9 @@ public class MyAttentionPinsFragment
                 .httpsMyFollowingPinsMaxRx(mAuthorization, mMaxId, mLimit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .map(new Func1<AttentionPinsBean, List<PinsMainEntity>>() {
+                .map(new Func1<FollowPinsBean, List<PinsMainEntity>>() {
                     @Override
-                    public List<PinsMainEntity> call(AttentionPinsBean followingPinsBean) {
+                    public List<PinsMainEntity> call(FollowPinsBean followingPinsBean) {
                         return followingPinsBean.getPins();
                     }
                 })

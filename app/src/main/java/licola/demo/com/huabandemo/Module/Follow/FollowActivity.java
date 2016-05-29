@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.Module.Attention;
+package licola.demo.com.huabandemo.Module.Follow;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,7 +28,7 @@ import licola.demo.com.huabandemo.Util.Logger;
 /**
  * Created by LiCola on  2016/04/23  18:09
  */
-public class MyAttentionActivityNew extends BaseSwipeViewPagerActivity<BaseRecyclerHeadFragment>
+public class FollowActivity extends BaseSwipeViewPagerActivity<BaseRecyclerHeadFragment>
         implements OnPinsFragmentInteractionListener,
         OnBoardFragmentInteractionListener<BoardPinsBean> {
 
@@ -47,12 +47,12 @@ public class MyAttentionActivityNew extends BaseSwipeViewPagerActivity<BaseRecyc
     }
 
     public static void launch(Activity activity) {
-        Intent intent = new Intent(activity, MyAttentionActivityNew.class);
+        Intent intent = new Intent(activity, FollowActivity.class);
         activity.startActivity(intent);
     }
 
     public static void launch(Activity activity, int flag) {
-        Intent intent = new Intent(activity, MyAttentionActivityNew.class);
+        Intent intent = new Intent(activity, FollowActivity.class);
         intent.setFlags(flag);
         activity.startActivity(intent);
     }
@@ -64,7 +64,10 @@ public class MyAttentionActivityNew extends BaseSwipeViewPagerActivity<BaseRecyc
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
-
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_follow;
+    }
 
     @Override
     protected String[] getTitleList() {
@@ -74,8 +77,8 @@ public class MyAttentionActivityNew extends BaseSwipeViewPagerActivity<BaseRecyc
     @Override
     protected ArrayList<BaseRecyclerHeadFragment> initFragmentList() {
         ArrayList<BaseRecyclerHeadFragment> mFragmentList=new ArrayList<>(2);
-        mFragmentList.add(MyAttentionPinsFragment.newInstance());
-        mFragmentList.add(MyAttentionBoardFragment.newInstance());
+        mFragmentList.add(FollowPinsFragment.newInstance());
+        mFragmentList.add(FollowBoardFragment.newInstance());
         return mFragmentList;
     }
 
@@ -85,10 +88,7 @@ public class MyAttentionActivityNew extends BaseSwipeViewPagerActivity<BaseRecyc
         mTabLayout.setSelectedTabIndicatorColor(mColorTabIndicator);
     }
 
-    @Override
-    protected int getLayoutId() {
-        return R.layout.activity_my_attention;
-    }
+
 
     @Override
     protected String getTAG() {
@@ -141,9 +141,9 @@ public class MyAttentionActivityNew extends BaseSwipeViewPagerActivity<BaseRecyc
         BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }
 
+
     @Override
-    public void onClickBoardItemOperate(BoardPinsBean bean, View view) {
-        String boardId = String.valueOf(bean.getBoard_id());
-        BoardDetailActivity.launch(this, boardId, bean.getTitle());
+    protected void ViewPagerPageSelected(int position) {
+        Logger.d("position="+position);
     }
 }

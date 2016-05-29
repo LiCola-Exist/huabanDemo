@@ -3,7 +3,7 @@ package licola.demo.com.huabandemo.Module.BoardDetail;
 /**
  * Created by LiCola on  2016/05/07  13:48
  */
-public class AttentionOperateBean {
+public class FollowBoardOperateBean {
 
     /**
      * board_id : 967118

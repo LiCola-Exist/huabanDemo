@@ -22,7 +22,8 @@
             android:fitsSystemWindows="true"
             app:contentScrim="@color/transparent"
             app:statusBarScrim="@color/transparent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <include layout="@layout/view_user_info_head" />
 
@@ -30,6 +31,7 @@
                 android:id="@+id/toolbar_user"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
@@ -41,11 +43,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/transparent" />
+            android:background="@color/transparent"
+            />
 
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/view_swipe_viewpager" />
-
+    <include layout="@layout/view_fab" android:visibility="invisible"/>
 
 </android.support.design.widget.CoordinatorLayout>

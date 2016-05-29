@@ -26,4 +26,6 @@
         <item>@string/title_fragment_gather</item>
         <item>@string/title_fragment_like</item>
     </string-array>
+
+
 </resources>

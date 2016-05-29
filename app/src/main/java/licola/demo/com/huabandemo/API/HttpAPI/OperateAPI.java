@@ -1,10 +1,10 @@
 package licola.demo.com.huabandemo.API.HttpAPI;
 
-import licola.demo.com.huabandemo.Entity.BoardListInfoBean;
-import licola.demo.com.huabandemo.Module.BoardDetail.AttentionOperateBean;
+import licola.demo.com.huabandemo.Module.BoardDetail.FollowBoardOperateBean;
 import licola.demo.com.huabandemo.Module.ImageDetail.GatherInfoBean;
 import licola.demo.com.huabandemo.Module.ImageDetail.GatherResultBean;
-import licola.demo.com.huabandemo.Module.ImageDetail.LikeOperateBean;
+import licola.demo.com.huabandemo.Module.ImageDetail.LikePinsOperateBean;
+import licola.demo.com.huabandemo.Module.User.FollowUserOperateBean;
 import licola.demo.com.huabandemo.Module.User.UserBoardSingleBean;
 import licola.demo.com.huabandemo.Util.Constant;
 import retrofit2.http.Field;
@@ -25,13 +25,21 @@ public interface OperateAPI {
     //https://api.huaban.com/pins/687738004/unlike POST方法 这两个统一成一个接口
     //对图片的进行like操作
     @POST("pins/{pinId}/{operate}")
-    Observable<LikeOperateBean> httpsLikeOperate(@Header(Constant.Authorization) String authorization, @Path("pinId") String pinsId, @Path("operate") String operate);
+    Observable<LikePinsOperateBean> httpsLikeOperate(@Header(
+            Constant.Authorization) String authorization, @Path("pinId") String pinsId, @Path("operate") String operate);
+
 
     //https://api.huaban.com/boards/967118/follow
     //https://api.huaban.com/boards/967118/unfollow POST方法 统一成一个接口
     //对画板进行关注操作
     @POST("boards/{boardId}/{operate}")
-    Observable<AttentionOperateBean> httpsAttentionOperate(@Header(Constant.Authorization) String authorization, @Path("boardId") String boardId, @Path("operate") String operate);
+    Observable<FollowBoardOperateBean> httpsFollowBoardOperate(
+            @Header(Constant.Authorization) String authorization, @Path("boardId") String boardId, @Path("operate") String operate);
+
+    //关注某个用户
+    //https://api.huaban.com/users/17037199/follow  或者unfollow POST方法 统一成一个接口
+    @POST("users/{userId}/{operate}")
+    Observable<FollowUserOperateBean> httpsFollowUserOperate(@Header(Constant.Authorization) String authorization, @Path("userId") String userId, @Path("operate") String operate);
 
 
     //对某个图片进行采集前网络访问 判断是否被采集过
@@ -57,6 +65,7 @@ public interface OperateAPI {
     @FormUrlEncoded
     @POST("boards/{boardId}")
     Observable<UserBoardSingleBean> httpsDeleteBoard(@Header(Constant.Authorization) String authorization, @Path("boardId") String boardId, @Field("_method") String operate);
+
 
 
 }

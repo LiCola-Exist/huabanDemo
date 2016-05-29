@@ -108,7 +108,7 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
 
             @Override
             public void onClickTextInfo(BoardPinsBean bean, View view) {
-                mListener.onClickBoardItemOperate(bean,view);
+                mListener.onClickBoardItemImage(bean,view);
             }
         });
     }

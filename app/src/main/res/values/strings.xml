@@ -46,27 +46,6 @@
     <string name="nav_friends">friend</string>
     <string name="nav_used_scan">scan</string>
 
-    <string name="menu_all">ALL</string>
-    <string name="menu_popular">POPULAR</string>
-    <string name="menu_home">HOME</string>
-    <string name="menu_diy_crafts">CRAFTS</string>
-    <string name="menu_photography">PHOTOGRAPHY</string>
-    <string name="menu_food_drink">FOOD</string>
-    <string name="menu_travel_places">TRAVEL</string>
-    <string name="menu_illustration">ILLUSTRATION</string>
-    <string name="menu_design">DESIGN</string>
-    <string name="menu_apparel">APPAREL</string>
-    <string name="menu_modeling_hair">MODELING</string>
-    <string name="menu_wedding_events">WEDDING</string>
-    <string name="menu_desire">DESIRE</string>
-    <string name="menu_beauty">BEAUTY</string>
-    <string name="menu_pets">PETS</string>
-    <string name="menu_kids">KIDS</string>
-    <string name="menu_architecture">ARCHITECTURE</string>
-    <string name="menu_film_music_books">BOOKS</string>
-    <string name="menu_tips">TIPS</string>
-    <string name="menu_art">ART</string>
-    <string name="menu_men">MEN</string>
 
     <string name="action_bar_search">Search</string>
     <string name="action_bar_add">Add</string>
@@ -74,7 +53,8 @@
     <string name="action_bar_like">Like</string>
     <string name="action_bar_download">Download</string>
     <string name="action_bar_gather">Gather</string>
-    <string name="action_bar_attention">Attention</string>
+    <string name="action_bar_follow">Follow</string>
+    <string name="action_bar_user_setting">User Setting</string>
 
     <string name="hint_search">key</string>
     <string name="hint_not_history">noting</string>

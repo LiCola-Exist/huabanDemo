@@ -26,6 +26,8 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jakewharton.rxbinding.view.RxView;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
@@ -35,7 +37,7 @@ import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
-import licola.demo.com.huabandemo.Module.Attention.MyAttentionActivityNew;
+import licola.demo.com.huabandemo.Module.Follow.FollowActivity;
 import licola.demo.com.huabandemo.Module.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Module.Login.LoginActivity;
 import licola.demo.com.huabandemo.Module.Search.SearchAndTypeActivity;
@@ -49,6 +51,9 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import rx.functions.Action1;
 
+import static licola.demo.com.huabandemo.Util.SPUtils.FILE_NAME;
+import static licola.demo.com.huabandemo.Util.SPUtils.MODE;
+
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         OnClickListener,
@@ -61,8 +66,8 @@ public class MainActivity extends BaseActivity
     NavigationView mNavigation;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-    @Bind(R.id.fab_search)
-    FloatingActionButton mFabSearch;
+    @Bind(R.id.fab_operate)
+    FloatingActionButton mFabOperate;
     @Bind(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefresh;
 
@@ -118,7 +123,7 @@ public class MainActivity extends BaseActivity
         fragmentManager = getSupportFragmentManager();
         getData();
 
-        getSharedPreferences(SPUtils.FILE_NAME, SPUtils.MODE).registerOnSharedPreferenceChangeListener(this);
+        getSharedPreferences(FILE_NAME, MODE).registerOnSharedPreferenceChangeListener(this);
         intiDrawer(toolbar);//初始化DrawerLayout
         initHeadView();//为Drawer添加头部
         intiMenuView();//为Drawer添加menu菜单项目
@@ -153,9 +158,10 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    protected  void initListener() {
-        RxView.clicks(mFabSearch)
-//                .throttleFirst(500, TimeUnit.MILLISECONDS)//设置500毫秒的间隔 防止抖动 用户点击太快登录多次
+    protected  void initResAndListener() {
+        mFabOperate.setImageResource(R.drawable.ic_search_black_24dp);
+        RxView.clicks(mFabOperate)
+                .throttleFirst(Constant.throttDuration, TimeUnit.MILLISECONDS)//防止抖动处理
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
@@ -296,7 +302,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        getSharedPreferences(SPUtils.FILE_NAME, SPUtils.MODE).registerOnSharedPreferenceChangeListener(this);
+        getSharedPreferences(FILE_NAME, MODE).registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -369,7 +375,7 @@ public class MainActivity extends BaseActivity
                 break;
 
             case R.id.btn_nav_attention:
-                MyAttentionActivityNew.launch(MainActivity.this);
+                FollowActivity.launch(MainActivity.this);
                 break;
 
             default:

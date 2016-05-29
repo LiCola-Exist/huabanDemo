@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -13,11 +14,10 @@ import licola.demo.com.huabandemo.User.UserSingleton;
 import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
-
-import static licola.demo.com.huabandemo.Util.LeakUtils.fixInputMethodManagerLeak;
 
 /**
  * Created by LiYi on 2015/11/4 0004 14:59.
@@ -88,13 +88,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mContext = this;
         getNecessaryData();
-        initListener();
+        initResAndListener();
         Logger.d(TAG);
 
     }
 
-    //空方法 规定子类 初始化监听器的步骤
-    protected void initListener() {
+    //空方法 规定子类 初始化监听器 和定义显示资源 的步骤
+    protected void initResAndListener() {
 
     }
 
@@ -170,5 +170,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Logger.d(TAG);
+    }
+
+    protected void checkException(Throwable e,View mRootView) {
+        NetUtils.checkHttpException(mContext, e, mRootView);
     }
 }

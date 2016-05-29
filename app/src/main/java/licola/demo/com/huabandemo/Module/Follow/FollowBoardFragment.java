@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.Module.Attention;
+package licola.demo.com.huabandemo.Module.Follow;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -25,8 +25,8 @@ import rx.schedulers.Schedulers;
 /**
  * Created by LiCola on  2016/04/04  21:39
  */
-public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardAdapter, List<BoardPinsBean>> {
-    private static final String TAG = "MyAttentionBoardFragment";
+public class FollowBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardAdapter, List<BoardPinsBean>> {
+    private static final String TAG = "FollowBoardFragment";
 
     @BindString(R.string.snack_message_not_notify)
     String mStringNotNotify;
@@ -41,8 +41,8 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
         return this.toString();
     }
 
-    public static MyAttentionBoardFragment newInstance() {
-        return new MyAttentionBoardFragment();
+    public static FollowBoardFragment newInstance() {
+        return new FollowBoardFragment();
     }
 
 
@@ -103,7 +103,7 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
             @Override
             public void onClickTextInfo(BoardPinsBean bean, View view) {
                 Logger.d();
-                mListener.onClickBoardItemOperate(bean, view);
+                mListener.onClickBoardItemImage(bean, view);
             }
         });
     }
@@ -135,8 +135,8 @@ public class MyAttentionBoardFragment extends BaseRecyclerHeadFragment<RecyclerB
             throwRuntimeException(context);
         }
 
-        if (context instanceof MyAttentionActivityNew) {
-            mAuthorization = ((MyAttentionActivityNew) context).mAuthorization;
+        if (context instanceof FollowActivity) {
+            mAuthorization = ((FollowActivity) context).mAuthorization;
         }
     }
 

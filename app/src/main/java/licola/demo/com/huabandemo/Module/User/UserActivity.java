@@ -1,21 +1,21 @@
 package licola.demo.com.huabandemo.Module.User;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -25,13 +25,14 @@ import com.facebook.datasource.DataSource;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber;
 import com.facebook.imagepipeline.image.CloseableImage;
+import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindString;
-import licola.demo.com.huabandemo.API.Dialog.OnEditDialogInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.HttpAPI.OperateAPI;
@@ -47,13 +48,10 @@ import licola.demo.com.huabandemo.Module.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Module.Login.UserMeAndOtherBean;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
-import licola.demo.com.huabandemo.Util.DialogUtils;
 import licola.demo.com.huabandemo.Util.FastBlurUtil;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.Widget.MyDialog.BoardEditDialogFragment;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -68,7 +66,7 @@ import rx.schedulers.Schedulers;
 public class UserActivity
         extends BaseSwipeViewPagerActivity<BaseRecyclerHeadFragment>
         implements OnBoardFragmentInteractionListener<UserBoardItemBean>,
-        OnPinsFragmentInteractionListener, OnEditDialogInteractionListener {
+        OnPinsFragmentInteractionListener {
     private static final String TYPE_KEY = "TYPE_KEY";
     private static final String TYPE_TITLE = "TYPE_TITLE";
 
@@ -102,15 +100,17 @@ public class UserActivity
     @Bind(R.id.tablayout_user)
     TabLayout mTabLayout;
 
+    @Bind(R.id.fab_operate)
+    FloatingActionButton mFabOperate;
 
     public String mKey;
     public String mTitle;
     public boolean isMe;
-
+    public boolean isFollow;
 
     @Override
     protected int getLayoutId() {
-        return R.layout.activity_my_user;
+        return R.layout.activity_user;
     }
 
     public static void launch(Activity activity, String key, String title) {
@@ -137,9 +137,25 @@ public class UserActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置打开时的文字颜色
+        //// TODO: 2016/5/29 0029
         if (isMe) {
             addSubscription(getMyBoardListInfo());
         }
+
+
+    }
+
+    @Override
+    protected void initResAndListener() {
+        super.initResAndListener();
+        RxView.clicks(mFabOperate)
+                .throttleFirst(Constant.throttDuration, TimeUnit.MILLISECONDS)//防止抖动处理
+                .subscribe(new Action1<Void>() {
+                    @Override
+                    public void call(Void aVoid) {
+                        startOperate();
+                    }
+                });
 
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
@@ -153,6 +169,94 @@ public class UserActivity
 
             }
         });
+    }
+
+    private void startOperate() {
+        if (isMe) {
+            Logger.d("is me add broad");
+            showAddBoardDialog();
+        } else {
+            httpFollowUser();
+        }
+    }
+
+    private void showAddBoardDialog() {
+
+    }
+
+    private void httpFollowUser() {
+        String operate = isFollow ? Constant.OPERATEUNFOLLOW : Constant.OPERATEFOLLOW;
+
+        RetrofitClient.createService(OperateAPI.class)
+                .httpsFollowUserOperate(mAuthorization, mKey, operate)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<FollowUserOperateBean>() {
+                    @Override
+                    public void onCompleted() {
+                        int res = isFollow ? R.drawable.ic_done_black_24dp : R.drawable.ic_loyalty_black_24dp;
+                        setFabDrawableAnimator(res, mFabOperate);
+                        // TODO: 2016/5/29 0029 如果当前正在显示画板Fragment 需要刷新操作
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.toString());
+                        checkException(e, mAppBar);
+                        setFabDrawableAnimator(R.drawable.ic_report_black_24dp, mFabOperate);
+                    }
+
+                    @Override
+                    public void onNext(FollowUserOperateBean followUserOperateBean) {
+                        isFollow = !isFollow;
+                    }
+                });
+    }
+
+    /**
+     * 配置fab的drawable 和动画显示
+     *
+     * @param resId
+     * @param mFabActionBtn
+     */
+    private void setFabDrawableAnimator(int resId, FloatingActionButton mFabActionBtn) {
+
+        mFabActionBtn.hide(new FloatingActionButton.OnVisibilityChangedListener() {
+            @Override
+            public void onHidden(FloatingActionButton fab) {
+                super.onHidden(fab);
+                Logger.d("onHidden");
+                fab.setImageResource(resId);
+                fab.show();
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(isMe ? R.menu.menu_user_me : R.menu.menu_user, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.action_follow:
+                httpFollowUser();
+                break;
+            case R.id.action_user_setting:
+                //// TODO: 2016/5/29 0029 用户设置相关跳转
+                Logger.d("action_user_setting");
+                break;
+        }
+
+        // boolean Return false to allow normal menu processing to
+        // proceed, true to consume it here.
+        // false：允许继续事件传递  true：就自己消耗事件 不再传递
+        return true;
     }
 
     @Override
@@ -189,6 +293,7 @@ public class UserActivity
     }
 
 
+    //获取我的画板字段 没有UI效果
     private Subscription getMyBoardListInfo() {
         return RetrofitClient.createService(UserAPI.class)
                 .httpsBoardListInfo(mAuthorization, Constant.OPERATEBOARDEXTRA)
@@ -231,14 +336,61 @@ public class UserActivity
 
                     @Override
                     public void onNext(UserMeAndOtherBean userInfoBean) {
-                        setUserData(userInfoBean);
+                        setUserHeadAndBackGround(userInfoBean);//设置用户头像和 模糊背景
+                        setUserTextInfo(userInfoBean);//设置用户文字信息
+                        setUserFollow(userInfoBean);
                     }
                 });
 
 
     }
 
-    private void setUserData(UserMeAndOtherBean bean) {
+    @Override
+    protected void ViewPagerPageSelected(int position) {
+        Logger.d("position="+position);
+    }
+
+    /**
+     * 设置网络返回数据 主要判断是否已经关注过
+     *
+     * @param bean
+     */
+    private void setUserFollow(UserMeAndOtherBean bean) {
+        isFollow = bean.getFollowing() == 1;
+        //网络返回成功后 如果是我显示添加 否则根据关注状态 显示
+        mFabOperate.setImageResource(
+                isMe ? R.drawable.ic_add_black_24dp :
+                        (isFollow ? R.drawable.ic_done_black_24dp : R.drawable.ic_loyalty_black_24dp));
+        mFabOperate.show();
+
+    }
+
+    private void setUserTextInfo(UserMeAndOtherBean bean) {
+        String name = bean.getUsername();
+        if (!TextUtils.isEmpty(name)) {
+            mTvUserName.setText(name);
+        } else {
+            mTvUserName.setText("用户名为空");
+        }
+
+        String location = bean.getProfile().getLocation();
+        String job = bean.getProfile().getJob();
+        StringBuffer buffer = new StringBuffer();
+        if (!TextUtils.isEmpty(location)) {
+            buffer.append(location);
+            buffer.append(" ");
+        }
+        if (!TextUtils.isEmpty(job)) {
+            buffer.append(job);
+        }
+        if (!TextUtils.isEmpty(buffer)) {
+            mTvUserLocationJob.setText(buffer);
+        }
+
+        mTvUserFriend.setText(String.format(mFansFollowingFormat, bean.getFollower_count(), bean.getFollowing_count()));
+    }
+
+    private void setUserHeadAndBackGround(UserMeAndOtherBean bean) {
         String url = bean.getAvatar();
         if (!TextUtils.isEmpty(url)) {
             if (!url.contains(mHttpRoot)) {
@@ -277,29 +429,6 @@ public class UserActivity
                     })
                     .build();
         }
-        String name = bean.getUsername();
-        if (!TextUtils.isEmpty(name)) {
-            mTvUserName.setText(name);
-        } else {
-            mTvUserName.setText("用户名为空");
-        }
-
-        String location = bean.getProfile().getLocation();
-        String job = bean.getProfile().getJob();
-        StringBuffer buffer = new StringBuffer();
-        if (!TextUtils.isEmpty(location)) {
-            buffer.append(location);
-            buffer.append(" ");
-        }
-        if (!TextUtils.isEmpty(job)) {
-            buffer.append(job);
-        }
-        if (!TextUtils.isEmpty(buffer)) {
-            mTvUserLocationJob.setText(buffer);
-        }
-
-        mTvUserFriend.setText(String.format(mFansFollowingFormat, bean.getFollower_count(), bean.getFollowing_count()));
-
     }
 
 
@@ -309,17 +438,6 @@ public class UserActivity
         BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }
 
-    @Override
-    public void onClickBoardItemOperate(UserBoardItemBean bean, View view) {
-        Logger.d();
-        if (isMe) {
-            BoardEditDialogFragment fragment = BoardEditDialogFragment.create(String.valueOf(bean.getBoard_id()),
-                    bean.getTitle(), bean.getDescription(), bean.getCategory_id());
-            fragment.show(getSupportFragmentManager(), null);
-        } else {
-            Logger.d();
-        }
-    }
 
     @Override
     public void onClickPinsItemImage(PinsMainEntity bean, View view) {
@@ -331,50 +449,4 @@ public class UserActivity
         ImageDetailActivity.launch(this);
     }
 
-    private Action1<UserBoardSingleBean> getNextAction() {
-        return userBoardSingleBean -> {
-            Logger.d();
-            setSwipeRefresh();
-        };
-    }
-
-    private Action1<Throwable> getErrorAction() {
-        return throwable -> {
-            NetUtils.checkHttpException(mContext, throwable, mSwipeRefresh);
-            Logger.d(throwable.toString());
-        };
-    }
-
-    @Override
-    public void onDialogPositiveClick(String boardId, String name, String describe, String selectType) {
-        Logger.d("name=" + name + " describe=" + describe + " selectPosition=" + selectType);
-
-        RetrofitClient.createService(OperateAPI.class)
-                .httpsEditBoard(mAuthorization, boardId, name, describe, selectType)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getNextAction(), getErrorAction());
-    }
-
-
-    @Override
-    public void onDialogNeutralClick(String boardId, String boardTitle) {
-        Logger.d();
-
-        DialogUtils.showDeleteDialog(mContext, boardTitle, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                startDeleteBoard(boardId);
-            }
-        });
-    }
-
-    private void startDeleteBoard(String boardId) {
-
-        RetrofitClient.createService(OperateAPI.class)
-                .httpsDeleteBoard(mAuthorization, boardId, Constant.OPERATEDELETEBOARD)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getNextAction(), getErrorAction());
-    }
 }

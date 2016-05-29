@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.Module.Attention;
+package licola.demo.com.huabandemo.Module.Follow;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import licola.demo.com.huabandemo.Entity.BoardPinsBean;
 /**
  * Created by LiCola on  2016/04/04  19:53
  */
-public class AttentionBoardListBean {
+public class FollowBoardListBean {
 
     /**
      * filter : board:following:all

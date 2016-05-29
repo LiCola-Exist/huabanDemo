@@ -9,5 +9,5 @@ import android.view.View;
 public interface OnBoardFragmentInteractionListener<T> {
     void onClickBoardItemImage(T bean, View view);
 
-    void onClickBoardItemOperate(T bean, View view);
+//    void onClickBoardItemOperate(T bean, View view);
 }

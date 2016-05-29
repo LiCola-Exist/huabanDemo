@@ -3,14 +3,10 @@ package licola.demo.com.huabandemo.Module.Type;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-
-import java.lang.ref.WeakReference;
 
 import butterknife.Bind;
 import licola.demo.com.huabandemo.API.OnFragmentRefreshListener;
@@ -19,11 +15,9 @@ import licola.demo.com.huabandemo.API.Fragment.OnRefreshFragmentInteractionListe
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Module.ImageDetail.ImageDetailActivity;
-import licola.demo.com.huabandemo.Util.SPUtils;
 
 /**
  * Created by LiCola on  2016/03/20  12:00
@@ -43,8 +37,8 @@ public class TypeActivity extends BaseActivity
 
     @Bind(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefresh;
-    @Bind(R.id.fab_search)
-    FloatingActionButton mFabSearch;
+    @Bind(R.id.fab_operate)
+    FloatingActionButton mFabOperate;
 
     //刷新的接口 子Fragment实现
     private OnFragmentRefreshListener mListenerRefresh;
@@ -103,7 +97,7 @@ public class TypeActivity extends BaseActivity
     }
 
     @Override
-    protected void initListener() {
+    protected void initResAndListener() {
         mSwipeRefresh.setColorSchemeResources(ints);
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -112,7 +106,8 @@ public class TypeActivity extends BaseActivity
             }
         });
 
-        mFabSearch.setOnClickListener(v -> finish());
+        mFabOperate.setImageResource(R.drawable.ic_search_black_24dp);
+        mFabOperate.setOnClickListener(v -> finish());
     }
 
     private void getData() {

@@ -40,13 +40,16 @@ public class Constant {
     //http limit number
     public static final int LIMIT = 20;
 
+    //RxView点击防止抖动时间间隔
+    public static final long throttDuration=300;
+
     //用户喜欢操作的操作字段
     public static final String OPERATELIKE = "like";
     public static final String OPERATEUNLIKE = "unlike";
 
     //用户对画板的关注操作字段
-    public static final String OPERATEATTENTION = "follow";
-    public static final String OPERATEUNATTENTION = "unfollow";
+    public static final String OPERATEFOLLOW = "follow";
+    public static final String OPERATEUNFOLLOW = "unfollow";
 
     //获得用户画板列表详情的操作符
     public static final String OPERATEBOARDEXTRA="recommend_tags";

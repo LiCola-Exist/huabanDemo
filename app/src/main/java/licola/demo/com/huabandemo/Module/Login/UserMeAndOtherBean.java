@@ -37,6 +37,10 @@ public class UserMeAndOtherBean {
     private int follower_count;
     private int creations_count;
     private int pin_count;
+
+    //该用户是否已经关注 关注为1 否则没有对应的网络字段 int默认值为0
+    private int following;
+
     /**
      * location : 金华
      * sex : 1
@@ -158,6 +162,14 @@ public class UserMeAndOtherBean {
 
     public void setPin_count(int pin_count) {
         this.pin_count = pin_count;
+    }
+
+    public int getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(int following) {
+        this.following = following;
     }
 
     public ProfileBean getProfile() {

@@ -24,35 +24,15 @@
     <string name="nav_friends">好友</string>
     <string name="nav_used_scan">常用浏览</string>
 
-    <string name="menu_all">首页</string>
-    <string name="menu_popular">热门</string>
-    <string name="menu_home">家居</string>
-    <string name="menu_diy_crafts">手工</string>
-    <string name="menu_photography">摄影</string>
-    <string name="menu_food_drink">美食</string>
-    <string name="menu_travel_places">旅行</string>
-    <string name="menu_illustration">插画</string>
-    <string name="menu_design">平面</string>
-    <string name="menu_apparel">搭配</string>
-    <string name="menu_modeling_hair">造型</string>
-    <string name="menu_wedding_events">婚礼</string>
-    <string name="menu_desire">礼物</string>
-    <string name="menu_beauty">美女</string>
-    <string name="menu_pets">宠物</string>
-    <string name="menu_kids">儿童</string>
-    <string name="menu_architecture">建筑设计</string>
-    <string name="menu_film_music_books">电影图书</string>
-    <string name="menu_tips">生活百科</string>
-    <string name="menu_art">人文艺术</string>
-    <string name="menu_men">男士风尚</string>
-
     <string name="action_bar_search">搜索</string>
     <string name="action_bar_add">添加</string>
     <string name="action_bar_edit">编辑</string>
     <string name="action_bar_like">喜欢</string>
     <string name="action_bar_download">下载</string>
     <string name="action_bar_gather">采集</string>
-    <string name="action_bar_attention">关注</string>
+    <string name="action_bar_follow">关注</string>
+    <string name="action_bar_user_setting">用户设置</string>
+
 
     <string name="hint_search">关键字</string>
     <string name="hint_not_history">空</string>

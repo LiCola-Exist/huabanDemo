@@ -3,7 +3,7 @@ package licola.demo.com.huabandemo.Module.ImageDetail;
 /**
  * Created by LiCola on  2016/04/19  17:25
  */
-public class LikeOperateBean {
+public class LikePinsOperateBean {
 
     /**
      * pin_id : 690448610

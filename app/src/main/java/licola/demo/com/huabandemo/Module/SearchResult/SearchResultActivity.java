@@ -163,11 +163,6 @@ public class SearchResultActivity extends BaseActivity implements
         BoardDetailActivity.launch(this, boardId, bean.getTitle());
     }
 
-    @Override
-    public void onClickBoardItemOperate(BoardPinsBean bean, View view) {
-        String boardId = String.valueOf(bean.getBoard_id());
-        BoardDetailActivity.launch(this, boardId, bean.getTitle());
-    }
 
     @Override
     public void onClickItemUser(UsersBean bean, View view) {

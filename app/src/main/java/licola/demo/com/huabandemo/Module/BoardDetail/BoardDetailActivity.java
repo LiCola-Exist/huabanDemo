@@ -54,7 +54,7 @@ public class BoardDetailActivity extends BaseActivity
     //是否我的画板 音响FloatingActionButton 的显示
     private boolean isMe=false;
     //该画板是否被关注的标志位 默认false
-    public boolean isAttention = false;
+    public boolean isFollow = false;
 
     public static void launch(Activity activity, String key, String title) {
         Intent intent = new Intent(activity, BoardDetailActivity.class);
@@ -89,7 +89,7 @@ public class BoardDetailActivity extends BaseActivity
     }
 
     private void actionAttention() {
-        String operate = isAttention ? Constant.OPERATEUNATTENTION : Constant.OPERATEATTENTION;
+        String operate = isFollow ? Constant.OPERATEUNFOLLOW : Constant.OPERATEFOLLOW;
 
         Animator animation = AnimatorInflater.loadAnimator(mContext, R.animator.scale_small_animation);
         animation.setTarget(mFabBoardAttention);
@@ -97,13 +97,13 @@ public class BoardDetailActivity extends BaseActivity
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .flatMap(aVoid -> RetrofitClient.createService(OperateAPI.class)
-                        .httpsAttentionOperate(mAuthorization, mKey, operate))
+                        .httpsFollowBoardOperate(mAuthorization, mKey, operate))
                 .observeOn(AndroidSchedulers.mainThread())//最后统一回到UI线程中处理
-                .subscribe(new Subscriber<AttentionOperateBean>() {
+                .subscribe(new Subscriber<FollowBoardOperateBean>() {
                     @Override
                     public void onCompleted() {
                         Logger.d();
-                        setFabDrawableAndStart(isAttention ? R.drawable.ic_done_white_24dp : R.drawable.ic_loyalty_white_24dp, mContext, mFabBoardAttention);
+                        setFabDrawableAndStart(isFollow ? R.drawable.ic_done_white_24dp : R.drawable.ic_loyalty_white_24dp, mContext, mFabBoardAttention);
                     }
 
                     @Override
@@ -114,8 +114,8 @@ public class BoardDetailActivity extends BaseActivity
                     }
 
                     @Override
-                    public void onNext(AttentionOperateBean attentionOperateBean) {
-                        isAttention = !isAttention;//取反
+                    public void onNext(FollowBoardOperateBean followBoardOperateBean) {
+                        isFollow = !isFollow;//取反
                     }
                 });
     }
@@ -174,7 +174,7 @@ public class BoardDetailActivity extends BaseActivity
             isMe = userId.equals(localUserId);
         }
         if (!isMe){
-            this.isAttention = isAttention;
+            this.isFollow = isAttention;
             mFabBoardAttention.setVisibility(View.VISIBLE);
             mFabBoardAttention.setImageResource(
                     isAttention ? R.drawable.ic_done_white_24dp : R.drawable.ic_loyalty_white_24dp);

@@ -47,7 +47,6 @@ import licola.demo.com.huabandemo.Service.DownloadService;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.IntentUtils;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Widget.MyDialog.GatherDialogFragment;
@@ -93,7 +92,7 @@ public class ImageDetailActivity extends BaseActivity
     @Bind(R.id.toolbar_image)
     Toolbar toolbar;
     @Bind(R.id.fab_image_detail)
-    FloatingActionButton mFabActionBtn;
+    FloatingActionButton mFabOperate;
     @Bind(R.id.img_image_big)
     SimpleDraweeView mImgImageBig;
 
@@ -184,8 +183,8 @@ public class ImageDetailActivity extends BaseActivity
     }
 
     @Override
-    protected void initListener() {
-        mFabActionBtn.setOnClickListener(new View.OnClickListener() {
+    protected void initResAndListener() {
+        mFabOperate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showGatherDialog();
@@ -228,9 +227,18 @@ public class ImageDetailActivity extends BaseActivity
     protected void onResume() {
         super.onResume();
 
+        showImage();//显示图片
+
+    }
+
+    /**
+     * 显示图片的操作
+     * 主要逻辑 根据图片类型 git图 使fab旋转 表示loading
+     */
+    private void showImage() {
         final ObjectAnimator objectAnimator;
         if (Utils.checkIsGif(mImageType)) {
-            objectAnimator = AnimatorUtils.getRotationFS(mFabActionBtn);
+            objectAnimator = AnimatorUtils.getRotationFS(mFabOperate);
             objectAnimator.start();
         } else {
             objectAnimator = null;
@@ -278,7 +286,6 @@ public class ImageDetailActivity extends BaseActivity
                     }
                 })
                 .build();
-
     }
 
     @Override
@@ -302,7 +309,7 @@ public class ImageDetailActivity extends BaseActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Logger.d("id=" + item.getItemId());
+//        Logger.d("id=" + item.getItemId());
         int id = item.getItemId();
 
         switch (id) {
@@ -330,50 +337,6 @@ public class ImageDetailActivity extends BaseActivity
     private void actionDownload(MenuItem item) {
         Logger.d();
         DownloadService.launch(this, mImageUrl, mImageType);
-    }
-
-    private void actionLike(MenuItem item) {
-        Logger.d();
-        //根据当前值 取操作符
-        String operate = isLike ? Constant.OPERATEUNLIKE : Constant.OPERATELIKE;
-        RetrofitClient.createService(OperateAPI.class)
-                .httpsLikeOperate(mAuthorization, mPinsId, operate)
-                .subscribeOn(Schedulers.io())
-                .delay(600, TimeUnit.MILLISECONDS)//延迟 使得能够完成动画
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<LikeOperateBean>() {
-                    @Override
-                    public void onStart() {
-                        super.onStart();
-                        Logger.d();
-                        item.setEnabled(false);//不可点击
-                        AnimatedVectorDrawableCompat drawable = (AnimatedVectorDrawableCompat) item.getIcon();
-                        if (drawable != null) {
-                            drawable.start();
-                        }
-
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        Logger.d();
-                        item.setEnabled(true);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Logger.d(e.toString());
-                        item.setEnabled(true);
-                    }
-
-                    @Override
-                    public void onNext(LikeOperateBean likeOperateBean) {
-                        Logger.d();
-                        //网络操作成功 标志位取反 然后重设图标
-                        isLike = !isLike;
-                        setIconDynamic(item, isLike);
-                    }
-                });
     }
 
     /**
@@ -407,7 +370,6 @@ public class ImageDetailActivity extends BaseActivity
                 break;
         }
     }
-
 
     @Override
     protected void onDestroy() {
@@ -472,9 +434,53 @@ public class ImageDetailActivity extends BaseActivity
         actionGather(describe, selectPosition);
     }
 
+    private void actionLike(MenuItem item) {
+        Logger.d();
+        //根据当前值 取操作符
+        String operate = isLike ? Constant.OPERATEUNLIKE : Constant.OPERATELIKE;
+        RetrofitClient.createService(OperateAPI.class)
+                .httpsLikeOperate(mAuthorization, mPinsId, operate)
+                .subscribeOn(Schedulers.io())
+                .delay(600, TimeUnit.MILLISECONDS)//延迟 使得能够完成动画
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<LikePinsOperateBean>() {
+                    @Override
+                    public void onStart() {
+                        super.onStart();
+                        Logger.d();
+                        item.setEnabled(false);//不可点击
+                        AnimatedVectorDrawableCompat drawable = (AnimatedVectorDrawableCompat) item.getIcon();
+                        if (drawable != null) {
+                            drawable.start();
+                        }
+
+                    }
+                    @Override
+                    public void onCompleted() {
+                        Logger.d();
+                        item.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.toString());
+                        item.setEnabled(true);
+                        checkException(e,mAppBar);
+                    }
+
+                    @Override
+                    public void onNext(LikePinsOperateBean likePinsOperateBean) {
+                        Logger.d();
+                        //网络操作成功 标志位取反 然后重设图标
+                        isLike = !isLike;
+                        setIconDynamic(item, isLike);
+                    }
+                });
+    }
+
     private void actionGather(String describe, int selectPosition) {
 
-        Animator animation = AnimatorUtils.getRotationAD(mFabActionBtn);
+        Animator animation = AnimatorUtils.getRotationAD(mFabOperate);
         MyRxObservable.add(animation)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -490,14 +496,14 @@ public class ImageDetailActivity extends BaseActivity
                     @Override
                     public void onCompleted() {
                         Logger.d();
-                        setFabDrawableAnimator(R.drawable.ic_done_white_24dp, mFabActionBtn);
+                        setFabDrawableAnimator(R.drawable.ic_done_white_24dp, mFabOperate);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Logger.d(e.toString());
-                        NetUtils.checkHttpException(mContext, e, mAppBar);
-                        setFabDrawableAnimator(R.drawable.ic_report_white_24dp, mFabActionBtn);
+                        checkException(e,mAppBar);
+                        setFabDrawableAnimator(R.drawable.ic_report_white_24dp, mFabOperate);
                     }
 
                     @Override
