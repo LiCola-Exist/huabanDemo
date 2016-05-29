@@ -258,14 +258,14 @@ public class UserActivity
                                 Logger.d("bitmap is not null");
                                 Drawable backDrawable = new BitmapDrawable(getResources(), FastBlurUtil.doBlur(bitmap, 25, false));
                                 if (Utils.checkUiThreadBoolean()) {
+                                    mAppBar.setBackground(backDrawable);
+                                } else {
                                     mAppBar.post(new Runnable() {
                                         @Override
                                         public void run() {
                                             mAppBar.setBackground(backDrawable);
                                         }
                                     });
-                                } else {
-                                    mAppBar.setBackground(backDrawable);
                                 }
                             }
                         }

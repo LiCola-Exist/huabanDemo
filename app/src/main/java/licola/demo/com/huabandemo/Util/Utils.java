@@ -48,6 +48,10 @@ public final class Utils {
         }
     }
 
+    /**
+     * 检查当前是否在主线程 返回true为主线程
+     * @return
+     */
     public static boolean checkUiThreadBoolean(){
         return Looper.getMainLooper() == Looper.myLooper();
     }

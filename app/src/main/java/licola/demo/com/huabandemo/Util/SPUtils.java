@@ -14,7 +14,7 @@ public class SPUtils {
     }
 
     /**
-     * 保存在手机里面的文件名
+     * 保存在手机里面的文件名 和读写模式
      */
     public static final String FILE_NAME = "share_data";
     public static final int MODE = Context.MODE_PRIVATE;
@@ -118,7 +118,6 @@ public class SPUtils {
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(key);
         editor.apply();
-//        SharedPreferencesCompat.apply(editor);
     }
 
     /**
@@ -132,7 +131,6 @@ public class SPUtils {
         SharedPreferences.Editor editor = sp.edit();
         editor.clear();
         editor.apply();
-//        SharedPreferencesCompat.apply(editor);
     }
 
     /**

@@ -9,6 +9,7 @@ import android.view.WindowManager;
 
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.User.UserSingleton;
 import licola.demo.com.huabandemo.Util.Base64;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -98,6 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void getNecessaryData() {
+        UserSingleton.getInstance().isLogin(getApplication());
         isLogin = (boolean) SPUtils.get(mContext, Constant.ISLOGIN, false);
         mAuthorization=getAuthorizations(isLogin);
     }

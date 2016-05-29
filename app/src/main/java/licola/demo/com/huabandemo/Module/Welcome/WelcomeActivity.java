@@ -72,7 +72,6 @@ public class WelcomeActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         Animator animation = AnimatorInflater.loadAnimator(mContext, R.animator.welcome_animator);
-//        Logger.d(mImageView.getDrawable().getClass() + " ");
         //observeOn() 指定的是它之后的操作所在的线程
         //subscribeOn() 作用于Observable对象
         //onCompleted() 和 onError() 二者是互斥的 调用一个就不会再调用另一个
