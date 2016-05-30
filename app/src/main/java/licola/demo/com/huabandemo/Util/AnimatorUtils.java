@@ -39,7 +39,7 @@ public class AnimatorUtils {
 
     public static ObjectAnimator getRotationFS(View target) {
         final ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(target, View.ROTATION, 0, 360);
-        objectAnimator.setDuration(1000);
+        objectAnimator.setDuration(600);
         objectAnimator.setRepeatCount(ValueAnimator.INFINITE);
         objectAnimator.setInterpolator(new FastOutSlowInInterpolator());
         return objectAnimator;

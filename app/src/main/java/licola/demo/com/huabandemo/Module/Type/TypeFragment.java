@@ -15,7 +15,7 @@ import java.util.List;
 import butterknife.Bind;
 import org.greenrobot.eventbus.EventBus;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.HttpAPI.TypeAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.TypeAPI;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseFragment;
 import licola.demo.com.huabandemo.Entity.ListPinsBean;

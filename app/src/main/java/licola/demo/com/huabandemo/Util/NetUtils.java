@@ -50,8 +50,8 @@ public class NetUtils {
 
     }
 
-    public static Snackbar showSnackBar(View view, String message) {
-        Snackbar snackbar=Snackbar.make(view, message, Snackbar.LENGTH_SHORT);
+    public static Snackbar showSnackBar(View rootView, String message) {
+        Snackbar snackbar=Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT);
         snackbar.show();
         return snackbar;
     }

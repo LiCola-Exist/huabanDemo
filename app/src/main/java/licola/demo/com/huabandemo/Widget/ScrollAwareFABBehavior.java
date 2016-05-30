@@ -12,12 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
 
+import licola.demo.com.huabandemo.Util.Logger;
+
 /**
  * Created by LiCola on  2016/05/02  15:42
+ * 添加给Fab的 Behavior 实现当内容控件向下滑动向下隐藏 向上滑动进入
  */
 public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
-    private boolean mIsAnimatingOut = false;
+    private boolean mIsAnimatingOut = false;//fab是否被 压出 默认false 表示显示
 
     public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
         super();
@@ -32,10 +35,12 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
     @Override
     public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child, View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
         super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed);
+
+//        Logger.d("dyConsumed="+dyConsumed+ " mIsAnimatingOut="+mIsAnimatingOut+" Visibility="+child.getVisibility()+" "+" Y="+child.getTranslationY());
         if (dyConsumed > 0 && !this.mIsAnimatingOut && child.getVisibility() == View.VISIBLE) {
             // User scrolled down and the FAB is currently visible -> hide the FAB
             animateOut(child);
-        } else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) {
+        } else if (dyConsumed < 0 && this.mIsAnimatingOut && child.getVisibility() != View.VISIBLE) {
             // User scrolled up and the FAB is currently not visible -> show the FAB
             animateIn(child);
         }
@@ -55,7 +60,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
                         }
 
                         public void onAnimationEnd(View view) {
-                            ScrollAwareFABBehavior.this.mIsAnimatingOut = false;
+//                            ScrollAwareFABBehavior.this.mIsAnimatingOut = false;
                             view.setVisibility(View.GONE);
                         }
                     }).start();
@@ -69,7 +74,23 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
         button.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= 14) {
             ViewCompat.animate(button).translationY(0)
-                    .setInterpolator(INTERPOLATOR).withLayer().setListener(null)
+                    .setInterpolator(INTERPOLATOR).withLayer().setListener(new ViewPropertyAnimatorListener() {
+                @Override
+                public void onAnimationStart(View view) {
+                    ScrollAwareFABBehavior.this.mIsAnimatingOut = false;
+                }
+
+                @Override
+                public void onAnimationCancel(View view) {
+                    ScrollAwareFABBehavior.this.mIsAnimatingOut = true;
+                }
+
+                @Override
+                public void onAnimationEnd(View view) {
+//                    ScrollAwareFABBehavior.this.mIsAnimatingOut = true;
+                    view.setVisibility(View.VISIBLE);
+                }
+            })
                     .start();
         } else {
 

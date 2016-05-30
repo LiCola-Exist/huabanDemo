@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.API.HttpAPI;
+package licola.demo.com.huabandemo.API.HttpsAPI;
 
 import licola.demo.com.huabandemo.Module.Login.TokenBean;
 import licola.demo.com.huabandemo.Module.Login.UserMeAndOtherBean;

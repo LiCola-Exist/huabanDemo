@@ -5,10 +5,9 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:divider="@drawable/divider_padding_linear"
-    android:orientation="vertical"
-    android:showDividers="middle"
     android:gravity="center"
-    >
+    android:orientation="vertical"
+    android:showDividers="middle">
 
     <RelativeLayout
         android:id="@+id/relativelayout_image_describe"
@@ -39,6 +38,7 @@
             android:maxLines="1"
             android:textColor="?android:textColorSecondary"
             android:textSize="@dimen/card_context_size_14sp"
+
             tools:text="图片的来源" />
 
 
@@ -68,7 +68,7 @@
 
     </RelativeLayout>
 
-    <include layout="@layout/view_bar_user_info"/>
+    <include layout="@layout/view_bar_user_info" />
 
     <RelativeLayout
         android:id="@+id/relativelayout_image_board"
@@ -97,33 +97,29 @@
                 android:id="@+id/img_image_board_1"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                />
+                android:layout_alignParentTop="true" />
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/img_image_board_2"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                />
+                android:layout_alignParentLeft="true" />
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/img_image_board_3"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
-                />
+                android:layout_alignParentTop="true" />
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/img_image_board_4"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                />
+                android:layout_alignParentRight="true" />
         </RelativeLayout>
 
         <TextView

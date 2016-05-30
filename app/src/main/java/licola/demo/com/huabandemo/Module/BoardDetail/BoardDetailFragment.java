@@ -18,7 +18,7 @@ import butterknife.BindString;
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.API.Fragment.OnBoardDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.HttpAPI.BoardDetailAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.BoardDetailAPI;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;

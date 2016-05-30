@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.FloatingActionButton
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.FloatingActionButton xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fab_operate"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|end"
     android:layout_margin="@dimen/fab_margin"
-
     android:tint="@color/white"
-    app:layout_behavior="licola.demo.com.huabandemo.Widget.ScrollAwareFABBehavior" />
+    app:layout_behavior="licola.demo.com.huabandemo.Widget.ScrollAwareFABBehavior"
+    app:rippleColor="@color/primary_dark"
+     />

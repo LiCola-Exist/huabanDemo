@@ -5,8 +5,6 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -16,26 +14,18 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import licola.demo.com.huabandemo.API.HttpAPI.DownUpAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.DownUpAPI;
 import licola.demo.com.huabandemo.API.OnProgressResponseListener;
 import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.Entity.DownloadInfo;
-import licola.demo.com.huabandemo.HttpUtils.Converter.AvatarConverter;
-import licola.demo.com.huabandemo.HttpUtils.DownloadProgressHandler;
-import licola.demo.com.huabandemo.HttpUtils.OkHttpHelper;
-import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitDownClient;
 import licola.demo.com.huabandemo.Util.FileUtils;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NotificationUtils;
 import licola.demo.com.huabandemo.Util.Utils;
-import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
-import retrofit2.Retrofit;
 import rx.Subscriber;
 import rx.functions.Func1;
-
-import static licola.demo.com.huabandemo.HttpUtils.OkHttpHelper.addProgressClient;
 
 /**
  * Created by LiCola on  2016/05/13  22:02

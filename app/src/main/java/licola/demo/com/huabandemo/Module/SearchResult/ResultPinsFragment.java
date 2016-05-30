@@ -7,7 +7,7 @@ import android.view.View;
 import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.HttpAPI.SearchAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.SearchAPI;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;

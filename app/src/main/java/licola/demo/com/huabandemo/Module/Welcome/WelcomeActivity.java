@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import butterknife.Bind;
 import butterknife.BindString;
-import licola.demo.com.huabandemo.API.HttpAPI.LoginAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.LoginAPI;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
 import licola.demo.com.huabandemo.Module.Login.LoginActivity;

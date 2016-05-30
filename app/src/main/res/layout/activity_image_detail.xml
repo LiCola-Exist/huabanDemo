@@ -13,15 +13,17 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/colltoolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="?colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            app:contentScrim="@color/grey_a700"
+
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:statusBarScrim="@color/transparent">
 
 
             <com.facebook.drawee.view.SimpleDraweeView
@@ -36,12 +38,14 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar_image"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="112dp"
                 android:background="@drawable/bg_gradient_tool_bar"
                 app:layout_collapseMode="pin"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
+
+
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
@@ -57,8 +61,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_camera_white_24dp"
-        app:layout_anchor="@id/appbar_image_detail"
-        app:layout_anchorGravity="bottom|end" />
+        app:layout_anchor="@id/colltoolbar_layout"
+        app:layout_anchorGravity="bottom|end"
+        app:rippleColor="@color/primary_dark" />
 
 
 </android.support.design.widget.CoordinatorLayout>

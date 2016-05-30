@@ -31,7 +31,7 @@ import butterknife.BindDrawable;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.API.Dialog.OnGatherDialogInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnImageDetailFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.HttpAPI.OperateAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.OperateAPI;
 import licola.demo.com.huabandemo.Util.AnimatorUtils;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
@@ -142,8 +142,9 @@ public class ImageDetailActivity extends BaseActivity
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置打开时的文字颜色
+//        mCollapsingToolbar.setExpandedTitleColor(Color.TRANSPARENT);//设置打开时的文字颜色
 
         recoverData(savedInstanceState);//恢复数据
 
@@ -264,7 +265,12 @@ public class ImageDetailActivity extends BaseActivity
                             animatable.start();
                         }
                         if (objectAnimator != null && objectAnimator.isRunning()) {
-                            objectAnimator.cancel();
+                            mImgImageBig.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    objectAnimator.cancel();
+                                }
+                            }, 600);
                         }
 
                     }
@@ -405,7 +411,6 @@ public class ImageDetailActivity extends BaseActivity
     }
 
     /**
-     *
      * 警告：用户可能没有任何应用处理您发送到 startActivity() 的隐式 Intent。
      * 如果出现这种情况，则调用将会失败，且应用会崩溃。
      * 要验证 Activity 是否会接收 Intent，请对 Intent 对象调用 resolveActivity()。
@@ -455,6 +460,7 @@ public class ImageDetailActivity extends BaseActivity
                         }
 
                     }
+
                     @Override
                     public void onCompleted() {
                         Logger.d();
@@ -465,7 +471,7 @@ public class ImageDetailActivity extends BaseActivity
                     public void onError(Throwable e) {
                         Logger.d(e.toString());
                         item.setEnabled(true);
-                        checkException(e,mAppBar);
+                        checkException(e, mAppBar);
                     }
 
                     @Override
@@ -502,7 +508,7 @@ public class ImageDetailActivity extends BaseActivity
                     @Override
                     public void onError(Throwable e) {
                         Logger.d(e.toString());
-                        checkException(e,mAppBar);
+                        checkException(e, mAppBar);
                         setFabDrawableAnimator(R.drawable.ic_report_white_24dp, mFabOperate);
                     }
 
@@ -530,6 +536,7 @@ public class ImageDetailActivity extends BaseActivity
                 Logger.d("onHidden");
                 fab.setImageResource(resId);
                 fab.show();
+
             }
         });
     }

@@ -33,10 +33,11 @@ import java.util.concurrent.TimeUnit;
 import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindString;
+import licola.demo.com.huabandemo.API.Dialog.OnAddDialogInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.HttpAPI.OperateAPI;
-import licola.demo.com.huabandemo.API.HttpAPI.UserAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.OperateAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.UserAPI;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Base.BaseSwipeViewPagerActivity;
 import licola.demo.com.huabandemo.Module.BoardDetail.BoardDetailActivity;
@@ -50,8 +51,11 @@ import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.FastBlurUtil;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
+import licola.demo.com.huabandemo.Widget.MyDialog.BoardAddDialogFragment;
+import licola.demo.com.huabandemo.Widget.MyDialog.BoardEditDialogFragment;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -66,7 +70,7 @@ import rx.schedulers.Schedulers;
 public class UserActivity
         extends BaseSwipeViewPagerActivity<BaseRecyclerHeadFragment>
         implements OnBoardFragmentInteractionListener<UserBoardItemBean>,
-        OnPinsFragmentInteractionListener {
+        OnPinsFragmentInteractionListener, OnAddDialogInteractionListener {
     private static final String TYPE_KEY = "TYPE_KEY";
     private static final String TYPE_TITLE = "TYPE_TITLE";
 
@@ -164,7 +168,7 @@ public class UserActivity
                 final float size = -verticalOffset;
                 final float total = appBarLayout.getTotalScrollRange();
                 double per = 1.0f - (size / total);
-                Logger.d("per" + per);
+//                Logger.d("per" + per);
                 mLayoutUser.setAlpha((float) per);
 
             }
@@ -176,12 +180,16 @@ public class UserActivity
             Logger.d("is me add broad");
             showAddBoardDialog();
         } else {
+            Logger.d("httpFollowUser");
             httpFollowUser();
+
         }
     }
 
     private void showAddBoardDialog() {
-
+        BoardAddDialogFragment fragment = BoardAddDialogFragment.create();
+        fragment.setListener(this);//注入已经实现接口的 自己
+        fragment.show(getSupportFragmentManager(), null);
     }
 
     private void httpFollowUser() {
@@ -194,9 +202,11 @@ public class UserActivity
                 .subscribe(new Subscriber<FollowUserOperateBean>() {
                     @Override
                     public void onCompleted() {
+                        Logger.d();
                         int res = isFollow ? R.drawable.ic_done_black_24dp : R.drawable.ic_loyalty_black_24dp;
                         setFabDrawableAnimator(res, mFabOperate);
                         // TODO: 2016/5/29 0029 如果当前正在显示画板Fragment 需要刷新操作
+
                     }
 
                     @Override
@@ -208,6 +218,7 @@ public class UserActivity
 
                     @Override
                     public void onNext(FollowUserOperateBean followUserOperateBean) {
+                        Logger.d();
                         isFollow = !isFollow;
                     }
                 });
@@ -228,6 +239,9 @@ public class UserActivity
                 Logger.d("onHidden");
                 fab.setImageResource(resId);
                 fab.show();
+                mSwipeRefresh.setRefreshing(true);
+                mListenerRefresh.getHttpRefresh();
+//                NetUtils.showSnackBar(mFabOperate,"关注用户成功");
             }
         });
     }
@@ -347,7 +361,21 @@ public class UserActivity
 
     @Override
     protected void ViewPagerPageSelected(int position) {
-        Logger.d("position="+position);
+//        Logger.d("position=" + position + " view=" + mFabOperate.getVisibility() + " Y=" + mFabOperate.getTranslationY());
+
+        if (position != 0) {
+            //如果不在第一版面 重置第一页影响的Y值 然后隐藏
+            mFabOperate.setTranslationY(0);
+            if (mFabOperate.getVisibility() != View.GONE) {
+                mFabOperate.hide();
+            }
+
+        } else {
+            //如果回带第一版面 显示
+            if (mFabOperate.getVisibility() != View.VISIBLE) {
+                mFabOperate.show();
+            }
+        }
     }
 
     /**
@@ -449,4 +477,8 @@ public class UserActivity
         ImageDetailActivity.launch(this);
     }
 
+    @Override
+    public void onDialogPositiveClick(String name, String describe, String selectType) {
+        Logger.d(name + " " + describe + " " + selectType);
+    }
 }

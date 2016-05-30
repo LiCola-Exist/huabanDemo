@@ -17,10 +17,10 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="名称"
         android:id="@+id/edit_board_name"
         android:paddingLeft="0dp"
         android:paddingRight="0dp"
+        tools:text="名称"
         />
 
     <TextView
@@ -49,6 +49,7 @@
         android:id="@+id/spinner_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.Spinner.Underlined"
        />
 
 </LinearLayout>

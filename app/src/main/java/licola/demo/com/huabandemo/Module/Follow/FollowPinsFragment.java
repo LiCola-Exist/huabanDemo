@@ -10,7 +10,7 @@ import butterknife.BindString;
 import org.greenrobot.eventbus.EventBus;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnRefreshFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.HttpAPI.FollowingAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.FollowingAPI;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;

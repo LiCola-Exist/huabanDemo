@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.BindString;
-import licola.demo.com.huabandemo.API.HttpAPI.SearchAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.SearchAPI;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
 import licola.demo.com.huabandemo.Module.Type.TypeActivity;

@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.API.HttpAPI;
+package licola.demo.com.huabandemo.API.HttpsAPI;
 
 import licola.demo.com.huabandemo.Module.BoardDetail.FollowBoardOperateBean;
 import licola.demo.com.huabandemo.Module.ImageDetail.GatherInfoBean;
@@ -48,17 +48,25 @@ public interface OperateAPI {
     Observable<GatherInfoBean> httpsGatherInfo(@Header(Constant.Authorization) String authorization, @Path("viaId") String viaId, @Query("check") boolean check);
 
     //采集某个图片 用body形式传输数据
-    //board_id=17891564&text=描述内容&via=707423726
-    //https://api.huaban.com/pins/
+    //https://api.huaban.com/pins/ body=board_id=17891564&text=描述内容&via=707423726
     @FormUrlEncoded
     @POST("pins/")
     Observable<GatherResultBean> httpsGatherPins(@Header(Constant.Authorization) String authorization, @Field("board_id") String boardId, @Field("text") String describe, @Field("via") String PinsIda);
+
+    //新建画板
+    //https://api.huaban.com/boards  body=category=类型&description=描述&title=标题
+    @FormUrlEncoded
+    @POST("boards/")
+    Observable<UserBoardSingleBean> httpsAddBoard(
+            @Header(Constant.Authorization) String authorization, @Field("title") String title, @Field("description") String description, @Field("category") String category
+    );
 
     //修改某个画板的信息
     //https://api.huaban.com/boards/29646779 category=photography&description=%E6%B7%BB%E5%8A%A0%E6%8F%8F%E8%BF%B0&title=%E6%B7%BB%E5%8A%A0
     @FormUrlEncoded
     @POST("boards/{boardId}")
-    Observable<UserBoardSingleBean> httpsEditBoard(@Header(Constant.Authorization) String authorization, @Path("boardId") String boardId, @Field("title") String title, @Field("description") String description, @Field("category") String category);
+    Observable<UserBoardSingleBean> httpsEditBoard(
+            @Header(Constant.Authorization) String authorization, @Path("boardId") String boardId, @Field("title") String title, @Field("description") String description, @Field("category") String category);
 
     //删除某个画板
     //https://api.huaban.com/boards/29653031 POST BODY= _method=DELETE

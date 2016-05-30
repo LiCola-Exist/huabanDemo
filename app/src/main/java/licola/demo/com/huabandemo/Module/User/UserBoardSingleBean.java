@@ -3,7 +3,7 @@ package licola.demo.com.huabandemo.Module.User;
 /**
  * Created by LiCola on  2016/04/07  17:37
  */
-public class UserBoardSingleBean {
+public class UserBoardSingleBean extends OperateError{
 
     private UserBoardItemBean board;
 

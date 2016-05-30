@@ -9,7 +9,7 @@ import java.util.List;
 import butterknife.BindString;
 import licola.demo.com.huabandemo.API.Fragment.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnRefreshFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.HttpAPI.FollowingAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.FollowingAPI;
 import licola.demo.com.huabandemo.Adapter.RecyclerBoardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.BoardPinsBean;

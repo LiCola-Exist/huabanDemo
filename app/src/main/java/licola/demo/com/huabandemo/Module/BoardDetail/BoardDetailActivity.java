@@ -13,7 +13,7 @@ import android.view.View;
 
 import butterknife.Bind;
 import licola.demo.com.huabandemo.API.Fragment.OnBoardDetailFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.HttpAPI.OperateAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.OperateAPI;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;

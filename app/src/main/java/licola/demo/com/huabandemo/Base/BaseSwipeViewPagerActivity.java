@@ -63,6 +63,7 @@ public abstract class BaseSwipeViewPagerActivity<T extends BaseFragment>
 
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setOffscreenPageLimit(mFragmentList.size());
         setupTabLayoutWithViewPager(mViewPager);
     }
 
@@ -106,7 +107,7 @@ public abstract class BaseSwipeViewPagerActivity<T extends BaseFragment>
 
             @Override
             public void onPageSelected(int position) {
-                Logger.d("position=" + position);
+//                Logger.d("position=" + position);
                 mListenerRefresh = (OnFragmentRefreshListener) mFragmentList.get(position);
                 ViewPagerPageSelected(position);
             }

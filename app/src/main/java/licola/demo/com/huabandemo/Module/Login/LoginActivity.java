@@ -29,8 +29,8 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
 import butterknife.BindString;
-import licola.demo.com.huabandemo.API.HttpAPI.LoginAPI;
-import licola.demo.com.huabandemo.API.HttpAPI.UserAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.LoginAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.UserAPI;
 import licola.demo.com.huabandemo.Entity.BoardItemInfoBean;
 import licola.demo.com.huabandemo.Entity.BoardListInfoBean;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -28,26 +29,30 @@ import licola.demo.com.huabandemo.Util.Logger;
  */
 public class BoardEditDialogFragment extends BaseDialogFragment {
 
+    //bundle key
     private static final String KEYBOARDID = "keyBoardId";
     private static final String KEYBOARDNAME = "keyBoardName";
     private static final String KEYDESCRIBE = "keyDescribe";
     private static final String KEYBOARDTYPE = "keyBoardType";
 
-
+    //UI
     EditText mEditTextBoardName;
     EditText mEditTextBoardDescribe;
     Spinner mSpinnerBoardTitle;
 
 
     private Context mContext;
+
+    //外部传入的值
     private String mStringBoardId;
     private String mStringBoardName;
     private String mStringDescribe;
     private String mStringBoardType;
 
+    //画板类型 通过context 获取本地资源
     private String[] titleList;
 
-    private boolean isChange = false;
+    private boolean isChange = false;//输入值是否有变化 默认false
 
     OnEditDialogInteractionListener mListener;
 
@@ -92,6 +97,7 @@ public class BoardEditDialogFragment extends BaseDialogFragment {
     }
 
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Logger.d(TAG);
@@ -105,7 +111,7 @@ public class BoardEditDialogFragment extends BaseDialogFragment {
         //消极操作 不需要返回
         builder.setNegativeButton(R.string.dialog_negative, null);
         //中立操作 这里修改成删除操作传递回调用者 回调id name
-        builder.setNeutralButton("删除", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton(R.string.dialog_delete_positive, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Logger.d();
@@ -135,39 +141,45 @@ public class BoardEditDialogFragment extends BaseDialogFragment {
      * @return
      */
     private boolean DataChange() {
-        boolean isChange = this.isChange;//默认是没有变化的
+        //Spinner 控件会影响 所以先取内部变量
+        boolean isChange = this.isChange;
         if (isChange) {
             return true;
         }
-        //取出输入框值
-        String input = mEditTextBoardName.getText().toString().trim();
+        //临时变量
+        String input;
+        input = mEditTextBoardName.getText().toString().trim();//取名称输入框值
         //判断 不为空 并且值有变化
         if ((!TextUtils.isEmpty(input)) && (!input.equals(mStringBoardName))) {
             return true;
         }
 
-        input = mEditTextBoardDescribe.getText().toString().trim();
+        input = mEditTextBoardDescribe.getText().toString().trim();//取描述输入框值
         if ((!TextUtils.isEmpty(input)) && (!input.equals(mStringDescribe))) {
             return true;
         }
 
-        return isChange;
+        return false;
     }
 
     private void setData() {
+        //画板名称
         if (!TextUtils.isEmpty(mStringBoardName)) {
             mEditTextBoardName.setText(mStringBoardName);
         } else {
-            mEditTextBoardName.setText(R.string.text_is_empty);
+            mEditTextBoardName.setText(R.string.text_is_default);
         }
-        //描述可以为空
+
+        //画板描述 可以为空
         mEditTextBoardDescribe.setText(mStringDescribe);
 
-
+        //画板类型 定义在本地资源中
         titleList = getResources().getStringArray(R.array.title_array_all);
         String[] typeList = getResources().getStringArray(R.array.type_array_all);
-        int selectPosition = 0;
+        int selectPosition = 0;//默认选中第一项
+
         if (mStringBoardType != null) {
+            //遍历查找
             for (int i = 0, size = titleList.length; i < size; i++) {
                 if (typeList[i].equals(mStringBoardType)) {
                     selectPosition = i;
@@ -187,7 +199,7 @@ public class BoardEditDialogFragment extends BaseDialogFragment {
                 String selected = typeList[position];
                 if (!selected.equals(mStringBoardType)) {
                     mStringBoardType = typeList[position];
-                    isChange = true;
+                    isChange = true;//有选择 就表示数据发生变化
                 }
 
             }

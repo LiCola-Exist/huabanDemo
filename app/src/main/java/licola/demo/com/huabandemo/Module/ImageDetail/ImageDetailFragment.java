@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import org.greenrobot.eventbus.EventBus;
 
 import licola.demo.com.huabandemo.API.Fragment.OnImageDetailFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.HttpAPI.ImageDetailAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.ImageDetailAPI;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
@@ -164,9 +164,9 @@ public class ImageDetailFragment extends
             mListener.onClickImageLink(link);
         });
 
-        tv_image_gather.setOnClickListener(v -> Logger.d());
-
-        tv_image_like.setOnClickListener(v -> Logger.d());
+//        tv_image_gather.setOnClickListener(v -> Logger.d());
+//
+//        tv_image_like.setOnClickListener(v -> Logger.d());
 
         mRLImageUser.setOnClickListener(v -> {
             mListener.onClickUserField(mUserId, mUserName);

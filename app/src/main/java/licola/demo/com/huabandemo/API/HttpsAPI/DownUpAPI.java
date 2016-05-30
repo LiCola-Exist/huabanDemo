@@ -1,4 +1,4 @@
-package licola.demo.com.huabandemo.API.HttpAPI;
+package licola.demo.com.huabandemo.API.HttpsAPI;
 
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;

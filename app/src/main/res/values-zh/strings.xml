@@ -91,7 +91,7 @@
     <string name="text_fans_attention">%1$d粉丝 %2$d关注</string>
     <string name="text_image_describe_null">暂无图片描述</string>
     <string name="text_board_describe_null">暂无画板描述</string>
-    <string name="text_is_empty">空</string>
+    <string name="text_is_default">默认空画板</string>
     <string name="text_recommend">推荐</string>
     <string name="text_to">采集到</string>
     <string name="text_edit">编辑</string>
@@ -103,9 +103,16 @@
     <string name="dialog_title_gather">采集</string>
     <string name="dialog_title_delete">删除</string>
     <string name="dialog_title_edit">编辑</string>
+    <string name="dialog_title_add">添加</string>
     <string name="dialog_negative">取消</string>
+
     <string name="dialog_gather_positive">确定采集</string>
+
+    <string name="dialog_add_positive">确定添加</string>
+
     <string name="dialog_edit_positive">确定修改</string>
+    <string name="dialog_edit_neutral">删除画板</string>
+
     <string name="dialog_delete_positive">确定删除</string>
 
     <string name="dialog_delete_message">会同时删除《%s》画板内的所有采集</string>

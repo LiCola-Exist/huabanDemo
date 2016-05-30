@@ -9,7 +9,7 @@ import java.util.List;
 import org.greenrobot.eventbus.EventBus;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnRefreshFragmentInteractionListener;
-import licola.demo.com.huabandemo.API.HttpAPI.TypeAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.TypeAPI;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.ListPinsBean;

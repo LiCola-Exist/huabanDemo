@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.API.Dialog.OnGatherDialogInteractionListener;
-import licola.demo.com.huabandemo.API.HttpAPI.OperateAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.OperateAPI;
 import licola.demo.com.huabandemo.Base.BaseDialogFragment;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
 import licola.demo.com.huabandemo.Module.ImageDetail.GatherInfoBean;
