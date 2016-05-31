@@ -47,6 +47,7 @@ public class AvatarConverter extends retrofit2.Converter.Factory  {
     @Override
     public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
         return new AvatarResponseBodyConverter<>(gson,type);
+
     }
 
     @Override

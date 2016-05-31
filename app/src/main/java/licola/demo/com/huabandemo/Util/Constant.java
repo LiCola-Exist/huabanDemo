@@ -5,6 +5,9 @@ package licola.demo.com.huabandemo.Util;
  * 常量类 用于保存字段的key值
  */
 public class Constant {
+    public static final String EMPTY_STRING = "";
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
     public static final String Authorization="Authorization";
 
     //token information

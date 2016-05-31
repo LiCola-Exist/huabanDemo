@@ -99,7 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void getNecessaryData() {
-        UserSingleton.getInstance().isLogin(getApplication());
+//        UserSingleton.getInstance().isLogin(getApplication());
         isLogin = (boolean) SPUtils.get(mContext, Constant.ISLOGIN, false);
         mAuthorization=getAuthorizations(isLogin);
     }

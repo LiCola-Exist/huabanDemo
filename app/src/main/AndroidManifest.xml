@@ -13,21 +13,28 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <!--
+        注：如果指定 Activity 的启动模式为 "standard"，则该 Activity 也会从堆栈中删除，
+        并在其位置启动一个新实例，以便处理传入的 Intent。 这是因为当启动模式为 "standard" 时，
+        将始终为新 Intent 创建新实例。 所以定义为singleTask
+        -->
         <activity
             android:name=".Module.Main.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar">
             <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
             <!--</intent-filter>-->
         </activity>
 
         <activity
             android:name=".Module.Welcome.WelcomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -114,7 +121,7 @@
         </activity>
 
 
-        <service android:name=".Service.DownloadService"/>
+        <service android:name=".Service.DownloadService" />
         //todo 注册广播暂时不不处理 网络状态变换
         <receiver android:name=".HttpUtils.ConnectionChangeReceiver">
             <intent-filter>

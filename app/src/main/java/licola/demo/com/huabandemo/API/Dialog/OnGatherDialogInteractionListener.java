@@ -6,5 +6,6 @@ package licola.demo.com.huabandemo.API.Dialog;
  * 由dialog传递 宿主实现
  */
 public interface OnGatherDialogInteractionListener {
-     void onDialogPositiveClick(String describe,int selectPosition);
+
+     void onDialogPositiveClick(String boardId, String describe, String PinsId);
 }

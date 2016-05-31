@@ -44,12 +44,16 @@ import licola.demo.com.huabandemo.Module.Search.SearchAndTypeActivity;
 import licola.demo.com.huabandemo.Module.Setting.SettingsActivity;
 import licola.demo.com.huabandemo.Module.Type.TypeNewFragment;
 import licola.demo.com.huabandemo.Module.User.UserActivity;
+import licola.demo.com.huabandemo.Observable.SPHelper;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.CompatUtils;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.SPUtils;
+import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 import static licola.demo.com.huabandemo.Util.SPUtils.FILE_NAME;
 import static licola.demo.com.huabandemo.Util.SPUtils.MODE;
@@ -132,6 +136,30 @@ public class MainActivity extends BaseActivity
 
 //        Logger.d(Constant.ISLOGIN);
 
+//        SPHelper.getLoginState()
+//                .concatMap(new Func1<Boolean, Observable<Boolean>>() {
+//                    @Override
+//                    public Observable<Boolean> call(Boolean aBoolean) {
+//                        return SPHelper.getLoginDtime();
+//                    }
+//                })
+//                .subscribe(new Subscriber<Boolean>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        Logger.d();
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        Logger.d(e.toString());
+//                    }
+//
+//                    @Override
+//                    public void onNext(Boolean aBoolean) {
+//                        Logger.d("aBoolean=" + aBoolean);
+//                    }
+//                });
+
     }
 
     //取出各种需要用的全局变量
@@ -158,7 +186,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    protected  void initResAndListener() {
+    protected void initResAndListener() {
         mFabOperate.setImageResource(R.drawable.ic_search_black_24dp);
         RxView.clicks(mFabOperate)
                 .throttleFirst(Constant.throttDuration, TimeUnit.MILLISECONDS)//防止抖动处理

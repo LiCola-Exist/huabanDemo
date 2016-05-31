@@ -24,10 +24,17 @@ import licola.demo.com.huabandemo.Module.ImageDetail.GatherInfoBean;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.SPUtils;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static licola.demo.com.huabandemo.Util.Constant.BOARDIDARRAY;
+import static licola.demo.com.huabandemo.Util.Constant.BOARDTILTARRAY;
+import static licola.demo.com.huabandemo.Util.Constant.EMPTY_STRING;
+import static licola.demo.com.huabandemo.Util.Constant.EMPTY_STRING_ARRAY;
+import static licola.demo.com.huabandemo.Util.Constant.SEPARATECOMMA;
 
 /**
  * Created by LiCola on  2016/05/06  14:40
@@ -37,7 +44,7 @@ public class GatherDialogFragment extends BaseDialogFragment {
     private static final String KEYAUTHORIZATION = "keyAuthorization";
     private static final String KEYVIAID = "keyViaId";
     private static final String KEYDESCRIBE = "keyDescribe";
-    private static final String KEYBOARDTITLEARRAY = "keyBoardTitleArray";
+
 
 
     EditText mEditTextDescribe;
@@ -48,9 +55,17 @@ public class GatherDialogFragment extends BaseDialogFragment {
     private Context mContext;
     private String mViaId;
     private String mDescribeText;
-    private String[] mBoardTitleArray;
 
-    private int mSelectPosition=0;//默认的选中项
+    //都存在在本地 通过context获取资源
+    private String[] mBoardTitleArray;//我的画板名称
+    private String[] mBoardIdArray;//我的画板id
+
+    private int mSelectPosition = 0;//默认的选中项
+
+
+    public void setListener(OnGatherDialogInteractionListener mListener) {
+        this.mListener = mListener;
+    }
 
     OnGatherDialogInteractionListener mListener;
 
@@ -63,20 +78,14 @@ public class GatherDialogFragment extends BaseDialogFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        if (context instanceof OnGatherDialogInteractionListener){
-            mListener= (OnGatherDialogInteractionListener) context;
-        }else {
-            throwRuntimeException(context);
-        }
-
     }
 
-    public static GatherDialogFragment create(String Authorization,String viaId, String describe, String[] boardTitleArray) {
+    //通过构造器 注入授权字段 id 和原来的描述 其他内容通过其他方法获取
+    public static GatherDialogFragment create(String Authorization, String viaId, String describe) {
         Bundle bundle = new Bundle();
-        bundle.putString(KEYAUTHORIZATION,Authorization);
+        bundle.putString(KEYAUTHORIZATION, Authorization);
         bundle.putString(KEYVIAID, viaId);
         bundle.putString(KEYDESCRIBE, describe);
-        bundle.putStringArray(KEYBOARDTITLEARRAY, boardTitleArray);
         GatherDialogFragment fragment = new GatherDialogFragment();
         fragment.setArguments(bundle);
 
@@ -88,11 +97,15 @@ public class GatherDialogFragment extends BaseDialogFragment {
         super.onCreate(savedInstanceState);
         Bundle args = getArguments();
         if (args != null) {
-            mAuthorization=args.getString(KEYAUTHORIZATION);
+            mAuthorization = args.getString(KEYAUTHORIZATION);
             mViaId = args.getString(KEYVIAID);
             mDescribeText = args.getString(KEYDESCRIBE);
-            mBoardTitleArray = args.getStringArray(KEYBOARDTITLEARRAY);
         }
+        String boardTitleArray = (String) SPUtils.get(mContext, BOARDTILTARRAY, EMPTY_STRING);
+        String mBoardId = (String) SPUtils.get(mContext, BOARDIDARRAY, EMPTY_STRING);
+
+        mBoardTitleArray = boardTitleArray != null ? boardTitleArray.split(SEPARATECOMMA) : EMPTY_STRING_ARRAY;
+        mBoardIdArray = mBoardId != null ? mBoardId.split(SEPARATECOMMA) : EMPTY_STRING_ARRAY;
     }
 
 
@@ -106,17 +119,17 @@ public class GatherDialogFragment extends BaseDialogFragment {
         initView(dialogView);
         builder.setView(dialogView);
 
-        builder.setNegativeButton(R.string.dialog_negative,null);
+        builder.setNegativeButton(R.string.dialog_negative, null);
         builder.setPositiveButton(R.string.dialog_gather_positive, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Logger.d();
                 //取出输入字符串 没有输入用hint文本作为默认值
-                String input=mEditTextDescribe.getText().toString();
-                if (TextUtils.isEmpty(input)){
-                    input=mEditTextDescribe.getHint().toString();
+                String input = mEditTextDescribe.getText().toString();
+                if (TextUtils.isEmpty(input)) {
+                    input = mEditTextDescribe.getHint().toString();
                 }
-                mListener.onDialogPositiveClick(input,mSelectPosition);
+                mListener.onDialogPositiveClick(mBoardIdArray[mSelectPosition],input,mViaId);
             }
         });
 
@@ -148,15 +161,15 @@ public class GatherDialogFragment extends BaseDialogFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(mContext, R.layout.support_simple_spinner_dropdown_item, mBoardTitleArray);
         if (!TextUtils.isEmpty(mDescribeText)) {
             mEditTextDescribe.setHint(mDescribeText);
-        }else {
+        } else {
             mEditTextDescribe.setHint(R.string.text_image_describe_null);
         }
         mSpinnerBoardTitle.setAdapter(adapter);
         mSpinnerBoardTitle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Logger.d("position="+position);
-                mSelectPosition=position;
+                Logger.d("position=" + position);
+                mSelectPosition = position;
             }
 
             @Override
@@ -166,7 +179,6 @@ public class GatherDialogFragment extends BaseDialogFragment {
         });
 
     }
-
 
 
     public Subscription getGatherInfo() {
@@ -189,7 +201,7 @@ public class GatherDialogFragment extends BaseDialogFragment {
                     @Override
                     public void onNext(GatherInfoBean gatherInfoBean) {
                         Logger.d("this pin exist =" + (gatherInfoBean.getExist_pin() != null));
-                        if (gatherInfoBean.getExist_pin()!=null){
+                        if (gatherInfoBean.getExist_pin() != null) {
                             String formatWarning = getResources().getString(R.string.text_gather_warning);
                             mTVGatherWarning.setVisibility(View.VISIBLE);
                             mTVGatherWarning.setText(String.format(formatWarning, gatherInfoBean.getExist_pin().getBoard().getTitle()));

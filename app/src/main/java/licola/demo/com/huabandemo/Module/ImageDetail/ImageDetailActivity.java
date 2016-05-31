@@ -3,6 +3,8 @@ package licola.demo.com.huabandemo.Module.ImageDetail;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Animatable;
@@ -24,6 +26,7 @@ import com.facebook.imagepipeline.image.ImageInfo;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.Bind;
@@ -128,6 +131,12 @@ public class ImageDetailActivity extends BaseActivity
         activity.startActivity(intent);
     }
 
+    public static void launchWithFlag(Activity activity, int flag) {
+        Intent intent = new Intent(activity, ImageDetailActivity.class);
+        intent.setFlags(flag);
+        activity.startActivity(intent);
+    }
+
     @Override
     protected boolean isTranslucentStatusBar() {
         return false;
@@ -138,7 +147,9 @@ public class ImageDetailActivity extends BaseActivity
         super.onCreate(savedInstanceState);
 
         EventBus.getDefault().register(this);//注册
-        mActionFrom = getIntent().getIntExtra(ACTION_KEY, ACTION_DEFAULT);
+        if (getIntent() != null) {
+            mActionFrom = getIntent().getIntExtra(ACTION_KEY, ACTION_DEFAULT);
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -162,6 +173,7 @@ public class ImageDetailActivity extends BaseActivity
 
         getSupportFragmentManager().
                 beginTransaction().replace(R.id.framelayout_info_recycler, ImageDetailFragment.newInstance(mPinsId)).commit();
+
 
     }
 
@@ -212,13 +224,8 @@ public class ImageDetailActivity extends BaseActivity
      */
     private void showGatherDialog() {
 
-        String boardTitleArray = (String) SPUtils.get(mContext, Constant.BOARDTILTARRAY, "");
-        String mBoardId = (String) SPUtils.get(mContext, Constant.BOARDIDARRAY, "");
-        Logger.d("title is " + boardTitleArray);
-
-        String[] array = boardTitleArray != null ? boardTitleArray.split(Constant.SEPARATECOMMA) : new String[0];
-        mBoardIdArray = mBoardId != null ? mBoardId.split(Constant.SEPARATECOMMA) : new String[0];
-        GatherDialogFragment fragment = GatherDialogFragment.create(mAuthorization, mPinsId, mPinsBean.getRaw_text(), array);
+        GatherDialogFragment fragment = GatherDialogFragment.create(mAuthorization, mPinsId, mPinsBean.getRaw_text());
+        fragment.setListener(this);//显式绑定自己 接口回调数据
         fragment.show(getSupportFragmentManager(), null);
 
     }
@@ -378,6 +385,12 @@ public class ImageDetailActivity extends BaseActivity
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Logger.d(intent.toString());
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
@@ -392,12 +405,14 @@ public class ImageDetailActivity extends BaseActivity
 
     @Override
     public void onClickPinsItemImage(PinsMainEntity bean, View view) {
-        ImageDetailActivity.launch(this, mActionFrom);
+        ImageDetailActivity.launch(this, ACTION_THIS);
     }
 
     @Override
     public void onClickPinsItemText(PinsMainEntity bean, View view) {
-        ImageDetailActivity.launch(this, mActionFrom);
+        ImageDetailActivity.launch(this, ACTION_THIS);
+        //自己会重新走 onPause--》onResume
+//        ImageDetailActivity.launchWithFlag(this, Intent.FLAG_ACTIVITY_SINGLE_TOP);
     }
 
     @Override
@@ -433,10 +448,47 @@ public class ImageDetailActivity extends BaseActivity
     }
 
     @Override
-    public void onDialogPositiveClick(String describe, int selectPosition) {
-        Logger.d("describe=" + describe + " selectPosition=" + selectPosition);
+    public void onDialogPositiveClick(String boardId, String describe, String PinsId) {
+        Logger.d("describe=" + describe + " boardId=" + boardId);
 
-        actionGather(describe, selectPosition);
+        actionGather(boardId, describe, PinsId);
+    }
+
+    private void actionGather(String boardId, String describe, String PinsId) {
+
+        Animator animation = AnimatorUtils.getRotationAD(mFabOperate);
+        MyRxObservable.add(animation)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Void, Observable<GatherResultBean>>() {
+                    @Override
+                    public Observable<GatherResultBean> call(Void aVoid) {
+                        return RetrofitClient.createService(OperateAPI.class)
+                                .httpsGatherPins(mAuthorization, boardId, describe, PinsId);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())//最后统一回到UI线程中处理
+                .subscribe(new Subscriber<GatherResultBean>() {
+                    @Override
+                    public void onCompleted() {
+                        Logger.d();
+                        setFabDrawableAnimator(R.drawable.ic_done_white_24dp, mFabOperate);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.d(e.toString());
+                        checkException(e, mAppBar);
+                        setFabDrawableAnimator(R.drawable.ic_report_white_24dp, mFabOperate);
+                    }
+
+                    @Override
+                    public void onNext(GatherResultBean gatherResultBean) {
+                        Logger.d();
+                        //成功后取反
+                        isGathered = !isGathered;
+                    }
+                });
     }
 
     private void actionLike(MenuItem item) {
@@ -484,42 +536,6 @@ public class ImageDetailActivity extends BaseActivity
                 });
     }
 
-    private void actionGather(String describe, int selectPosition) {
-
-        Animator animation = AnimatorUtils.getRotationAD(mFabOperate);
-        MyRxObservable.add(animation)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<Void, Observable<GatherResultBean>>() {
-                    @Override
-                    public Observable<GatherResultBean> call(Void aVoid) {
-                        return RetrofitClient.createService(OperateAPI.class)
-                                .httpsGatherPins(mAuthorization, mBoardIdArray[selectPosition], describe, mPinsId);
-                    }
-                })
-                .observeOn(AndroidSchedulers.mainThread())//最后统一回到UI线程中处理
-                .subscribe(new Subscriber<GatherResultBean>() {
-                    @Override
-                    public void onCompleted() {
-                        Logger.d();
-                        setFabDrawableAnimator(R.drawable.ic_done_white_24dp, mFabOperate);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Logger.d(e.toString());
-                        checkException(e, mAppBar);
-                        setFabDrawableAnimator(R.drawable.ic_report_white_24dp, mFabOperate);
-                    }
-
-                    @Override
-                    public void onNext(GatherResultBean gatherResultBean) {
-                        Logger.d();
-                        //成功后取反
-                        isGathered = !isGathered;
-                    }
-                });
-    }
 
     /**
      * 配置fab的drawable 和动画显示
