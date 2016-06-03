@@ -34,7 +34,6 @@ import licola.demo.com.huabandemo.API.HttpsAPI.UserAPI;
 import licola.demo.com.huabandemo.Entity.BoardItemInfoBean;
 import licola.demo.com.huabandemo.Entity.BoardListInfoBean;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
-import licola.demo.com.huabandemo.Observable.Bean.UserFirstLoginBean;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Module.User.UserActivity;
 import licola.demo.com.huabandemo.Util.Base64;
@@ -44,7 +43,6 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPBuild;
 import licola.demo.com.huabandemo.Base.BaseActivity;
-import licola.demo.com.huabandemo.Util.SPUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -62,8 +60,8 @@ public class LoginActivity extends BaseActivity {
     private static final String PASSWORD = "password";
     private static final String TYPE_KEY = "type_key";
 
-    //多个用户信息的对象
-    private UserFirstLoginBean mUserFistBean;
+    private TokenBean mTokenBean;
+    private UserMeAndOtherBean mUserBean;
 
     //需要的资源
     @BindString(R.string.snack_message_login_success)
@@ -126,7 +124,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    protected void initResAndListener() {
+    protected  void initResAndListener() {
         //软键盘 确定按钮 监听
 
 //        mEditPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -256,9 +254,11 @@ public class LoginActivity extends BaseActivity {
                 .flatMap(new Func1<TokenBean, Observable<UserMeAndOtherBean>>() {
                     @Override
                     public Observable<UserMeAndOtherBean> call(TokenBean tokenBean) {
-                        //构造保存数据的对象 注入账号密码 token对象
-                        mUserFistBean = new UserFirstLoginBean(username, password, tokenBean);
-                        //更新得到的 授权值
+//                        mTokenAccess = tokenBean.getAccess_token();
+//                        mTokenRefresh = tokenBean.getRefresh_token();
+//                        mTokenType = tokenBean.getToken_type();
+//                        mTokenExpiresIn = tokenBean.getExpires_in();
+                        mTokenBean = tokenBean;
                         mAuthorization = tokenBean.getToken_type() + " " + tokenBean.getAccess_token();
                         return RetrofitClient.createService(LoginAPI.class)
                                 .httpsUserRx(mAuthorization);
@@ -267,34 +267,24 @@ public class LoginActivity extends BaseActivity {
                 .flatMap(new Func1<UserMeAndOtherBean, Observable<BoardListInfoBean>>() {
                     @Override
                     public Observable<BoardListInfoBean> call(UserMeAndOtherBean userMeAndOtherBean) {
-                        mUserFistBean.setmUserBean(userMeAndOtherBean);//注入用户个人信息
+                        mUserBean = userMeAndOtherBean;
                         return RetrofitClient.createService(UserAPI.class)
                                 .httpsBoardListInfo(mAuthorization, Constant.OPERATEBOARDEXTRA);
                     }
                 })
-                .map(new Func1<BoardListInfoBean, UserMeAndOtherBean>() {
-                    @Override
-                    public UserMeAndOtherBean call(BoardListInfoBean boardListInfoBean) {
-                        mUserFistBean.setmBoardListInfoBean(boardListInfoBean);//注入画板信息
-
-                        SPBuild.saveUserInfo(mUserFistBean);//保存所有信息
-                        return mUserFistBean.getmUserBean();
-                    }
-                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<UserMeAndOtherBean>() {
+                .subscribe(new Subscriber<BoardListInfoBean>() {
                     @Override
                     public void onStart() {
                         super.onStart();
-                        Logger.d("onStart");
+                        Logger.d();
                         showProgress(true);
                     }
 
                     @Override
                     public void onCompleted() {
-                        Logger.d("onCompleted");
-                        showProgress(false);
+                        Logger.d();
                     }
 
                     @Override
@@ -305,18 +295,102 @@ public class LoginActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void onNext(UserMeAndOtherBean bean) {
-                        Logger.d("onNext");
+                    public void onNext(BoardListInfoBean boardListInfoBean) {
+                        Logger.d();
+                        showProgress(false);
                         NetUtils.showSnackBar(mScrollViewLogin, snack_message_login_success).setCallback(new Snackbar.Callback() {
                             @Override
                             public void onDismissed(Snackbar snackbar, int event) {
                                 super.onDismissed(snackbar, event);
-                                UserActivity.launch(LoginActivity.this, String.valueOf(bean.getUser_id()), bean.getUsername());
+                                UserActivity.launch(LoginActivity.this, String.valueOf(mUserBean.getUser_id()), mUserBean.getUsername());
                                 finish();
                             }
                         });
+                        saveUserInfo(mUserBean, mTokenBean, username, password, boardListInfoBean.getBoards());
+                        Logger.d();
                     }
                 });
+
+//                    @Override
+//                    public void onNext(UserMeAndOtherBean userMeBean) {
+//                        Logger.d();
+//                        showProgress(false);
+//                        NetUtils.showSnackBar(mScrollViewLogin, snack_message_login_success).setCallback(new Snackbar.Callback() {
+//                            @Override
+//                            public void onDismissed(Snackbar snackbar, int event) {
+//                                super.onDismissed(snackbar, event);
+//                                UserActivity.launch(LoginActivity.this, String.valueOf(userMeBean.getUser_id()), userMeBean.getUsername());
+//                                finish();
+//                            }
+//                        });
+//                        saveUserInfo(userMeBean, mTokenAccess, mTokenRefresh, mTokenType, mTokenExpiresIn, username, password);
+//                        Logger.d();
+//
+//                    }
+//                });
+    }
+
+
+    private void saveUserInfo(UserMeAndOtherBean result,
+                              TokenBean mTokenBean,
+                              String mUserAccount, String mUserPassword, List<BoardItemInfoBean> mBoardList) {
+
+        //构造两个StringBuilder对象 拼接用逗号分隔 写入 SharedPreferences
+        StringBuilder boardTitle = new StringBuilder();
+        StringBuilder boardId = new StringBuilder();
+
+//        for (BoardItemInfoBean item : mBoardList) {
+//            boardTitle.append(item.getTitle());
+//            boardId.append(item.getBoard_id());
+//        }
+        for (int i = 0, size = mBoardList.size(); i < size; i++) {
+            boardTitle.append(mBoardList.get(i).getTitle());
+            boardId.append(mBoardList.get(i).getBoard_id());
+
+            if (i != size - 1) {
+                boardTitle.append(Constant.SEPARATECOMMA);
+                boardId.append(Constant.SEPARATECOMMA);
+            }
+        }
+
+        new SPBuild(getApplicationContext())
+                .addData(Constant.ISLOGIN, Boolean.TRUE)//登陆志位
+                .addData(Constant.LOGINTIME, System.currentTimeMillis())//登陆时间
+                .addData(Constant.USERACCOUNT, mUserAccount)//账号
+                .addData(Constant.USERPASSWORD, mUserPassword)//密码
+                .addData(Constant.TOKENACCESS, mTokenBean.getAccess_token())
+                .addData(Constant.TOKENREFRESH, mTokenBean.getRefresh_token())
+                .addData(Constant.TOKENTYPE, mTokenBean.getToken_type())
+                .addData(Constant.TOKENEXPIRESIN, mTokenBean.getExpires_in())
+                .addData(Constant.USERNAME, result.getUsername())
+                .addData(Constant.USERID, String.valueOf(result.getUser_id()))
+                .addData(Constant.USERHEADKEY, result.getAvatar())
+                .addData(Constant.USEREMAIL, result.getEmail())
+                .addData(Constant.BOARDTILTARRAY, boardTitle.toString())
+                .addData(Constant.BOARDIDARRAY, boardId.toString())
+                .build();
+
+//        //保存先清空内容
+//        SPUtils.clear(getApplicationContext());
+//        //逻辑的关键信息
+//        SPUtils.putApply(getApplicationContext(), Constant.ISLOGIN, Boolean.TRUE);
+//        SPUtils.putApply(getApplicationContext(), Constant.LOGINTIME, System.currentTimeMillis());//获取当前时间作为登录时间
+//        SPUtils.putApply(getApplicationContext(), Constant.USERACCOUNT, mUserAccount);
+//        SPUtils.putApply(getApplicationContext(), Constant.USERPASSWORD, mUserPassword);
+//
+//        //token 信息
+//        SPUtils.putApply(getApplicationContext(), Constant.TOKENACCESS, mTokenAccess);
+//        SPUtils.putApply(getApplicationContext(), Constant.TOKENREFRESH, mTokenRefresh);
+//        SPUtils.putApply(getApplicationContext(), Constant.TOKENTYPE, mTokenType);
+//        SPUtils.putApply(getApplicationContext(), Constant.TOKENEXPIRESIN, mTokenExpiresIn);
+//        //用户个人信息
+//
+//        SPUtils.putApply(getApplicationContext(), Constant.USERNAME, result.getUsername());
+//        SPUtils.putApply(getApplicationContext(), Constant.USERID, String.valueOf(result.getUser_id()));
+//        SPUtils.putApply(getApplicationContext(), Constant.USERHEADKEY, result.getAvatar().getKey());
+//        SPUtils.putApply(getApplicationContext(), Constant.USEREMAIL, result.getEmail());
+
+
     }
 
     private boolean isEmailValid(String email) {

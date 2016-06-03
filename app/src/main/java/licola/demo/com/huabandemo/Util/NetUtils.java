@@ -51,7 +51,7 @@ public class NetUtils {
     }
 
     public static Snackbar showSnackBar(View rootView, String message) {
-        Snackbar snackbar = Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT);
+        Snackbar snackbar=Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT);
         snackbar.show();
         return snackbar;
     }
@@ -70,12 +70,9 @@ public class NetUtils {
         } else if (mThrowable instanceof ConnectException) {
             String snack_message_net_error = mContext.getString(R.string.snack_message_net_error);
             NetUtils.showNetworkErrorSnackBar(mContext, mRootView, snack_message_net_error, snack_action_to_setting);
-        } else if (mThrowable instanceof RuntimeException) {
-            String msg = "RuntimeException:"+mThrowable.getMessage();
-            NetUtils.showSnackBar(mRootView, msg);
         } else {
             String snack_message_unknown_error = mContext.getString(R.string.snack_message_unknown_error);
-            NetUtils.showSnackBar(mRootView, snack_message_unknown_error);
+            NetUtils.showSnackBar(mRootView,snack_message_unknown_error);
         }
     }
 

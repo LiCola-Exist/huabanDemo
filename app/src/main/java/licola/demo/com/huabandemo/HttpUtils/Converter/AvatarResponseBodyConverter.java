@@ -48,7 +48,7 @@ public class AvatarResponseBodyConverter<T> implements retrofit2.Converter<Respo
                 buffer.append(line);//写入buffer
             }
             result = buffer.toString();
-        } catch (Exception e) {
+        } catch (InterruptedIOException e) {
             Logger.d(e.toString());
             result = "{}";
         } finally {
@@ -56,7 +56,6 @@ public class AvatarResponseBodyConverter<T> implements retrofit2.Converter<Respo
         }
         // Logger.d();
         return gson.fromJson(regexChange(result), type);//返回解析后的对象
-
     }
 
     /**

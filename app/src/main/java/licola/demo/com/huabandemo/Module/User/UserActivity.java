@@ -40,27 +40,26 @@ import licola.demo.com.huabandemo.API.HttpsAPI.OperateAPI;
 import licola.demo.com.huabandemo.API.HttpsAPI.UserAPI;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Base.BaseSwipeViewPagerActivity;
+import licola.demo.com.huabandemo.Module.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Entity.BoardListInfoBean;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
-import licola.demo.com.huabandemo.Module.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Module.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Module.Login.UserMeAndOtherBean;
-import licola.demo.com.huabandemo.Observable.ErrorHelper;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.FastBlurUtil;
 import licola.demo.com.huabandemo.Util.Logger;
+import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Widget.MyDialog.BoardAddDialogFragment;
-import rx.Observable;
+import licola.demo.com.huabandemo.Widget.MyDialog.BoardEditDialogFragment;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -158,7 +157,7 @@ public class UserActivity
                 .subscribe(new Action1<Void>() {
                     @Override
                     public void call(Void aVoid) {
-                        startOperate(isMe);
+                        startOperate();
                     }
                 });
 
@@ -176,13 +175,14 @@ public class UserActivity
         });
     }
 
-    private void startOperate(boolean isMe) {
+    private void startOperate() {
         if (isMe) {
             Logger.d("is me add broad");
             showAddBoardDialog();
         } else {
             Logger.d("httpFollowUser");
             httpFollowUser();
+
         }
     }
 
@@ -213,9 +213,7 @@ public class UserActivity
                     public void onError(Throwable e) {
                         Logger.d(e.toString());
                         checkException(e, mAppBar);
-                        //出现错误弹出提示 不需要修改图标
-//                        mFabOperate.setImageResource(R.drawable.ic_report_black_24dp);
-//                        setFabDrawableAnimator(R.drawable.ic_report_black_24dp, mFabOperate);
+                        setFabDrawableAnimator(R.drawable.ic_report_black_24dp, mFabOperate);
                     }
 
                     @Override
@@ -482,49 +480,5 @@ public class UserActivity
     @Override
     public void onDialogPositiveClick(String name, String describe, String selectType) {
         Logger.d(name + " " + describe + " " + selectType);
-
-        httpAddBoard(name, describe, selectType);
-    }
-
-    private void httpAddBoard(String name, String describe, String selectType) {
-        RetrofitClient.createService(OperateAPI.class)
-                .httpsAddBoard(mAuthorization, name, describe, selectType)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Func1<UserBoardSingleBean, Observable<UserBoardSingleBean>>() {
-                    @Override
-                    public Observable<UserBoardSingleBean> call(UserBoardSingleBean userBoardSingleBean) {
-                        return ErrorHelper.getCheckNetError(userBoardSingleBean);
-                    }
-                })
-                .subscribe(new Subscriber<UserBoardSingleBean>() {
-                    @Override
-                    public void onCompleted() {
-                        Logger.d();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Logger.d(e.toString());
-                        //出现错误 应当弹出提示 不应该修改图片 影响用户操作
-//                        mFabOperate.setImageResource(R.drawable.ic_report_black_24dp);
-//                        setFabDrawableAnimator(R.drawable.ic_report_black_24dp,mFabOperate);
-                        checkException(e, mAppBar);
-                    }
-
-                    @Override
-                    public void onNext(UserBoardSingleBean userBoardSingleBean) {
-                        Logger.d(userBoardSingleBean.getBoards().getTitle());
-                        String boardIdArray = (String) SPUtils.get(mContext, Constant.BOARDIDARRAY, Constant.EMPTY_STRING);
-                        String boardTitleArray = (String) SPUtils.get(mContext, Constant.BOARDTILTARRAY, Constant.EMPTY_STRING);
-
-                        boardIdArray = boardIdArray + Constant.SEPARATECOMMA + userBoardSingleBean.getBoards().getBoard_id();
-                        boardTitleArray = boardTitleArray + Constant.SEPARATECOMMA + userBoardSingleBean.getBoards().getTitle();
-
-                        SPUtils.putApply(mContext, Constant.BOARDIDARRAY, boardIdArray);
-                        SPUtils.putApply(mContext, Constant.BOARDTILTARRAY, boardTitleArray);
-                    }
-                });
-
     }
 }

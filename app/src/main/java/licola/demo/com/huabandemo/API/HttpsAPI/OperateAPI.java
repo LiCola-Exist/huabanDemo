@@ -51,7 +51,7 @@ public interface OperateAPI {
     //https://api.huaban.com/pins/ body=board_id=17891564&text=描述内容&via=707423726
     @FormUrlEncoded
     @POST("pins/")
-    Observable<GatherResultBean> httpsGatherPins(@Header(Constant.Authorization) String authorization, @Field("board_id") String boardId, @Field("text") String describe, @Field("via") String PinsId);
+    Observable<GatherResultBean> httpsGatherPins(@Header(Constant.Authorization) String authorization, @Field("board_id") String boardId, @Field("text") String describe, @Field("via") String PinsIda);
 
     //新建画板
     //https://api.huaban.com/boards  body=category=类型&description=描述&title=标题
