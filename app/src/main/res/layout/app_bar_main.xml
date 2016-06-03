@@ -9,9 +9,9 @@
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
-        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <android.support.v7.widget.Toolbar
@@ -19,14 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-             />
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/view_swipe_frame"/>
+    <include layout="@layout/view_swipe_frame" />
 
 
-    <include layout="@layout/view_fab"/>
+    <include layout="@layout/view_fab" />
 
 </android.support.design.widget.CoordinatorLayout>

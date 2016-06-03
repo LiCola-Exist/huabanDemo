@@ -188,6 +188,7 @@ public class ImageDetailActivity extends BaseActivity
     }
 
 
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

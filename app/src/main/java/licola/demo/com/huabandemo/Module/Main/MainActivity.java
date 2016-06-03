@@ -88,8 +88,8 @@ public class MainActivity extends BaseActivity
     private String[] titles;
 
     private Boolean isLogin;
-    private String mUserName = "";
-    private String mUserId = "";
+    private String mUserName = Constant.EMPTY_STRING;
+    private String mUserId = Constant.EMPTY_STRING;
 
 //    private FirebaseAnalytics mFirebaseAnalytics;
 

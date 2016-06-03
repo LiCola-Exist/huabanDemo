@@ -2,6 +2,7 @@ package licola.demo.com.huabandemo.Module.SearchResult;
 
 import java.util.List;
 
+import licola.demo.com.huabandemo.Entity.ErrorBaseBean;
 import licola.demo.com.huabandemo.Entity.FacetsEntity;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 
@@ -11,7 +12,7 @@ import licola.demo.com.huabandemo.Entity.PinsMainEntity;
  * 其中去掉了 comments 这个数组对象 其中包含有个图片的评论信息
  * 已经把user相关的 avatar 对象改为 String
  */
-public class SearchImageBean{
+public class SearchImageBean extends ErrorBaseBean{
 
 
     /**

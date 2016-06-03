@@ -1,9 +1,11 @@
 package licola.demo.com.huabandemo.Module.User;
 
+import licola.demo.com.huabandemo.Entity.ErrorBaseBean;
+
 /**
  * Created by LiCola on  2016/04/07  17:37
  */
-public class UserBoardSingleBean extends OperateError{
+public class UserBoardSingleBean extends ErrorBaseBean {
 
     private UserBoardItemBean board;
 

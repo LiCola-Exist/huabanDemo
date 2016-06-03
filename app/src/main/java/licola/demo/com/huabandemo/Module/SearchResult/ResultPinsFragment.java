@@ -12,7 +12,9 @@ import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
+import licola.demo.com.huabandemo.Observable.ErrorHelper;
 import licola.demo.com.huabandemo.Util.Logger;
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -48,8 +50,12 @@ public class ResultPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHea
     protected Subscription getHttpFirst() {
         return RetrofitClient.createService(SearchAPI.class)
                 .httpsImageSearchRx(mAuthorization,mKey, mIndex, mLimit)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<SearchImageBean, Observable<SearchImageBean>>() {
+                    @Override
+                    public Observable<SearchImageBean> call(SearchImageBean searchImageBean) {
+                        return ErrorHelper.getCheckNetError(searchImageBean);
+                    }
+                })
                 .map(new Func1<SearchImageBean, List<PinsMainEntity>>() {
                     @Override
                     public List<PinsMainEntity> call(SearchImageBean searchImageBean) {
@@ -57,6 +63,8 @@ public class ResultPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHea
                     }
                 })
                 .filter(getFilterFunc1())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<PinsMainEntity>>() {
                     @Override
                     public void onCompleted() {
@@ -67,6 +75,7 @@ public class ResultPinsFragment extends BaseRecyclerHeadFragment<RecyclerPinsHea
                     public void onError(Throwable e) {
                         Logger.d(e.toString());
                         checkException(e);
+
                     }
 
                     @Override

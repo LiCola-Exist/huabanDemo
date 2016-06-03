@@ -3,11 +3,12 @@ package licola.demo.com.huabandemo.Module.SearchResult;
 import java.util.List;
 
 import licola.demo.com.huabandemo.Entity.BoardPinsBean;
+import licola.demo.com.huabandemo.Entity.ErrorBaseBean;
 
 /**
  * Created by LiCola on  2016/04/05  16:42
  */
-public class SearchBoardListBean {
+public class SearchBoardListBean extends ErrorBaseBean {
 
     /**
      * text : material design

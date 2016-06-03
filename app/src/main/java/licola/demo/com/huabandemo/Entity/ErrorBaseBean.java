@@ -1,10 +1,10 @@
-package licola.demo.com.huabandemo.Module.User;
+package licola.demo.com.huabandemo.Entity;
 
 /**
  * Created by LiCola on  2016/05/30  18:50
  */
 
-public class OperateError {
+public class ErrorBaseBean {
 
     /**
      * err : 403
@@ -14,7 +14,6 @@ public class OperateError {
 
     private int err;
     private String msg;
-    private int board_id;
 
     public int getErr() {
         return err;
@@ -32,11 +31,4 @@ public class OperateError {
         this.msg = msg;
     }
 
-    public int getBoard_id() {
-        return board_id;
-    }
-
-    public void setBoard_id(int board_id) {
-        this.board_id = board_id;
-    }
 }

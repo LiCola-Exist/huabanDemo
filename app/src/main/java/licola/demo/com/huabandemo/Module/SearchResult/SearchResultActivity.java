@@ -117,7 +117,7 @@ public class SearchResultActivity extends BaseActivity implements
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-
+//        mViewPager.setOffscreenPageLimit(3);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);

@@ -94,6 +94,8 @@ public abstract class BaseFragment extends Fragment {
         Logger.d(TAG);
     }
 
+
+
     @Override
     public void onStart() {
         super.onStart();

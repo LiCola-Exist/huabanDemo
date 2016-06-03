@@ -12,7 +12,9 @@ import licola.demo.com.huabandemo.Adapter.RecyclerBoardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.BoardPinsBean;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
+import licola.demo.com.huabandemo.Observable.ErrorHelper;
 import licola.demo.com.huabandemo.Util.Logger;
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -48,6 +50,12 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
     protected Subscription getHttpFirst() {
         return RetrofitClient.createService(SearchAPI.class)
                 .httpsBoardSearchRx(mAuthorization,mKey,mIndex,mLimit)
+                .flatMap(new Func1<SearchBoardListBean, Observable<SearchBoardListBean>>() {
+                    @Override
+                    public Observable<SearchBoardListBean> call(SearchBoardListBean searchBoardListBean) {
+                        return ErrorHelper.getCheckNetError(searchBoardListBean);
+                    }
+                })
                 .map(new Func1<SearchBoardListBean, List<BoardPinsBean>>() {
                     @Override
                     public List<BoardPinsBean> call(SearchBoardListBean searchBoardListBean) {
@@ -55,8 +63,8 @@ public class ResultBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
                     }
                 })
                 .filter(getFilterFunc1())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())//发布者的运行线程 联网操作属于IO操作
+                .observeOn(AndroidSchedulers.mainThread())//订阅者的运行线程 在main线程中才能修改UI
                 .subscribe(new Subscriber<List<BoardPinsBean>>() {
                     @Override
                     public void onCompleted() {

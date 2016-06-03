@@ -2,10 +2,12 @@ package licola.demo.com.huabandemo.Module.SearchResult;
 
 import java.util.List;
 
+import licola.demo.com.huabandemo.Entity.ErrorBaseBean;
+
 /**
  * Created by LiCola on  2016/04/05  20:02
  */
-public class SearchPeopleListBean {
+public class SearchPeopleListBean extends ErrorBaseBean{
 
     /**
      * text : 特立独行的猫

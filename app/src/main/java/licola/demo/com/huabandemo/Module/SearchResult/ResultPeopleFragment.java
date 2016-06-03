@@ -14,10 +14,13 @@ import licola.demo.com.huabandemo.Adapter.RecyclerPeopleAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
 import licola.demo.com.huabandemo.Module.SearchResult.SearchPeopleListBean.UsersBean;
+import licola.demo.com.huabandemo.Observable.ErrorHelper;
 import licola.demo.com.huabandemo.Util.Logger;
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -26,7 +29,6 @@ import rx.schedulers.Schedulers;
 public class ResultPeopleFragment extends
         BaseRecyclerHeadFragment<RecyclerPeopleAdapter, List<UsersBean>> {
 
-    private static final String TAG = "ResultPeopleFragment";
     private int mIndex = 1;//联网的起始页 默认1
 
     private OnPeopleFragmentInteraction<UsersBean> mListener;
@@ -51,10 +53,14 @@ public class ResultPeopleFragment extends
         return RetrofitClient.createService(SearchAPI.class)
                 .httpsPeopleSearchRx(mAuthorization,mKey,mIndex,mLimit)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<SearchPeopleListBean, Observable<SearchPeopleListBean>>() {
+                    @Override
+                    public Observable<SearchPeopleListBean> call(SearchPeopleListBean searchPeopleListBean) {
+                        return ErrorHelper.getCheckNetError(searchPeopleListBean);
+                    }
+                })
                 .map(SearchPeopleListBean::getUsers)
                 .filter(getFilterFunc1())
-                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<UsersBean>>() {
                     @Override
