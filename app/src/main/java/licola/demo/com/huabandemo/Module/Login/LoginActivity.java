@@ -363,7 +363,7 @@ public class LoginActivity extends BaseActivity {
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-            
+
             mProgressLogin.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
             mProgressLogin.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
