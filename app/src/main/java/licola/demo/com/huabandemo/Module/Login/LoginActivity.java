@@ -43,6 +43,7 @@ import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPBuild;
 import licola.demo.com.huabandemo.Base.BaseActivity;
+import licola.demo.com.huabandemo.Util.SPUtils;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -249,28 +250,17 @@ public class LoginActivity extends BaseActivity {
         RetrofitClient.createService(LoginAPI.class)
                 .httpsTokenRx(mAuthorization, PASSWORD, username, password)
                 //得到toke成功 用内部字段保存 在最后得到用户信息一起保存写入
-
                 //得到Observable<> 将它转换成另一个Observable<>
-                .flatMap(new Func1<TokenBean, Observable<UserMeAndOtherBean>>() {
-                    @Override
-                    public Observable<UserMeAndOtherBean> call(TokenBean tokenBean) {
-//                        mTokenAccess = tokenBean.getAccess_token();
-//                        mTokenRefresh = tokenBean.getRefresh_token();
-//                        mTokenType = tokenBean.getToken_type();
-//                        mTokenExpiresIn = tokenBean.getExpires_in();
-                        mTokenBean = tokenBean;
-                        mAuthorization = tokenBean.getToken_type() + " " + tokenBean.getAccess_token();
-                        return RetrofitClient.createService(LoginAPI.class)
-                                .httpsUserRx(mAuthorization);
-                    }
+                .flatMap((Func1<TokenBean, Observable<UserMeAndOtherBean>>) tokenBean -> {
+                    mTokenBean = tokenBean;
+                    mAuthorization = tokenBean.getToken_type() + " " + tokenBean.getAccess_token();
+                    return RetrofitClient.createService(LoginAPI.class)
+                            .httpsUserRx(mAuthorization);
                 })
-                .flatMap(new Func1<UserMeAndOtherBean, Observable<BoardListInfoBean>>() {
-                    @Override
-                    public Observable<BoardListInfoBean> call(UserMeAndOtherBean userMeAndOtherBean) {
-                        mUserBean = userMeAndOtherBean;
-                        return RetrofitClient.createService(UserAPI.class)
-                                .httpsBoardListInfo(mAuthorization, Constant.OPERATEBOARDEXTRA);
-                    }
+                .flatMap((Func1<UserMeAndOtherBean, Observable<BoardListInfoBean>>) userMeAndOtherBean -> {
+                    mUserBean = userMeAndOtherBean;
+                    return RetrofitClient.createService(UserAPI.class)
+                            .httpsBoardListInfo(mAuthorization, Constant.OPERATEBOARDEXTRA);
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -311,23 +301,6 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
 
-//                    @Override
-//                    public void onNext(UserMeAndOtherBean userMeBean) {
-//                        Logger.d();
-//                        showProgress(false);
-//                        NetUtils.showSnackBar(mScrollViewLogin, snack_message_login_success).setCallback(new Snackbar.Callback() {
-//                            @Override
-//                            public void onDismissed(Snackbar snackbar, int event) {
-//                                super.onDismissed(snackbar, event);
-//                                UserActivity.launch(LoginActivity.this, String.valueOf(userMeBean.getUser_id()), userMeBean.getUsername());
-//                                finish();
-//                            }
-//                        });
-//                        saveUserInfo(userMeBean, mTokenAccess, mTokenRefresh, mTokenType, mTokenExpiresIn, username, password);
-//                        Logger.d();
-//
-//                    }
-//                });
     }
 
 
@@ -335,14 +308,13 @@ public class LoginActivity extends BaseActivity {
                               TokenBean mTokenBean,
                               String mUserAccount, String mUserPassword, List<BoardItemInfoBean> mBoardList) {
 
+        //保存先清空内容
+        SPUtils.clear(getApplicationContext());
+
         //构造两个StringBuilder对象 拼接用逗号分隔 写入 SharedPreferences
         StringBuilder boardTitle = new StringBuilder();
         StringBuilder boardId = new StringBuilder();
 
-//        for (BoardItemInfoBean item : mBoardList) {
-//            boardTitle.append(item.getTitle());
-//            boardId.append(item.getBoard_id());
-//        }
         for (int i = 0, size = mBoardList.size(); i < size; i++) {
             boardTitle.append(mBoardList.get(i).getTitle());
             boardId.append(mBoardList.get(i).getBoard_id());
@@ -369,28 +341,6 @@ public class LoginActivity extends BaseActivity {
                 .addData(Constant.BOARDTILTARRAY, boardTitle.toString())
                 .addData(Constant.BOARDIDARRAY, boardId.toString())
                 .build();
-
-//        //保存先清空内容
-//        SPUtils.clear(getApplicationContext());
-//        //逻辑的关键信息
-//        SPUtils.putApply(getApplicationContext(), Constant.ISLOGIN, Boolean.TRUE);
-//        SPUtils.putApply(getApplicationContext(), Constant.LOGINTIME, System.currentTimeMillis());//获取当前时间作为登录时间
-//        SPUtils.putApply(getApplicationContext(), Constant.USERACCOUNT, mUserAccount);
-//        SPUtils.putApply(getApplicationContext(), Constant.USERPASSWORD, mUserPassword);
-//
-//        //token 信息
-//        SPUtils.putApply(getApplicationContext(), Constant.TOKENACCESS, mTokenAccess);
-//        SPUtils.putApply(getApplicationContext(), Constant.TOKENREFRESH, mTokenRefresh);
-//        SPUtils.putApply(getApplicationContext(), Constant.TOKENTYPE, mTokenType);
-//        SPUtils.putApply(getApplicationContext(), Constant.TOKENEXPIRESIN, mTokenExpiresIn);
-//        //用户个人信息
-//
-//        SPUtils.putApply(getApplicationContext(), Constant.USERNAME, result.getUsername());
-//        SPUtils.putApply(getApplicationContext(), Constant.USERID, String.valueOf(result.getUser_id()));
-//        SPUtils.putApply(getApplicationContext(), Constant.USERHEADKEY, result.getAvatar().getKey());
-//        SPUtils.putApply(getApplicationContext(), Constant.USEREMAIL, result.getEmail());
-
-
     }
 
     private boolean isEmailValid(String email) {
@@ -413,16 +363,7 @@ public class LoginActivity extends BaseActivity {
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-//            mScrollViewLogin.setVisibility(show ? View.GONE : View.VISIBLE);
-//            mScrollViewLogin.animate().setDuration(shortAnimTime).alpha(
-//                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-//                @Override
-//                public void onAnimationEnd(Animator animation) {
-//                    mScrollViewLogin.setVisibility(show ? View.GONE : View.VISIBLE);
-//                }
-//            });
-
+            
             mProgressLogin.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
             mProgressLogin.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {

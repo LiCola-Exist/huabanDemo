@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -23,6 +24,15 @@ public class HuaBanApplication extends Application {
         instance = this;
         refWatcher= LeakCanary.install(this);//初始化 内存检测工具
         Fresco.initialize(HuaBanApplication.getInstance());//初始化Fresco图片加载框架
+
+        //chrome 调试工具
+        Stetho.initialize(
+                Stetho.newInitializerBuilder(this)
+                        .enableDumpapp(
+                                Stetho.defaultDumperPluginsProvider(this))
+                        .enableWebKitInspector(
+                                Stetho.defaultInspectorModulesProvider(this))
+                        .build());
 
     }
 

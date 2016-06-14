@@ -166,6 +166,7 @@ public class ImageDetailActivity extends BaseActivity
     }
 
     private void recoverData(Bundle savedInstanceState) {
+        Logger.d(TAG);
         //被销毁之后 恢复数据
         if (savedInstanceState != null) {
             if ((savedInstanceState.getParcelable(KEYPARCELABLE) != null) && (mPinsBean == null)) {

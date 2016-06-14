@@ -27,8 +27,7 @@ public class FileUtils {
 
     @NonNull
     public static File getDirsFile(String dirsFileName) {
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_DCIM), dirsFileName);
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), dirsFileName);
         if (!file.exists()) {
             file.mkdir();
         }

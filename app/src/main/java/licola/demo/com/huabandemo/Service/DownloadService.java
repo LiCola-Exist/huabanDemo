@@ -120,6 +120,7 @@ public class DownloadService extends IntentService {
             message.what = MSG_LOADING;
             message.obj = mDownloadInfo;
             mNotifyHandler.sendMessage(message);
+
             mNotifyHandler.postDelayed(this, mDelayedTime);
         }
     };

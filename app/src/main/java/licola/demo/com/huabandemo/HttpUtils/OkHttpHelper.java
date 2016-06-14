@@ -26,7 +26,7 @@ public class OkHttpHelper {
         return builder;
     }
 
-    public static OkHttpClient.Builder addProgressClient(OkHttpClient.Builder builder,OnProgressResponseListener listener) {
+    public static OkHttpClient.Builder addProgressClient(OkHttpClient.Builder builder, OnProgressResponseListener listener) {
 
 //        OnProgressResponseListener listener=new OnProgressResponseListener() {
 //            @Override
@@ -47,7 +47,7 @@ public class OkHttpHelper {
                 Logger.d("start intercept");
                 Response originalResponse = chain.proceed(chain.request());
                 return originalResponse.newBuilder().body(
-                        new ProgressResponseBody(originalResponse.body(),listener))
+                        new ProgressResponseBody(originalResponse.body(), listener))
                         .build();
             }
         });

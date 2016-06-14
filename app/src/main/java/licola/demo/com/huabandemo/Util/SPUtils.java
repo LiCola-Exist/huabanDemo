@@ -3,6 +3,7 @@ package licola.demo.com.huabandemo.Util;
 import java.util.Map;
 import java.util.Set;
 
+import android.content.ContentProvider;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.SharedPreferences;
@@ -29,6 +30,7 @@ public class SPUtils {
     public static void putApply(Context context, String key, Object object) {
         SharedPreferences sp = context.getSharedPreferences(FILE_NAME,
                 MODE);
+
         SharedPreferences.Editor editor = sp.edit();
         judgePutDataType(key, object, editor);
         editor.apply();
