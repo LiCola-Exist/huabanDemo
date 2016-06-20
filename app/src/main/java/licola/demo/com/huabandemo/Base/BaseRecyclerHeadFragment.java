@@ -9,10 +9,11 @@ import android.view.View;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import licola.demo.com.huabandemo.API.OnFragmentRefreshListener;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
+import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Widget.LoadingFooter;
 import licola.demo.com.huabandemo.Widget.MyRecyclerview.HeaderAndFooterRecyclerViewAdapter;
 import licola.demo.com.huabandemo.Widget.MyRecyclerview.RecyclerViewUtils;
@@ -43,7 +44,7 @@ public abstract class BaseRecyclerHeadFragment
     protected boolean isScorllLisener = true;
 
 
-    @Bind(R.id.recycler_list)
+    @BindView(R.id.recycler_list)
     protected RecyclerView mRecyclerView;
 
     //    protected RecyclerPinsHeadCardAdapter mAdapter;
@@ -75,6 +76,8 @@ public abstract class BaseRecyclerHeadFragment
             mKey = args.getString(TYPE_KEY);//父类取出key
         }
     }
+
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -109,8 +112,18 @@ public abstract class BaseRecyclerHeadFragment
         return new Func1<K, Boolean>() {
             @Override
             public Boolean call(K k) {
+//                getFootView();
+
                 if (k == null || k.size() == 0) {
-                    mFooterView.setState(LoadingFooter.State.TheEnd);
+                    if (mFooterView!=null){
+                        mFooterView.setState(LoadingFooter.State.TheEnd);
+                        Logger.d("mFooterView ! = null");
+
+                    }else {
+                        Logger.d("mFooterView= null");
+                    }
+
+
                     isScorllLisener = false;
                     return false;
                 }
@@ -127,7 +140,7 @@ public abstract class BaseRecyclerHeadFragment
 
     protected View getFootView() {
         if (mFooterView == null) {
-            mFooterView = new LoadingFooter(getContext());
+            mFooterView = new LoadingFooter(getActivity());
             mFooterView.setState(LoadingFooter.State.Loading);
         }
         return mFooterView;

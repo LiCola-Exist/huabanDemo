@@ -11,11 +11,12 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+
+import butterknife.BindView;
 import licola.demo.com.huabandemo.API.OnFragmentRefreshListener;
 import licola.demo.com.huabandemo.API.Fragment.OnRefreshFragmentInteractionListener;
 import licola.demo.com.huabandemo.R;
-import licola.demo.com.huabandemo.Util.Logger;
+
 
 /**
  * Created by LiCola on  2016/04/23  17:34
@@ -26,9 +27,9 @@ public abstract class BaseSwipeViewPagerActivity<T extends BaseFragment>
         extends BaseActivity
         implements OnRefreshFragmentInteractionListener {
 
-    @Bind(R.id.container)
+    @BindView(R.id.container)
     protected ViewPager mViewPager;
-    @Bind(R.id.swipe_refresh_widget)
+    @BindView(R.id.swipe_refresh_widget)
     protected SwipeRefreshLayout mSwipeRefresh;
 
     protected ArrayList<T> mFragmentList;

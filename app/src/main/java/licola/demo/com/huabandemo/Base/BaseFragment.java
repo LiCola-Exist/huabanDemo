@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NetUtils;
 import rx.Subscription;
@@ -26,6 +27,8 @@ public abstract class BaseFragment extends Fragment {
     protected abstract String getTAG();
 
     protected View mRootView;
+
+    protected Unbinder unbinder;
 
     //联网的授权字段 几乎所有的Fragment子类都有联网功能 故父类提供变量
     protected String mAuthorization;
@@ -84,7 +87,7 @@ public abstract class BaseFragment extends Fragment {
         if (null == mRootView) {
             mRootView = inflater.inflate(getLayoutId(), null);
         }
-        ButterKnife.bind(this, mRootView);
+        unbinder= ButterKnife.bind(this, mRootView);
         return mRootView;
     }
 
@@ -124,7 +127,7 @@ public abstract class BaseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         Logger.d(TAG);
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override
