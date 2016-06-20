@@ -11,7 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 
-import butterknife.Bind;
+
+import butterknife.BindView;
 import licola.demo.com.huabandemo.API.Fragment.OnBoardDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.HttpsAPI.OperateAPI;
 import licola.demo.com.huabandemo.Base.BaseActivity;
@@ -34,9 +35,9 @@ public class BoardDetailActivity extends BaseActivity
     protected static final String TYPE_KEY = "TYPE_KEY";
     protected static final String TYPE_TITLE = "TYPE_TITLE";
 
-    @Bind(R.id.toolbar)
+    @BindView(R.id.toolbar)
     Toolbar mToolBar;
-    @Bind(R.id.fab_board_detail)
+    @BindView(R.id.fab_board_detail)
     FloatingActionButton mFabBoardAttention;
 
     @Override

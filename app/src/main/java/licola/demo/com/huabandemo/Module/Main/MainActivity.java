@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -26,9 +27,11 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jakewharton.rxbinding.view.RxView;
 
+
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnRefreshFragmentInteractionListener;
@@ -62,13 +65,13 @@ public class MainActivity extends BaseActivity
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     //布局中控件 自动生成
-    @Bind(R.id.navigation_view)
+    @BindView(R.id.navigation_view)
     NavigationView mNavigation;
-    @Bind(R.id.drawer_layout)
+    @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-    @Bind(R.id.fab_operate)
+    @BindView(R.id.fab_operate)
     FloatingActionButton mFabOperate;
-    @Bind(R.id.swipe_refresh_widget)
+    @BindView(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefresh;
 
     //NavigationView中的控件 手动填充
@@ -77,6 +80,7 @@ public class MainActivity extends BaseActivity
     private TextView tv_nav_email;//用户邮箱
 
     private FragmentManager fragmentManager;
+    private BaseRecyclerHeadFragment fragment;
 
     private final int mDrawableList[] = {R.drawable.ic_loyalty_black_36dp, R.drawable.ic_camera_black_36dp,
             R.drawable.ic_message_black_36dp, R.drawable.ic_people_black_36dp};
@@ -278,7 +282,7 @@ public class MainActivity extends BaseActivity
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         String type = types[position];
         String title = titles[position];
-        BaseRecyclerHeadFragment fragment = TypeNewFragment.newInstance(type, title);
+        fragment = TypeNewFragment.newInstance(type, title);
         if (fragment != null) {
             mListenerRefresh = fragment;
         }
@@ -286,6 +290,17 @@ public class MainActivity extends BaseActivity
         transaction.commit();
         setTitle(title);
     }
+
+
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        FragmentTransaction ft = fragmentManager.beginTransaction();
+//        ft.remove(fragment);
+//        ft.commitAllowingStateLoss();
+//        super.onSaveInstanceState(outState);
+//    }
+
 
 
     @Override

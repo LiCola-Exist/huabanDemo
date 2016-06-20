@@ -31,7 +31,6 @@ public class LoadingFooter extends RelativeLayout {
 
     public LoadingFooter(Context context, AttributeSet attrs) {
         this(context, attrs,0);
-
     }
 
     public LoadingFooter(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -153,7 +152,7 @@ public class LoadingFooter extends RelativeLayout {
         }
     }
 
-    public  enum State {
+    public enum State {
         Normal/**正常*/
         , TheEnd/**加载到最底了*/
         , Loading/**加载中..*/

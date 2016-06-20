@@ -8,7 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import licola.demo.com.huabandemo.API.OnFragmentRefreshListener;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnRefreshFragmentInteractionListener;
@@ -35,9 +35,9 @@ public class TypeActivity extends BaseActivity
     protected String mType;
     protected String mTitle;
 
-    @Bind(R.id.swipe_refresh_widget)
+    @BindView(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefresh;
-    @Bind(R.id.fab_operate)
+    @BindView(R.id.fab_operate)
     FloatingActionButton mFabOperate;
 
     //刷新的接口 子Fragment实现

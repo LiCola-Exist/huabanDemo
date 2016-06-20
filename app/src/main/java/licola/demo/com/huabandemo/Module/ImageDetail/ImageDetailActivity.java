@@ -26,9 +26,10 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
+
 import butterknife.BindDrawable;
 import butterknife.BindString;
+import butterknife.BindView;
 import licola.demo.com.huabandemo.API.Dialog.OnGatherDialogInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.HttpsAPI.OperateAPI;
@@ -85,15 +86,15 @@ public class ImageDetailActivity extends BaseActivity
     @BindString(R.string.url_image_general)
     String mFormatImageGeneral;
 
-    @Bind(R.id.appbar_image_detail)
+    @BindView(R.id.appbar_image_detail)
     AppBarLayout mAppBar;
-    @Bind(R.id.colltoolbar_layout)
+    @BindView(R.id.colltoolbar_layout)
     CollapsingToolbarLayout mCollapsingToolbar;
-    @Bind(R.id.toolbar_image)
+    @BindView(R.id.toolbar_image)
     Toolbar toolbar;
-    @Bind(R.id.fab_image_detail)
+    @BindView(R.id.fab_image_detail)
     FloatingActionButton mFabOperate;
-    @Bind(R.id.img_image_big)
+    @BindView(R.id.img_image_big)
     SimpleDraweeView mImgImageBig;
 
     public PinsMainEntity mPinsBean;

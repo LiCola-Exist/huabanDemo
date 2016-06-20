@@ -46,10 +46,22 @@ public class FollowBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
     }
 
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        if (savedInstanceState!=null){
+//            mAuthorization=savedInstanceState.getString("key1");
+//            Logger.d(mAuthorization);
+//        }
     }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        outState.putString("key1",mAuthorization);
+//        Logger.d();
+//    }
 
     @Override
     protected Subscription getHttpFirst() {
@@ -128,6 +140,7 @@ public class FollowBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if ((context instanceof OnBoardFragmentInteractionListener) && (context instanceof OnRefreshFragmentInteractionListener)) {
             mListener = (OnBoardFragmentInteractionListener<BoardPinsBean>) context;
             mRefreshListener = (OnRefreshFragmentInteractionListener) context;
@@ -136,7 +149,11 @@ public class FollowBoardFragment extends BaseRecyclerHeadFragment<RecyclerBoardA
         }
 
         if (context instanceof FollowActivity) {
-            mAuthorization = ((FollowActivity) context).mAuthorization;
+            String a=((FollowActivity) context).mAuthorization;
+            if (a!=null){
+                mAuthorization=a;
+            }
+            Logger.d(mAuthorization);
         }
     }
 

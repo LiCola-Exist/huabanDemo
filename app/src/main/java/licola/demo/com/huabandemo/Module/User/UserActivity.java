@@ -30,9 +30,9 @@ import com.jakewharton.rxbinding.view.RxView;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
 import butterknife.BindColor;
 import butterknife.BindString;
+import butterknife.BindView;
 import licola.demo.com.huabandemo.API.Dialog.OnAddDialogInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
@@ -40,22 +40,20 @@ import licola.demo.com.huabandemo.API.HttpsAPI.OperateAPI;
 import licola.demo.com.huabandemo.API.HttpsAPI.UserAPI;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Base.BaseSwipeViewPagerActivity;
-import licola.demo.com.huabandemo.Module.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Entity.BoardListInfoBean;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
 import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
+import licola.demo.com.huabandemo.Module.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Module.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Module.Login.UserMeAndOtherBean;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.FastBlurUtil;
 import licola.demo.com.huabandemo.Util.Logger;
-import licola.demo.com.huabandemo.Util.NetUtils;
 import licola.demo.com.huabandemo.Util.SPUtils;
 import licola.demo.com.huabandemo.Util.Utils;
 import licola.demo.com.huabandemo.Widget.MyDialog.BoardAddDialogFragment;
-import licola.demo.com.huabandemo.Widget.MyDialog.BoardEditDialogFragment;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -84,27 +82,27 @@ public class UserActivity
     @BindString(R.string.text_fans_attention)
     String mFansFollowingFormat;
 
-    @Bind(R.id.toolbar_user)
+    @BindView(R.id.toolbar_user)
     Toolbar mToolbar;
-    @Bind(R.id.app_bar)
+    @BindView(R.id.app_bar)
     AppBarLayout mAppBar;
-    @Bind(R.id.collapsingtoolbar_user)
+    @BindView(R.id.collapsingtoolbar_user)
     CollapsingToolbarLayout mCollapsingToolbar;
-    @Bind(R.id.linearlayout_user_info)
+    @BindView(R.id.linearlayout_user_info)
     LinearLayout mLayoutUser;
-    @Bind(R.id.img_image_user)
+    @BindView(R.id.img_image_user)
     SimpleDraweeView mImageUser;
-    @Bind(R.id.tv_user_name)
+    @BindView(R.id.tv_user_name)
     TextView mTvUserName;
-    @Bind(R.id.tv_user_location_job)
+    @BindView(R.id.tv_user_location_job)
     TextView mTvUserLocationJob;
-    @Bind(R.id.tv_user_friend)
+    @BindView(R.id.tv_user_friend)
     TextView mTvUserFriend;
 
-    @Bind(R.id.tablayout_user)
+    @BindView(R.id.tablayout_user)
     TabLayout mTabLayout;
 
-    @Bind(R.id.fab_operate)
+    @BindView(R.id.fab_operate)
     FloatingActionButton mFabOperate;
 
     public String mKey;

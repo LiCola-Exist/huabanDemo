@@ -2,12 +2,16 @@ package licola.demo.com.huabandemo.Module.Follow;
 
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import java.util.List;
 
 import butterknife.BindString;
+
 import org.greenrobot.eventbus.EventBus;
+
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnRefreshFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.HttpsAPI.FollowingAPI;
@@ -51,10 +55,14 @@ public class FollowPinsFragment
         return new FollowPinsFragment();
     }
 
+    public FollowPinsFragment() {
+
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Logger.d(context.toString());
         if ((context instanceof OnRefreshFragmentInteractionListener)
                 && (context instanceof OnPinsFragmentInteractionListener)) {
             mListener = (OnPinsFragmentInteractionListener) context;
@@ -64,9 +72,45 @@ public class FollowPinsFragment
         }
 
         if (context instanceof FollowActivity) {
-            mAuthorization = ((FollowActivity) context).mAuthorization;
+            String a = ((FollowActivity) context).mAuthorization;
+            if (a != null) {
+                mAuthorization = a;
+            }
+            Logger.d(mAuthorization);
         }
+
     }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+        mRefreshListener = null;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            mAuthorization = savedInstanceState.getString("key1");
+            Logger.d(mAuthorization);
+        }
+
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("key1", mAuthorization);
+        Logger.d();
+    }
+
 
     @Override
     protected Subscription getHttpFirst() {
@@ -101,15 +145,25 @@ public class FollowPinsFragment
     }
 
     private Action0 getCompleteAction() {
-        return () -> {
-            Logger.d();
-            mRefreshListener.OnRefreshState(false);
+//        return () -> {
+//            Logger.d();
+////            mRefreshListener.OnRefreshState(false);
+//            ((OnRefreshFragmentInteractionListener) getActivity()).OnRefreshState(false);
+//        };
+        return new Action0() {
+            @Override
+            public void call() {
+                Logger.d();
+//            mRefreshListener.OnRefreshState(false);
+            ((OnRefreshFragmentInteractionListener) getActivity()).OnRefreshState(false);
+            }
         };
     }
 
 
     /**
      * 判断集合是否和当前adapter中的集合对象一致 这里只简单实现 应该重写hash方法 用equals做判断
+     *
      * @param result
      * @return
      */

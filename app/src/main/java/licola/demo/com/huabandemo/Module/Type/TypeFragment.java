@@ -12,8 +12,9 @@ import android.widget.ProgressBar;
 
 import java.util.List;
 
-import butterknife.Bind;
 import org.greenrobot.eventbus.EventBus;
+
+import butterknife.BindView;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.HttpsAPI.TypeAPI;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
@@ -50,11 +51,11 @@ public class TypeFragment extends BaseFragment {
 
 
 
-    @Bind(R.id.recycler_list)
+    @BindView(R.id.recycler_list)
     RecyclerView mRecyclerView;
-    @Bind(R.id.swipe_refresh_widget)
+    @BindView(R.id.swipe_refresh_widget)
     SwipeRefreshLayout mSwipeRefresh;
-    @Bind(R.id.progressBar_recycler)
+    @BindView(R.id.progressBar_recycler)
     ProgressBar mProgressBar;
 
     //    private MainRecyclerViewAdapter mAdapter;

@@ -31,8 +31,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
 import licola.demo.com.huabandemo.API.HttpsAPI.SearchAPI;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
@@ -57,20 +57,20 @@ import rx.schedulers.Schedulers;
  */
 public class SearchAndTypeActivity extends BaseActivity {
 
-    @Bind(R.id.actv_search)
+    @BindView(R.id.actv_search)
     AutoCompleteTextView mACTVSearch;
-    @Bind(R.id.scrollview_search)
+    @BindView(R.id.scrollview_search)
     ScrollView mScrollViewSearch;
-    @Bind(R.id.flow_reference)
+    @BindView(R.id.flow_reference)
     FlowLayout mFlowReference;//推荐的父控件 内容动态填充
-    @Bind(R.id.flow_history)
+    @BindView(R.id.flow_history)
     FlowLayout mFlowHistory;//推荐的父控件 内容动态填充
-    @Bind(R.id.ibtn_clear_history)
+    @BindView(R.id.ibtn_clear_history)
     ImageButton mIBtnClearHistory;
 
     @BindString(R.string.hint_not_history)
     String mStringNotHistory;
-//    @BindDrawable(R.drawable.bg_tv_text_selector)
+//    @BindViewDrawable(R.drawable.bg_tv_text_selector)
 //    Drawable mTextDrawable;
 
     final int mItemLineNumber = 3;//每行的个数

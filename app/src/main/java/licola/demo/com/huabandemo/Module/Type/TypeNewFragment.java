@@ -54,12 +54,23 @@ public class TypeNewFragment
         return fragment;
     }
 
+    public TypeNewFragment(){
+
+    }
+
     @Override
     protected void getBundleData(Bundle args) {
         if (args != null) {
             mKey = args.getString(TYPE_KEY);
             mTitle = args.getString(TYPE_TITLE);
+
+
         }
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -147,6 +158,7 @@ public class TypeNewFragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Logger.d(context.toString());
         if ((context instanceof OnRefreshFragmentInteractionListener)
                 && (context instanceof OnPinsFragmentInteractionListener)) {
             mListener = (OnPinsFragmentInteractionListener) context;

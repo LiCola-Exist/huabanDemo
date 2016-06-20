@@ -12,8 +12,8 @@ import android.view.View;
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
 import butterknife.BindColor;
+import butterknife.BindView;
 import licola.demo.com.huabandemo.API.Fragment.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
@@ -32,13 +32,13 @@ public class FollowActivity extends BaseSwipeViewPagerActivity<BaseRecyclerHeadF
         implements OnPinsFragmentInteractionListener,
         OnBoardFragmentInteractionListener<BoardPinsBean> {
 
-    @Bind(R.id.tablatyou_attention)
+    @BindView(R.id.tablatyou_attention)
     TabLayout mTabLayout;
-    @Bind(R.id.toolbar_attention)
+    @BindView(R.id.toolbar_attention)
     Toolbar mToolbar;
 
     @BindColor(R.color.white)
-    int mColorTabIndicator;
+    int mColorTaBindViewicator;
 
 
     @Override
@@ -85,7 +85,7 @@ public class FollowActivity extends BaseSwipeViewPagerActivity<BaseRecyclerHeadF
     @Override
     protected void setupTabLayoutWithViewPager(ViewPager mViewPager) {
         mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setSelectedTabIndicatorColor(mColorTabIndicator);
+        mTabLayout.setSelectedTabIndicatorColor(mColorTaBindViewicator);
     }
 
 

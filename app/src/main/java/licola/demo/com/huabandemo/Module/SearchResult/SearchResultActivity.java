@@ -17,9 +17,10 @@ import android.view.View;
 import java.util.HashSet;
 import java.util.Set;
 
-import butterknife.Bind;
+
 import butterknife.BindColor;
 import butterknife.BindString;
+import butterknife.BindView;
 import licola.demo.com.huabandemo.API.Fragment.OnBoardFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnPeopleFragmentInteraction;
 import licola.demo.com.huabandemo.API.Fragment.OnPinsFragmentInteractionListener;
@@ -54,9 +55,9 @@ public class SearchResultActivity extends BaseActivity implements
     @BindColor(R.color.white)
     int mColorTabIndicator;
 
-    @Bind(R.id.viewpager_search)
+    @BindView(R.id.viewpager_search)
     ViewPager mViewPager;
-    @Bind(R.id.tablayou_search)
+    @BindView(R.id.tablayou_search)
     TabLayout mTabLayout;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;

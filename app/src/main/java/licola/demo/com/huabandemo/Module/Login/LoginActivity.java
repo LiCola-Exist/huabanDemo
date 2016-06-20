@@ -27,8 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.Bind;
 import butterknife.BindString;
+import butterknife.BindView;
+
 import licola.demo.com.huabandemo.API.HttpsAPI.LoginAPI;
 import licola.demo.com.huabandemo.API.HttpsAPI.UserAPI;
 import licola.demo.com.huabandemo.Entity.BoardItemInfoBean;
@@ -69,19 +70,19 @@ public class LoginActivity extends BaseActivity {
     String snack_message_login_success;
 
     // UI references.
-    @Bind(R.id.progress_login)
+    @BindView(R.id.progress_login)
     ProgressBar mProgressLogin;
-    @Bind(R.id.actv_username)
+    @BindView(R.id.actv_username)
     AutoCompleteTextView mACTVUsername;
-    @Bind(R.id.edit_password)
+    @BindView(R.id.edit_password)
     EditText mEditPassword;
-    @Bind(R.id.btn_login)
+    @BindView(R.id.btn_login)
     Button mBtnLogin;
-    @Bind(R.id.btn_register)
+    @BindView(R.id.btn_register)
     Button mBtnRegister;
-    @Bind(R.id.ll_login)
+    @BindView(R.id.ll_login)
     LinearLayout mLinearLogin;
-    @Bind(R.id.scroll_login_form)
+    @BindView(R.id.scroll_login_form)
     ScrollView mScrollViewLogin;
 
     //联网的授权字段 提供子Fragment使用
