@@ -22,7 +22,7 @@ public class HuaBanApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        refWatcher= LeakCanary.install(this);//初始化 内存检测工具
+        refWatcher = LeakCanary.install(this);//初始化 内存检测工具
         Fresco.initialize(HuaBanApplication.getInstance());//初始化Fresco图片加载框架
 
         //chrome 调试工具
@@ -45,12 +45,13 @@ public class HuaBanApplication extends Application {
 
     /**
      * 获得内存监视器 监视任何对象
-     *  使用 refWatcher.watch(object);
+     * 使用 refWatcher.watch(object);
+     *
      * @return 全局的refWatcher
      */
-   public static RefWatcher getRefwatcher(Context context){
-       HuaBanApplication huaBanApplication= (HuaBanApplication) context.getApplicationContext();
-       return huaBanApplication.refWatcher;
-   }
+    public static RefWatcher getRefwatcher(Context context) {
+        HuaBanApplication huaBanApplication = (HuaBanApplication) context.getApplicationContext();
+        return huaBanApplication.refWatcher;
+    }
 
 }

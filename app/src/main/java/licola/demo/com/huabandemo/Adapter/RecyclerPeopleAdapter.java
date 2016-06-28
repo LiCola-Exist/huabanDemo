@@ -107,7 +107,7 @@ public class RecyclerPeopleAdapter extends BaseRecyclerAdapter<UsersBean> {
         }else {
             //// TODO: 2016/4/6 0006 对于同一个View，请不要多次调用setHierarchy，即使这个View是可回收的。创建 DraweeHierarchy 的较为耗时的一个过程，应该多次利用。
 
-            holder.img_image_user.setImageURI(null);
+//            holder.img_image_user.setImageURI(null);
             holder.img_image_user.getHierarchy().setPlaceholderImage(R.drawable.ic_account_circle_gray_48dp);
         }
 
