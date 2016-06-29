@@ -134,7 +134,8 @@ public class MainActivity extends BaseActivity
         intiMenuView();//为Drawer添加menu菜单项目
 
         selectFragment(0);//默认选中0
-
+        //测试bugly异常反馈
+//        CrashReport.testJavaCrash();
     }
 
     //取出各种需要用的全局变量

@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+/.idea/
+/build/
+.gradle/
+app/app.iml
+crash.txt
+huabanDemo.iml
+local.properties
