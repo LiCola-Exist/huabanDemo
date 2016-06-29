@@ -7,6 +7,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.stetho.Stetho;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+import com.tencent.bugly.crashreport.CrashReport;
 
 /**
  * Created by LiCola on  2015/12/02  13:25
@@ -24,6 +25,9 @@ public class HuaBanApplication extends Application {
         instance = this;
         refWatcher = LeakCanary.install(this);//初始化 内存检测工具
         Fresco.initialize(HuaBanApplication.getInstance());//初始化Fresco图片加载框架
+
+        CrashReport.initCrashReport(getApplicationContext(), "900037004", false);
+
 
         //chrome 调试工具
         Stetho.initialize(

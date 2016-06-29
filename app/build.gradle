@@ -71,6 +71,8 @@ dependencies {
     debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
     testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    //bug反馈 bugly检测工具
+    compile 'com.tencent.bugly:crashreport:2.1.7'
     //Android官方支持包 使用外部supportLibraryVersion统一版本
     compile "com.android.support:support-v4:$rootProject.supportLibraryVersion"
     compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
@@ -81,6 +83,8 @@ dependencies {
     //图片框架
     compile 'com.facebook.fresco:fresco:0.11.0'
     compile 'com.facebook.fresco:drawee:0.11.0'
+    compile 'com.facebook.fresco:imagepipeline:0.11.0'
+    compile 'com.facebook.fresco:animated-gif:0.11.0'
     //响应式
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'io.reactivex:rxandroid:1.2.1'

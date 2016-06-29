@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jakewharton.rxbinding.view.RxView;
+import com.tencent.bugly.crashreport.CrashReport;
 
 
 import java.util.concurrent.TimeUnit;
@@ -133,8 +134,6 @@ public class MainActivity extends BaseActivity
         intiMenuView();//为Drawer添加menu菜单项目
 
         selectFragment(0);//默认选中0
-
-//        Logger.d(Constant.ISLOGIN);
 
     }
 
