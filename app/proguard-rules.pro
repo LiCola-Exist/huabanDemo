@@ -15,6 +15,7 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+#RxJava的混淆
 -dontwarn sun.misc.**
 
 -keepclassmembers class rx.internal.util.unsafe.*ArrayQueue*Field* {
@@ -29,6 +30,19 @@
 -keepclassmembers class rx.internal.util.unsafe.BaseLinkedQueueConsumerNodeRef {
     rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
-
+#Bugly的混淆
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
+
+#eventbus的混淆
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+      @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode {
+      *;
+}
+# Only required if you use AsyncExecutor
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+      <init>(java.lang.Throwable);
+}
