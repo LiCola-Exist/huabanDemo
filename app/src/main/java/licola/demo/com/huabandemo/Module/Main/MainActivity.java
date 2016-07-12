@@ -10,6 +10,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -210,6 +212,11 @@ public class MainActivity extends BaseActivity
             if (!TextUtils.isEmpty(email)) {
                 tv_nav_email.setText(email);
             }
+        }else {
+            new ImageLoadFresco.LoadImageFrescoBuilder(mContext,img_nav_head,"")
+                    .setPlaceHolderImage(ContextCompat.getDrawable(mContext,R.drawable.ic_account_circle_gray_48dp))
+                    .setIsCircle(true, true)
+                    .build();
         }
     }
 
@@ -238,9 +245,9 @@ public class MainActivity extends BaseActivity
      * @param group
      */
     private void addButtonDrawable(LinearLayout group) {
-        Button btn = null;
+//        Button btn = null;
         for (int i = 0, size = group.getChildCount(); i < size; i++) {
-            btn = (Button) group.getChildAt(i);
+            Button btn = (Button) group.getChildAt(i);
             btn.setCompoundDrawablesWithIntrinsicBounds(
                     null,
                     CompatUtils.getTintListDrawable(mContext, mDrawableList[i], R.color.tint_list_pink),

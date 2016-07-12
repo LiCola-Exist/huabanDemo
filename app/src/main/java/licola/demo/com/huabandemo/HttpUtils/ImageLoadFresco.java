@@ -26,6 +26,7 @@ import com.facebook.imagepipeline.image.CloseableImage;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
+import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
 
 /**
@@ -108,8 +109,9 @@ public class ImageLoadFresco {
         if (frescoBuilder.mActualImageScaleType == ScalingUtils.ScaleType.FOCUS_CROP) {
             builderM.setActualImageFocusPoint(new PointF(0f, 0f));
         }
-
+        ;
         if (frescoBuilder.mPlaceHolderImage != null) {
+//            builderM.setPlaceholderImage(ContextCompat.getDrawable(mContext, R.drawable.ic_account_circle_gray_48dp), ScalingUtils.ScaleType.CENTER);
             builderM.setPlaceholderImage(frescoBuilder.mPlaceHolderImage, ScalingUtils.ScaleType.CENTER);
         }
 

@@ -11,9 +11,12 @@ import android.support.v4.graphics.drawable.DrawableCompat;
  */
 public final class CompatUtils {
     public static Drawable getTintListDrawable(Context mContext, int mResDrawableId, int mResTintId){
-        Drawable drawable = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, mResDrawableId).mutate());
-        DrawableCompat.setTintList(drawable, ContextCompat.getColorStateList(mContext, mResTintId));
-        return drawable;
+        Drawable drawable=ContextCompat.getDrawable(mContext,mResDrawableId);
+        Drawable drawable1= DrawableCompat.wrap(drawable.mutate());
+        DrawableCompat.setTintList(drawable1,ContextCompat.getColorStateList(mContext,mResTintId));
+//        Drawable drawable = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, mResDrawableId).mutate());
+//        DrawableCompat.setTintList(drawable, ContextCompat.getColorStateList(mContext, mResTintId));
+        return drawable1;
     }
 
     public static Drawable getTintDrawable(Context mContext ,int mResDrawableId, @ColorInt int tint){
