@@ -43,6 +43,7 @@ import licola.demo.com.huabandemo.Util.Logger;
 public class ImageLoadFresco {
     private static final String TAG = "ImageLoadFresco";
 
+    
     //必要参数
     private SimpleDraweeView mSimpleDraweeView;
     private Context mContext;
