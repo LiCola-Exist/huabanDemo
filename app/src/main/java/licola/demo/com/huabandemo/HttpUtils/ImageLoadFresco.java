@@ -48,7 +48,6 @@ public class ImageLoadFresco {
     private SimpleDraweeView mSimpleDraweeView;
     private Context mContext;
 
-
     /**
      * 私有化的构造函数 得到builder的参数 构造对象
      *
