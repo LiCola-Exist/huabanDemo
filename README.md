@@ -4,6 +4,7 @@
  - 作为一个花瓣网用户实在受不了Android版的崩溃而且已经一年多没有更新。工作之余网络抓包和反编译，要自己写一个App，因为毕竟是别人的项目也不指望能上架，就直接开源放到github上，如果侵权请联系我及时删除。
  - 源代码放在GitHub：[项目地址](https://github.com/LiCola/huabanDemo)
  - 下面介绍目前的工作内容
+
 #更新记录
  - 现在兼容包升级导致API-20以下Fresco使用异常，目前已经统一使用[CompatUtils工具类](https://github.com/LiCola/huabanDemo/blob/master/app/src/main/java/licola/demo/com/huabandemo/Util/CompatUtils.java)，内部使用[VectorDrawableCompat](https://developer.android.com/reference/android/support/graphics/drawable/VectorDrawableCompat.html)获取VectorDrawable资源，保证低版本的运行。
 
