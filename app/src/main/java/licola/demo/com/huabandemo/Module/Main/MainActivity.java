@@ -4,6 +4,8 @@ package licola.demo.com.huabandemo.Module.Main;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -190,13 +193,14 @@ public class MainActivity extends BaseActivity
      * 根据登录状态 显示头像和用户名
      */
     private void setNavUserInfo() {
-
+        Drawable drawable= CompatUtils.getTintDrawable(mContext,R.drawable.ic_account_circle_gray_48dp, Color.GRAY);
         Logger.d("isLogin=" + isLogin);
         if (isLogin) {
             String key = (String) SPUtils.get(mContext, Constant.USERHEADKEY, "");
             if (!TextUtils.isEmpty(key)) {
                 key = getString(R.string.urlImageRoot) + key;
                 new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_nav_head, key)
+                        .setPlaceHolderImage(drawable)
                         .setIsCircle(true, true)
                         .build();
             } else {
@@ -213,8 +217,9 @@ public class MainActivity extends BaseActivity
                 tv_nav_email.setText(email);
             }
         }else {
+
             new ImageLoadFresco.LoadImageFrescoBuilder(mContext,img_nav_head,"")
-                    .setPlaceHolderImage(ContextCompat.getDrawable(mContext,R.drawable.ic_account_circle_gray_48dp))
+                    .setPlaceHolderImage(drawable)
                     .setIsCircle(true, true)
                     .build();
         }

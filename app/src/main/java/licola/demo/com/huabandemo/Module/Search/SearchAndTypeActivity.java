@@ -7,12 +7,14 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -48,6 +50,7 @@ import licola.demo.com.huabandemo.Widget.FlowLayout;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -118,6 +121,7 @@ public class SearchAndTypeActivity extends BaseActivity {
 
         initHintAdapter();
         initHintHttp();
+
         mACTVSearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -125,6 +129,10 @@ public class SearchAndTypeActivity extends BaseActivity {
                 SearchResultActivity.launch(SearchAndTypeActivity.this, mListHttpHint.get(position));
             }
         });
+
+        RxTextView.editorActions(mACTVSearch, integer -> integer==EditorInfo.IME_ACTION_SEARCH).throttleFirst(500,TimeUnit.MILLISECONDS)
+                .subscribe(integer -> {initActionSearch();});
+
         initClearHistory();//点击按钮 清除历史记录的操作
     }
 

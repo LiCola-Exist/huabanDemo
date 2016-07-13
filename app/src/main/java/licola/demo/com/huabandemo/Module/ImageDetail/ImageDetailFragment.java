@@ -1,6 +1,7 @@
 package licola.demo.com.huabandemo.Module.ImageDetail;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -344,6 +345,7 @@ public class ImageDetailFragment extends
             }
             //用户名头像加载
             new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_user, url_head)
+                    .setPlaceHolderImage(CompatUtils.getTintDrawable(getContext(),R.drawable.ic_account_circle_gray_48dp, Color.GRAY))
                     .setIsCircle(true)
                     .build();
         }

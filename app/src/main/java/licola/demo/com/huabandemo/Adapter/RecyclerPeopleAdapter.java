@@ -1,5 +1,6 @@
 package licola.demo.com.huabandemo.Adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,6 +103,7 @@ public class RecyclerPeopleAdapter extends BaseRecyclerAdapter<UsersBean> {
                 url = String.format(mUrlSmallFormat, url);
             }
             new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_image_user, url)
+                    .setPlaceHolderImage(CompatUtils.getTintDrawable(mContext,R.drawable.ic_account_circle_gray_48dp, Color.GRAY))
                     .setIsCircle(true)
                     .build();
         }else {

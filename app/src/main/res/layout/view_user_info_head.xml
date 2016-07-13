@@ -16,9 +16,6 @@
         android:id="@+id/img_image_user"
         android:layout_width="@dimen/user_head_circle_big_size"
         android:layout_height="@dimen/user_head_circle_big_size"
-        fresco:placeholderImage="@drawable/ic_account_circle_white_48dp"
-        fresco:placeholderImageScaleType="fitCenter"
-
         />
 
     <TextView
@@ -51,8 +48,6 @@
         android:layout_marginTop="@dimen/text_margin"
         android:layout_marginBottom="@dimen/text_margin"
         android:background="@drawable/bg_text_user_friend"
-        android:drawableEnd="@drawable/ic_chevron_right_white_24dp"
-        android:drawableRight="@drawable/ic_chevron_right_white_24dp"
         android:drawablePadding="@dimen/text_padding_default"
         android:ellipsize="end"
         android:gravity="center"

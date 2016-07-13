@@ -30,6 +30,7 @@
                 android:inputType="textAutoComplete"
                 android:maxLines="1"
                 android:popupBackground="@color/white"
+                android:imeOptions="actionSearch"
                 />
         </android.support.v7.widget.Toolbar>
 

@@ -48,6 +48,7 @@ import licola.demo.com.huabandemo.Module.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Module.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Module.Login.UserMeAndOtherBean;
 import licola.demo.com.huabandemo.R;
+import licola.demo.com.huabandemo.Util.CompatUtils;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.FastBlurUtil;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -144,7 +145,16 @@ public class UserActivity
             addSubscription(getMyBoardListInfo());
         }
 
+        initView();
 
+    }
+
+    private void initView() {
+        mTvUserFriend.setCompoundDrawablesWithIntrinsicBounds(
+                null,
+                null,
+                CompatUtils.getTintDrawable(mContext,R.drawable.ic_chevron_right_white_24dp,Color.WHITE),
+                null);
     }
 
     @Override
@@ -423,6 +433,7 @@ public class UserActivity
                 url = String.format(mFormatUrlSmall, url);
             }
             new ImageLoadFresco.LoadImageFrescoBuilder(getApplicationContext(), mImageUser, url)
+                    .setPlaceHolderImage(CompatUtils.getTintDrawable(mContext,R.drawable.ic_account_circle_white_48dp,Color.WHITE))
                     .setIsCircle(true, true)
                     .setBitmapDataSubscriber(new BaseBitmapDataSubscriber() {
                         @Override
