@@ -165,9 +165,9 @@ public class ImageDetailFragment extends
             mListener.onClickImageLink(link);
         });
 
-//        tv_image_gather.setOnClickListener(v -> Logger.d());
+        tv_image_gather.setOnClickListener(v -> Logger.d());
 //
-//        tv_image_like.setOnClickListener(v -> Logger.d());
+        tv_image_like.setOnClickListener(v -> Logger.d());
 
         mRLImageUser.setOnClickListener(v -> {
             mListener.onClickUserField(mUserId, mUserName);
@@ -176,6 +176,8 @@ public class ImageDetailFragment extends
         mRLImageBoard.setOnClickListener(v -> {
             mListener.onClickBoardField(mBoardId, mBoardName);
         });
+
+
     }
 
     @Override
@@ -345,7 +347,7 @@ public class ImageDetailFragment extends
             }
             //用户名头像加载
             new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_user, url_head)
-                    .setPlaceHolderImage(CompatUtils.getTintDrawable(getContext(),R.drawable.ic_account_circle_gray_48dp, Color.GRAY))
+                    .setPlaceHolderImage(CompatUtils.getTintDrawable(getContext(), R.drawable.ic_account_circle_gray_48dp, Color.GRAY))
                     .setIsCircle(true)
                     .build();
         }
@@ -367,15 +369,19 @@ public class ImageDetailFragment extends
         new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_1, url1)
                 .setIsRadius(true, 5)
                 .build();
+//        Logger.d("id1=" + img_image_board_1.getId());
         new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_2, url2)
                 .setIsRadius(true, 5)
                 .build();
+//        Logger.d("id2=" + img_image_board_2.getId());
         new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_3, url3)
                 .setIsRadius(true, 5)
                 .build();
+//        Logger.d("id3=" + img_image_board_3.getId());
         new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_4, url4)
                 .setIsRadius(true, 5)
                 .build();
+//        Logger.d("id4=" + img_image_board_4.getId());
 
     }
 

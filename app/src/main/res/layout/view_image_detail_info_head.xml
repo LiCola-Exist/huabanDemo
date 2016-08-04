@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:divider="@drawable/divider_padding_linear"
+
     android:gravity="center"
     android:orientation="vertical"
+    android:divider="@drawable/divider_padding_linear"
     android:showDividers="middle">
 
     <RelativeLayout

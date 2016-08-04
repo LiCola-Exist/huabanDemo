@@ -67,7 +67,7 @@ public class SearchAndTypeActivity extends BaseActivity {
     @BindView(R.id.flow_reference)
     FlowLayout mFlowReference;//推荐的父控件 内容动态填充
     @BindView(R.id.flow_history)
-    FlowLayout mFlowHistory;//推荐的父控件 内容动态填充
+    FlowLayout mFlowHistory;//搜索历史父控件 内容动态填充
     @BindView(R.id.ibtn_clear_history)
     ImageButton mIBtnClearHistory;
 

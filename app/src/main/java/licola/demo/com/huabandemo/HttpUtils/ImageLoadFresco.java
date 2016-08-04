@@ -200,7 +200,7 @@ public class ImageLoadFresco {
          * @return
          */
         public ImageLoadFresco build() {
-
+            Logger.d("图片开始加载 viewId="+this.mSimpleDraweeView.getId()+" url"+this.mUrl);
 //            if (TextUtils.isEmpty(mUrl)) {
 //                throw new IllegalArgumentException("URL不能为空");
 //            }

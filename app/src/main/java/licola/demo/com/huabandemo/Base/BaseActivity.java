@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import licola.demo.com.huabandemo.R;
@@ -25,12 +26,13 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected String TAG = getTAG();
-
+    
     protected abstract int getLayoutId();
 
     protected abstract String getTAG();
 
     protected Context mContext;
+
 
     //关键的是否登录 由父类提供
     public boolean isLogin=false;
@@ -43,7 +45,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public String toString() {
         return getClass().getSimpleName() + " @" + Integer.toHexString(hashCode());
     }
-
 
     private CompositeSubscription mCompositeSubscription;
 
@@ -89,7 +90,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         mContext = this;
         getNecessaryData();
         initResAndListener();
-        Logger.d(TAG);
+        if (isLogin()){
+            Logger.d(TAG);
+        }
 
     }
 
@@ -109,6 +112,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         return true;
     }
 
+    protected boolean isLogin(){
+        return true;
+    }
+
     protected String getAuthorizations(boolean isLogin) {
 
         String temp = " ";
@@ -124,26 +131,34 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Logger.d(TAG);
+        if (isLogin()){
+            Logger.d(TAG);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Logger.d(TAG);
+        if (isLogin()){
+            Logger.d(TAG);
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Logger.d(TAG);
+        if (isLogin()){
+            Logger.d(TAG);
+        }
     }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Logger.d(TAG);
+        if (isLogin()){
+            Logger.d(TAG);
+        }
         if (this.mCompositeSubscription != null) {
 
             this.mCompositeSubscription.unsubscribe();
@@ -163,13 +178,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        Logger.d(TAG);
+        if (isLogin()){
+            Logger.d(TAG);
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Logger.d(TAG);
+        if (isLogin()){
+            Logger.d(TAG);
+        }
     }
 
     protected void checkException(Throwable e,View mRootView) {
