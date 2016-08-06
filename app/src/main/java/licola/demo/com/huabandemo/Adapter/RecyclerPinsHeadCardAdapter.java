@@ -160,6 +160,7 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsMainEnt
 
         new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
                 .setProgressBarImage(dProgressImage)
+                //加载gif图 自动播放
 //                .setControllerListener(new BaseControllerListener<ImageInfo>() {
 //                    @Override
 //                    public void onFinalImageSet(String id, ImageInfo imageInfo, Animatable animatable) {

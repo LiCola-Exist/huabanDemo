@@ -45,6 +45,7 @@ import licola.demo.com.huabandemo.Module.User.UserActivity;
 import licola.demo.com.huabandemo.Observable.MyRxObservable;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Service.DownloadService;
+import licola.demo.com.huabandemo.Util.CompatUtils;
 import licola.demo.com.huabandemo.Util.Constant;
 import licola.demo.com.huabandemo.Util.IntentUtils;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -74,9 +75,8 @@ public class ImageDetailActivity extends BaseActivity
     public static final int ACTION_ATTENTION = 4;//来自我的关注界面的跳转
     public static final int ACTION_SEARCH = 5;//来自搜索界面的跳转
 
-    @BindDrawable(R.drawable.ic_cancel_black_24dp)
+
     Drawable mDrawableCancel;
-    @BindDrawable(R.drawable.ic_refresh_black_24dp)
     Drawable mDrawableRefresh;
 
     //小图的后缀
@@ -149,6 +149,8 @@ public class ImageDetailActivity extends BaseActivity
 
         recoverData(savedInstanceState);//恢复数据
 
+        mDrawableCancel= CompatUtils.getTintDrawable(mContext,R.drawable.ic_cancel_black_24dp,Color.GRAY);
+        mDrawableRefresh=CompatUtils.getTintDrawable(mContext,R.drawable.ic_refresh_black_24dp,Color.GRAY);
 
         mImageUrl = mPinsBean.getFile().getKey();
         mImageType = mPinsBean.getFile().getType();
@@ -188,6 +190,7 @@ public class ImageDetailActivity extends BaseActivity
 
     @Override
     protected void initResAndListener() {
+        mFabOperate.setImageResource(R.drawable.ic_camera_white_24dp);
         mFabOperate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
