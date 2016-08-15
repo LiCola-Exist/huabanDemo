@@ -38,6 +38,8 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
+
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tablayout_user"
             android:layout_width="match_parent"

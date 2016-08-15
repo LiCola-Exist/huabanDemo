@@ -24,7 +24,7 @@ public class HuaBanApplication extends Application {
         super.onCreate();
         instance = this;
         refWatcher = LeakCanary.install(this);//初始化 内存检测工具
-        Fresco.initialize(HuaBanApplication.getInstance());//初始化Fresco图片加载框架
+        Fresco.initialize(this);//初始化Fresco图片加载框架
 
         CrashReport.initCrashReport(getApplicationContext(), "900037004", false);
 
@@ -40,12 +40,6 @@ public class HuaBanApplication extends Application {
 
     }
 
-    public static HuaBanApplication getInstance() {
-        if (null == instance) {
-            instance = new HuaBanApplication();
-        }
-        return instance;
-    }
 
     /**
      * 获得内存监视器 监视任何对象
