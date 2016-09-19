@@ -16,6 +16,11 @@ import rx.Observable;
  */
 
 public interface UserAPI {
+
+    //获取登录用户信息
+    @GET("users/me")
+    Observable<UserMeAndOtherBean> httpsUserRx(@Header(Constant.Authorization) String authorization);
+
     //https://api.huaban.com/users/15246080
     //获取个人信息
     @GET("users/{userId}")

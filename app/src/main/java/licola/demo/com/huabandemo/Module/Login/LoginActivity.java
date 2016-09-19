@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -20,7 +19,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.jakewharton.rxbinding.widget.RxTextView;
@@ -32,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindString;
 import butterknife.BindView;
 
-import licola.demo.com.huabandemo.API.HttpsAPI.LoginAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.TokenAPI;
 import licola.demo.com.huabandemo.API.HttpsAPI.UserAPI;
 import licola.demo.com.huabandemo.Entity.BoardItemInfoBean;
 import licola.demo.com.huabandemo.Entity.BoardListInfoBean;
@@ -253,14 +251,14 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void httpLogin(final String username, final String password) {
-        RetrofitClient.createService(LoginAPI.class)
-                .httpsTokenRx(mAuthorization, PASSWORD, username, password)
+        RetrofitClient.createService(TokenAPI.class)
+                .httpsGetTokenRx(mAuthorization, PASSWORD, username, password)
                 //得到toke成功 用内部字段保存 在最后得到用户信息一起保存写入
                 //得到Observable<> 将它转换成另一个Observable<>
                 .flatMap((Func1<TokenBean, Observable<UserMeAndOtherBean>>) tokenBean -> {
                     mTokenBean = tokenBean;
                     mAuthorization = tokenBean.getToken_type() + " " + tokenBean.getAccess_token();
-                    return RetrofitClient.createService(LoginAPI.class)
+                    return RetrofitClient.createService(UserAPI.class)
                             .httpsUserRx(mAuthorization);
                 })
                 .flatMap((Func1<UserMeAndOtherBean, Observable<BoardListInfoBean>>) userMeAndOtherBean -> {

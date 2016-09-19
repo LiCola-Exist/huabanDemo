@@ -10,7 +10,7 @@ import android.widget.ImageView;
 
 import butterknife.BindString;
 import butterknife.BindView;
-import licola.demo.com.huabandemo.API.HttpsAPI.LoginAPI;
+import licola.demo.com.huabandemo.API.HttpsAPI.TokenAPI;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
 import licola.demo.com.huabandemo.Module.Login.LoginActivity;
@@ -142,8 +142,8 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private Observable<TokenBean> getUserToken(String username, String password) {
-        return RetrofitClient.createService(LoginAPI.class)
-                .httpsTokenRx(Base64.mClientInto, PASSWORD, username, password);
+        return RetrofitClient.createService(TokenAPI.class)
+                .httpsGetTokenRx(Base64.mClientInto, PASSWORD, username, password);
     }
 
 }
