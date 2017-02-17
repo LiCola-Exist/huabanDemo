@@ -42,7 +42,8 @@ import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Base.BaseSwipeViewPagerActivity;
 import licola.demo.com.huabandemo.Entity.BoardListInfoBean;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
-import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadBuilder;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
 import licola.demo.com.huabandemo.Module.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Module.ImageDetail.ImageDetailActivity;
@@ -432,7 +433,7 @@ public class UserActivity
             if (!url.contains(mHttpRoot)) {
                 url = String.format(mFormatUrlSmall, url);
             }
-            new ImageLoadFresco.LoadImageFrescoBuilder(getApplicationContext(), mImageUser, url)
+            ImageLoadBuilder.Start(getApplicationContext(), mImageUser, url)
                     .setPlaceHolderImage(CompatUtils.getTintDrawable(mContext,R.drawable.ic_account_circle_white_48dp,Color.WHITE))
                     .setIsCircle(true, true)
                     .setBitmapDataSubscriber(new BaseBitmapDataSubscriber() {

@@ -16,7 +16,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import licola.demo.com.huabandemo.Base.BaseRecyclerAdapter;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
-import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadBuilder;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadFresco;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.CompatUtils;
 import licola.demo.com.huabandemo.Util.Utils;
@@ -158,7 +159,7 @@ public class RecyclerPinsHeadCardAdapter extends BaseRecyclerAdapter<PinsMainEnt
         Drawable dProgressImage =
                 CompatUtils.getTintListDrawable(mContext, R.drawable.ic_toys_black_48dp, R.color.tint_list_pink);
 
-        new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
+        ImageLoadBuilder.Start(mContext, holder.img_card_image, url_img)
                 .setProgressBarImage(dProgressImage)
                 //加载gif图 自动播放
 //                .setControllerListener(new BaseControllerListener<ImageInfo>() {

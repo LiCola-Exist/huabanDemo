@@ -22,12 +22,13 @@ import java.util.List;
 
 
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadBuilder;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.CompatUtils;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.Utils;
 
-import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadFresco;
 
 import static android.view.View.*;
 import static android.view.View.OnClickListener;
@@ -185,7 +186,7 @@ public class RecyclerPinsCardAdapter extends RecyclerView.Adapter<RecyclerPinsCa
         Drawable dProgressImage =
                 CompatUtils.getTintListDrawable(mContext,R.drawable.ic_toys_black_48dp,R.color.tint_list_pink);
 
-        new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
+        ImageLoadBuilder.Start(mContext, holder.img_card_image, url_img)
                 .setProgressBarImage(dProgressImage)
                 .setControllerListener(new BaseControllerListener<ImageInfo>() {
                     @Override

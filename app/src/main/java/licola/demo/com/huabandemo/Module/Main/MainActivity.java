@@ -7,14 +7,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.graphics.ColorUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -31,7 +27,6 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jakewharton.rxbinding.view.RxView;
-import com.tencent.bugly.crashreport.CrashReport;
 
 
 import java.util.concurrent.TimeUnit;
@@ -45,7 +40,8 @@ import licola.demo.com.huabandemo.API.OnFragmentRefreshListener;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
-import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadBuilder;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadFresco;
 import licola.demo.com.huabandemo.Module.Follow.FollowActivity;
 import licola.demo.com.huabandemo.Module.ImageDetail.ImageDetailActivity;
 import licola.demo.com.huabandemo.Module.Login.LoginActivity;
@@ -199,7 +195,7 @@ public class MainActivity extends BaseActivity
             String key = (String) SPUtils.get(mContext, Constant.USERHEADKEY, "");
             if (!TextUtils.isEmpty(key)) {
                 key = getString(R.string.urlImageRoot) + key;
-                new ImageLoadFresco.LoadImageFrescoBuilder(mContext, img_nav_head, key)
+                ImageLoadBuilder.Start(mContext, img_nav_head, key)
                         .setPlaceHolderImage(drawable)
                         .setIsCircle(true, true)
                         .build();
@@ -218,7 +214,7 @@ public class MainActivity extends BaseActivity
             }
         }else {
 
-            new ImageLoadFresco.LoadImageFrescoBuilder(mContext,img_nav_head,"")
+            ImageLoadBuilder.Start(mContext,img_nav_head,"")
                     .setPlaceHolderImage(drawable)
                     .setIsCircle(true, true)
                     .build();

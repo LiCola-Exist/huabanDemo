@@ -25,7 +25,8 @@ import licola.demo.com.huabandemo.API.HttpsAPI.ImageDetailAPI;
 import licola.demo.com.huabandemo.Adapter.RecyclerPinsHeadCardAdapter;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
-import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadBuilder;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.CompatUtils;
@@ -346,7 +347,7 @@ public class ImageDetailFragment extends
                 url_head = String.format(mFormatUrlSmall, url_head);
             }
             //用户名头像加载
-            new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_user, url_head)
+            ImageLoadBuilder.Start(getContext(), img_image_user, url_head)
                     .setPlaceHolderImage(CompatUtils.getTintDrawable(getContext(), R.drawable.ic_account_circle_gray_48dp, Color.GRAY))
                     .setIsCircle(true)
                     .build();
@@ -366,19 +367,19 @@ public class ImageDetailFragment extends
             tv_image_board.setText("暂无画板信息");
         }
 
-        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_1, url1)
+        ImageLoadBuilder.Start(getContext(), img_image_board_1, url1)
                 .setIsRadius(true, 5)
                 .build();
 //        Logger.d("id1=" + img_image_board_1.getId());
-        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_2, url2)
+        ImageLoadBuilder.Start(getContext(), img_image_board_2, url2)
                 .setIsRadius(true, 5)
                 .build();
 //        Logger.d("id2=" + img_image_board_2.getId());
-        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_3, url3)
+        ImageLoadBuilder.Start(getContext(), img_image_board_3, url3)
                 .setIsRadius(true, 5)
                 .build();
 //        Logger.d("id3=" + img_image_board_3.getId());
-        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), img_image_board_4, url4)
+        ImageLoadBuilder.Start(getContext(), img_image_board_4, url4)
                 .setIsRadius(true, 5)
                 .build();
 //        Logger.d("id4=" + img_image_board_4.getId());

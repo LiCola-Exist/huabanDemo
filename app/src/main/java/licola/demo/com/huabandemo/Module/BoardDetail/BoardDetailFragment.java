@@ -24,7 +24,7 @@ import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Base.BaseRecyclerHeadFragment;
 import licola.demo.com.huabandemo.Entity.ListPinsBean;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
-import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadBuilder;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Logger;
@@ -171,9 +171,11 @@ public class BoardDetailFragment extends BaseRecyclerHeadFragment<RecyclerPinsHe
     }
 
     private void setBoardUserInfo(String url_head, String username) {
-        new ImageLoadFresco.LoadImageFrescoBuilder(getContext(), mImageUser, url_head)
+
+        ImageLoadBuilder.Start(getContext(),mImageUser,url_head)
                 .setIsCircle(true)
                 .build();
+
 
         mTVUserName.setText(username);
     }

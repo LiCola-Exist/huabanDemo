@@ -8,6 +8,7 @@ import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Interpolator;
@@ -52,14 +53,17 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
             ViewCompat.animate(button).translationY(button.getHeight() + getMarginBottom(button)).setInterpolator(INTERPOLATOR).withLayer()
                     .setListener(new ViewPropertyAnimatorListener() {
                         public void onAnimationStart(View view) {
+                            Logger.d();
                             ScrollAwareFABBehavior.this.mIsAnimatingOut = true;
                         }
 
                         public void onAnimationCancel(View view) {
+                            Logger.d();
                             ScrollAwareFABBehavior.this.mIsAnimatingOut = false;
                         }
 
                         public void onAnimationEnd(View view) {
+                            Logger.d();
 //                            ScrollAwareFABBehavior.this.mIsAnimatingOut = false;
                             view.setVisibility(View.GONE);
                         }
@@ -77,16 +81,19 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
                     .setInterpolator(INTERPOLATOR).withLayer().setListener(new ViewPropertyAnimatorListener() {
                 @Override
                 public void onAnimationStart(View view) {
+                    Logger.d();
                     ScrollAwareFABBehavior.this.mIsAnimatingOut = false;
                 }
 
                 @Override
                 public void onAnimationCancel(View view) {
+                    Logger.d();
                     ScrollAwareFABBehavior.this.mIsAnimatingOut = true;
                 }
 
                 @Override
                 public void onAnimationEnd(View view) {
+                    Logger.d();
 //                    ScrollAwareFABBehavior.this.mIsAnimatingOut = true;
                     view.setVisibility(View.VISIBLE);
                 }

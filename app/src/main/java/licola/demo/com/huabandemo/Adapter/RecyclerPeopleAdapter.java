@@ -11,7 +11,8 @@ import android.widget.TextView;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import licola.demo.com.huabandemo.Base.BaseRecyclerAdapter;
-import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadBuilder;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadFresco;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.CompatUtils;
 
@@ -102,10 +103,12 @@ public class RecyclerPeopleAdapter extends BaseRecyclerAdapter<UsersBean> {
             if (!url.contains(mHttpRoot)) {
                 url = String.format(mUrlSmallFormat, url);
             }
-            new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_image_user, url)
+
+            ImageLoadBuilder.Start(mContext,holder.img_image_user,url)
                     .setPlaceHolderImage(CompatUtils.getTintDrawable(mContext,R.drawable.ic_account_circle_gray_48dp, Color.GRAY))
                     .setIsCircle(true)
                     .build();
+
         }else {
             //// TODO: 2016/4/6 0006 对于同一个View，请不要多次调用setHierarchy，即使这个View是可回收的。创建 DraweeHierarchy 的较为耗时的一个过程，应该多次利用。
 

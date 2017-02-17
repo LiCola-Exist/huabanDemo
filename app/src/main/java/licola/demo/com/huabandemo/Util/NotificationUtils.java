@@ -57,14 +57,12 @@ public class NotificationUtils {
 
 
     public static Notification showIntentNotification(
-            Application application, File file, String type, String title, String text) {
-        return showIntentNotification(application,resId,file,type,title,text);
+            Application application,Intent intent, String title, String text) {
+        return showIntentNotification(application,resId,intent,title,text);
     }
 
     public static Notification showIntentNotification(
-            Application application, int resId, File file, String type, String title, String text) {
-
-        Intent intent = IntentUtils.startImageFile(file, type);//使用工具类 包装打开文件的intent
+            Application application, int resId, Intent intent, String title, String text) {
 
         PendingIntent pendingIntent = PendingIntent.getActivity(application, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -79,52 +77,4 @@ public class NotificationUtils {
         return mBuilder.build();
     }
 
-
-    private void showNotification(int id, String contentText, String contentTitle, String ticker) {
-//        Uri uri = Uri.parse("http://www.pixiv.net/member_illust.php?mode=big&illust_id=1636887");
-//        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//        Logger.d(pendingIntent.toString());
-//        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext())
-//                .setSmallIcon(R.drawable.ic_launcher)
-//                .setContentText(contentText)
-//                .setContentTitle(contentTitle)
-//                .setTicker(ticker)
-//                .setAutoCancel(true);
-//
-//        new Thread(
-//                new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        int incr;
-//                        // Do the "lengthy" operation 20 times
-//                        for (incr = 0; incr <= 100; incr += 10) {
-//                            // Sets the progress indicator to a max value, the
-//                            // current completion percentage, and "determinate"
-//                            // state
-//                            mBuilder.setProgress(100, incr, false);
-//                            // Displays the progress bar for the first time.
-//                            mNontificationManager.notify(id, mBuilder.build());
-//                            // Sleeps the thread, simulating an operation
-//                            // that takes time
-//                            try {
-//                                // Sleep for 5 seconds
-//                                Thread.sleep(1000);
-//                            } catch (InterruptedException e) {
-//                                Logger.d("sleep failure");
-//                            }
-//                        }
-//                        // When the loop is finished, updates the notification
-//                        mBuilder.setContentText("Download complete")
-//                                // Removes the progress bar
-//                                .setProgress(0, 0, false)
-//                                .setContentIntent(pendingIntent);
-//                        Logger.d(Thread.currentThread().toString());
-//                        mNontificationManager.notify(id, mBuilder.build());
-//                    }
-//                }
-//// Starts the thread by calling the run() method in its Runnable
-//        ).start();
-////        mNontificationManager.notify(id, mBuilder.build());
-    }
 }

@@ -20,6 +20,7 @@ import licola.demo.com.huabandemo.Base.HuaBanApplication;
 import licola.demo.com.huabandemo.Entity.DownloadInfo;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitDownClient;
 import licola.demo.com.huabandemo.Util.FileUtils;
+import licola.demo.com.huabandemo.Util.IntentUtils;
 import licola.demo.com.huabandemo.Util.Logger;
 import licola.demo.com.huabandemo.Util.NotificationUtils;
 import licola.demo.com.huabandemo.Util.Utils;
@@ -91,10 +92,11 @@ public class DownloadService extends IntentService {
                             (getApplication(), downloadInfo.fileName, downloadInfo.mProcess);
                     break;
                 case MSG_COMPLETE:
+                    Intent intent = IntentUtils.startImageFile(downloadInfo.mFile,
+                            downloadInfo.mMediaType);//使用工具类 包装打开文件的intent
                     notification = NotificationUtils.showIntentNotification(
                             getApplication(),
-                            downloadInfo.mFile,
-                            downloadInfo.mMediaType,
+                            intent,
                             downloadInfo.fileName,
                             downloadInfo.mState
                     );

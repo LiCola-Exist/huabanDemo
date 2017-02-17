@@ -23,9 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadBuilder;
 import licola.demo.com.huabandemo.R;
 import licola.demo.com.huabandemo.Util.Utils;
-import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadFresco;
 
 import static android.view.ViewGroup.OnClickListener;
 import static android.view.ViewGroup.VISIBLE;
@@ -146,7 +147,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
 
 //        FrescoBuilder.setHeadDrawableMC2V(mContext, holder.img_card_head, url_head,true);
-        new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_head, url_head)
+        ImageLoadBuilder.Start(mContext, holder.img_card_head, url_head)
                 .setIsCircle(true)
                 .build();
 
@@ -164,7 +165,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         Drawable dProgressImage = DrawableCompat.wrap(ContextCompat.getDrawable(mContext, R.drawable.ic_toys_black_24dp).mutate());
         DrawableCompat.setTintList(dProgressImage, ContextCompat.getColorStateList(mContext, R.color.tint_list_pink));
 
-        new ImageLoadFresco.LoadImageFrescoBuilder(mContext, holder.img_card_image, url_img)
+        ImageLoadBuilder.Start(mContext, holder.img_card_image, url_img)
                 .setProgressBarImage(dProgressImage)
                 .setControllerListener(new BaseControllerListener<ImageInfo>() {
                     @Override

@@ -27,16 +27,16 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 
-import butterknife.BindDrawable;
 import butterknife.BindString;
 import butterknife.BindView;
 import licola.demo.com.huabandemo.API.Dialog.OnGatherDialogInteractionListener;
 import licola.demo.com.huabandemo.API.Fragment.OnImageDetailFragmentInteractionListener;
 import licola.demo.com.huabandemo.API.HttpsAPI.OperateAPI;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadBuilder;
 import licola.demo.com.huabandemo.Util.AnimatorUtils;
 import licola.demo.com.huabandemo.Base.BaseActivity;
 import licola.demo.com.huabandemo.Entity.PinsMainEntity;
-import licola.demo.com.huabandemo.HttpUtils.ImageLoadFresco;
+import licola.demo.com.huabandemo.HttpUtils.ImageLoad.ImageLoadFresco;
 import licola.demo.com.huabandemo.HttpUtils.RetrofitClient;
 import licola.demo.com.huabandemo.Module.BoardDetail.BoardDetailActivity;
 import licola.demo.com.huabandemo.Module.Main.MainActivity;
@@ -255,7 +255,7 @@ public class ImageDetailActivity extends BaseActivity
         String url = String.format(mFormatImageUrlBig, mImageUrl);
         String url_low = String.format(mFormatImageGeneral, mImageUrl);
         //加载大图
-        new ImageLoadFresco.LoadImageFrescoBuilder(mContext, mImgImageBig, url)
+        ImageLoadBuilder.Start(mContext, mImgImageBig, url)
 //                .setActualImageScaleType(ScalingUtils.ScaleType.FOCUS_CROP)
                 .setUrlLow(url_low)
                 .setRetryImage(mDrawableRefresh)
