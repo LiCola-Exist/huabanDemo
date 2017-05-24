@@ -14,6 +14,13 @@ import licola.demo.com.huabandemo.Util.Logger;
 
 /**
  * Created by 李可乐 on 2017/2/17 0017.
+ * 图片加载的封装builder类
+ * 使用示例
+ * <p>
+ * ImageLoadBuilder.Start(getContext(),mImageUser,url_head)
+ * .setIsCircle(true)
+ * .build();
+ * </p>
  */
 
 public class ImageLoadBuilder {

@@ -23,14 +23,8 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 /**
  * Created by LiCola on  2016/01/16  15:26
- * 用Fresco加载图片的类
- * 针对这个Demo已经配置很多默认的值
- * 用构造器模式便于设置更多形式
- * <p/>
- * 使用示例：
- * new ImageLoadFresco.ImageLoadBuilder(mContext,img_image_user,url_head)
- * .setIsCircle(true)
- * .build();
+ * 封装的Fresco图片加载类
+ * 使用构造器传入配置好的值
  */
 public class ImageLoadFresco {
     private static final String TAG = "ImageLoadFresco";
@@ -146,6 +140,5 @@ public class ImageLoadFresco {
         }
 
     }
-
 
 }

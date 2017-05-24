@@ -1,6 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'android-apt'
 apply plugin: 'bugly'
 
 bugly {
@@ -15,12 +13,10 @@ buildscript {
     }
 
     dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.2.5'
         classpath 'com.tencent.bugly:symtabfileuploader:1.3.9'
     }
 }
 
-// Required because retrolambda is on maven central
 repositories {
     mavenCentral()
 }
@@ -35,7 +31,12 @@ android {
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
+        jackOptions {
+            enabled true
+        }
     }
+
+
     buildTypes {
         release {
             minifyEnabled false
@@ -48,9 +49,9 @@ android {
         }
     }
     productFlavors {
-//        dev {
-//            minSdkVersion 21
-//        }
+        dev {
+            minSdkVersion 21
+        }
     }
 
     lintOptions {
@@ -65,9 +66,6 @@ android {
     }
 }
 
-retrolambda {
-    javaVersion JavaVersion.VERSION_1_7
-}
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -101,11 +99,12 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding-support-v4:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
     //retrofit网络框架
-    compile 'com.squareup.retrofit2:retrofit:2.0.2'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
     //替换retrofit内部的okhttp
-    compile 'com.squareup.okhttp3:logging-interceptor:3.2.0'
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     compile 'com.squareup.okio:okio:1.7.0'
     //事件解耦
     compile 'org.greenrobot:eventbus:3.0.0'
@@ -113,9 +112,8 @@ dependencies {
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.5.0'
     //开发辅助工具
     compile 'com.jakewharton:butterknife:8.1.0'
-    apt 'com.jakewharton:butterknife-compiler:8.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.1.0'
     provided 'org.projectlombok:lombok:1.16.8'
     compile 'com.facebook.stetho:stetho:1.3.1'
-    compile 'com.facebook.stetho:stetho-okhttp3:1.3.1'
     compile 'com.facebook.fresco:stetho:0.10.0'
 }

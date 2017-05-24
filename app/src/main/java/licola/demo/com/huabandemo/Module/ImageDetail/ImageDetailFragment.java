@@ -170,13 +170,9 @@ public class ImageDetailFragment extends
 //
         tv_image_like.setOnClickListener(v -> Logger.d());
 
-        mRLImageUser.setOnClickListener(v -> {
-            mListener.onClickUserField(mUserId, mUserName);
-        });
+        mRLImageUser.setOnClickListener(v -> mListener.onClickUserField(mUserId, mUserName));
 
-        mRLImageBoard.setOnClickListener(v -> {
-            mListener.onClickBoardField(mBoardId, mBoardName);
-        });
+        mRLImageBoard.setOnClickListener(v -> mListener.onClickBoardField(mBoardId, mBoardName));
 
 
     }

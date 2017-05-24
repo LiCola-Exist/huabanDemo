@@ -1,14 +1,10 @@
 package licola.demo.com.huabandemo.HttpUtils;
 
-import com.google.gson.Gson;
-
 import licola.demo.com.huabandemo.API.OnProgressResponseListener;
-import licola.demo.com.huabandemo.HttpUtils.Converter.AvatarConverter;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 
-import static licola.demo.com.huabandemo.HttpUtils.OkHttpHelper.addLogClient;
 import static licola.demo.com.huabandemo.HttpUtils.OkHttpHelper.addProgressClient;
 
 
