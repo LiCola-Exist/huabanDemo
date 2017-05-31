@@ -14,5 +14,6 @@ public abstract class HttpInterface<T> {
     }
 
     public void onHttpFinish() {
+
     }
 }
